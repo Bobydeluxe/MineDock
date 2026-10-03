@@ -31,6 +31,8 @@ Le résultat machine est conservé dans `data/live-smoke/result.json` sur le pos
 
 ## Limites de cette validation
 
+Le [workflow GitHub Validate](https://github.com/Bobydeluxe/MineDock/actions/runs/37150089013) a également réussi le 3 octobre 2026 sur Ubuntu : installation des dépendances, lint, TypeScript, tests unitaires/d’intégration, compilation et deux parcours d’interface sous Xvfb. Cette validation du code et de l’interface ne valide pas à elle seule les packages AppImage/deb/DMG, les runtimes Java sur ces OS ou une session de jeu.
+
 - Une connexion depuis un véritable client Minecraft et une session de jeu restent à valider après acceptation personnelle de l’EULA dans l’assistant.
 - Les binaires Windows sont non signés, comme confirmé par `Get-AuthenticodeSignature`. L’installation NSIS sur le système hôte n’a pas été exécutée pendant les tests.
 - Linux, macOS, arm64 et les anciennes versions Minecraft nécessitent leurs propres validations ; leurs configurations de build ne constituent pas une preuve de fonctionnement.

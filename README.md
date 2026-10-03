@@ -6,6 +6,8 @@ Gestionnaire desktop de serveurs Minecraft, local-first, en français et en angl
 
 Les versions téléchargeables sont regroupées dans les [releases GitHub](https://github.com/Bobydeluxe/MineDock/releases).
 
+Pour la bêta 0.1.0 : [installateur Windows x64](https://github.com/Bobydeluxe/MineDock/releases/download/v0.1.0/MineDock-0.1.0-Setup-x64.exe), [version portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.1.0/MineDock-0.1.0-Portable-x64.exe) et [empreintes SHA-256](https://github.com/Bobydeluxe/MineDock/releases/download/v0.1.0/SHA256SUMS.txt).
+
 Les builds locaux se trouvent dans `release/` :
 
 - `MineDock-0.1.0-Setup-x64.exe` : installateur par utilisateur ;

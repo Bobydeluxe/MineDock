@@ -2,6 +2,7 @@ MINEDOCK — PREMIERS PAS SUR GITHUB
 Guide préparé le 3 octobre 2026
 Choix : projet public, nom conseillé MineDock.
 Dépôt du projet : https://github.com/Bobydeluxe/MineDock
+Téléchargements : https://github.com/Bobydeluxe/MineDock/releases/tag/v0.1.0
 
 Ce qui est déjà prêt :
 - Le code, les tests, la documentation et le README.
@@ -15,7 +16,8 @@ Les étapes expliquées dans ce guide :
 - Proposer les installateurs dans une version téléchargeable.
 - Envoyer les futures modifications du projet.
 
-Le compte Bobydeluxe et le dépôt MineDock sont déjà créés.
+Le compte Bobydeluxe et le dépôt MineDock sont créés, le code est publié
+et la préversion Windows v0.1.0 est disponible en téléchargement.
 Les étapes de création restent utiles si tu souhaites publier un autre projet.
 
 ======================================================================
