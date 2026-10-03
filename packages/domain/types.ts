@@ -1,0 +1,238 @@
+import { z } from 'zod';
+
+export const PRODUCT = { name: 'MineDock', version: '0.1.0' } as const;
+export const engineSchema = z.enum(['paper', 'vanilla']);
+export type Engine = z.infer<typeof engineSchema>;
+export type ServerStatus =
+  | 'installing'
+  | 'stopped'
+  | 'starting'
+  | 'running'
+  | 'stopping'
+  | 'crashed'
+  | 'backing_up'
+  | 'restoring';
+export const createServerSchema = z
+  .object({
+    name: z.string().trim().min(1).max(60),
+    engine: engineSchema,
+    version: z.string().regex(/^[a-zA-Z0-9._-]{1,40}$/),
+    memoryMin: z.number().int().min(256).max(131072),
+    memoryMax: z.number().int().min(512).max(131072),
+    port: z.number().int().min(1024).max(65535),
+    difficulty: z.enum(['peaceful', 'easy', 'normal', 'hard']),
+    gamemode: z.enum(['survival', 'creative', 'adventure', 'spectator']),
+    maxPlayers: z.number().int().min(1).max(1000),
+    viewDistance: z.number().int().min(2).max(32),
+    simulationDistance: z.number().int().min(2).max(32),
+    pvp: z.boolean(),
+    whitelist: z.boolean(),
+    onlineMode: z.boolean(),
+    seed: z.string().max(100),
+    motd: z.string().max(200),
+    autoStart: z.boolean(),
+    autoRestart: z.boolean(),
+    eula: z.literal(true),
+  })
+  .refine((v) => v.memoryMin <= v.memoryMax, {
+    message: 'La mémoire minimale dépasse la mémoire maximale.',
+  });
+export type CreateServerInput = z.infer<typeof createServerSchema>;
+export const serverOptionsSchema = z
+  .object({
+    memoryMin: z.number().int().min(256).max(131072),
+    memoryMax: z.number().int().min(512).max(131072),
+    autoStart: z.boolean(),
+    autoRestart: z.boolean(),
+    javaPath: z.string().min(1),
+  })
+  .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Mémoire minimale invalide.' });
+export type ServerOptions = z.infer<typeof serverOptionsSchema>;
+export interface Server extends Omit<CreateServerInput, 'eula'> {
+  id: string;
+  path: string;
+  javaMajor: number;
+  javaPath: string;
+  build: string;
+  status: ServerStatus;
+  createdAt: string;
+  updatedAt: string;
+  pid?: number;
+  startedAt?: string;
+  exitCode?: number;
+  error?: string;
+  cpu: number;
+  memory: number;
+  players: string[];
+  diskBytes: number;
+  installationComplete?: boolean;
+}
+export interface LogLine {
+  seq: number;
+  at: string;
+  level: 'INFO' | 'WARN' | 'ERROR' | 'DEBUG' | 'CHAT';
+  text: string;
+}
+export interface Metric {
+  at: string;
+  cpu: number;
+  memory: number;
+  players: number;
+}
+export interface Backup {
+  id: string;
+  serverId: string;
+  name: string;
+  createdAt: string;
+  size: number;
+  sha256: string;
+  version: string;
+  reason: string;
+}
+export const scheduleSchema = z
+  .object({
+    serverId: z.string().uuid(),
+    action: z.enum(['backup', 'restart', 'start', 'stop', 'command']),
+    intervalMinutes: z.number().int().min(5).max(525600),
+    command: z.string().max(500).default(''),
+    enabled: z.boolean().default(true),
+  })
+  .refine(
+    (v) => v.action !== 'command' || (v.command.trim().length > 0 && !/[\r\n\0]/.test(v.command)),
+    { message: 'Commande invalide.' },
+  );
+export type ScheduleInput = z.infer<typeof scheduleSchema>;
+export interface Schedule extends ScheduleInput {
+  id: string;
+  nextRun: string;
+  lastError?: string;
+}
+export interface Activity {
+  id: number;
+  at: string;
+  action: string;
+  serverId?: string;
+  detail: string;
+  success: boolean;
+}
+export const settingsSchema = z.object({
+  language: z.enum(['fr', 'en']),
+  theme: z.enum(['dark', 'light', 'system']),
+  serverRoot: z.string().min(1),
+  backupRoot: z.string().min(1),
+  preventSleep: z.boolean(),
+  onboarded: z.boolean(),
+});
+export type Settings = z.infer<typeof settingsSchema>;
+export interface Diagnostic {
+  platform: string;
+  arch: string;
+  totalMemory: number;
+  freeMemory: number;
+  freeDisk: number;
+  java: { path: string; major: number }[];
+  docker: boolean;
+  lanIp: string;
+  port: number;
+  dataRoot: string;
+}
+export interface Runtime {
+  major: number;
+  path: string;
+  source: 'managed' | 'system';
+}
+export interface FileEntry {
+  name: string;
+  directory: boolean;
+  size: number;
+  modified: string;
+}
+export interface Project {
+  id: string;
+  title: string;
+  description: string;
+  author: string;
+  downloads: number;
+  iconUrl?: string;
+  categories: string[];
+}
+export interface InstalledContent {
+  id: string;
+  serverId: string;
+  projectId: string;
+  title: string;
+  versionId: string;
+  filename: string;
+  enabled: boolean;
+}
+export interface Progress {
+  id: string;
+  label: string;
+  received: number;
+  total: number;
+  speed: number;
+  phase: string;
+  done?: boolean;
+  error?: string;
+}
+export type AppEvent =
+  | { type: 'server'; server: Server }
+  | { type: 'log'; serverId: string; line: LogLine }
+  | { type: 'logs'; serverId: string; lines: LogLine[] }
+  | { type: 'metric'; serverId: string; metric: Metric }
+  | { type: 'progress'; progress: Progress }
+  | { type: 'activity'; activity: Activity }
+  | { type: 'changed' };
+export interface Snapshot {
+  servers: Server[];
+  backups: Backup[];
+  schedules: Schedule[];
+  settings: Settings;
+  activity: Activity[];
+  mock: boolean;
+}
+
+/** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
+export interface Api {
+  snapshot(): Promise<Snapshot>;
+  diagnostic(): Promise<Diagnostic>;
+  settings(value: Settings): Promise<Settings>;
+  selectFolder(): Promise<string | null>;
+  openFolder(serverId?: string): Promise<void>;
+  versions(engine: Engine): Promise<string[]>;
+  create(input: CreateServerInput): Promise<Server>;
+  retryInstallation(id: string): Promise<Server>;
+  cancelDownload(id: string): Promise<void>;
+  start(id: string): Promise<void>;
+  stop(id: string): Promise<void>;
+  restart(id: string): Promise<void>;
+  remove(id: string, confirmation: string): Promise<void>;
+  logs(id: string): Promise<LogLine[]>;
+  command(id: string, command: string): Promise<string>;
+  players(id: string): Promise<string[]>;
+  properties(id: string): Promise<Record<string, string>>;
+  saveProperties(id: string, properties: Record<string, string>): Promise<void>;
+  configureServer(id: string, options: ServerOptions): Promise<Server>;
+  files(id: string, path: string): Promise<FileEntry[]>;
+  readFile(id: string, path: string): Promise<string>;
+  writeFile(id: string, path: string, content: string): Promise<void>;
+  mkdir(id: string, path: string): Promise<void>;
+  deleteFile(id: string, path: string, confirmation: string): Promise<void>;
+  uploadFile(id: string, path: string): Promise<void>;
+  exportFile(id: string, path: string): Promise<void>;
+  backup(id: string): Promise<Backup>;
+  verifyBackup(id: string): Promise<boolean>;
+  restore(id: string, confirmation: string): Promise<void>;
+  exportBackup(id: string): Promise<void>;
+  deleteBackup(id: string, confirmation: string): Promise<void>;
+  schedules(input: ScheduleInput): Promise<Schedule>;
+  deleteSchedule(id: string): Promise<void>;
+  metrics(id: string, hours: number): Promise<Metric[]>;
+  runtimes(): Promise<Runtime[]>;
+  installRuntime(major: number): Promise<Runtime>;
+  search(id: string, query: string): Promise<Project[]>;
+  installContent(id: string, projectId: string): Promise<InstalledContent[]>;
+  content(id: string): Promise<InstalledContent[]>;
+  toggleContent(id: string, contentId: string): Promise<void>;
+  onEvent(listener: (event: AppEvent) => void): () => void;
+}
