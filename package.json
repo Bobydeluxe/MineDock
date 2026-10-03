@@ -4,6 +4,7 @@
   "private": true,
   "description": "Local-first Minecraft server manager",
   "author": "MineDock contributors",
+  "homepage": "https://github.com/Bobydeluxe/MineDock",
   "license": "MIT",
   "type": "module",
   "main": "dist/main.cjs",
@@ -96,6 +97,7 @@
         "deb"
       ],
       "category": "Utility",
+      "maintainer": "Bobydeluxe <337467661+Bobydeluxe@users.noreply.github.com>",
       "icon": "apps/desktop/assets/icon.png"
     },
     "mac": {
