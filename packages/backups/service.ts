@@ -30,11 +30,11 @@ export class BackupService {
   async create(id: string, reason = 'manual'): Promise<Backup> {
     const server = this.repo.server(id);
     if (server.installationComplete === false)
-      throw new DomainError('INSTALL', 'Terminez l’installation avant de sauvegarder ce serveur.');
+      throw new DomainError('INSTALL', 'Finish installation before backing up this server.');
     if (this.runner.isOrphaned(id))
-      throw new Error('Fermez l’ancien processus avant de sauvegarder ce serveur.');
+      throw new Error('Close the old process before backing up this server.');
     if (['installing', 'starting', 'stopping', 'restoring'].includes(server.status))
-      throw new DomainError('BUSY', 'Attendez la fin de l’opération en cours.');
+      throw new DomainError('BUSY', 'Wait for the current operation to finish.');
     const active = this.runner.isRunning(id);
     const previous = server.status;
     const root = this.provider.root();
@@ -42,9 +42,9 @@ export class BackupService {
     const size = await directorySize(server.path);
     const disk = await statfs(root);
     if (size > maximumBackupSize)
-      throw new DomainError('SIZE', 'Ce serveur dépasse la limite de sauvegarde de la V1 (64 Go).');
+      throw new DomainError('SIZE', 'This server exceeds the V1 backup limit (64 GB).');
     if (Number(disk.bavail) * Number(disk.bsize) < size + 128 * 1024 ** 2)
-      throw new DomainError('DISK', 'Espace insuffisant pour une sauvegarde complète.');
+      throw new DomainError('DISK', 'Not enough disk space for a complete backup.');
     const backupId = randomUUID();
     const filename = path.join(root, `${backupId}.zip`);
     const temporary = filename + '.part';
@@ -58,7 +58,7 @@ export class BackupService {
         await this.runner.command(id, 'save-off');
         const reply = await this.runner.command(id, 'save-all flush');
         if (/Unknown|Incorrect|Error|failed/i.test(reply))
-          throw new Error('Le serveur n’a pas confirmé la sauvegarde du monde.');
+          throw new Error('The server did not confirm saving the world.');
       }
       const manifest = JSON.stringify({
         format: 1,
@@ -80,7 +80,7 @@ export class BackupService {
       const meta: Backup = {
         id: backupId,
         serverId: id,
-        name: `${server.name} · ${new Date().toLocaleString('fr-FR')}`,
+        name: `${server.name} · ${new Date().toLocaleString(this.repo.settings().language)}`,
         createdAt: new Date().toISOString(),
         size: info.size,
         sha256: checksum,
@@ -101,7 +101,7 @@ export class BackupService {
         } catch (e) {
           this.repo.audit(
             'backup.save_on_failed',
-            'Échec de save-on : arrêt de sécurité pour éviter un monde non sauvegardé. ' +
+            'Failed to resume world saving: safety stop to prevent unsaved world changes. ' +
               String(e),
             id,
             false,
@@ -126,7 +126,7 @@ export class BackupService {
     const valid = (await sha256(item.path)) === item.metadata.sha256;
     this.repo.audit(
       'backup.verified',
-      valid ? 'Intégrité SHA-256 vérifiée.' : 'La sauvegarde est endommagée.',
+      valid ? 'SHA-256 integrity verified.' : 'The backup is corrupted.',
       item.metadata.serverId,
       valid,
     );
@@ -136,11 +136,11 @@ export class BackupService {
     const item = this.repo.backup(id);
     const server = this.repo.server(item.metadata.serverId);
     if (confirmation !== server.name)
-      throw new DomainError('CONFIRM', 'Le nom de confirmation est incorrect.');
+      throw new DomainError('CONFIRM', 'The confirmation name is incorrect.');
     if (this.runner.isRunning(server.id) || this.runner.isOrphaned(server.id))
-      throw new DomainError('RUNNING', 'Arrêtez le serveur avant de restaurer une sauvegarde.');
+      throw new DomainError('RUNNING', 'Stop the server before restoring a backup.');
     if (!(await this.verify(id)))
-      throw new DomainError('INTEGRITY', 'Sauvegarde corrompue. Restauration annulée.');
+      throw new DomainError('INTEGRITY', 'Corrupted backup. Restore cancelled.');
     await this.create(server.id, 'before_restore');
     const stage = path.join(path.dirname(server.path), `${server.id}.restore-${randomUUID()}`);
     const original = stage + '.previous';
@@ -151,7 +151,7 @@ export class BackupService {
       const info = await statfs(path.dirname(server.path));
       // ZIP sizes are checked while extracting; disk errors preserve the original directory.
       if (Number(info.bavail) * Number(info.bsize) < item.metadata.size + 128 * 1024 ** 2)
-        throw new DomainError('DISK', 'Espace insuffisant pour préparer la restauration.');
+        throw new DomainError('DISK', 'Not enough disk space to prepare the restore.');
       await extractZip(item.path, stage, maximumBackupSize);
       const manifestSchema = z.object({
         format: z.literal(1),
@@ -216,8 +216,7 @@ export class BackupService {
       try {
         this.repo.db.prepare('DELETE FROM installed_content WHERE server_id=?').run(server.id);
         for (const content of manifest.content) {
-          if (content.serverId !== server.id)
-            throw new Error('Métadonnées de plugin incohérentes.');
+          if (content.serverId !== server.id) throw new Error('Inconsistent plugin metadata.');
           this.repo.saveContent(content);
         }
         this.repo.saveServer(server);
@@ -242,7 +241,7 @@ export class BackupService {
       if (!swapped && (await readdir(path.dirname(server.path))).includes(path.basename(original)))
         this.repo.audit(
           'restore.recovery',
-          `La copie précédente est conservée : ${original}`,
+          `The previous copy is preserved: ${original}`,
           server.id,
           false,
         );
@@ -251,7 +250,7 @@ export class BackupService {
   async delete(id: string, confirmation: string): Promise<void> {
     const item = this.repo.backup(id);
     if (confirmation !== item.metadata.name)
-      throw new DomainError('CONFIRM', 'Confirmation incorrecte.');
+      throw new DomainError('CONFIRM', 'Incorrect confirmation.');
     await rm(item.path);
     this.repo.deleteBackup(id);
     this.repo.audit('backup.deleted', item.metadata.name, item.metadata.serverId);

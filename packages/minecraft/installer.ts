@@ -23,7 +23,7 @@ export class ServerInstaller {
   async install(id: string): Promise<Server> {
     const server = this.repo.server(id);
     if (server.installationComplete !== false)
-      throw new Error('L’installation de ce serveur est déjà terminée.');
+      throw new Error('Installation of this server is already complete.');
     server.status = 'installing';
     server.error = undefined;
     this.repo.saveServer(server);

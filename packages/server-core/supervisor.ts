@@ -79,9 +79,9 @@ export class ServerProcessSupervisor implements ServerRunner {
         cpu: 0,
         memory: 0,
         error: this.orphaned.has(server.id)
-          ? 'Un ancien processus peut encore fonctionner. Fermez-le ou redémarrez l’ordinateur avant de gérer ce serveur.'
+          ? 'An old process may still be running. Close it or restart your computer before managing this server.'
           : server.installationComplete === false
-            ? 'Installation incomplète. Réessayez l’installation depuis ce serveur.'
+            ? 'Installation is incomplete. Retry installation from this server.'
             : undefined,
       } satisfies Server;
       repo.saveServer(recovered);
@@ -155,33 +155,35 @@ export class ServerProcessSupervisor implements ServerRunner {
     }
   }
   async start(id: string): Promise<void> {
-    if (this.closing) throw new DomainError('CLOSING', 'L’application est en cours de fermeture.');
+    if (this.closing) throw new DomainError('CLOSING', 'The application is shutting down.');
     if (this.isOrphaned(id))
       throw new DomainError(
         'ORPHAN',
-        'Un ancien processus doit être fermé avant de gérer ce serveur. Redémarrez l’ordinateur si nécessaire.',
+        'An old process must be closed before managing this server. Restart your computer if needed.',
       );
-    if (this.instances.has(id))
-      throw new DomainError('RUNNING', 'Ce serveur est déjà en cours de fonctionnement.');
+    if (this.instances.has(id)) throw new DomainError('RUNNING', 'This server is already running.');
     const server = this.repo.server(id);
     if (server.status === 'installing' || !server.javaPath || server.installationComplete === false)
-      throw new DomainError('INSTALL', 'L’installation du serveur n’est pas terminée.');
+      throw new DomainError('INSTALL', 'Server installation is not complete.');
     const props = parseProperties(
       await readFile(path.join(server.path, 'server.properties'), 'utf8'),
     );
     if (props['online-mode'] !== 'true')
-      this.repo.audit('server.warning', 'Authentification Minecraft désactivée.', id);
+      this.repo.audit('server.warning', 'Minecraft account verification is disabled.', id);
     if (!(await checkPort(server.port)))
       throw new DomainError(
         'PORT',
-        `Le port ${server.port} est déjà utilisé. Modifiez-le dans les paramètres.`,
+        `Port ${server.port} is already in use. Change it in settings.`,
       );
     if (!(await checkPort(Number(props['rcon.port']))))
-      throw new DomainError('PORT', `Le port RCON ${props['rcon.port']} est déjà utilisé.`);
+      throw new DomainError('PORT', `RCON port ${props['rcon.port']} is already in use.`);
     await stat(server.javaPath);
     await stat(path.join(server.path, 'server.jar'));
     if (!/eula\s*=\s*true/.test(await readFile(path.join(server.path, 'eula.txt'), 'utf8')))
-      throw new DomainError('EULA', 'Vous devez accepter l’EULA Minecraft avant le démarrage.');
+      throw new DomainError(
+        'EULA',
+        'You must accept the Minecraft EULA before starting the server.',
+      );
     clearTimeout(this.retryTimers.get(id));
     this.retryTimers.delete(id);
     server.status = 'starting';
@@ -199,7 +201,7 @@ export class ServerProcessSupervisor implements ServerRunner {
       ended = resolve;
     });
     const startupTimer = setTimeout(() => {
-      this.log(id, 'Le démarrage dépasse 5 minutes. Arrêt de sécurité.', true);
+      this.log(id, 'Startup exceeded 5 minutes. Stopping for safety.', true);
       void this.stop(id).catch((e) => this.logger.write(String(e), true));
     }, 300000);
     const instance: Instance = {
@@ -264,10 +266,7 @@ export class ServerProcessSupervisor implements ServerRunner {
         this.crashes.set(id, history);
         if (history.length < 3) {
           const delay = 15000 * 2 ** (history.length - 1);
-          this.log(
-            id,
-            `Redémarrage automatique dans ${delay / 1000} secondes (${history.length}/3).`,
-          );
+          this.log(id, `Automatic restart in ${delay / 1000} seconds (${history.length}/3).`);
           this.retryTimers.set(
             id,
             setTimeout(() => {
@@ -278,7 +277,7 @@ export class ServerProcessSupervisor implements ServerRunner {
             }, delay),
           );
         } else {
-          latest.error += ' Trois crashes en dix minutes : redémarrage automatique suspendu.';
+          latest.error += ' Three crashes in ten minutes: automatic restart suspended.';
           this.repo.saveServer(latest);
         }
       }
@@ -322,11 +321,11 @@ export class ServerProcessSupervisor implements ServerRunner {
     if (this.instances.has(id)) {
       this.log(
         id,
-        'L’arrêt normal a dépassé 30 secondes. Le processus est terminé de force.',
+        'Graceful shutdown exceeded 30 seconds. The process was forcefully terminated.',
         true,
       );
       if (!instance.process.kill('SIGKILL'))
-        throw new DomainError('STOP', 'Le système n’a pas pu terminer le processus.');
+        throw new DomainError('STOP', 'The system could not terminate the process.');
       let forceTimer: NodeJS.Timeout | undefined;
       try {
         await Promise.race([
@@ -337,7 +336,7 @@ export class ServerProcessSupervisor implements ServerRunner {
                 reject(
                   new DomainError(
                     'STOP',
-                    'Le processus ne confirme pas son arrêt. Vérifiez le gestionnaire de tâches.',
+                    'The process did not confirm shutdown. Check your task manager.',
                   ),
                 ),
               10000,
@@ -355,7 +354,7 @@ export class ServerProcessSupervisor implements ServerRunner {
   }
   async command(id: string, command: string): Promise<string> {
     if (!this.instances.has(id))
-      throw new DomainError('STOPPED', 'Démarrez le serveur pour envoyer une commande.');
+      throw new DomainError('STOPPED', 'Start the server before sending a command.');
     const server = this.repo.server(id);
     const props = parseProperties(
       await readFile(path.join(server.path, 'server.properties'), 'utf8'),

@@ -10,14 +10,14 @@ export function validateRelative(relative: string): string {
     path.isAbsolute(relative) ||
     /^[\\/]/.test(relative)
   )
-    throw new DomainError('PATH', 'Chemin non autorisé.');
+    throw new DomainError('PATH', 'Path is not allowed.');
   const parts = relative.replace(/\\/g, '/').split('/');
   if (
     parts.some(
       (p) => p === '..' || /[. ]$/.test(p) || /^(con|prn|aux|nul|com\d|lpt\d)(\.|$)/i.test(p),
     )
   )
-    throw new DomainError('PATH', 'Chemin non autorisé.');
+    throw new DomainError('PATH', 'Path is not allowed.');
   return parts.filter((p) => p && p !== '.').join(path.sep);
 }
 export async function containedPath(
@@ -26,19 +26,18 @@ export async function containedPath(
   allowRoot = false,
 ): Promise<string> {
   const safe = validateRelative(relative);
-  if (!safe && !allowRoot) throw new DomainError('PATH', 'Le dossier racine est protégé.');
+  if (!safe && !allowRoot) throw new DomainError('PATH', 'The root folder is protected.');
   const resolvedRoot = await realpath(root);
   let cursor = resolvedRoot;
   for (const part of safe.split(path.sep).filter(Boolean)) {
     cursor = path.join(cursor, part);
     try {
       const stat = await lstat(cursor);
-      if (stat.isSymbolicLink())
-        throw new DomainError('PATH', 'Les liens symboliques ne sont pas autorisés.');
+      if (stat.isSymbolicLink()) throw new DomainError('PATH', 'Symbolic links are not allowed.');
       const resolved = await realpath(cursor);
       const rel = path.relative(resolvedRoot, resolved);
       if (rel.startsWith('..') || path.isAbsolute(rel))
-        throw new DomainError('PATH', 'Chemin non autorisé.');
+        throw new DomainError('PATH', 'Path is not allowed.');
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
     }

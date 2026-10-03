@@ -124,7 +124,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
               </div>
               <strong>{bytes(server.memory)}</strong>
               <div className="metric-footer">
-                {t('memoryAllocated')} · {server.memoryMax / 1024} Go
+                {t('memoryAllocated')} · {server.memoryMax / 1024} {t('gigabytes')}
               </div>
             </div>
             <div className="metric-card">
@@ -211,7 +211,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
                   label={t('memory')}
                   color="#9ba8dd"
                   values={metrics.data.map((m) => m.memory / 1024 ** 3)}
-                  suffix=" Go"
+                  suffix={` ${t('gigabytes')}`}
                 />
               </div>
             ) : (
@@ -979,7 +979,7 @@ function AnalyticsView({ serverId }: { serverId: string }) {
             label={t('memory')}
             values={data.map((m) => m.memory / 1024 ** 3)}
             color="#9ba8dd"
-            suffix=" Go"
+            suffix={` ${t('gigabytes')}`}
           />
           <Chart label={t('players')} values={data.map((m) => m.players)} color="#e4b879" />
         </div>

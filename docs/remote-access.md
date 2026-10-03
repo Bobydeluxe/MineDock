@@ -1,9 +1,9 @@
-# Accès local et réseau
+# Local and network access
 
-La V1 n’expose aucun panneau administratif distant. L’administrateur est le compte OS qui lance le desktop. Il n’y a pas de login factice, de lien QR non protégé, de tunnel ou de serveur web de production.
+V1 exposes no remote administration panel. The administrator is the OS account running the desktop. There is no fake login, unprotected QR link, tunnel or production web server.
 
-Pour jouer sur le même ordinateur, utilisez `localhost:port`. Pour jouer sur le LAN, utilisez l’adresse IPv4 locale affichée et autorisez le trafic Minecraft si votre pare-feu le demande. Le logiciel ne configure ni pare-feu ni routeur. Les adresses affichées ne sont pas des adresses publiques.
+On the same computer, use `localhost:port`. On the LAN, use the displayed local IPv4 address and allow Minecraft traffic if prompted by your firewall. MineDock does not configure the firewall or router. Displayed addresses are not public addresses.
 
-Ne redirigez jamais RCON sur Internet. Le mode localhost avec `server-ip=127.0.0.1` limite le serveur à l’ordinateur. Le bind vide permet le LAN et exige un réseau de confiance.
+Never forward RCON to the Internet. `server-ip=127.0.0.1` restricts the server to this computer. An empty bind address permits LAN access and requires a trusted network.
 
-Le futur panneau distant réutilisera les DTO et services, avec login Argon2id, rôles par serveur, sessions expirables, CSRF, rate limiting, TLS et WebSockets authentifiés. Cette couche doit être développée avant toute option d’exposition réseau. Playit/Geyser/Docker et le cloud sont des extensions distinctes, non actives dans la V1.
+A future remote panel would reuse DTOs/services with Argon2id login, per-server roles, expiring sessions, CSRF protection, rate limits, TLS and authenticated WebSockets. This layer must exist before exposing administration to a network. Playit, Geyser, Docker and cloud features are separate extensions, inactive in V1.

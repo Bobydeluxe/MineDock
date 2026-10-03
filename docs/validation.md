@@ -1,41 +1,49 @@
-# Validation de MineDock 0.1.0
+# MineDock validation
 
-Validation locale effectuée le **3 octobre 2026**, sous Windows 11 x64. Cette livraison est une bêta du gestionnaire local Paper / Vanilla ; son périmètre précis figure dans [la feuille de route](roadmap.md).
+Validation is performed on Windows 11 x64. The current multilingual beta is **0.2.0**; see [the roadmap](roadmap.md) for its scope. The 0.1.0 baseline passed strict TypeScript, ESLint, 52 unit/integration tests, two UI journeys, Windows packaging and the packaged Electron first-launch test on 3 October 2026.
 
-## Contrôles de code et de construction
+The 0.2.0 changes add English defaults, six complete UI/diagnostic catalogs, preference persistence checks, multilingual Electron navigation/reload/restart checks, and English project documentation.
 
-| Contrôle                                       | Résultat                                   |
-| ---------------------------------------------- | ------------------------------------------ |
-| TypeScript strict, `pnpm typecheck`            | Réussi                                     |
-| ESLint, `pnpm lint`                            | Réussi                                     |
-| Vitest, `pnpm test`                            | 52 tests réussis dans 5 fichiers           |
-| Playwright, `pnpm test:ui`                     | 2 parcours réussis                         |
-| Exécutable empaqueté, `pnpm test:packaged`     | Premier lancement Electron réussi          |
-| Compilation et packaging, `pnpm build:windows` | Installateur NSIS et portable x64 produits |
+## Version 0.2.0 release checks
 
-Les tests unitaires et d’intégration couvrent notamment SQLite, le chiffrement, les chemins confinés, les liens de fichiers, le parseur de propriétés, les ports réservés, les téléchargements et leurs empreintes, les redirections, les ZIP malveillants, RCON fragmenté, les dépendances Modrinth, les sauvegardes live, la restauration et son retour arrière, les tâches et la limitation des redémarrages après crash. Les processus de ces tests sont de petits programmes Node dédiés ; ils ne sont pas des serveurs Minecraft jouables.
+Validated on **3 October 2026**, Windows 11 x64:
 
-Le parcours Electron utilise le vrai main process, le preload et SQLite dans un dossier temporaire : premier lancement, diagnostic, préférences, dashboard vide, langue et isolation du renderer. Le second parcours utilise le **mode démo explicitement annoncé** : création, start, console, stop, sauvegarde, paramètres et restauration. Les captures ont été inspectées ; le test Electron vérifie aussi les couleurs finales du thème sombre.
+| Check                        | Result                                                   |
+| ---------------------------- | -------------------------------------------------------- |
+| Strict TypeScript            | Passed                                                   |
+| ESLint                       | Passed                                                   |
+| Vitest                       | 66 tests passed in 6 files                               |
+| Playwright                   | Both UI journeys passed; all six languages checked       |
+| Packaged Windows application | Onboarding, six languages and restart persistence passed |
+| Windows packaging            | NSIS installer and portable x64 executable produced      |
 
-## Vérifications avec les services réels
+The translation checks cover all 302 UI keys and 146 shared diagnostic messages for each language, including legacy French messages and interpolation values. English dashboard screenshots replace the earlier French screenshots.
 
-Le script `pnpm test:live` a accédé aux catalogues officiels : 103 releases Vanilla et 55 versions Paper lors de ce contrôle. Il a téléchargé un runtime Temurin Java 21 et Paper **1.21.11, build 132**, vérifié leurs empreintes puis lancé le véritable bootstrap Java / Paper. Le démarrage a atteint le contrôle EULA avec `eula=false`. Une recherche Modrinth de plugins compatibles a également retourné des résultats réels.
+## Test coverage
 
-L’empreinte SHA-256 de ce JAR Paper était :
+Unit/integration tests cover SQLite, encryption, contained paths and symlinks, property parsing, reserved ports, downloads/checksums/redirects, malicious ZIPs, fragmented RCON, Modrinth dependencies, live backup, restoration/rollback, schedules and crash restart limits. These tests use small purpose-built Node processes, not playable Minecraft servers.
+
+The desktop UI journey uses the real Electron main/preload and temporary SQLite data: onboarding, diagnostics, preferences, empty dashboard, all six languages, persistence and renderer isolation. The second journey explicitly uses **demo mode**: creation, start, console, stop, backup, settings and restore. Screenshots also verify the final dark-theme colors.
+
+## Real-service baseline
+
+On 3 October 2026, `pnpm test:live` accessed official catalogs containing 103 Vanilla releases and 55 Paper versions, downloaded Temurin Java 21 and Paper **1.21.11 build 132**, verified hashes and launched the real Java/Paper bootstrap. It reached the EULA check with `eula=false`. A compatible Modrinth plugin search also returned real results.
+
+The tested Paper JAR SHA-256 was:
 
 ```text
 5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba
 ```
 
-Le résultat machine est conservé dans `data/live-smoke/result.json` sur le poste de validation, dossier ignoré par Git. Aucun test n’accepte l’EULA d’un serveur réel au nom de son propriétaire.
+Machine results remain in the validation workstation's ignored `data/live-smoke/result.json`. No test accepts a real server's EULA on the owner's behalf. Localization changes do not represent a new gameplay validation.
 
-## Limites de cette validation
+## CI and limits
 
-Le [workflow GitHub Validate](https://github.com/Bobydeluxe/MineDock/actions/runs/37150089013) a également réussi le 3 octobre 2026 sur Ubuntu : installation des dépendances, lint, TypeScript, tests unitaires/d’intégration, compilation et deux parcours d’interface sous Xvfb. Cette validation du code et de l’interface ne valide pas à elle seule les packages AppImage/deb/DMG, les runtimes Java sur ces OS ou une session de jeu.
+The [0.1.0 Validate workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37150089013) passed on Ubuntu, including dependency installation, lint, TypeScript, tests, build and both UI journeys under Xvfb. The [subsequent platform build workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37150702487) produced Windows, Linux and macOS packages successfully. Packaging does not itself verify downloaded Java runtimes or gameplay on those OSes.
 
-- Une connexion depuis un véritable client Minecraft et une session de jeu restent à valider après acceptation personnelle de l’EULA dans l’assistant.
-- Les binaires Windows sont non signés, comme confirmé par `Get-AuthenticodeSignature`. L’installation NSIS sur le système hôte n’a pas été exécutée pendant les tests.
-- Linux, macOS, arm64 et les anciennes versions Minecraft nécessitent leurs propres validations ; leurs configurations de build ne constituent pas une preuve de fonctionnement.
-- Les scénarios de coupure électrique, disque plein et serveurs de grande taille n’ont pas fait l’objet d’un essai de charge prolongé.
+- A real Minecraft client connection/gameplay session still requires validation after personal wizard EULA acceptance.
+- Windows executables are unsigned. NSIS installation onto the host system is not performed by these smoke tests.
+- Linux, macOS, arm64 and historical Minecraft versions require platform-specific gameplay/native integration validation.
+- Power loss, disk-full conditions and very large servers have not undergone extended load testing.
 
-Les distributions incluent la licence du projet et les [mentions des dépendances](THIRD_PARTY_NOTICES.md). Les empreintes des deux distributions finales se trouvent dans `release/SHA256SUMS.txt`.
+Distributions include the project license and [third-party notices](THIRD_PARTY_NOTICES.md). Final Windows checksums are in `release/SHA256SUMS.txt`.

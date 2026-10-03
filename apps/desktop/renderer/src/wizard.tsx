@@ -19,8 +19,10 @@ import type {
   Settings,
   Progress,
 } from '../../../../packages/domain/types';
-import { useApp } from './context';
+import { AppContext, useApp } from './context';
 import { translator } from './i18n';
+import { languages } from '../../../../packages/domain/languages';
+import { localizeMessage } from '../../../../packages/domain/localization';
 import { Dialog, Button, Field, Toggle, Loading, ErrorBox, useData, bytes } from './ui';
 
 export function CreateServer({
@@ -160,12 +162,14 @@ export function CreateServer({
                 >
                   <MemoryIcon />
                   {t(label as 'small' | 'standard' | 'powerful')}
-                  <strong>{Number(value) / 1024} Go</strong>
+                  <strong>
+                    {Number(value) / 1024} {t('gigabytes')}
+                  </strong>
                 </button>
               ))}
             </div>
             <div className="form-grid">
-              <Field label={`${t('memoryMin')} (Mo)`}>
+              <Field label={`${t('memoryMin')} (${t('megabytes')})`}>
                 <input
                   type="number"
                   min={256}
@@ -175,7 +179,7 @@ export function CreateServer({
                   onChange={(e) => update('memoryMin', Number(e.target.value))}
                 />
               </Field>
-              <Field label={`${t('memoryMax')} (Mo)`}>
+              <Field label={`${t('memoryMax')} (${t('megabytes')})`}>
                 <input
                   type="number"
                   min={512}
@@ -310,7 +314,9 @@ export function CreateServer({
               </div>
               <div>
                 <span>{t('resources')}</span>
-                <strong>{input.memoryMax / 1024} Go RAM</strong>
+                <strong>
+                  {input.memoryMax / 1024} {t('gigabytes')} RAM
+                </strong>
               </div>
               <div>
                 <span>{t('gameplay')}</span>
@@ -377,7 +383,7 @@ export function CreateServer({
                     </header>
                     <progress max={item.total || 1} value={item.received} />
                     <small>
-                      {item.error ||
+                      {(item.error && localizeMessage(item.error, snapshot.settings.language)) ||
                         `${bytes(item.received)} / ${item.total ? bytes(item.total) : '…'} · ${bytes(item.speed)}/s`}
                     </small>
                   </div>
@@ -421,10 +427,14 @@ function MemoryIcon() {
   return <Sparkles size={17} />;
 }
 export function Onboarding() {
-  const { api, snapshot, run, busy } = useApp();
+  const context = useApp();
+  const { api, snapshot, run, busy } = context;
   const [step, setStep] = useState(0);
   const [settings, setSettings] = useState<Settings>(snapshot.settings);
   const t = translator(settings.language);
+  useEffect(() => {
+    document.documentElement.lang = settings.language;
+  }, [settings.language]);
   const diagnostic = useData(() => api.diagnostic(), []);
   const titles = ['setupLanguage', 'setupDiagnostic', 'setupFolders', 'setupFinish'] as const;
   const folder = async (key: 'serverRoot' | 'backupRoot') => {
@@ -432,134 +442,139 @@ export function Onboarding() {
     if (result.ok && result.value) setSettings((s) => ({ ...s, [key]: result.value! }));
   };
   return (
-    <Dialog title={t('setupTitle')} closeLabel={t('close')}>
-      <div className="dialog-body onboarding">
-        <div className="setup-icon">
-          {step === 0 ? (
-            <Globe2 size={30} />
-          ) : step === 1 ? (
-            <ServerIcon size={30} />
-          ) : step === 2 ? (
-            <Folder size={30} />
-          ) : (
-            <ShieldCheck size={30} />
+    <AppContext value={{ ...context, snapshot: { ...snapshot, settings }, t }}>
+      <Dialog title={t('setupTitle')} closeLabel={t('close')}>
+        <div className="dialog-body onboarding">
+          <div className="setup-icon">
+            {step === 0 ? (
+              <Globe2 size={30} />
+            ) : step === 1 ? (
+              <ServerIcon size={30} />
+            ) : step === 2 ? (
+              <Folder size={30} />
+            ) : (
+              <ShieldCheck size={30} />
+            )}
+          </div>
+          <small className="eyebrow">{step + 1} / 4</small>
+          <h2>{t(titles[step]!)}</h2>
+          <p className="muted">{t('setupSub')}</p>
+          {step === 0 && (
+            <div className="language-options">
+              {languages.map(({ code, name }) => (
+                <Button
+                  key={code}
+                  lang={code}
+                  aria-pressed={settings.language === code}
+                  variant={settings.language === code ? 'primary' : 'default'}
+                  onClick={() => setSettings((s) => ({ ...s, language: code }))}
+                >
+                  {name}
+                </Button>
+              ))}
+            </div>
+          )}
+          {step === 1 &&
+            (diagnostic.error ? (
+              <ErrorBox
+                error={diagnostic.error}
+                retry={diagnostic.reload}
+                retryLabel={t('retry')}
+              />
+            ) : !diagnostic.data ? (
+              <Loading label={t('loading')} />
+            ) : (
+              <>
+                <div className="diagnostic-grid">
+                  {[
+                    [t('operatingSystem'), diagnostic.data.platform],
+                    [t('architecture'), diagnostic.data.arch],
+                    [t('availableRam'), bytes(diagnostic.data.freeMemory)],
+                    [t('availableDisk'), bytes(diagnostic.data.freeDisk)],
+                    [
+                      t('detectedJava'),
+                      diagnostic.data.java.map((j) => `Java ${j.major}`).join(', ') || t('absent'),
+                    ],
+                    [t('dockerOptional'), t(diagnostic.data.docker ? 'available' : 'absent')],
+                  ].map(([label, value]) => (
+                    <div key={label}>
+                      <span>{label}</span>
+                      <strong>{value}</strong>
+                    </div>
+                  ))}
+                </div>
+                <div className="info-note">
+                  <Coffee size={19} />
+                  <p>{t('javaAutoHelp')}</p>
+                </div>
+              </>
+            ))}
+          {step === 2 && (
+            <>
+              {(['serverRoot', 'backupRoot'] as const).map((key) => (
+                <Field key={key} label={t(key === 'serverRoot' ? 'serverFolder' : 'backupFolder')}>
+                  <div className="input-button">
+                    <input readOnly value={settings[key]} />
+                    <Button
+                      onClick={() => {
+                        void folder(key);
+                      }}
+                    >
+                      <Folder size={15} />
+                      {t('choose')}
+                    </Button>
+                  </div>
+                </Field>
+              ))}
+              <Field label={t('theme')}>
+                <select
+                  value={settings.theme}
+                  onChange={(e) =>
+                    setSettings((s) => ({ ...s, theme: e.target.value as Settings['theme'] }))
+                  }
+                >
+                  {(['system', 'dark', 'light'] as const).map((value) => (
+                    <option key={value} value={value}>
+                      {t(value)}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+            </>
+          )}
+          {step === 3 && (
+            <>
+              <div className="info-note">
+                <ShieldCheck size={20} />
+                <p>{t('setupPrivacy')}</p>
+              </div>
+              <p className="muted">{t('localAdmin')}</p>
+            </>
           )}
         </div>
-        <small className="eyebrow">{step + 1} / 4</small>
-        <h2>{t(titles[step]!)}</h2>
-        <p className="muted">{t('setupSub')}</p>
-        {step === 0 && (
-          <div className="language-options">
-            <Button
-              variant={settings.language === 'fr' ? 'primary' : 'default'}
-              onClick={() => setSettings((s) => ({ ...s, language: 'fr' }))}
-            >
-              Français
+        <footer className="dialog-footer">
+          <Button disabled={step === 0 || busy} onClick={() => setStep(step - 1)}>
+            {t('previous')}
+          </Button>
+          {step < 3 ? (
+            <Button variant="primary" onClick={() => setStep(step + 1)}>
+              {t('next')}
+              <ArrowRight size={16} />
             </Button>
-            <Button
-              variant={settings.language === 'en' ? 'primary' : 'default'}
-              onClick={() => setSettings((s) => ({ ...s, language: 'en' }))}
-            >
-              English
-            </Button>
-          </div>
-        )}
-        {step === 1 &&
-          (diagnostic.error ? (
-            <ErrorBox error={diagnostic.error} retry={diagnostic.reload} retryLabel={t('retry')} />
-          ) : !diagnostic.data ? (
-            <Loading label={t('loading')} />
           ) : (
-            <>
-              <div className="diagnostic-grid">
-                {[
-                  [t('operatingSystem'), diagnostic.data.platform],
-                  [t('architecture'), diagnostic.data.arch],
-                  [t('availableRam'), bytes(diagnostic.data.freeMemory)],
-                  [t('availableDisk'), bytes(diagnostic.data.freeDisk)],
-                  [
-                    t('detectedJava'),
-                    diagnostic.data.java.map((j) => `Java ${j.major}`).join(', ') || t('absent'),
-                  ],
-                  [t('dockerOptional'), t(diagnostic.data.docker ? 'available' : 'absent')],
-                ].map(([label, value]) => (
-                  <div key={label}>
-                    <span>{label}</span>
-                    <strong>{value}</strong>
-                  </div>
-                ))}
-              </div>
-              <div className="info-note">
-                <Coffee size={19} />
-                <p>{t('javaAutoHelp')}</p>
-              </div>
-            </>
-          ))}
-        {step === 2 && (
-          <>
-            {(['serverRoot', 'backupRoot'] as const).map((key) => (
-              <Field key={key} label={t(key === 'serverRoot' ? 'serverFolder' : 'backupFolder')}>
-                <div className="input-button">
-                  <input readOnly value={settings[key]} />
-                  <Button
-                    onClick={() => {
-                      void folder(key);
-                    }}
-                  >
-                    <Folder size={15} />
-                    {t('choose')}
-                  </Button>
-                </div>
-              </Field>
-            ))}
-            <Field label={t('theme')}>
-              <select
-                value={settings.theme}
-                onChange={(e) =>
-                  setSettings((s) => ({ ...s, theme: e.target.value as Settings['theme'] }))
-                }
-              >
-                {(['system', 'dark', 'light'] as const).map((value) => (
-                  <option key={value} value={value}>
-                    {t(value)}
-                  </option>
-                ))}
-              </select>
-            </Field>
-          </>
-        )}
-        {step === 3 && (
-          <>
-            <div className="info-note">
-              <ShieldCheck size={20} />
-              <p>{t('setupPrivacy')}</p>
-            </div>
-            <p className="muted">{t('localAdmin')}</p>
-          </>
-        )}
-      </div>
-      <footer className="dialog-footer">
-        <Button disabled={step === 0 || busy} onClick={() => setStep(step - 1)}>
-          {t('previous')}
-        </Button>
-        {step < 3 ? (
-          <Button variant="primary" onClick={() => setStep(step + 1)}>
-            {t('next')}
-            <ArrowRight size={16} />
-          </Button>
-        ) : (
-          <Button
-            variant="primary"
-            disabled={busy}
-            onClick={() => {
-              void run(() => api.settings({ ...settings, onboarded: true }));
-            }}
-          >
-            {t('setupStart')}
-            <ArrowRight size={16} />
-          </Button>
-        )}
-      </footer>
-    </Dialog>
+            <Button
+              variant="primary"
+              disabled={busy}
+              onClick={() => {
+                void run(() => api.settings({ ...settings, onboarded: true }));
+              }}
+            >
+              {t('setupStart')}
+              <ArrowRight size={16} />
+            </Button>
+          )}
+        </footer>
+      </Dialog>
+    </AppContext>
   );
 }

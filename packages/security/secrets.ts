@@ -18,7 +18,7 @@ export class LocalSecretStore implements SecretStore {
       key = randomBytes(32);
       await writeFile(filename, key, { flag: 'wx', mode: 0o600 });
     }
-    if (key.length !== 32) throw new Error('La clé locale de chiffrement est invalide.');
+    if (key.length !== 32) throw new Error('The local encryption key is invalid.');
     return new LocalSecretStore(key);
   }
   encrypt(value: string): string {

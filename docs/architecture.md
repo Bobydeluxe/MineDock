@@ -1,39 +1,39 @@
-# Architecture et décisions
+# Architecture and decisions
 
-## État initial et périmètre
+## Initial state and scope
 
-Le repository était vide. La première livraison implémente le cœur V1 : Java, Vanilla/Paper, processus natifs, administration locale et sécurité des données. Les fonctions avancées du cahier des charges sont listées explicitement dans `roadmap.md`. Aucun compte, cloud ou assistant IA n’est requis.
+The repository began empty. V1 implements Java, Vanilla/Paper, native processes, local administration and data protection. Advanced requirements are explicitly tracked in [the roadmap](roadmap.md). No account, cloud or AI assistant is required.
 
-## Electron plutôt que Tauri pour la V1
+## Electron for V1
 
-Le main process Node embarqué réunit les flux de processus, TCP RCON, extraction de runtimes, streaming réseau et SQLite. Il évite un service Node externe ou une seconde implémentation Rust de ces services. Le workspace disposait déjà de Node 24 et pas de toolchain Rust. Cet avantage de livraison et de test justifie Electron malgré son empreinte mémoire plus élevée que Tauri. React ne dépend pas de ses API : tout passe par le contrat `Api` du preload.
+The bundled Node main process combines process streams, TCP RCON, runtime extraction, network streaming and SQLite. This avoids an external Node service or a second Rust implementation. The original workspace already had Node 24 and no Rust toolchain. Delivery and testing favored Electron despite its larger memory footprint. React depends on the preload `Api` contract rather than Electron APIs.
 
-La fenêtre utilise `sandbox: true`, `contextIsolation: true`, `nodeIntegration: false`. Le preload expose seulement les méthodes nommées du contrat, jamais `ipcRenderer`, `fs`, un PID à manipuler ou une primitive d’exécution. Le main vérifie l’identité du renderer et son URL à chaque appel. Les pages externes ne sont jamais intégrées dans un renderer privilégié.
+The window uses `sandbox: true`, `contextIsolation: true` and `nodeIntegration: false`. Preload exposes only named contract methods, never `ipcRenderer`, `fs`, arbitrary PIDs or execution primitives. Main verifies renderer identity and URL for every call. External pages are never embedded in a privileged renderer.
 
-## Couches
+## Layers
 
-- Domaine : DTO, Zod, parseur de propriétés, erreurs et états.
-- Application : `AppCore` orchestre les services, sérialise les mutations par serveur et centralise l’audit.
-- Infrastructure : processus, téléchargements, fichiers, SQLite et secrets.
-- Présentation : composants React, dictionnaires FR/EN et thèmes. Le mock est activé uniquement par le mode Vite `mock`.
+- Domain: DTOs, Zod validation, property parsing, errors, states and language definitions.
+- Application: `AppCore` orchestrates services, serializes mutations per server and centralizes audit.
+- Infrastructure: processes, downloads, files, SQLite and secrets.
+- Presentation: React, six complete language catalogs and themes. Mock data requires the explicit Vite `mock` mode.
 
-`ServerRunner`, `SecretStore`, `BackupStorageProvider` et `MarketplaceProvider` définissent des frontières pour les futures implémentations Docker, keychains, clouds et registres. Les implémentations V1 sont concrètes et testées ; les providers futurs n’ont pas de fonctions vides.
+`ServerRunner`, `SecretStore`, `BackupStorageProvider` and `MarketplaceProvider` define boundaries for future implementations. V1 providers are concrete; future providers are not empty functions presented as working features.
 
-## Données
+## Data
 
-SQLite natif Node est embarqué dans Electron, sans module SQLite natif à recompiler. `migrations.ts` contient le SQL versionné ; `PRAGMA user_version` enregistre la version. `quick_check` vérifie la base, une copie précède une migration, puis une transaction applique le schéma. WAL et clés étrangères sont activés. Un snapshot cohérent de la base est créé à l’ouverture et toutes les heures.
+Electron embeds native Node SQLite without a separate native module to rebuild. `migrations.ts` holds versioned SQL and `PRAGMA user_version` records the version. `quick_check` checks integrity; a copy precedes migration, followed by a schema transaction. WAL and foreign keys are enabled. A consistent database snapshot is taken on opening and hourly.
 
-Les tables contiennent profils, réglages, archives, tâches, événements, métriques, contenu installé, historique joueurs et runtimes. Les profils JSON sont typés côté application ; les index temporels permettent la rétention des métriques. Les fonctionnalités de comptes distants ajouteront leurs propres migrations quand elles seront implémentées.
+Tables store profiles, preferences, archives, tasks, events, metrics, installed content, player history and runtimes. Application code types JSON profiles; time indexes support metric retention. Future remote accounts require their own migrations. Language preferences already stored by earlier versions remain valid.
 
-## Événements et charge
+## Events and load
 
-Le bus fournit états, logs, métriques, progression et audit. Les envois de console vers le renderer sont groupés toutes les 100 ms et bornés à 500 lignes par envoi/serveur pour éviter l’accumulation IPC lors d’un flot excessif. Aucun serveur web administratif n’est démarré. Les métriques sont mesurées toutes les cinq secondes uniquement pour les processus actifs, persistées toutes les quinze secondes, agrégées à la lecture et retenues sept jours. Le client borne ses logs à 5 000 lignes et les virtualise. Java produit ses propres logs persistants sur disque.
+The bus carries states, logs, metrics, progress and audit. Console IPC sends batches every 100 ms, capped at 500 lines per server per batch. No administrative web server starts. Active processes are sampled every five seconds, metrics persist every fifteen seconds, are aggregated on read and retained seven days. The renderer caps console history at 5,000 lines and virtualizes it. Java retains its own logs on disk.
 
-## Sources vérifiées
+## Sources
 
-- [Paper Downloads Service](https://docs.papermc.io/misc/downloads-service/) : API v3, User-Agent identifié, builds stables et SHA-256.
-- [Exigences Java Paper](https://docs.papermc.io/paper/getting-started/) : recommandations distinctes de Mojang, jusqu’à Java 25 pour 26.1+.
-- [Modrinth API](https://docs.modrinth.com/api/) : filtres version / loader / côté serveur et SHA-512.
-- [Electron security](https://www.electronjs.org/docs/latest/tutorial/security), [safeStorage](https://www.electronjs.org/docs/latest/api/safe-storage).
+- [Paper Downloads Service](https://docs.papermc.io/misc/downloads-service/): v3 API, identified User-Agent, stable builds and SHA-256.
+- [Paper Java requirements](https://docs.papermc.io/paper/getting-started/): recommendations separate from Mojang, including Java 25 for 26.1+.
+- [Modrinth API](https://docs.modrinth.com/api/): version/loader/server-side filters and SHA-512.
+- [Electron security](https://www.electronjs.org/docs/latest/tutorial/security) and [safeStorage](https://www.electronjs.org/docs/latest/api/safe-storage).
 
-Mojang détermine directement `javaVersion.majorVersion` dans les métadonnées de la version. Le mapping historique n’est qu’un fallback.
+Mojang supplies `javaVersion.majorVersion` in version metadata. Historical mapping is only a fallback.

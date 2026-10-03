@@ -74,12 +74,12 @@ export class MinecraftVersionService {
       await fetchJson<unknown>('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'),
     );
     const entry = manifest.versions.find((v) => v.id === version && v.type === 'release');
-    if (!entry) throw new DomainError('VERSION', 'Version Minecraft non disponible.');
+    if (!entry) throw new DomainError('VERSION', 'Minecraft version is unavailable.');
     const meta = metadataSchema.parse(await fetchJson<unknown>(entry.url));
     const java = meta.javaVersion?.majorVersion ?? javaForVersion(version);
     if (engine === 'vanilla') {
       if (!meta.downloads.server)
-        throw new DomainError('VERSION', 'Cette version ne propose pas de serveur officiel.');
+        throw new DomainError('VERSION', 'This version does not provide an official server.');
       return {
         url: meta.downloads.server.url,
         hash: { algorithm: 'sha1', value: meta.downloads.server.sha1 },
@@ -99,7 +99,7 @@ export class MinecraftVersionService {
     if (!file || !build)
       throw new DomainError(
         'VERSION',
-        'Aucune build Paper stable pour cette version. Choisissez une autre version.',
+        'No stable Paper build for this version. Choose another version.',
       );
     return {
       url: file.url,

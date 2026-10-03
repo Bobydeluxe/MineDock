@@ -1222,6 +1222,7 @@ textarea {
 }
 .language-options {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   gap: 15px;
   margin: 30px 0 12px;

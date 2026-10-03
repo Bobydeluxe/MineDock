@@ -18,7 +18,7 @@ export async function rconCommand(
   timeout = 6000,
 ): Promise<string> {
   if (/[\0\r\n]/.test(command) || Buffer.byteLength(command) > 4096)
-    throw new DomainError('COMMAND', 'Commande invalide.');
+    throw new DomainError('COMMAND', 'Invalid command.');
   return new Promise((resolve, reject) => {
     const socket = net.createConnection({ host: '127.0.0.1', port });
     const auth = randomInt(1, 1000000);
@@ -37,41 +37,41 @@ export async function rconCommand(
       else resolve(output);
     };
     const timer = setTimeout(
-      () => finish(new DomainError('RCON', 'RCON ne répond pas. Attendez la fin du démarrage.')),
+      () => finish(new DomainError('RCON', 'RCON is not responding. Wait for startup to finish.')),
       timeout,
     );
     socket.once('connect', () => socket.write(encodePacket(auth, 3, password)));
     socket.on('error', () =>
       finish(
-        new DomainError('RCON', 'Connexion RCON impossible. Vérifiez que le serveur est actif.'),
+        new DomainError('RCON', 'Unable to connect to RCON. Check that the server is running.'),
       ),
     );
     socket.on('close', () => {
-      if (!done) finish(new DomainError('RCON', 'La connexion RCON a été fermée.'));
+      if (!done) finish(new DomainError('RCON', 'The RCON connection was closed.'));
     });
     socket.on('data', (data: Buffer) => {
       buffer = Buffer.concat([buffer, data]);
       if (buffer.length > 4 * 1024 * 1024) {
-        finish(new Error('Réponse RCON trop volumineuse.'));
+        finish(new Error('RCON response is too large.'));
         return;
       }
       while (buffer.length >= 4) {
         const length = buffer.readInt32LE(0);
         if (length < 10 || length > 4 * 1024 * 1024) {
-          finish(new Error('Paquet RCON invalide.'));
+          finish(new Error('Invalid RCON packet.'));
           return;
         }
         if (buffer.length < length + 4) break;
         const packet = buffer.subarray(0, length + 4);
         buffer = buffer.subarray(length + 4);
         if (packet.at(-1) !== 0 || packet.at(-2) !== 0) {
-          finish(new Error('Terminaison RCON invalide.'));
+          finish(new Error('Invalid RCON terminator.'));
           return;
         }
         const id = packet.readInt32LE(4);
         const type = packet.readInt32LE(8);
         if (id === -1) {
-          finish(new DomainError('RCON', 'Authentification RCON refusée.'));
+          finish(new DomainError('RCON', 'RCON authentication was rejected.'));
           return;
         }
         if (!authenticated && id === auth && type === 2) {

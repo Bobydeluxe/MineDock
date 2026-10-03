@@ -1,5 +1,5 @@
-# Signaler un problème de sécurité
+# Reporting a security issue
 
-Ne publiez pas un exploit avec des secrets ou des mondes privés dans une issue publique. Une fois le repository publié, utilisez son mécanisme de signalement privé GitHub si activé, ou le canal privé indiqué par les mainteneurs. Aucun email de contact fictif n’est fourni dans cette version locale.
+Do not post exploits containing secrets or private worlds in public issues. Use the repository's private GitHub vulnerability reporting facility if enabled, or a private channel specified by the maintainers. This beta does not provide an invented contact address.
 
-Joignez la version, l’OS, les étapes minimales et des logs nettoyés. Les versions bêta n’ont pas encore reçu d’audit indépendant. Les frontières et limites sont documentées dans `docs/security.md`.
+Include the version, operating system, minimal reproduction steps and sanitized logs. Beta versions have not received an independent audit. See [security boundaries and limitations](docs/security.md).

@@ -11,14 +11,13 @@ export function readableError(error: unknown): string {
   if (error instanceof DomainError) return error.message;
   if (error instanceof Error) {
     if (error.name === 'ZodError')
-      return 'Certains paramètres sont invalides. Vérifiez les champs saisis et leurs limites.';
+      return 'Some settings are invalid. Check the entered values and their limits.';
     if (/ENOSPC/.test(error.message))
-      return 'Espace disque insuffisant. Libérez de l’espace puis réessayez.';
-    if (/EACCES|EPERM/.test(error.message))
-      return 'Accès refusé. Vérifiez les permissions du dossier.';
+      return 'Not enough disk space. Free some space and try again.';
+    if (/EACCES|EPERM/.test(error.message)) return 'Access denied. Check the folder permissions.';
     if (/fetch failed|ECONN|ENOTFOUND|timeout|abort/i.test(error.message))
-      return 'Connexion impossible ou interrompue. Vérifiez votre réseau puis réessayez.';
+      return 'Connection failed or was interrupted. Check your network and try again.';
     return error.message;
   }
-  return 'Une erreur inattendue est survenue.';
+  return 'An unexpected error occurred.';
 }

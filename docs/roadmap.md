@@ -1,30 +1,30 @@
-# Périmètre et limites honnêtes de la bêta
+# Beta scope and limitations
 
-Le cœur local V1 est implémenté. Les fichiers `plan.md` et `validation.md` décrivent ce qui est exécuté et testé.
+The local V1 core is implemented. [The implementation plan](plan.md) and [validation record](validation.md) describe what is exercised and tested.
 
-## Avant une V1 stable publique
+## Before a stable public V1
 
-- Faire le parcours de connexion avec un vrai client Minecraft après consentement EULA du propriétaire. Les tests live de cette livraison s’arrêtent volontairement avant ce consentement.
-- Valider plusieurs versions historiques Vanilla/Paper, Linux, macOS et architectures arm64 sur leurs OS.
-- Ajouter la reprise des téléchargements à partir d’un offset, la récupération automatique de staging après coupure et les annulations de jobs longues. La reprise d’une installation incomplète depuis le bouton Réessayer est implémentée, avec version/build épinglés.
-- Élargir les tests de démarrage forcé, de crash répété et de disque plein.
-- Mettre en place certificats, signatures et canal de mises à jour vérifiées.
-- Préparer audit indépendant et politiques de rétention configurables.
+- Connect a real Minecraft client after the owner personally accepts the EULA. Existing live tests stop at that consent gate.
+- Validate historical Vanilla/Paper versions, Linux, macOS and arm64 on their actual platforms.
+- Add offset-based download resumption, automatic staging recovery after interruption and broader long-job cancellation. Retrying an incomplete installation already preserves its pinned version/build.
+- Broaden forced-shutdown, repeated-crash and disk-full testing.
+- Configure certificates, signatures and a verified update channel.
+- Arrange independent auditing and configurable retention policies.
 
-## Extensions après stabilisation
+## Extensions after stabilization
 
-Fabric / Forge / NeoForge / Purpur, BDS / PocketMine, import de serveurs et de modpacks, import/export/duplication de mondes, mises à jour de plugins avec comparaison et rollback, CurseForge / Hangar, Geyser / Floodgate, tunnels Playit, Docker avec quotas, panneau distant et comptes locaux multi-utilisateurs, cloud backups et IA optionnelle.
+Fabric/Forge/NeoForge/Purpur, BDS/PocketMine, server/modpack import, dedicated world import/export/duplication, plugin update comparison/rollback, CurseForge/Hangar, Geyser/Floodgate, Playit tunnels, Docker quotas, remote administration/local multi-user accounts, cloud backups and optional AI.
 
-## Choix V1 simplifiés
+## Simplified V1 choices
 
-- Les tâches utilisent des intervalles en minutes, pas encore un calendrier quotidien/cron avec avertissements multiples. Restart annonce dix secondes.
-- Console en mémoire limitée à 5 000 lignes ; les logs Minecraft complets restent sur disque. L’éditeur est textuel avec validation JSON, sans coloration syntaxique ni validation YAML.
-- File manager : navigation, édition, création, import/export fichier, suppression ; pas encore rename/move/copy ou outils ZIP génériques dans l’UI.
-- Modrinth : plugins Paper, installation de dépendances, versions épinglées, enable/disable. Pas encore recherche de mises à jour, désinstallation gérée, comparaison de versions ni téléchargement d’icônes distantes.
-- Joueurs : pseudos live et modération RCON ; UUID/ping/playtime et listes persistantes détaillées ne sont pas inventés.
-- Taille de serveur disponible, rafraîchie périodiquement ; pas encore un index par catégorie et une liste des plus gros fichiers.
-- Runtimes : installation, détection et sélection par serveur ; réparation/suppression de runtime via UI reste à ajouter.
-- La détection Docker est informative. Elle n’annonce pas un runner Docker fonctionnel.
-- L’interface est FR/EN ; certains diagnostics domaine restent en français.
+- Tasks use minute intervals rather than daily calendars/cron or multiple warnings. Scheduled restart announces ten seconds.
+- In-memory console history is capped at 5,000 lines; full Minecraft logs stay on disk. Text editing validates JSON but has no syntax highlighting/YAML validation.
+- Files: browse, edit, create, import/export and delete. Rename/move/copy and general ZIP tools are not implemented in the UI.
+- Modrinth: Paper plugins, dependencies, pinned versions and enable/disable. Update checks, managed uninstall, version comparison and remote project icons are pending.
+- Players: live usernames and RCON moderation. UUID/ping/playtime and detailed persistent lists are not fabricated.
+- Server size refreshes periodically; storage category indexes and largest-file lists are pending.
+- Runtimes: install, detect and choose per server. UI repair/removal is pending.
+- Docker detection is informational; there is no Docker runner.
+- Six languages cover MineDock's interface and recognized diagnostics. External output and unknown errors retain their original text.
 
-Ces limites sont documentées et les fonctions absentes ne sont pas présentées avec des boutons trompeurs.
+Unavailable features are documented rather than represented by nonfunctional buttons.

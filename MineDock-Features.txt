@@ -1,0 +1,392 @@
+MINEDOCK — COMPLETE FEATURE LIST
+Version: 0.2.0 beta
+Project status: 3 October 2026
+
+This document distinguishes implemented features, current limitations and
+planned improvements. Planned features are not available in the beta.
+English is the primary project language and the application's default.
+
+======================================================================
+1. APPLICATION AND FIRST LAUNCH — IMPLEMENTED
+======================================================================
+
+- Desktop application with a graphical interface.
+- Local management of multiple Minecraft servers.
+- No mandatory cloud account.
+- Four-step first-launch wizard.
+- Six languages: English, French, German, Spanish, Portuguese and Italian.
+- Immediate language preview during onboarding.
+- Language selection in Settings, saved between launches.
+- Existing language preferences preserved when upgrading.
+- Localized MineDock errors, crash explanations and activity labels.
+- Light, dark or system-synchronized theme.
+- Server and backup folder selection.
+- Platform, architecture and available-resource diagnostics.
+- Total memory, free memory and free disk-space display.
+- Detection of existing Java installations.
+- Informational Docker detection, without a Docker server runner.
+- Local-network IP detection and available-port discovery.
+- Persistent preferences.
+- Only one MineDock instance at a time.
+- Offline local administration after complete installation and first server
+  startup; downloads require Internet access.
+- Optional temporary sleep prevention while servers run.
+
+======================================================================
+2. DASHBOARD AND NAVIGATION — IMPLEMENTED
+======================================================================
+
+- Overview of all servers.
+- Cards displaying server name, engine, version and status.
+- Active-server and connected-player counts.
+- Used memory and server storage display.
+- Server search by name.
+- All, online and stopped server filters.
+- Sidebar with direct access to each server.
+- Quick start, stop and backup actions.
+- Display/copy local and LAN connection addresses.
+- Activity history and access to backups.
+- Success notifications and error messages.
+- Navigation palette: Ctrl+K.
+- Open settings: Ctrl+,.
+- Create a server: Ctrl+Shift+N.
+- Layout adapts to different window sizes.
+- Separate, explicitly identified demo mode for development.
+
+======================================================================
+3. SERVER CREATION AND INSTALLATION — IMPLEMENTED
+======================================================================
+
+- Four-step server creation wizard.
+- Server name selection.
+- Paper or Vanilla engine selection.
+- Version lists from official Mojang and PaperMC catalogs.
+- Vanilla release versions; snapshots hidden in this beta.
+- Stable Paper build selection.
+- Pinned Minecraft version and Paper build for installation.
+- Minimum/maximum Java memory settings, including a 4 GB preset.
+- Minecraft port selection.
+- Minecraft/RCON port conflict checks across profiles.
+- Initial game mode and difficulty configuration.
+- Maximum player count.
+- PvP and whitelist controls.
+- View/simulation distance settings.
+- World seed and server welcome message.
+- Minecraft account verification through online-mode.
+- Automatic startup and crash recovery options.
+- Pre-creation summary.
+- Minecraft EULA link and explicit acceptance checkbox.
+- Recording of the consent personally given in the wizard.
+- Automatic installation of the appropriate Java runtime when needed.
+- Official Minecraft/Paper JAR downloads.
+- Server folder and configuration creation.
+- Download progress, received bytes and speed display.
+- Cancellation of an ongoing download.
+- Download checksum verification before installation.
+- Incomplete profiles retained after failed installation.
+- Retry button for incomplete installation using the same pinned version/build,
+  while preventing an incomplete server from starting.
+
+======================================================================
+4. JAVA AND RUNTIMES — IMPLEMENTED
+======================================================================
+
+- Java discovery through JAVA_HOME, accessible executables and managed runtimes.
+- Isolated Temurin/Adoptium runtime downloads.
+- Java major versions 8, 11, 16, 17, 21 and 25.
+- Required Java version determined from engine/Minecraft version.
+- Separate Vanilla and Paper Java requirements.
+- Available-runtime list in Settings.
+- Runtime installation from the interface.
+- Compatible runtime selection for each server.
+- Download verification and controlled extraction of Java archives.
+- Distributed application requires no Node or pnpm installation.
+
+======================================================================
+5. STARTUP, SHUTDOWN AND SUPERVISION — IMPLEMENTED
+======================================================================
+
+- Independent Java process for every server.
+- Start, stop and restart from the interface.
+- Automatic startup of configured profiles when MineDock opens.
+- Runtime, JAR, EULA and port checks before startup.
+- Installing, stopped, starting, online, stopping, crashed, backing-up and
+  restoring states.
+- Successful startup detected from real server output.
+- Five-minute startup timeout.
+- PID, start time and exit code tracking.
+- save-all flush before shutdown when RCON is available.
+- stop command and graceful shutdown waiting.
+- Forced termination as a last resort after the shutdown timeout.
+- Expected shutdown distinguished from crashes.
+- Crash detection with explanations for recognized errors.
+- Optional automatic crash recovery with 15- then 30-second delays.
+- Recovery suspended after three crashes in ten minutes.
+- Serialization of sensitive operations on the same server.
+- Detection of an old active PID after abrupt manager termination.
+- Blocking/explanation when an old process may still use a server.
+- Supervised server shutdown when MineDock closes normally.
+
+======================================================================
+6. CONSOLE AND COMMANDS — IMPLEMENTED
+======================================================================
+
+- Live logs from the actual Java process.
+- stdout/stderr reading.
+- Virtualized console to limit rendering cost.
+- Console-line search.
+- Log-level filters.
+- Optional automatic scrolling.
+- Copy console contents.
+- Administrative command submission.
+- Quick commands.
+- Command history navigable with keyboard arrows.
+- Authenticated local RCON connection.
+- Fragmented RCON response handling and response deadlines.
+- Sensitive-data redaction in displayed logs.
+- Console buffer capped at 5,000 lines; Minecraft disk logs remain available.
+- Original Minecraft output and protocol commands retained verbatim.
+
+======================================================================
+7. PLAYERS AND MODERATION — IMPLEMENTED
+======================================================================
+
+- Connected usernames collected from logs and RCON list.
+- Player count and maximum capacity display.
+- Periodic player-list refresh.
+- Kick a player.
+- Ban a player.
+- Grant operator permissions: op.
+- Remove operator permissions: deop.
+- Add a player to the whitelist.
+- Username entry for supported moderation actions.
+- Other Minecraft commands available through the free-form console.
+
+======================================================================
+8. CONFIGURATION AND WORLD — IMPLEMENTED
+======================================================================
+
+- Graphical editing of principal server properties.
+- Survival, creative, adventure and spectator modes.
+- Peaceful, easy, normal and hard difficulty.
+- PvP, hardcore and command blocks.
+- Maximum player count and whitelist.
+- World name, seed and structure generation.
+- View/simulation distances.
+- Network port and online-mode.
+- MOTD welcome message and spawn protection.
+- Profile minimum/maximum RAM editing.
+- Java runtime selection and automatic startup/recovery options.
+- Value validation and port-conflict checks.
+- Backups before relevant configuration changes.
+- Preservation of unchanged properties and handling of comments, escapes and
+  Unicode characters in server.properties.
+- Main-world, seed and folder view.
+- Open the server folder in the operating system's file browser.
+- Backup/settings access from the world view.
+- Confirmed server deletion into local trash, preserving files.
+
+======================================================================
+9. FILE MANAGER — IMPLEMENTED
+======================================================================
+
+- Server-folder navigation.
+- Breadcrumb navigation to parent folders.
+- Names, sizes and modification dates.
+- Text-file reading/editing.
+- JSON validation before saving.
+- File/folder creation.
+- Native file import/export dialogs.
+- Confirmed file deletion, preceded by a safety backup.
+- Sensitive/essential file protection.
+- Contained paths with traversal, symbolic-link and junction checks.
+- Read-only access while a server is active.
+- Current text-editor limit: 2 MB.
+
+======================================================================
+10. BACKUPS AND RESTORATION — IMPLEMENTED
+======================================================================
+
+- Manual complete-server backups.
+- Global and per-server backup lists.
+- ZIP archives indexed in SQLite.
+- Name, date, size and reason display.
+- SHA-256 integrity verification.
+- Native backup export.
+- Confirmed backup deletion.
+- Live backups using save-off, save-all flush and save-on.
+- Safety shutdown if world-saving resumption cannot be confirmed.
+- Free-space checks before backup/restoration preparation.
+- Restoration requires a stopped server and exact confirmation name.
+- Safety backup before every restore.
+- Checksum verification before extraction.
+- Staged extraction with archive-entry validation.
+- Prepared-folder swap and rollback for relevant failures.
+- Managed-plugin metadata restoration.
+- Profile settings synchronized with restored properties.
+- Current profile ports retained and RCON secret reinjected on restore.
+- rcon.password and session locks excluded from generated archives.
+- No automatic purging of manual backups.
+- Current limit: 64 GB uncompressed per backup.
+
+======================================================================
+11. SCHEDULER — IMPLEMENTED
+======================================================================
+
+- SQLite-persisted tasks retained between launches.
+- Repeated execution by minute interval, minimum five minutes.
+- Backup, start, stop, restart and command actions.
+- Next execution and task-error display.
+- Task deletion.
+- Missed executions coalesce into one recovery run without a catch-up loop.
+- Ten-second announcement before scheduled restart.
+- Tasks execute while MineDock remains open.
+
+======================================================================
+12. PLUGINS AND MODRINTH — IMPLEMENTED
+======================================================================
+
+- Modrinth plugin search for Paper servers.
+- Minecraft-version, engine and server-side compatibility filtering.
+- Project information and download count.
+- Compatible-version selection and installed-version pinning.
+- Required dependency resolution/installation with depth/count limits.
+- SHA-512 verification for applicable downloads.
+- File staging and rollback on installation failure.
+- Existing files unmanaged by MineDock cannot be silently replaced.
+- Backup before installation.
+- Local installed-content registry and installed-plugin list.
+- Plugin enable/disable while the server is stopped.
+- External project titles/descriptions preserved in their original language.
+
+======================================================================
+13. METRICS, ACTIVITY AND LOGS — IMPLEMENTED
+======================================================================
+
+- Actual Java process CPU measurement.
+- Actual Java process RAM measurement.
+- Per-server CPU/memory charts.
+- Metric sampling every five seconds.
+- Periodic SQLite metric persistence.
+- Seven-day metric retention.
+- Server-folder size measurement/refresh.
+- Activity history with date, server, action and result.
+- Sensitive-operation audit.
+- Application logs separate from Minecraft logs.
+- Readable, localized messages for recognized MineDock errors.
+- Display translation of historical diagnostics stored by French builds.
+
+======================================================================
+14. DATA PROTECTION AND SECURITY — IMPLEMENTED
+======================================================================
+
+- Isolated Electron renderer, sandbox enabled, no renderer Node access.
+- Limited preload API and IPC validation.
+- Typed input validation.
+- Java process launch without an intermediate shell.
+- No public administration panel exposed by MineDock.
+- HTTPS downloads with host/redirect validation.
+- Bounded download deadlines and sizes.
+- Temporary files and checksum validation before replacement.
+- Directory traversal and dangerous-filename protection.
+- Symlink/junction checks for file operations.
+- Controlled ZIP extraction rejecting malicious/ambiguous entries.
+- Random RCON password encrypted in the local database.
+- safeStorage when available, with local AES-256-GCM fallback.
+- Secret/sensitive-data redaction in relevant output.
+- SQLite versioned migrations, transactions and integrity checks.
+- Periodic consistent SQLite snapshots.
+
+======================================================================
+15. DISTRIBUTION AND DEVELOPMENT — DELIVERED
+======================================================================
+
+- Windows x64 NSIS installer: MineDock-0.2.0-Setup-x64.exe.
+- Windows x64 portable: MineDock-0.2.0-Portable-x64.exe.
+- Unpacked Windows application for diagnostics.
+- SHA256SUMS.txt for both distributions.
+- Persistent user-profile data, including the portable edition.
+- Original source code under MIT.
+- Original icons and visual identity.
+- Electron, React, strict TypeScript, Vite, Tailwind and SQLite.
+- pnpm install/dev/test/lint/typecheck/build scripts.
+- Windows, Linux and macOS packaging commands.
+- Unit, integration, UI, live and packaged-binary tests.
+- Six-language catalog/placeholder/persistence tests.
+- Verification CI and distribution build workflow.
+- English README, architecture, security, backup and lifecycle documentation.
+- English feature list and beginner GitHub guide.
+- Contribution guidelines and vulnerability reporting policy.
+- Project license and dependency notices included in distributions.
+
+======================================================================
+16. PLANNED IMPROVEMENTS — NOT YET AVAILABLE
+======================================================================
+
+Engines and compatibility:
+- Purpur, Fabric, Forge and NeoForge.
+- Bedrock Dedicated Server and PocketMine-MP.
+- Crossplay through GeyserMC and Floodgate.
+- Mod management and modpack import.
+
+Import and worlds:
+- Existing-server import.
+- Dedicated world import, export and duplication in the interface.
+
+Content:
+- CurseForge and Hangar.
+- Plugin update checks.
+- Version comparison and rollback.
+- Managed plugin uninstall.
+- Remote project icons.
+
+Files and players:
+- File rename, move and copy from the interface.
+- General ZIP compression/extraction in the file manager.
+- Syntax highlighting and YAML validation.
+- Player UUID, ping, playtime and detailed persistent lists.
+- Storage statistics by category and largest-file list.
+
+Scheduling and maintenance:
+- Individual task pause/resume controls.
+- Daily calendar and cron expressions.
+- Multiple restart warnings.
+- Download resumption from an offset.
+- Full automatic staging recovery after interruption.
+- Cancellation of additional long-running operations.
+- Java runtime repair/removal in the interface.
+- Configurable retention policies.
+
+Distribution:
+- Windows executable signatures.
+- macOS signing/notarization.
+- Verified automatic update channel.
+- Full Linux/macOS/arm64 native integration and gameplay validation.
+
+======================================================================
+17. VALIDATION STATUS AND BETA LIMITATIONS
+======================================================================
+
+- Windows 11 x64: build and packaged application launch verified.
+- Baseline: 52 unit/integration tests and two UI journeys passed.
+- The multilingual update adds catalog and language-persistence tests;
+  current results are recorded in docs/validation.md.
+- Strict TypeScript, lint and Windows packaging are release checks.
+- Real Java/Paper downloads verified; Paper bootstrap tested up to its EULA
+  gate with eula=false.
+- A real Minecraft client connection/gameplay session still needs validation
+  after personal EULA acceptance in the wizard.
+- Windows distributions are currently unsigned.
+- Windows/Linux/macOS CI packaging succeeds, but packaging is not gameplay
+  validation or proof of every native integration on those systems.
+- Unknown external errors and OS file dialogs may retain their own language.
+- MineDock must remain open to supervise servers and execute tasks.
+- MineDock does not automatically configure firewalls or router port forwarding.
+
+Project references:
+README.md
+docs/architecture.md
+docs/localization.md
+docs/roadmap.md
+docs/security.md
+docs/validation.md

@@ -17,8 +17,10 @@ import {
 } from 'lucide-react';
 import type { Server, Settings, Backup, ScheduleInput } from '../../../../packages/domain/types';
 import { PRODUCT } from '../../../../packages/domain/types';
+import { languages } from '../../../../packages/domain/languages';
+import { localizeMessage } from '../../../../packages/domain/localization';
 import { useApp } from './context';
-import type { Key } from './i18n';
+import { activityLabel, type Key } from './i18n';
 import { Button, Field, Toggle, Dialog, Empty, ErrorBox, Loading, useData, bytes } from './ui';
 export function Confirm({
   name,
@@ -246,7 +248,11 @@ export function SchedulesView({ serverId }: { serverId: string }) {
                   {t('nextRun')} :{' '}
                   {new Date(job.nextRun).toLocaleString(snapshot.settings.language)}
                 </small>
-                {job.lastError && <span className="warning-text">{job.lastError}</span>}
+                {job.lastError && (
+                  <span className="warning-text">
+                    {localizeMessage(job.lastError, snapshot.settings.language)}
+                  </span>
+                )}
               </div>
               <Button
                 variant="ghost"
@@ -503,7 +509,7 @@ function ServerOptionsView({ server }: { server: Server }) {
         {t('resources')} · Java {server.javaMajor}
       </h2>
       <div className="form-grid">
-        <Field label={`${t('memoryMin')} (Mo)`}>
+        <Field label={`${t('memoryMin')} (${t('megabytes')})`}>
           <input
             type="number"
             min={256}
@@ -513,7 +519,7 @@ function ServerOptionsView({ server }: { server: Server }) {
             onChange={(e) => setOptions((prev) => ({ ...prev, memoryMin: Number(e.target.value) }))}
           />
         </Field>
-        <Field label={`${t('memoryMax')} (Mo)`}>
+        <Field label={`${t('memoryMax')} (${t('megabytes')})`}>
           <input
             type="number"
             min={512}
@@ -571,7 +577,9 @@ export function ActivityView() {
   const { snapshot, t } = useApp();
   const [query, setQuery] = useState('');
   const items = snapshot.activity.filter((a) =>
-    `${a.detail} ${a.action}`.toLowerCase().includes(query.toLowerCase()),
+    `${localizeMessage(a.detail, snapshot.settings.language)} ${activityLabel(a.action, snapshot.settings.language)} ${a.action}`
+      .toLowerCase()
+      .includes(query.toLowerCase()),
   );
   return (
     <>
@@ -598,9 +606,9 @@ export function ActivityView() {
                 <Activity size={16} />
               </span>
               <div>
-                <strong>{item.detail}</strong>
+                <strong>{localizeMessage(item.detail, snapshot.settings.language)}</strong>
                 <small>
-                  {item.action}
+                  {activityLabel(item.action, snapshot.settings.language)}
                   {item.serverId &&
                     ` · ${snapshot.servers.find((s) => s.id === item.serverId)?.name ?? item.serverId}`}
                 </small>
@@ -660,8 +668,11 @@ export function SettingsView() {
                     setSettings((s) => ({ ...s, language: e.target.value as Settings['language'] }))
                   }
                 >
-                  <option value="fr">Français</option>
-                  <option value="en">English</option>
+                  {languages.map(({ code, name }) => (
+                    <option value={code} key={code}>
+                      {name}
+                    </option>
+                  ))}
                 </select>
               </Field>
               <Field label={t('theme')}>

@@ -72,8 +72,7 @@ export class RuntimeManager {
     return existing ?? this.install(major);
   }
   async install(major: number): Promise<Runtime> {
-    if (![8, 11, 16, 17, 21, 25].includes(major))
-      throw new Error('Version Java non prise en charge.');
+    if (![8, 11, 16, 17, 21, 25].includes(major)) throw new Error('Unsupported Java version.');
     const active = this.pending.get(major);
     if (active) return active;
     const work = this.provision(major);
@@ -90,7 +89,7 @@ export class RuntimeManager {
     ];
     const architecture = { x64: 'x64', arm64: 'aarch64' }[os.arch() as 'x64' | 'arm64'];
     if (!platform || !architecture)
-      throw new Error('Ce système ne dispose pas d’un runtime automatique.');
+      throw new Error('Automatic Java installation is unavailable on this system.');
     const schema = z.array(
       z.object({
         binary: z.object({ package: z.object({ link: z.string().url(), checksum: z.string() }) }),
@@ -102,7 +101,7 @@ export class RuntimeManager {
       ),
     );
     const asset = assets[0];
-    if (!asset) throw new Error('Runtime Java indisponible pour ce système.');
+    if (!asset) throw new Error('Java runtime is unavailable for this system.');
     const root = path.join(this.repo.root, 'runtimes');
     await mkdir(root, { recursive: true });
     const archive = path.join(root, `java-${major}${platform === 'windows' ? '.zip' : '.tar.gz'}`);
@@ -137,10 +136,10 @@ export class RuntimeManager {
                   'Link',
                 ].includes(entry.type)
               )
-                throw new Error('Archive runtime non sûre.');
+                throw new Error('Unsafe runtime archive.');
               if (entry.type === 'SymbolicLink' || entry.type === 'Link') {
                 const link = entry.linkpath;
-                if (!link || path.posix.isAbsolute(link)) throw new Error('Lien runtime non sûr.');
+                if (!link || path.posix.isAbsolute(link)) throw new Error('Unsafe runtime link.');
                 const target = path.posix.normalize(
                   entry.type === 'Link'
                     ? link
@@ -181,12 +180,12 @@ export class RuntimeManager {
         return undefined;
       };
       const java = await search(stage);
-      if (!java) throw new Error('Le runtime téléchargé ne contient pas Java.');
+      if (!java) throw new Error('The downloaded runtime does not contain Java.');
       const detected = await inspectJava(java);
-      if (detected?.major !== major) throw new Error('Version Java téléchargée incorrecte.');
+      if (detected?.major !== major) throw new Error('Incorrect downloaded Java version.');
       try {
         await stat(destination);
-        throw new Error('Ce runtime existe déjà. Réutilisez-le ou supprimez le dossier incomplet.');
+        throw new Error('This runtime already exists. Reuse it or remove the incomplete folder.');
       } catch (error) {
         if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error;
       }

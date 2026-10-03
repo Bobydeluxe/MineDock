@@ -1,15 +1,15 @@
-# Développement
+# Development
 
-Prérequis : Node 24+, pnpm 11+, accès réseau pour l’installation des dépendances. `pnpm install` est reproductible via le lockfile. `pnpm-workspace.yaml` autorise les scripts Electron et esbuild explicitement.
+Requires Node 24+, pnpm 11+ and network access for dependency installation. `pnpm install` uses the lockfile. `pnpm-workspace.yaml` explicitly allows Electron and esbuild installation scripts.
 
-`pnpm dev` construit main/preload puis lance Vite et Electron. `pnpm dev:mock` ne lance que l’interface simulée sur `127.0.0.1:5173`. Le mock n’est jamais sélectionné automatiquement en production si le bridge Electron manque.
+`pnpm dev` builds main/preload, then starts Vite and Electron. `pnpm dev:mock` opens only the simulated UI at `127.0.0.1:5173`. Production never selects mock data automatically when the Electron bridge is absent.
 
-Le contrat partagé est `packages/domain/types.ts`. Ajoutez une méthode au domaine, au preload et au main avec validation et vérification des permissions système pertinentes. Les méthodes UI de fichiers reçoivent des chemins relatifs, jamais des chemins système libres. Les sélecteurs natifs de fichiers ne fonctionnent que dans le desktop.
+The shared contract is `packages/domain/types.ts`. Add methods to the domain, preload and main with validation and relevant system permission checks. File UI methods take relative paths rather than arbitrary system paths. Native file selectors work only in the desktop.
 
-Les textes UI sont dans `i18n.ts`. Les erreurs domaine et diagnostics de règles serveur sont principalement en français dans cette bêta, même lorsque les libellés UI sont en anglais.
+Use English for code, documentation and canonical diagnostics. [Localization](localization.md) explains the six catalogs, default language and translation tests. New UI text must have all six translations.
 
-`MINEDOCK_DATA_DIR` permet un dossier de données isolé pour les tests et le développement. `MINEDOCK_TEST=1` masque la fenêtre des tests ; il ne remplace aucun service réel. Ne pointez jamais un test sur vos données de jeu.
+`MINEDOCK_DATA_DIR` selects an isolated development/test data folder. `MINEDOCK_TEST=1` hides test windows without replacing real services. Never point tests at gameplay data.
 
-Les tests unitaires et d’intégration ne téléchargent rien. Les tests UI utilisent des dossiers temporaires et un processus de jeu conçu pour les tests. `test:live` est facultatif, télécharge un vrai runtime et Paper dans `data/live-smoke`, conserve `eula=false` et atteint l’écran d’acceptation sans créer de monde jouable.
+Unit/integration tests do not download files. UI tests use temporary folders; process integration tests use purpose-built Node fixtures. Optional `test:live` downloads a real runtime and Paper into `data/live-smoke`, retains `eula=false` and reaches the consent gate without creating a playable world.
 
-Exécutez `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test` et `pnpm build` avant contribution. La console reste bornée ; le fichier complet `logs/latest.log` du serveur est accessible depuis son dossier pour l’archivage et le diagnostic.
+Run `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:ui` and `pnpm build` before contributing. Console history is bounded; full `logs/latest.log` remains in the server folder for archival and diagnostics.

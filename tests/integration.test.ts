@@ -39,11 +39,11 @@ it('real child lifecycle, live logs, fragmented RCON, safe live backup and stopp
     expect(runner.logs(f.server.id).some((l) => l.text.includes('Done'))).toBe(true);
     expect(await runner.players(f.server.id)).toEqual(['TestPlayer']);
     expect(await runner.command(f.server.id, 'multipart')).toBe('firstsecond');
-    await expect(rconCommand(f.rconPort, 'wrong', 'list')).rejects.toThrow('refusée');
+    await expect(rconCommand(f.rconPort, 'wrong', 'list')).rejects.toThrow('rejected');
     const backup = await backups.create(f.server.id);
     expect(await backups.verify(backup.id)).toBe(true);
     expect(runner.logs(f.server.id).some((l) => l.text.includes('save-on'))).toBe(true);
-    await expect(backups.restore(backup.id, 'Integration')).rejects.toThrow('Arrêtez');
+    await expect(backups.restore(backup.id, 'Integration')).rejects.toThrow('Stop');
     await runner.stop(f.server.id);
     expect(f.repo.server(f.server.id).status).toBe('stopped');
     await writeFile(path.join(f.server.path, 'world', 'level.dat'), 'changed');
@@ -54,7 +54,7 @@ it('real child lifecycle, live logs, fragmented RCON, safe live backup and stopp
     expect(f.repo.backups().some((b) => b.reason === 'before_restore')).toBe(true);
     expect(await sha256(f.repo.backup(backup.id).path)).toBe(backup.sha256);
     await writeFile(f.repo.backup(backup.id).path, 'corrupt');
-    await expect(backups.restore(backup.id, 'Integration')).rejects.toThrow('corrompue');
+    await expect(backups.restore(backup.id, 'Integration')).rejects.toThrow('Corrupted');
     expect(await readFile(path.join(f.server.path, 'world', 'level.dat'), 'utf8')).toBe(
       'original world',
     );
@@ -97,7 +97,7 @@ it('blocks junction escapes and keeps RCON secrets out of file reads', async () 
       path.join(f.server.path, 'escape'),
       process.platform === 'win32' ? 'junction' : 'dir',
     );
-    await expect(containedPath(f.server.path, 'escape/secret.txt')).rejects.toThrow('symboliques');
+    await expect(containedPath(f.server.path, 'escape/secret.txt')).rejects.toThrow('Symbolic');
     expect(await files.read(f.server.path, 'server.properties')).not.toContain('test-secret');
     await expect(files.write(f.server.path, 'invalid.json', '{bad')).rejects.toThrow('JSON');
     await expect(files.delete(f.server.path, '', '')).rejects.toThrow();

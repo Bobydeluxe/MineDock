@@ -72,7 +72,7 @@ export class ModrinthProvider implements MarketplaceProvider {
   }
   async install(server: Server, projectId: string): Promise<InstalledContent[]> {
     if (server.engine !== 'paper')
-      throw new Error('Le marketplace V1 installe uniquement des plugins compatibles Paper.');
+      throw new Error('The V1 marketplace only installs compatible Paper plugins.');
     const plugins = path.join(server.path, 'plugins');
     await mkdir(plugins, { recursive: true });
     const stage = path.join(server.path, `.content-${randomUUID()}`);
@@ -84,11 +84,11 @@ export class ModrinthProvider implements MarketplaceProvider {
     const resolve = async (id: string, pinned?: string): Promise<void> => {
       if (visited.has(id)) return;
       visited.add(id);
-      if (visited.size > 25) throw new Error('Trop de dépendances. Installation annulée.');
+      if (visited.size > 25) throw new Error('Too many dependencies. Installation cancelled.');
       const existing = installed.find((i) => i.projectId === id);
       if (existing) {
         if (!existing.enabled || (pinned && existing.versionId !== pinned))
-          throw new Error('Une dépendance déjà installée est désactivée ou incompatible.');
+          throw new Error('An installed dependency is disabled or incompatible.');
         return;
       }
       const project = z
@@ -97,7 +97,7 @@ export class ModrinthProvider implements MarketplaceProvider {
           await fetchJson<unknown>(`https://api.modrinth.com/v2/project/${encodeURIComponent(id)}`),
         );
       if (project.server_side === 'unsupported')
-        throw new Error('Ce contenu est réservé au client Minecraft.');
+        throw new Error('This content is only for the Minecraft client.');
       const version = pinned
         ? versionSchema.parse(
             await fetchJson<unknown>(
@@ -117,7 +117,7 @@ export class ModrinthProvider implements MarketplaceProvider {
         !version.game_versions.includes(server.version) ||
         !version.loaders.some((l) => ['paper', 'spigot', 'bukkit'].includes(l))
       )
-        throw new Error('Aucune version serveur compatible.');
+        throw new Error('No compatible server version.');
       for (const dep of version.dependencies.filter((d) => d.dependency_type === 'required')) {
         let depId = dep.project_id;
         if (!depId && dep.version_id)
@@ -126,7 +126,7 @@ export class ModrinthProvider implements MarketplaceProvider {
               `https://api.modrinth.com/v2/version/${encodeURIComponent(dep.version_id)}`,
             ),
           ).project_id;
-        if (!depId) throw new Error('Dépendance impossible à résoudre.');
+        if (!depId) throw new Error('Unable to resolve a dependency.');
         await resolve(depId, dep.version_id ?? undefined);
       }
       const file = version.files.find((f) => f.primary) ?? version.files[0];
@@ -135,13 +135,13 @@ export class ModrinthProvider implements MarketplaceProvider {
         !file.filename.endsWith('.jar') ||
         path.basename(file.filename) !== file.filename
       )
-        throw new Error('Ce projet ne fournit pas de plugin JAR.');
+        throw new Error('This project does not provide a plugin JAR.');
       validateRelative(file.filename);
       if (
         items.some((i) => i.filename === file.filename) ||
         installed.some((i) => i.filename === file.filename)
       )
-        throw new Error('Conflit de nom de fichier.');
+        throw new Error('Filename conflict.');
       await this.downloads.download(
         file.url,
         path.join(stage, file.filename),
@@ -167,7 +167,7 @@ export class ModrinthProvider implements MarketplaceProvider {
         const { access } = await import('node:fs/promises');
         try {
           await access(target);
-          throw new Error('Un plugin du même nom existe déjà.');
+          throw new Error('A plugin with the same filename already exists.');
         } catch (e) {
           if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
         }
@@ -193,7 +193,7 @@ export class ModrinthProvider implements MarketplaceProvider {
   }
   async toggle(server: Server, id: string): Promise<void> {
     const item = this.repo.content(server.id).find((i) => i.id === id);
-    if (!item) throw new Error('Plugin introuvable.');
+    if (!item) throw new Error('Plugin not found.');
     const root = path.join(server.path, 'plugins');
     const source = await containedPath(root, item.filename + (item.enabled ? '' : '.disabled'));
     const target = await containedPath(root, item.filename + (item.enabled ? '.disabled' : ''));

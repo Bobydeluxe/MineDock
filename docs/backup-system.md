@@ -1,13 +1,13 @@
-# Sauvegardes et restauration
+# Backups and restoration
 
-Chaque archive est un ZIP complet du dossier serveur, sauf les locks de session et le secret RCON connu. Elle contient également un manifeste de profil et de plugins pour garder le suivi du contenu cohérent au restore. Les archives vivent hors des dossiers serveurs et sont indexées dans SQLite avec UUID, taille, date, motif et SHA-256.
+Every archive is a complete server-folder ZIP, excluding session locks and the known RCON secret. It includes a profile/plugin manifest to keep content tracking consistent after restore. Archives live outside server folders and are indexed in SQLite by UUID, size, date, reason and SHA-256.
 
-Serveur actif : `save-off`, puis `save-all flush`, copie en ZIP, contrôle de hash, renommage final, enregistrement et `save-on` dans un `finally`. Si `save-on` ne peut pas être confirmé, un arrêt de sécurité évite de laisser le monde sans sauvegarde. Une opération de lifecycle ne peut pas chevaucher une sauvegarde.
+For a running server: `save-off`, `save-all flush`, ZIP copy, hash verification, final rename, database record and `save-on` in `finally`. If `save-on` cannot be confirmed, a safety stop prevents leaving the world without saving. Lifecycle operations cannot overlap a backup.
 
-Le disque disponible est vérifié avant copie. La V1 accepte au maximum 64 Go non compressés. Les tâches sont à intervalle et persistantes ; le manager doit rester ouvert. Aucune rétention destructive n’est configurée implicitement.
+Free disk space is checked before copying. V1 accepts up to 64 GB uncompressed. Interval tasks persist between launches and require the manager to remain open. No destructive retention policy is enabled implicitly.
 
-Restauration : exiger le nom du serveur et l’arrêt effectif ; vérifier SHA-256 ; sauvegarder l’état actuel ; extraire vers un dossier de staging en validant chaque entrée ; valider manifeste et JAR ; réinjecter le secret et conserver les ports actuels ; renommer l’original à part et échanger les dossiers ; restaurer profil et plugins dans une transaction SQLite. Si l’échange ou la transaction échoue, remettre le dossier original. La sauvegarde de sécurité reste disponible.
+Restore requires the server name and a stopped server. It verifies SHA-256, backs up the current state, extracts into staging while validating every entry, validates the manifest/JAR, reinjects the secret and preserves current ports, moves the original aside, swaps folders and restores profile/plugin metadata in a SQLite transaction. If the swap or transaction fails, it restores the original folder. The safety backup remains available.
 
-Un échec disque pendant l’extraction n’endommage pas le serveur original. Une coupure de courant précisément entre les renommages reste un risque : la copie `.previous` et la sauvegarde permettent une récupération manuelle. La récupération automatique après interruption est prévue dans la feuille de route ; ne prétendez pas que la restauration est une transaction distribuée parfaitement atomique.
+Extraction failure does not damage the original server. A power loss exactly between renames remains a risk: the `.previous` copy and safety backup permit manual recovery. Automatic interruption recovery is planned; this is not a perfectly atomic distributed transaction.
 
-Les archives manuelles restent jusqu’à leur suppression confirmée. Les archives de réglages et de plugins peuvent consommer de l’espace ; surveillez le disque et supprimez explicitement les anciennes copies si nécessaire.
+Manual archives remain until confirmed deletion. Settings/plugin safety copies consume disk space; monitor storage and explicitly remove old copies when necessary.

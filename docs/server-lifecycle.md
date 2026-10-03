@@ -1,13 +1,13 @@
-# Cycle de vie
+# Server lifecycle
 
-Une installation crée un UUID, résout une version officielle et un build stable épinglé, installe Java, vérifie le JAR, écrit les propriétés et enregistre le consentement EULA explicitement donné dans le wizard. Les installations échouées sont affichées avec leur erreur ; un serveur incomplet ne peut pas être lancé.
+Installation creates a UUID, resolves an official version and pinned stable build, installs Java, verifies the JAR, writes properties and records explicit wizard EULA consent. Failed installations show their error. An incomplete server cannot start; retry keeps the same version/build.
 
-Au démarrage : vérifier runtime, JAR, EULA, port Minecraft et port RCON. Lancer Java sans shell dans le dossier du serveur, enregistrer PID et heure. Lire stdout/stderr et passer « En ligne » sur le marqueur `Done`. Le démarrage est borné à cinq minutes. Le heap minimum/maximum correspond aux valeurs du profil ; aucun quota CPU natif n’est annoncé.
+Startup checks runtime, JAR, EULA, Minecraft port and RCON port. Java launches without a shell in the server folder; PID/start time are recorded. stdout/stderr are read and the actual `Done` marker changes status to Online. Startup is capped at five minutes. Heap limits come from the profile; no native CPU quota is claimed.
 
-À l’arrêt : tenter `save-all flush` par RCON, envoyer `stop` sur stdin et attendre trente secondes. Le processus n’est terminé de force qu’après ce délai ; un deuxième délai borne la confirmation d’arrêt. L’arrêt attendu et le crash sont distingués.
+Shutdown tries RCON `save-all flush`, sends `stop` through stdin and waits thirty seconds. Forced termination is a last resort after that deadline; a second timeout bounds shutdown confirmation. Expected stops and crashes are distinguished.
 
-Les redémarrages automatiques attendent quinze puis trente secondes ; trois crashes en dix minutes suspendent la reprise et produisent une alerte/audit. L’utilisateur peut désactiver la reprise par serveur. Les reprises utilisent la même exclusion mutuelle que les actions utilisateur.
+Automatic restart waits fifteen then thirty seconds. Three crashes in ten minutes suspend recovery and generate an alert/audit. Recovery is configurable per server and uses the same exclusion as user actions. Diagnostics follow the selected application language; original Java output stays verbatim.
 
-À la fermeture de MineDock, tâches et téléchargements sont arrêtés, les opérations en cours se terminent ou s’annulent, les processus sont arrêtés et SQLite est sauvegardé. Une terminaison brutale du manager peut laisser Java en vie. Un PID persistant encore vivant n’est jamais tué automatiquement, car l’OS pourrait l’avoir réattribué : le serveur est bloqué avec une explication jusqu’à fermeture de cet ancien processus ou redémarrage de l’ordinateur.
+On closing MineDock, tasks/downloads stop, ongoing operations finish or cancel, processes stop and SQLite is backed up. Abrupt manager termination can leave Java alive. A persisted PID is never killed automatically because the OS may have reused it. The server remains blocked with an explanation until the old process is closed or the computer restarts.
 
-Les joueurs sont découverts par les logs et par `list` via RCON. Le protocole authentifie chaque connexion, vérifie les tailles, collecte les réponses fragmentées et borne les délais. Minecraft ne fournit pas le ping ou l’UUID des joueurs via `list` ; la V1 ne fabrique pas ces valeurs.
+Players are discovered through logs and RCON `list`. Connections authenticate, verify sizes, collect fragmented responses and bound timeouts. Minecraft `list` supplies neither UUID nor ping; V1 does not invent these values.

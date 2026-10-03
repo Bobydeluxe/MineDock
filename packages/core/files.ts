@@ -35,11 +35,11 @@ export class FileService {
   }
   async read(root: string, relative: string): Promise<string> {
     if (!textExtensions.has(path.extname(relative).toLowerCase()))
-      throw new DomainError('FILE', 'Ce type de fichier ne peut pas être édité.');
+      throw new DomainError('FILE', 'This file type cannot be edited.');
     const filename = await containedPath(root, relative);
     const info = await stat(filename);
     if (info.size > 2 * 1024 * 1024)
-      throw new DomainError('FILE', 'Ce fichier dépasse la limite de l’éditeur (2 Mo).');
+      throw new DomainError('FILE', 'This file exceeds the editor limit (2 MB).');
     let text = await readFile(filename, 'utf8');
     if (path.basename(relative) === 'server.properties') {
       const props = parseProperties(text);
@@ -53,19 +53,16 @@ export class FileService {
       !textExtensions.has(path.extname(relative).toLowerCase()) ||
       Buffer.byteLength(content) > 2 * 1024 * 1024
     )
-      throw new DomainError('FILE', 'Format ou taille de fichier non autorisé.');
+      throw new DomainError('FILE', 'File format or size is not allowed.');
     if (path.basename(relative) === 'server.properties')
-      throw new DomainError(
-        'FILE',
-        'Utilisez l’éditeur de paramètres pour modifier server.properties.',
-      );
+      throw new DomainError('FILE', 'Use the settings editor to change server.properties.');
     if (path.basename(relative) === 'eula.txt')
-      throw new DomainError('FILE', 'Le consentement EULA est géré lors de la création.');
+      throw new DomainError('FILE', 'EULA consent is recorded during server creation.');
     if (path.extname(relative) === '.json') {
       try {
         JSON.parse(content);
       } catch {
-        throw new DomainError('JSON', 'Le JSON n’est pas valide. Le fichier n’a pas été modifié.');
+        throw new DomainError('JSON', 'Invalid JSON. The file was not changed.');
       }
     }
     await atomicWrite(await containedPath(root, relative), content);
@@ -75,15 +72,15 @@ export class FileService {
   }
   async delete(root: string, relative: string, confirmation: string): Promise<void> {
     if (confirmation !== path.basename(relative))
-      throw new DomainError('CONFIRM', 'Nom de confirmation incorrect.');
+      throw new DomainError('CONFIRM', 'Incorrect confirmation name.');
     if (['server.properties', 'eula.txt', 'server.jar'].includes(relative))
-      throw new DomainError('FILE', 'Ce fichier essentiel est protégé.');
+      throw new DomainError('FILE', 'This essential file is protected.');
     await rm(await containedPath(root, relative), { recursive: true });
   }
   async upload(root: string, relative: string, source: string): Promise<void> {
     const target = await containedPath(root, path.join(relative, path.basename(source)));
     if (['server.properties', 'server.jar', 'eula.txt'].includes(path.basename(source)))
-      throw new DomainError('FILE', 'Ce fichier essentiel est protégé.');
+      throw new DomainError('FILE', 'This essential file is protected.');
     await copyFile(source, target, 1); // COPYFILE_EXCL: never silently overwrite.
   }
 }

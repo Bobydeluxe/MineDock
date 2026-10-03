@@ -14,6 +14,7 @@ import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { AppCore } from '../../packages/core/app';
 import { readableError } from '../../packages/domain/errors';
+import { localizeMessage } from '../../packages/domain/localization';
 import { engineSchema } from '../../packages/domain/types';
 import { containedPath } from '../../packages/security/paths';
 import { LocalSecretStore, redact, type SecretStore } from '../../packages/security/secrets';
@@ -60,7 +61,7 @@ function register(core: AppCore): void {
         event.senderFrame !== event.sender.mainFrame ||
         event.senderFrame?.url !== (devUrl ? devUrl + '/' : pathToFileURL(rendererFile).href)
       )
-        throw new Error('Origine IPC refusée.');
+        throw new Error('IPC origin rejected.');
       try {
         return await action(...args);
       } catch (e) {
@@ -87,9 +88,9 @@ function register(core: AppCore): void {
     const serverId = id(value);
     // Lifecycle and save-hold commands belong to serialized services.
     if (/^\/?(?:stop|save-off|save-on)\s*$/i.test(cmd.trim()))
-      throw new Error('Utilisez les boutons d’arrêt et de sauvegarde pour cette opération.');
+      throw new Error('Use the stop and backup buttons for this operation.');
     const response = await core.exclusive(serverId, () => core.supervisor.command(serverId, cmd));
-    core.repo.audit('console.command', 'Commande exécutée.', serverId);
+    core.repo.audit('console.command', 'Command executed.', serverId);
     return response;
   });
   handle('properties', (value) => core.properties(id(value)));
@@ -162,9 +163,7 @@ function register(core: AppCore): void {
   handle('exportFile', async (value, file) => {
     const source = await containedPath(core.repo.server(id(value)).path, relative.parse(file));
     if (path.basename(source) === 'server.properties')
-      throw new Error(
-        'Ce fichier contient un secret RCON et ne peut pas être exporté directement.',
-      );
+      throw new Error('This file contains an RCON secret and cannot be exported directly.');
     const result = await dialog.showSaveDialog(window!, { defaultPath: path.basename(source) });
     if (result.filePath) await copyFile(source, result.filePath);
   });
@@ -296,7 +295,10 @@ if (single)
     })
     .catch((e) => {
       console.error(e);
-      dialog.showErrorBox('MineDock', readableError(e));
+      dialog.showErrorBox(
+        'MineDock',
+        localizeMessage(readableError(e), core?.repo.settings().language),
+      );
       app.exit(1);
     });
 app.on('window-all-closed', () => app.quit());
@@ -312,7 +314,7 @@ app.on('before-quit', (event) => {
       console.error(e);
       dialog.showErrorBox(
         'MineDock',
-        'La fermeture a rencontré une erreur. Consultez les logs : ' + readableError(e),
+        'An error occurred during shutdown. Check the logs: ' + readableError(e),
       );
       app.exit(1);
     });

@@ -26,7 +26,9 @@ import {
 import type { Snapshot, Server, Progress } from '../../../../packages/domain/types';
 import { PRODUCT } from '../../../../packages/domain/types';
 import { api } from './api';
-import { translator } from './i18n';
+import { translator, activityLabel } from './i18n';
+import { localizeMessage } from '../../../../packages/domain/localization';
+import { defaultLanguage } from '../../../../packages/domain/languages';
 import { AppContext, useApp, type Run } from './context';
 import { Button, Empty, Loading, ErrorBox, bytes, duration, Dialog, Field } from './ui';
 import { CreateServer, Onboarding } from './wizard';
@@ -151,7 +153,7 @@ export function App() {
       clearTimeout(timer);
     };
   }, [refresh]);
-  const language = snapshot?.settings.language ?? 'fr';
+  const language = snapshot?.settings.language ?? defaultLanguage;
   const t = translator(language);
   useEffect(() => {
     const theme = snapshot?.settings.theme ?? 'system';
@@ -196,7 +198,7 @@ export function App() {
     try {
       const value = await action();
       await refresh();
-      setToast({ text: message ?? t('success'), error: false });
+      setToast({ text: message ?? '', error: false });
       return { ok: true, value };
     } catch (e) {
       setToast({ text: (e as Error).message ?? String(e), error: true });
@@ -416,7 +418,7 @@ export function App() {
             className={`toast ${toast.error ? 'error' : ''}`}
           >
             <CircleCheck size={18} />
-            <span>{toast.text}</span>
+            <span>{toast.text ? localizeMessage(toast.text, language) : t('success')}</span>
             <Button variant="ghost" aria-label={t('close')} onClick={() => setToast(undefined)}>
               <X size={16} />
             </Button>
@@ -444,7 +446,7 @@ export function App() {
                   </header>
                   <progress max={p.total || 1} value={p.received} />
                   <small>
-                    {p.error ||
+                    {(p.error && localizeMessage(p.error, language)) ||
                       `${bytes(p.received)} / ${p.total ? bytes(p.total) : '…'} · ${bytes(p.speed)}/s`}
                   </small>
                 </div>
@@ -565,7 +567,7 @@ function Dashboard({
         <div>
           <div className="eyebrow">
             <span />
-            MINECRAFT SERVER MANAGER
+            {t('serverManager')}
           </div>
           <h1>{t('welcome')}</h1>
           <p>{t('welcomeSub')}</p>
@@ -736,8 +738,8 @@ function Dashboard({
                   <Activity size={15} />
                 </span>
                 <div>
-                  <strong>{a.detail}</strong>
-                  <small>{a.action}</small>
+                  <strong>{localizeMessage(a.detail, snapshot.settings.language)}</strong>
+                  <small>{activityLabel(a.action, snapshot.settings.language)}</small>
                 </div>
                 <time>
                   {new Date(a.at).toLocaleTimeString(snapshot.settings.language, {

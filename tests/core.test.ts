@@ -66,7 +66,7 @@ it('creates a server through the application service, persists settings and roll
       eula: true,
     });
     expect(server.status).toBe('stopped');
-    await expect(core.create({ ...server, port: f.rconPort, eula: true })).rejects.toThrow('port');
+    await expect(core.create({ ...server, port: f.rconPort, eula: true })).rejects.toThrow(/Port/i);
     expect((await stat(path.join(server.path, 'server.jar'))).size).toBe(jar.length);
     expect(await readFile(path.join(server.path, 'eula.txt'), 'utf8')).toContain('eula=true');
     const props = await core.properties(server.id);
@@ -88,7 +88,7 @@ it('creates a server through the application service, persists settings and roll
       core.exclusive(server.id, async () => {
         await core.exclusive(server.id, async () => undefined);
       }),
-    ).rejects.toThrow('opération');
+    ).rejects.toThrow('operation');
   } finally {
     await core.close();
     await f.cleanup();
@@ -163,7 +163,7 @@ it('retries an interrupted installation using its pinned profile and retains exp
     expect(await readFile(path.join(complete.path, 'eula.txt'), 'utf8')).toContain(
       incomplete.createdAt,
     );
-    await expect(core.retryInstallation(complete.id)).rejects.toThrow('déjà');
+    await expect(core.retryInstallation(complete.id)).rejects.toThrow('already');
   } finally {
     await core.close();
     await f.cleanup();

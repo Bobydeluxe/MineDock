@@ -31,7 +31,7 @@ export function approvedUrl(value: string): URL {
         url.hostname === h || (h === 'githubusercontent.com' && url.hostname.endsWith('.' + h)),
     )
   )
-    throw new DomainError('DOWNLOAD_URL', 'Source de téléchargement non autorisée.');
+    throw new DomainError('DOWNLOAD_URL', 'Download source is not allowed.');
   return url;
 }
 const headers = {
@@ -44,7 +44,7 @@ export async function fetchApproved(url: string, signal: AbortSignal): Promise<R
     if (response.status >= 300 && response.status < 400) {
       const location = response.headers.get('location');
       await response.body?.cancel();
-      if (!location) throw new Error('Redirection sans destination.');
+      if (!location) throw new Error('Redirect has no destination.');
       current = approvedUrl(new URL(location, current).href).href;
       continue;
     }
@@ -52,12 +52,12 @@ export async function fetchApproved(url: string, signal: AbortSignal): Promise<R
       await response.body?.cancel();
       throw new DomainError(
         'NETWORK',
-        `Le service de téléchargement a répondu ${response.status}. Réessayez plus tard.`,
+        `The download service returned ${response.status}. Try again later.`,
       );
     }
     return response;
   }
-  throw new Error('Trop de redirections.');
+  throw new Error('Too many redirects.');
 }
 export async function fetchJson<T>(url: string): Promise<T> {
   let last: unknown;
@@ -65,9 +65,9 @@ export async function fetchJson<T>(url: string): Promise<T> {
     try {
       const response = await fetchApproved(url, AbortSignal.timeout(20000));
       if (Number(response.headers.get('content-length') ?? 0) > 8 * 1024 * 1024)
-        throw new Error('Réponse trop volumineuse.');
+        throw new Error('Response is too large.');
       const reader = response.body?.getReader();
-      if (!reader) throw new Error('Réponse vide.');
+      if (!reader) throw new Error('Empty response.');
       const chunks: Uint8Array[] = [];
       let size = 0;
       for (;;) {
@@ -76,7 +76,7 @@ export async function fetchJson<T>(url: string): Promise<T> {
         size += next.value.length;
         if (size > 8 * 1024 * 1024) {
           await reader.cancel();
-          throw new Error('Réponse trop volumineuse.');
+          throw new Error('Response is too large.');
         }
         chunks.push(next.value);
       }
@@ -107,7 +107,7 @@ export class DownloadManager {
     hash: { algorithm: 'sha1' | 'sha256' | 'sha512'; value: string },
     maximum = 1024 * 1024 * 1024,
   ): Promise<void> {
-    if (this.closing) throw new Error('Le gestionnaire de téléchargements est fermé.');
+    if (this.closing) throw new Error('The download manager is closed.');
     const id = randomUUID();
     const controller = new AbortController();
     this.controllers.set(id, controller);
@@ -129,13 +129,13 @@ export class DownloadManager {
         AbortSignal.any([controller.signal, AbortSignal.timeout(15 * 60 * 1000)]),
       );
       progress.total = Number(response.headers.get('content-length') ?? 0);
-      if (progress.total > maximum) throw new Error('Téléchargement trop volumineux.');
+      if (progress.total > maximum) throw new Error('Download is too large.');
       file = await open(temp, 'wx', 0o600);
       const digest = createHash(hash.algorithm);
       const start = Date.now();
       let emitted = 0;
       const reader = response.body?.getReader();
-      if (!reader) throw new Error('Téléchargement vide.');
+      if (!reader) throw new Error('Empty download.');
       progress.phase = 'downloading';
       for (;;) {
         const next = await reader.read();
@@ -143,13 +143,13 @@ export class DownloadManager {
         progress.received += next.value.length;
         if (progress.received > maximum) {
           await reader.cancel();
-          throw new Error('Téléchargement trop volumineux.');
+          throw new Error('Download is too large.');
         }
         digest.update(next.value);
         let offset = 0;
         while (offset < next.value.length) {
           const written = await file.write(next.value, offset, next.value.length - offset);
-          if (!written.bytesWritten) throw new Error('Écriture du téléchargement interrompue.');
+          if (!written.bytesWritten) throw new Error('Writing the download was interrupted.');
           offset += written.bytesWritten;
         }
         progress.speed = progress.received / Math.max((Date.now() - start) / 1000, 0.1);
@@ -161,7 +161,7 @@ export class DownloadManager {
       if (digest.digest('hex').toLowerCase() !== hash.value.toLowerCase())
         throw new DomainError(
           'CHECKSUM',
-          'Le fichier téléchargé est corrompu. Il n’a pas été installé.',
+          'The downloaded file is corrupted. It was not installed.',
         );
       await file.sync();
       await file.close();
@@ -175,7 +175,7 @@ export class DownloadManager {
           ...progress,
           phase: 'failed',
           done: true,
-          error: e instanceof Error ? e.message : 'Échec',
+          error: e instanceof Error ? e.message : 'Failed',
         },
       });
       throw e;

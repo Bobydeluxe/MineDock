@@ -12,6 +12,7 @@ import {
 } from 'react';
 import { LoaderCircle, X, AlertCircle } from 'lucide-react';
 import { AppContext } from './context';
+import { localizeMessage } from '../../../../packages/domain/localization';
 export function Button({
   children,
   className = '',
@@ -108,10 +109,14 @@ export function ErrorBox({
   return (
     <div className="error-box" role="alert">
       <AlertCircle size={18} />
-      <span>{error}</span>
+      <LocalizedError error={error} />
       {retry && <Button onClick={retry}>{retryLabel}</Button>}
     </div>
   );
+}
+function LocalizedError({ error }: { error: string }): ReactNode {
+  const context = useContext(AppContext);
+  return <span>{localizeMessage(error, context?.snapshot.settings.language)}</span>;
 }
 export function Loading({ label }: { label: string }): ReactNode {
   return (
@@ -202,9 +207,9 @@ export function useData<T>(
   return { data, error, loading, reload: () => setKey((k) => k + 1) };
 }
 export function bytes(value: number): string {
-  if (!value) return '0 Mo';
+  if (!value) return '0 MB';
   const unit = value >= 1024 ** 3 ? 1024 ** 3 : 1024 ** 2;
-  return `${(value / unit).toFixed(1)} ${unit === 1024 ** 3 ? 'Go' : 'Mo'}`;
+  return `${(value / unit).toFixed(1)} ${unit === 1024 ** 3 ? 'GB' : 'MB'}`;
 }
 export function duration(start?: string): string {
   if (!start) return '—';

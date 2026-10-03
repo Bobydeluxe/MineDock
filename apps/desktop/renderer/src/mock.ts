@@ -51,15 +51,15 @@ export function createMockApi(): Api {
   });
   const data: Snapshot = {
     servers: [
-      server('Les copains', 'paper', 'running', 25565),
-      server('Atelier créatif', 'vanilla', 'stopped', 25566),
-      server('Nouvelle aventure', 'paper', 'stopped', 25567),
+      server('Our friends', 'paper', 'running', 25565),
+      server('Creative workshop', 'vanilla', 'stopped', 25566),
+      server('New adventure', 'paper', 'stopped', 25567),
     ],
     backups: [],
     schedules: [],
     activity: [],
     settings: {
-      language: 'fr',
+      language: 'en',
       theme: 'dark',
       serverRoot: 'C:/MineDock/servers',
       backupRoot: 'C:/MineDock/backups',
@@ -72,7 +72,7 @@ export function createMockApi(): Api {
   const texts = new Map<string, string>();
   const get = (id: string): Server => {
     const value = data.servers.find((s) => s.id === id);
-    if (!value) throw new Error('Serveur introuvable.');
+    if (!value) throw new Error('Server not found.');
     return value;
   };
   const change = (id: string, status: Server['status']): void => {
@@ -101,7 +101,7 @@ export function createMockApi(): Api {
     const meta = {
       id: crypto.randomUUID(),
       serverId: id,
-      name: `${s.name} · démo`,
+      name: `${s.name} · demo`,
       createdAt: new Date().toISOString(),
       size: 1024 ** 2 * 256,
       sha256: 'demo',
@@ -121,7 +121,7 @@ export function createMockApi(): Api {
         seq: ++seq,
         at: new Date().toISOString(),
         level: 'INFO' as const,
-        text: '[Server thread/INFO]: Démo : sauvegarde du monde terminée.',
+        text: '[Server thread/INFO]: Demo: world saved.',
       };
       const lines = logs.get(s.id) ?? [];
       lines.push(line);
@@ -151,7 +151,7 @@ export function createMockApi(): Api {
     },
     selectFolder: async () => 'C:/MineDock',
     openFolder: async () => {
-      audit('demo.folder', 'Dossier simulé.');
+      audit('demo.folder', 'Simulated folder.');
     },
     versions: async () => ['1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.20.6'],
     create: async (input) => {
@@ -162,7 +162,7 @@ export function createMockApi(): Api {
       return s;
     },
     cancelDownload: async () => {
-      audit('demo.download', 'Annulation simulée.');
+      audit('demo.download', 'Simulated cancellation.');
     },
     retryInstallation: async (id) => {
       change(id, 'stopped');
@@ -183,7 +183,7 @@ export function createMockApi(): Api {
       audit('server.restarted', get(id).name, id);
     },
     remove: async (id, confirmation) => {
-      if (get(id).name !== confirmation) throw new Error('Confirmation incorrecte.');
+      if (get(id).name !== confirmation) throw new Error('Incorrect confirmation.');
       data.servers = data.servers.filter((s) => s.id !== id);
       emit({ type: 'changed' });
     },
@@ -197,10 +197,10 @@ export function createMockApi(): Api {
         },
       ],
     command: async (id, command) => {
-      audit('console.command', 'Commande simulée.', id);
+      audit('console.command', 'Simulated command.', id);
       return command === 'list'
         ? 'There are 2 of a max of 20 players online: Alex, Steve'
-        : '[Démo] Commande exécutée.';
+        : '[Demo] Command executed.';
     },
     players: async (id) => get(id).players,
     properties: async (id) => {
@@ -262,7 +262,7 @@ export function createMockApi(): Api {
             },
             { name: 'notes.txt', directory: false, size: 128, modified: new Date().toISOString() },
           ],
-    readFile: async (id, file) => texts.get(id + ':' + file) ?? '# Fichier de démonstration\n',
+    readFile: async (id, file) => texts.get(id + ':' + file) ?? '# Demo file\n',
     writeFile: async (id, file, text) => {
       texts.set(id + ':' + file, text);
       audit('file.saved', file, id);
@@ -275,22 +275,22 @@ export function createMockApi(): Api {
       audit('demo.delete', file, id);
     },
     uploadFile: async (id) => {
-      audit('demo.upload', 'Import simulé', id);
+      audit('demo.upload', 'Simulated import', id);
     },
     exportFile: async (id) => {
-      audit('demo.export', 'Export simulé', id);
+      audit('demo.export', 'Simulated export', id);
     },
     backup,
     verifyBackup: async () => true,
     restore: async (id, confirmation) => {
       const item = data.backups.find((b) => b.id === id);
       if (!item || get(item.serverId).name !== confirmation)
-        throw new Error('Confirmation incorrecte.');
+        throw new Error('Incorrect confirmation.');
       await backup(item.serverId);
       audit('backup.restored', item.name, item.serverId);
     },
     exportBackup: async () => {
-      audit('demo.export', 'Export simulé');
+      audit('demo.export', 'Simulated export');
     },
     deleteBackup: async (id) => {
       data.backups = data.backups.filter((b) => b.id !== id);
@@ -327,7 +327,7 @@ export function createMockApi(): Api {
       {
         id: 'demo',
         title: 'LuckPerms',
-        description: 'Un système de permissions pour votre serveur.',
+        description: 'A permissions system for your server.',
         author: 'lucko',
         downloads: 9000000,
         categories: ['paper'],

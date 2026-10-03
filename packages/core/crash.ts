@@ -1,17 +1,17 @@
 export function analyzeCrash(text: string, java: number): string {
   if (/OutOfMemoryError|Java heap space/.test(text))
-    return 'Le serveur manque de mémoire. Augmentez la RAM allouée ou réduisez la distance de vue.';
+    return 'The server ran out of memory. Increase allocated RAM or reduce view distance.';
   if (
     /UnsupportedClassVersionError|UnsupportedClassVersion|requires.*Java|Java.*required/i.test(text)
   )
-    return `La version de Java est incompatible. Vérifiez le runtime Java ${java} du serveur.`;
+    return `The Java version is incompatible. Check the server's Java ${java} runtime.`;
   if (/Address already in use|FAILED TO BIND|BindException/i.test(text))
-    return 'Le port réseau est déjà utilisé. Choisissez un autre port.';
+    return 'The network port is already in use. Choose another port.';
   if (/missing.*depend|requires.*fabric|Could not load.*plugin/i.test(text))
-    return 'Un plugin ou un mod semble manquer d’une dépendance ou être incompatible.';
+    return 'A plugin or mod may be missing a dependency or may be incompatible.';
   if (/Invalid.*(config|properties)|Failed to load.*properties/i.test(text))
-    return 'La configuration du serveur semble invalide. Vérifiez les derniers changements.';
+    return 'The server configuration appears invalid. Check your recent changes.';
   if (/corrupt|ZipException|invalid.*(jar|zip)/i.test(text))
-    return 'Un fichier du serveur semble endommagé. Vérifiez les sauvegardes ou réinstallez le contenu concerné.';
-  return 'Le serveur s’est arrêté de façon inattendue. Consultez les dernières lignes de console pour identifier la cause.';
+    return 'A server file appears corrupted. Check backups or reinstall the affected content.';
+  return 'The server stopped unexpectedly. Check the latest console lines to identify the cause.';
 }

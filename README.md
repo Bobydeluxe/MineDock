@@ -1,51 +1,51 @@
 # MineDock
 
-Gestionnaire desktop de serveurs Minecraft, local-first, en français et en anglais. **V1 bêta 0.1.0**, code original sous licence MIT.
+A desktop Minecraft server manager that keeps your worlds on your computer. **V1 beta 0.2.0**, original code under the MIT license.
 
-## Installer sur Windows 11
+English is the project's primary language and the application's default. The app also supports **French, German, Spanish, Portuguese and Italian**. Choose a language during setup or in Settings; your preference is remembered between launches. Upgrades preserve your existing language choice.
 
-Les versions téléchargeables sont regroupées dans les [releases GitHub](https://github.com/Bobydeluxe/MineDock/releases).
+## Install on Windows 11
 
-Pour la bêta 0.1.0 : [installateur Windows x64](https://github.com/Bobydeluxe/MineDock/releases/download/v0.1.0/MineDock-0.1.0-Setup-x64.exe), [version portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.1.0/MineDock-0.1.0-Portable-x64.exe) et [empreintes SHA-256](https://github.com/Bobydeluxe/MineDock/releases/download/v0.1.0/SHA256SUMS.txt).
+Download builds from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases). The multilingual beta 0.2.0 provides a [Windows x64 installer](https://github.com/Bobydeluxe/MineDock/releases/download/v0.2.0/MineDock-0.2.0-Setup-x64.exe), a [portable executable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.2.0/MineDock-0.2.0-Portable-x64.exe) and [SHA-256 checksums](https://github.com/Bobydeluxe/MineDock/releases/download/v0.2.0/SHA256SUMS.txt).
 
-Les builds locaux se trouvent dans `release/` :
+Local builds are in `release/`:
 
-- `MineDock-0.1.0-Setup-x64.exe` : installateur par utilisateur ;
-- `MineDock-0.1.0-Portable-x64.exe` : exécutable sans installation ;
-- `win-unpacked/MineDock.exe` : application décompressée pour diagnostic.
+- `MineDock-0.2.0-Setup-x64.exe`: installer for the current user.
+- `MineDock-0.2.0-Portable-x64.exe`: executable requiring no installation.
+- `win-unpacked/MineDock.exe`: unpacked application for diagnostics.
 
-Ces builds ne sont pas signés. Aucun compte cloud, Node ou installation manuelle de Java n’est nécessaire pour les utiliser. Le runtime Java adapté est téléchargé au premier besoin. La version portable utilise elle aussi un dossier de données persistant dans le profil utilisateur ; elle ne met pas les mondes à côté de l’exécutable.
+These beta builds are unsigned. You do not need a cloud account, Node or a manual Java installation. MineDock downloads the required Java runtime when needed. The portable edition also keeps persistent data in your user profile; it does not store worlds beside the executable.
 
-1. Lancez MineDock et terminez l’assistant.
-2. Créez un serveur Paper ou Vanilla, choisissez la version et la RAM.
-3. Lisez et acceptez vous-même l’EULA Minecraft dans l’assistant.
-4. Démarrez le serveur, attendez le statut « En ligne », puis connectez votre client de la même version à l’adresse affichée.
-5. Utilisez les onglets Console, Joueurs, Fichiers, Sauvegardes et Paramètres.
+1. Launch MineDock and complete setup.
+2. Create a Paper or Vanilla server and select its Minecraft version and RAM.
+3. Read and personally accept the Minecraft EULA in the wizard.
+4. Start the server, wait for **Online**, then connect a matching Minecraft client using the displayed address.
+5. Use the Console, Players, Files, Backups and Settings tabs.
 
-MineDock doit rester ouvert pour superviser les serveurs et exécuter les tâches. Sa fermeture arrête les serveurs proprement. Le premier démarrage de Paper peut télécharger des fichiers Minecraft supplémentaires. Une fois le serveur complètement installé et démarré une première fois, son administration locale ne dépend pas d’Internet.
+MineDock must remain open to supervise servers and run scheduled tasks. Closing it stops servers gracefully. Paper may download additional Minecraft files on its first startup. After complete installation and a first startup, local administration works offline.
 
-## Fonctions réellement implémentées
+## Implemented features
 
-- Electron avec renderer isolé, React, TypeScript strict, Vite, Tailwind et SQLite avec migration versionnée.
-- Installation Vanilla / Paper depuis leurs catalogues officiels ; snapshots masqués, builds Paper stables uniquement et reprise d’installation incomplète depuis l’interface.
-- Runtimes Temurin isolés et détection de Java ; exigences Java distinctes pour Mojang et Paper.
-- Processus indépendants, start / stop / restart, détection des crashes et redémarrages bornés.
-- Console live virtualisée, recherche, filtres, copier, historique de commandes et RCON authentifié.
-- Liste de joueurs et commandes kick / ban / op / deop / whitelist.
-- Édition graphique de `server.properties`, RAM et runtime par serveur.
-- Navigation de fichiers confinée, éditeur texte, validation JSON, import/export de fichiers, création de dossiers et suppression confirmée.
-- ZIP complets avec SHA-256, sauvegardes live avec `save-off` / `save-all flush` / `save-on`, restauration préparée dans un dossier temporaire, sauvegarde préalable et restauration des métadonnées plugins.
-- Tâches persistantes à intervalle : sauvegarde, start, stop, restart, commande. Les reprises manquées sont regroupées en une exécution.
-- Plugins Modrinth compatibles Paper, dépendances obligatoires et versions épinglées, activation/désactivation serveur arrêté.
-- CPU / RAM du vrai processus Java, historique limité à 7 jours, taille des serveurs, audit et logs de l’application séparés.
-- Préférences FR / EN, thème clair / sombre / système et inhibition temporaire de veille optionnelle.
-- Suppression d’un serveur vers une corbeille locale, avec conservation des fichiers.
+- Electron with an isolated renderer, React, strict TypeScript, Vite, Tailwind and SQLite with versioned migrations.
+- Official Vanilla and Paper catalogs; release versions, stable Paper builds and retry of incomplete installations.
+- Isolated Temurin runtimes and Java detection, with separate Mojang and Paper Java requirements.
+- Independent server processes, start/stop/restart, crash explanations and bounded automatic restarts.
+- Virtualized live console, search, filters, copying, command history and authenticated RCON.
+- Player list and kick/ban/op/deop/whitelist commands.
+- Graphical `server.properties` editing and per-server RAM/runtime settings.
+- Contained file browsing, text editor, JSON validation, import/export, folder creation and confirmed deletion.
+- Complete ZIP backups with SHA-256, live `save-off`/`save-all flush`/`save-on`, staged restore, safety backup and plugin metadata restoration.
+- Persistent interval tasks: backup, start, stop, restart and command. Missed runs coalesce into one execution.
+- Compatible Modrinth Paper plugins, required dependencies, pinned versions and enable/disable while stopped.
+- Real Java process CPU/RAM, seven-day metric history, server storage, audit trail and separate application logs.
+- Six interface languages, localized MineDock diagnostics, light/dark/system themes and optional temporary sleep prevention.
+- Server deletion into a local trash folder, preserving its files.
 
-Les sauvegardes manuelles ne sont jamais purgées automatiquement. La V1 plafonne les archives à 64 Go non compressés et l’éditeur à 2 Mo. Les fichiers d’un serveur actif sont consultables mais les modifications sont réservées au serveur arrêté.
+Manual backups are never automatically purged. V1 limits backups to 64 GB of uncompressed data and text editing to 2 MB. Running servers' files can be viewed; writes require a stopped server. The [complete feature list](MineDock-Features.txt) distinguishes implemented features from planned work.
 
-## Développement
+## Development
 
-Node **24+**, pnpm **11+**. La compilation Windows s’effectue sur Windows ; macOS et Linux ont leurs propres jobs CI.
+Requires Node **24+** and pnpm **11+**. Build Windows packages on Windows; Linux and macOS have their own CI jobs.
 
 ```sh
 pnpm install
@@ -59,44 +59,44 @@ pnpm build
 pnpm build:windows
 ```
 
-`dev` lance le vrai desktop et ses services locaux. `dev:mock` lance un navigateur avec des données **explicitement simulées** ; il ne gère aucun vrai serveur. Redémarrez `dev` après un changement du main process ou du preload ; Vite recharge le renderer automatiquement.
+`dev` runs the real desktop and its local services. `dev:mock` opens a browser with **explicitly simulated data** and manages no real server. Restart `dev` after main-process or preload changes; Vite reloads the renderer automatically.
 
 ```sh
-pnpm test:live      # Téléchargements réels, Java, bootstrap Paper avec eula=false
-pnpm test:packaged  # Test du binaire Windows après build:windows
+pnpm test:live      # Real downloads, Java and Paper bootstrap with eula=false
+pnpm test:packaged  # Windows binary smoke test after build:windows
 pnpm build:linux
 pnpm build:mac
 ```
 
-Les tests UI utilisent Edge sous Windows et Chromium sous Linux/macOS. Sur ces derniers systèmes : `pnpm exec playwright install --with-deps chromium`. Les tests desktop sur Linux doivent s’exécuter sous un affichage graphique ou Xvfb. Aucun test n’accepte l’EULA d’un vrai serveur à votre place.
+UI tests use Edge on Windows and Chromium on Linux/macOS. On those systems run `pnpm exec playwright install --with-deps chromium`. Linux desktop tests require a graphical display or Xvfb. No test accepts a real server's EULA on your behalf.
 
 ## Architecture
 
 ```text
-apps/desktop/       main Electron, preload, React, assets originaux
-packages/domain/    types, validation, propriétés, erreurs
-packages/core/      services d’application, événements, fichiers, logs, scheduler
-packages/database/  repository SQLite, migrations
-packages/minecraft/ versions et téléchargements
-packages/runtime-manager/  runtimes Temurin
-packages/server-core/      supervisor, métriques
-packages/rcon/      protocole RCON
-packages/backups/   archives et restauration
+apps/desktop/       Electron main, preload, React and original assets
+packages/domain/    types, validation, properties, languages and diagnostics
+packages/core/      application services, events, files, logs and scheduler
+packages/database/  SQLite repository and migrations
+packages/minecraft/ versions and downloads
+packages/runtime-manager/  Temurin runtimes
+packages/server-core/      supervisor and metrics
+packages/rcon/      RCON protocol
+packages/backups/   archives and restoration
 packages/marketplace/       Modrinth
-packages/security/ chemins et secrets
-packages/networking/       ports et réseau local
-tests/             tests unitaires, intégration, UI
-docs/              décisions, sécurité, validation et feuille de route
+packages/security/ paths and secrets
+packages/networking/       ports and local network
+tests/             unit, integration and UI tests
+docs/              architecture, security, validation and roadmap
 ```
 
-Consultez [l’architecture](docs/architecture.md), [la sécurité](docs/security.md), [les validations](docs/validation.md) et [les limites de la V1](docs/roadmap.md).
+Read the [architecture](docs/architecture.md), [security](docs/security.md), [localization](docs/localization.md), [validation](docs/validation.md) and [V1 limitations](docs/roadmap.md). New to GitHub? See [the beginner guide](GITHUB-GUIDE.txt).
 
-## Aperçu
+## Preview
 
-![Tableau de bord MineDock, données de démonstration](docs/screenshots/dashboard-demo.png)
+![MineDock dashboard with demonstration data](docs/screenshots/dashboard-demo.png)
 
-L’image ci-dessus présente le mode démo, annoncé par une bannière. Une installation neuve démarre avec une liste de serveurs vide.
+This screenshot shows demo mode, identified by its banner. A fresh installation starts with an empty server list.
 
-## Références fonctionnelles
+## Functional references
 
-[Minecraft Server Manager](https://github.com/anefzaoui/minecraft-server-manager) et [PocketMC](https://pocketmc.github.io/) ont été étudiés uniquement pour leur philosophie et leurs fonctions publiques. Aucun code, asset, logo ou texte de ces projets n’a été repris. MineDock n’est pas affilié à Mojang, Microsoft ou PaperMC.
+[Minecraft Server Manager](https://github.com/anefzaoui/minecraft-server-manager) and [PocketMC](https://pocketmc.github.io/) informed the public feature research only. No code, assets, logos or text were copied from those projects. MineDock is not affiliated with Mojang, Microsoft or PaperMC.

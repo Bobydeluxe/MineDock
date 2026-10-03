@@ -1,15 +1,15 @@
 # Distribution
 
-`pnpm build` produit `dist/main.cjs`, `dist/preload.cjs`, le renderer Vite et l’icône. Les services sont bundlés ; le binaire Electron embarque Node et Chromium. L’utilisateur final n’installe ni Node ni pnpm.
+`pnpm build` produces `dist/main.cjs`, `dist/preload.cjs`, the Vite renderer and icon. Services are bundled; Electron includes Node and Chromium. End users do not install Node or pnpm.
 
-Sur Windows : `pnpm build:windows` produit NSIS et portable dans `release/`. NSIS installe dans le profil utilisateur et propose un dossier d’installation. Le portable est un paquet auto-extractible ; les données restent dans le profil utilisateur. `pnpm test:packaged` lance `release/win-unpacked/MineDock.exe` avec des données temporaires.
+On Windows, `pnpm build:windows` produces NSIS and portable builds in `release/`. NSIS installs for the current user and offers a destination-folder choice. The portable executable self-extracts, while persistent data remains in the user profile. `pnpm test:packaged` launches `release/win-unpacked/MineDock.exe` with temporary data.
 
-Sur Linux : `pnpm build:linux` produit AppImage et deb. Sur macOS : `pnpm build:mac` produit un DMG. Ces cibles sont configurées en CI ; elles nécessitent une validation sur leurs OS respectifs avant publication. Le réseau et les runtimes gèrent x64 et arm64, mais la livraison locale Windows a été validée en x64 uniquement.
+`pnpm build:linux` produces AppImage/deb and `pnpm build:mac` produces DMG. CI builds all three platforms. Successful packaging does not verify Minecraft gameplay, downloaded runtimes or every native integration on each OS. Runtime/network support includes x64 and arm64; local Windows delivery was tested on x64.
 
-Le paquet Debian déclare le mainteneur avec l’adresse GitHub masquée de Bobydeluxe. Le support passe par les issues du dépôt public indiqué dans `homepage` ; cette adresse masquée ne constitue pas une boîte de support.
+Debian metadata uses Bobydeluxe's masked GitHub maintainer email. Support belongs in the public repository's issues, linked through `homepage`; the masked email is not a support inbox.
 
-Les artefacts locaux sont **non signés**. Une distribution publique stable nécessite un certificat Windows / une signature de confiance, une identité macOS et la notarisation. Configurez les secrets `CSC_LINK` et `CSC_KEY_PASSWORD` de chaque plateforme, puis vérifiez la chaîne de signature dans le pipeline.
+Beta artifacts are **unsigned**. Stable distribution needs Windows signing credentials, a macOS signing identity and notarization. Configure platform `CSC_LINK` and `CSC_KEY_PASSWORD` secrets and verify the signature chain in CI.
 
-Le workflow de tags produit des artefacts et ne publie pas de GitHub Release. La publication reste une action volontaire après validation des signatures. Aucune mise à jour distante d’application n’est activée : il manque un endpoint de releases détenu par le mainteneur et une politique de vérification cryptographique. Il n’existe aucun endpoint inventé dans le logiciel.
+The tag workflow uploads build artifacts; it does not publish a GitHub Release. Beta releases are published separately with their unsigned status stated. Verified automatic app updates require a maintainer-owned endpoint and a cryptographic verification policy and are disabled until configured.
 
-Les icônes sont originales. Le nom/version se trouvent dans `PRODUCT` et les métadonnées de packaging `package.json`.
+Icons are original. Keep the `PRODUCT` version and `package.json` packaging version synchronized. English is the project's primary language; bundled catalogs provide six app languages without network requests.

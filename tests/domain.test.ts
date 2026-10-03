@@ -102,7 +102,7 @@ describe('configuration and scheduling', () => {
   it('advances missed intervals once from current time', () =>
     expect(nextExecution(360, 0)).toBe('1970-01-01T06:00:00.000Z'));
   it('explains deterministic crashes', () => {
-    expect(analyzeCrash('OutOfMemoryError', 21)).toContain('mémoire');
+    expect(analyzeCrash('OutOfMemoryError', 21)).toContain('memory');
     expect(analyzeCrash('FAILED TO BIND', 21)).toContain('port');
     expect(analyzeCrash('UnsupportedClassVersionError', 21)).toContain('Java');
   });

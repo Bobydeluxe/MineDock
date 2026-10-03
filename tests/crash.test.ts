@@ -49,7 +49,7 @@ it('bounds automatic restarts after repeated actual process crashes', async () =
     await third;
     await vi.advanceTimersByTimeAsync(120000);
     expect(starts).toBe(3);
-    expect(f.repo.server(server.id).error).toContain('Trois crashes');
+    expect(f.repo.server(server.id).error).toContain('Three crashes');
     expect(f.repo.server(server.id).status).toBe('crashed');
   } finally {
     vi.useRealTimers();

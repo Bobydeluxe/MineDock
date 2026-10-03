@@ -28,7 +28,7 @@ export async function zipDirectory(
       const child = path.join(relative, entry.name);
       validateRelative(child);
       if (metadata && child === '.minedock-backup.json') continue;
-      if (entry.isSymbolicLink()) throw new Error('Un lien symbolique empêche la sauvegarde sûre.');
+      if (entry.isSymbolicLink()) throw new Error('A symbolic link prevents a safe backup.');
       if (entry.isDirectory()) {
         zip.addEmptyDirectory(child.replace(/\\/g, '/'));
         await walk(child);
@@ -64,7 +64,7 @@ export async function extractZip(
   await new Promise<void>((resolve, reject) => {
     yauzl.open(archive, { lazyEntries: true, validateEntrySizes: true }, (error, zip) => {
       if (error || !zip) {
-        reject(error ?? new Error('Archive illisible.'));
+        reject(error ?? new Error('Unreadable archive.'));
         return;
       }
       let total = 0;
@@ -85,21 +85,21 @@ export async function extractZip(
       });
       zip.on('entry', (entry: yauzl.Entry) => {
         void (async () => {
-          if (++count > 200000) throw new Error('Archive contenant trop de fichiers.');
+          if (++count > 200000) throw new Error('Archive contains too many files.');
           const mode = (entry.externalFileAttributes >>> 16) & 0o170000;
-          if (mode === 0o120000) throw new Error('Archive contenant un lien symbolique.');
+          if (mode === 0o120000) throw new Error('Archive contains a symbolic link.');
           const name = entry.fileName.replace(/\/$/, '');
           validateRelative(name);
           const target = await containedPath(root, name);
           total += entry.uncompressedSize;
           if (total > maximum || entry.uncompressedSize > maximum)
-            throw new Error('Archive trop volumineuse.');
+            throw new Error('Archive is too large.');
           if (entry.fileName.endsWith('/')) await mkdir(target, { recursive: true });
           else {
             await mkdir(path.dirname(target), { recursive: true });
             const input = await new Promise<import('node:stream').Readable>((res, rej) =>
               zip.openReadStream(entry, (err, stream) =>
-                err || !stream ? rej(err ?? new Error('Entrée illisible.')) : res(stream),
+                err || !stream ? rej(err ?? new Error('Unreadable archive entry.')) : res(stream),
               ),
             );
             // O_EXCL also rejects duplicate entries and file/directory collisions.
@@ -126,5 +126,5 @@ export async function directorySize(root: string): Promise<number> {
   return total;
 }
 export async function ensureFile(filename: string): Promise<void> {
-  if (!(await stat(filename)).isFile()) throw new Error('Fichier attendu.');
+  if (!(await stat(filename)).isFile()) throw new Error('Expected a file.');
 }

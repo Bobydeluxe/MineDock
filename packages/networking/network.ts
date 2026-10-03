@@ -10,7 +10,7 @@ export async function checkPort(port: number): Promise<boolean> {
 export async function findAvailablePort(start = 25565): Promise<number> {
   for (let port = start; port < Math.min(start + 100, 65536); port++)
     if (await checkPort(port)) return port;
-  throw new Error('Aucun port disponible.');
+  throw new Error('No port is available.');
 }
 export function lanIp(): string {
   return (

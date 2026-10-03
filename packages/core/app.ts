@@ -21,6 +21,7 @@ import { LocalSecretStore, type SecretStore } from '../security/secrets';
 import { findAvailablePort, checkPort, lanIp } from '../networking/network';
 import { parseProperties, serializeProperties } from '../domain/properties';
 import { DomainError, readableError } from '../domain/errors';
+import { localizeMessage } from '../domain/localization';
 import {
   createServerSchema,
   settingsSchema,
@@ -89,7 +90,10 @@ export class AppCore {
           if (this.supervisor.isRunning(job.serverId)) {
             await this.supervisor.command(
               job.serverId,
-              'say [MineDock] Redémarrage dans 10 secondes.',
+              localizeMessage(
+                'say [MineDock] Restarting in 10 seconds.',
+                this.repo.settings().language,
+              ),
             );
             await new Promise((resolve) => setTimeout(resolve, 10000));
           }
@@ -128,9 +132,9 @@ export class AppCore {
     };
   }
   async exclusive<T>(id: string, operation: () => Promise<T>): Promise<T> {
-    if (this.closing) throw new DomainError('CLOSING', 'L’application est en cours de fermeture.');
+    if (this.closing) throw new DomainError('CLOSING', 'The application is shutting down.');
     if (this.operations.has(id))
-      throw new DomainError('BUSY', 'Une opération est déjà en cours sur ce serveur.');
+      throw new DomainError('BUSY', 'An operation is already in progress on this server.');
     const work = Promise.resolve().then(operation);
     this.operations.set(id, work);
     try {
@@ -153,14 +157,14 @@ export class AppCore {
     const id = randomUUID();
     return this.exclusive('create', async () => {
       if ((await this.reservedPorts()).has(input.port) || !(await checkPort(input.port)))
-        throw new DomainError('PORT', `Le port ${input.port} est déjà utilisé.`);
+        throw new DomainError('PORT', `Port ${input.port} is already in use.`);
       const artifact = await this.versions.artifact(input.engine, input.version);
       const root = this.repo.settings().serverRoot;
       const folder = path.join(root, id);
       await mkdir(folder, { recursive: true });
       const space = await statfs(root);
       if (Number(space.bavail) * Number(space.bsize) < 512 * 1024 ** 2)
-        throw new DomainError('DISK', 'Au moins 512 Mo d’espace libre sont nécessaires.');
+        throw new DomainError('DISK', 'At least 512 MB of free disk space is required.');
       const password = randomBytes(32).toString('base64url');
       const { eula: _eula, ...profile } = input;
       const server: Server = {
@@ -188,7 +192,7 @@ export class AppCore {
       this.exclusive(id, async () => {
         const server = this.assertStopped(id);
         if (server.installationComplete !== false)
-          throw new DomainError('INSTALL', 'Ce serveur est déjà installé.');
+          throw new DomainError('INSTALL', 'This server is already installed.');
         return this.installer.install(id);
       }),
     );
@@ -202,7 +206,7 @@ export class AppCore {
     )
       throw new DomainError(
         'RUNNING',
-        'Arrêtez le serveur avant de modifier ses fichiers ou sa configuration.',
+        'Stop the server before editing its files or configuration.',
       );
     return server;
   }
@@ -218,7 +222,7 @@ export class AppCore {
       const server = this.assertStopped(id);
       const values = z.record(z.string().max(120), z.string().max(2000)).parse(raw);
       if ('rcon.password' in values)
-        throw new DomainError('SECRET', 'Le mot de passe RCON est géré par l’application.');
+        throw new DomainError('SECRET', 'The application manages the RCON password.');
       const port = z.coerce.number().int().min(1024).max(65535).parse(values['server-port']);
       const players = z.coerce.number().int().min(1).max(1000).parse(values['max-players']);
       const view = z.coerce.number().int().min(2).max(32).parse(values['view-distance']);
@@ -233,15 +237,15 @@ export class AppCore {
         .parse(values.gamemode);
       const difficulty = z.enum(['peaceful', 'easy', 'normal', 'hard']).parse(values.difficulty);
       if ((await this.reservedPorts(id)).has(port) || !(await checkPort(port)))
-        throw new DomainError('PORT', 'Ce port est déjà utilisé.');
+        throw new DomainError('PORT', 'This port is already in use.');
       const worldName = values['level-name'] ?? 'world';
       if (!/^[a-zA-Z0-9_-]{1,60}$/.test(worldName))
         throw new DomainError(
           'WORLD',
-          'Le nom du dossier monde doit contenir uniquement lettres, chiffres, tirets et underscores.',
+          'The world folder name must contain only letters, digits, hyphens and underscores.',
         );
       if (values['server-ip'] && values['server-ip'] !== '127.0.0.1')
-        throw new DomainError('BIND', 'La V1 autorise une adresse vide (LAN) ou 127.0.0.1.');
+        throw new DomainError('BIND', 'V1 allows an empty bind address (LAN) or 127.0.0.1.');
       for (const key of ['online-mode', 'pvp', 'white-list'])
         z.enum(['true', 'false']).parse(values[key]);
       const current = parseProperties(
@@ -279,19 +283,16 @@ export class AppCore {
       const settings = settingsSchema.parse(raw);
       for (const folder of [settings.serverRoot, settings.backupRoot]) {
         if (!path.isAbsolute(folder) || path.parse(folder).root === folder)
-          throw new DomainError('PATH', 'Choisissez un dossier dédié à MineDock.');
+          throw new DomainError('PATH', 'Choose a dedicated MineDock folder.');
         await mkdir(folder, { recursive: true });
       }
       for (const server of this.repo.servers()) {
         const relative = path.relative(server.path, settings.backupRoot);
         if (!relative.startsWith('..') && !path.isAbsolute(relative))
-          throw new DomainError(
-            'PATH',
-            'Le dossier sauvegardes ne peut pas se trouver dans un serveur.',
-          );
+          throw new DomainError('PATH', 'The backup folder cannot be inside a server folder.');
       }
       this.repo.saveSettings(settings);
-      this.repo.audit('settings.updated', 'Préférences mises à jour.');
+      this.repo.audit('settings.updated', 'Preferences updated.');
       return settings;
     });
   }
@@ -306,7 +307,7 @@ export class AppCore {
       if (!runtime)
         throw new DomainError(
           'JAVA',
-          `Sélectionnez un runtime Java ${server.javaMajor} détecté par MineDock.`,
+          `Select a Java ${server.javaMajor} runtime detected by MineDock.`,
         );
       await this.backups.create(id, 'before_settings');
       Object.assign(server, options);
@@ -347,7 +348,7 @@ export class AppCore {
     await this.exclusive(id, async () => {
       const server = this.assertStopped(id);
       if (confirmation !== server.name)
-        throw new DomainError('CONFIRM', 'Le nom du serveur ne correspond pas.');
+        throw new DomainError('CONFIRM', 'The server name does not match.');
       // Move to an app-owned trash folder, preserving worlds and any associated backups.
       const trash = path.join(this.root, 'trash');
       await mkdir(trash, { recursive: true });
@@ -401,7 +402,7 @@ export class AppCore {
   }
   async exportBackup(id: string, destination: string): Promise<void> {
     const item = this.repo.backup(id);
-    if (!(await this.backups.verify(id))) throw new Error('Sauvegarde corrompue.');
+    if (!(await this.backups.verify(id))) throw new Error('Corrupted backup.');
     await copyFile(item.path, destination);
   }
   async close(): Promise<void> {

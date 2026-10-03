@@ -33,7 +33,7 @@ it('streams downloads, verifies integrity, preserves originals on mismatch and v
     );
     await expect(
       manager.download('https://cdn.modrinth.com/test.jar', filename, 'test', hash),
-    ).rejects.toThrow('corrompu');
+    ).rejects.toThrow('corrupted');
     expect(await readFile(filename, 'utf8')).toBe('verified artifact');
     expect((await readdir(f.root)).some((n) => n.endsWith('.part'))).toBe(false);
     vi.stubGlobal(
@@ -45,7 +45,7 @@ it('streams downloads, verifies integrity, preserves originals on mismatch and v
     );
     await expect(
       manager.download('https://cdn.modrinth.com/test.jar', filename, 'test', hash),
-    ).rejects.toThrow('autorisée');
+    ).rejects.toThrow('allowed');
   } finally {
     await f.cleanup();
   }

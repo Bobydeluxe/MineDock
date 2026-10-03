@@ -1,6 +1,7 @@
 import { z } from 'zod';
+import { languageCodes } from './languages';
 
-export const PRODUCT = { name: 'MineDock', version: '0.1.0' } as const;
+export const PRODUCT = { name: 'MineDock', version: '0.2.0' } as const;
 export const engineSchema = z.enum(['paper', 'vanilla']);
 export type Engine = z.infer<typeof engineSchema>;
 export type ServerStatus =
@@ -35,7 +36,7 @@ export const createServerSchema = z
     eula: z.literal(true),
   })
   .refine((v) => v.memoryMin <= v.memoryMax, {
-    message: 'La mémoire minimale dépasse la mémoire maximale.',
+    message: 'Minimum memory exceeds maximum memory.',
   });
 export type CreateServerInput = z.infer<typeof createServerSchema>;
 export const serverOptionsSchema = z
@@ -46,7 +47,7 @@ export const serverOptionsSchema = z
     autoRestart: z.boolean(),
     javaPath: z.string().min(1),
   })
-  .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Mémoire minimale invalide.' });
+  .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Invalid minimum memory.' });
 export type ServerOptions = z.infer<typeof serverOptionsSchema>;
 export interface Server extends Omit<CreateServerInput, 'eula'> {
   id: string;
@@ -99,7 +100,7 @@ export const scheduleSchema = z
   })
   .refine(
     (v) => v.action !== 'command' || (v.command.trim().length > 0 && !/[\r\n\0]/.test(v.command)),
-    { message: 'Commande invalide.' },
+    { message: 'Invalid command.' },
   );
 export type ScheduleInput = z.infer<typeof scheduleSchema>;
 export interface Schedule extends ScheduleInput {
@@ -116,7 +117,7 @@ export interface Activity {
   success: boolean;
 }
 export const settingsSchema = z.object({
-  language: z.enum(['fr', 'en']),
+  language: z.enum(languageCodes),
   theme: z.enum(['dark', 'light', 'system']),
   serverRoot: z.string().min(1),
   backupRoot: z.string().min(1),

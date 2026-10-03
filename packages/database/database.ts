@@ -28,10 +28,10 @@ export class Repository {
     this.db.exec('PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;');
     const integrity = this.db.prepare('PRAGMA quick_check').get();
     if (integrity?.quick_check !== 'ok')
-      throw new Error('Base de données endommagée. Votre copie est conservée.');
+      throw new Error('The database is corrupted. Your copy has been preserved.');
     const version = Number(this.db.prepare('PRAGMA user_version').get()?.user_version ?? 0);
     if (version > migrations.length)
-      throw new Error('Cette base nécessite une version plus récente de MineDock.');
+      throw new Error('This database requires a newer version of MineDock.');
     if (existed && version < migrations.length)
       copyFileSync(filename, filename + `.before-v${version + 1}.bak`);
     for (const migration of migrations.filter((m) => m.version > version)) {
@@ -54,7 +54,7 @@ export class Repository {
   }
   server(id: string): Server {
     const row = this.db.prepare('SELECT profile FROM servers WHERE id=?').get(id);
-    if (!row) throw new Error('Serveur introuvable.');
+    if (!row) throw new Error('Server not found.');
     return JSON.parse(String(row.profile)) as Server;
   }
   addServer(server: Server, secret: string): void {
@@ -91,7 +91,7 @@ export class Repository {
     return row
       ? (JSON.parse(String(row.value)) as Settings)
       : {
-          language: 'fr',
+          language: 'en',
           theme: 'system',
           serverRoot: path.join(this.root, 'servers'),
           backupRoot: path.join(this.root, 'backups'),
@@ -115,7 +115,7 @@ export class Repository {
   }
   backup(id: string): { metadata: Backup; path: string } {
     const row = this.db.prepare('SELECT * FROM backups WHERE id=?').get(id);
-    if (!row) throw new Error('Sauvegarde introuvable.');
+    if (!row) throw new Error('Backup not found.');
     return { metadata: JSON.parse(String(row.metadata)) as Backup, path: String(row.path) };
   }
   addBackup(meta: Backup, filename: string): void {
