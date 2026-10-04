@@ -27,4 +27,4 @@ The owner has no CurseForge API key or Windows/Apple signing certificate. Secret
 
 Real game/client/crossplay sessions require personal EULA acceptance and clients. Historical-version coverage, interactive native OS installation, keychain/sleep behavior and extended power-loss/disk-full/load validation remain separate. CurseForge pack import has an official API/restrictions assessment, without a fake import button. Current final-run progress and actual results are recorded in validation.
 
-The owner explicitly approved PR #1 integration and beta publication. The pull request is merged, v0.3.0 has twenty-one verified public assets, all twelve public update targets passed signature checks, and a real Windows portable installer passed the actual updater download/hash path. Installation was not executed.
+The owner explicitly approved PR #1 integration and beta publication. The pull request is merged, v0.3.0 has twenty verified public assets, all twelve public update targets passed signature checks, and a real Windows portable installer passed the actual updater download/hash path. Installation was not executed.

@@ -56,7 +56,7 @@ Real Hangar metadata/icons and Geyser/Floodgate/ViaVersion downloads are exercis
 
 ## Published release and actual update feed
 
-[MineDock 0.3.0 beta](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.3.0) is published with twelve tested native installers, six publisher-signed metadata files, the feature text, beginner guide and SHA256SUMS. Every uploaded asset was checked against its GitHub SHA-256/size before publication.
+[MineDock 0.3.0 beta](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.3.0) is published with twelve tested native installers, six publisher-signed metadata files, the feature text and SHA256SUMS. Every uploaded asset was checked against its GitHub SHA-256/size before publication.
 
 After publication, the actual UpdateService verified the public feed for all twelve OS/architecture/package combinations against the embedded publisher key. An isolated verifier host with comparison version 0.2.0 downloaded the real Windows x64 portable release and checked its signed size/SHA-256 again through installationFile(). This is a comparison/download test, not a claim that an old 0.2.0 client upgraded itself. The current 0.3.0 host correctly reports no newer update. No installer or Minecraft executable was launched by this check. Results are in ignored data/public-update-validation/result.json.
 
