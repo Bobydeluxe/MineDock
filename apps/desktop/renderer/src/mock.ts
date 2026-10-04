@@ -296,19 +296,19 @@ export function createMockApi(): Api {
     },
     operations: async () => [],
     updateStatus: async () => ({
-      currentVersion: '0.3.0',
+      currentVersion: '0.3.1',
       automaticChecks: false,
       trustedKeyConfigured: false,
       packaged: false,
     }),
     configureUpdates: async (automaticChecks) => ({
-      currentVersion: '0.3.0',
+      currentVersion: '0.3.1',
       automaticChecks,
       trustedKeyConfigured: false,
       packaged: false,
     }),
     checkUpdates: async () => ({
-      currentVersion: '0.3.0',
+      currentVersion: '0.3.1',
       automaticChecks: false,
       trustedKeyConfigured: false,
       packaged: false,

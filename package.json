@@ -1,6 +1,6 @@
 {
   "name": "minedock",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": true,
   "description": "Local-first Minecraft server manager",
   "author": "MineDock contributors",
@@ -23,6 +23,7 @@
     "test:live": "node scripts/smoke-live.mjs",
     "test:official": "node scripts/check-official.mjs",
     "test:packaged": "node scripts/test-packaged.mjs",
+    "screenshots": "node scripts/capture-ui.mjs",
     "updates:keygen": "node scripts/create-update-key.mjs",
     "updates:sign": "node scripts/sign-update.mjs",
     "lint": "eslint .",

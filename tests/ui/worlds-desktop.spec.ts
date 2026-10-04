@@ -34,7 +34,7 @@ test('real Electron world journey: filesystem metadata, safety backup, atomic du
       .click();
     await page
       .getByRole('navigation', { name: 'Server details' })
-      .getByRole('button', { name: 'World', exact: true })
+      .getByRole('button', { name: 'Worlds', exact: true })
       .click();
     await expect(page.locator('.managed-world')).toContainText('9223372036854775806');
     await page.getByRole('button', { name: 'Duplicate', exact: true }).click();

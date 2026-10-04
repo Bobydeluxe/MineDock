@@ -4,6 +4,7 @@ import type { ModpackPreview, ModpackSelection } from '../../../../packages/doma
 import { useApp } from './context';
 import { Button, Dialog, Field, bytes } from './ui';
 import { CreateServer } from './wizard';
+import { EngineIcon } from './engine-icon';
 export function ModpackDialog({
   preview,
   onClose,
@@ -24,6 +25,10 @@ export function ModpackDialog({
   return (
     <Dialog title={t('importModpack')} closeLabel={t('close')} onClose={onClose}>
       <div className="dialog-body">
+        <div className="review-engine">
+          <EngineIcon engine={preview.engine} size={42} />
+          <strong>{preview.name}</strong>
+        </div>
         <h2>
           {preview.name} · {preview.versionId}
         </h2>

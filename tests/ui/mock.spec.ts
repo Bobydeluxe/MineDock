@@ -138,7 +138,7 @@ test('explicit demo journey: add, pause and resume a daily task with timezone pr
       .click();
     await page
       .getByRole('navigation', { name: 'Server details' })
-      .getByRole('button', { name: 'Schedules', exact: true })
+      .getByRole('button', { name: 'Tasks', exact: true })
       .click();
     await page.getByRole('button', { name: 'Add task', exact: true }).click();
     await page.getByLabel('Schedule', { exact: true }).selectOption('daily');
@@ -170,7 +170,7 @@ test('explicit demo journey: duplicate dimensions, select the copy and delete th
       .click();
     await page
       .getByRole('navigation', { name: 'Server details' })
-      .getByRole('button', { name: 'World', exact: true })
+      .getByRole('button', { name: 'Worlds', exact: true })
       .click();
     await expect(page.locator('.managed-world')).toContainText('world_nether, world_the_end');
     await expect(page.getByRole('button', { name: 'Delete world', exact: true })).toBeDisabled();

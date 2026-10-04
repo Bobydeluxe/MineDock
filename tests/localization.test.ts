@@ -49,7 +49,7 @@ it.each(languageCodes)('persists %s across a database restart', async (language)
 });
 
 it('defaults to English and rejects unsupported preferences', () => {
-  expect(translator()('welcome')).toBe('A home for all your worlds.');
+  expect(translator()('welcome')).toBe('Server dashboard');
   expect(settingsSchema.shape.language.safeParse('xx').success).toBe(false);
 });
 

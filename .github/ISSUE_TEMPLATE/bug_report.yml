@@ -1,0 +1,33 @@
+name: Bug report
+description: Report a reproducible problem in MineDock.
+body:
+  - type: input
+    id: version
+    attributes:
+      label: MineDock version
+      placeholder: Release version or source commit
+    validations:
+      required: true
+  - type: input
+    id: system
+    attributes:
+      label: Operating system and architecture
+      placeholder: For example, Windows 11 x64
+    validations:
+      required: true
+  - type: input
+    id: engine
+    attributes:
+      label: Engine and Minecraft version
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include what you expected and what actually happened.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Screenshots or relevant logs
+      description: Remove passwords, API keys, private addresses and personal data before attaching logs.

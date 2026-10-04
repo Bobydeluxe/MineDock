@@ -629,8 +629,8 @@ if (single)
       window = new BrowserWindow({
         width: 1360,
         height: 920,
-        minWidth: 900,
-        minHeight: 640,
+        minWidth: 760,
+        minHeight: 520,
         title: 'MineDock',
         icon: path.join(__dirname, 'assets', 'icon.png'),
         backgroundColor: '#101216',

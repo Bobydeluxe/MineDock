@@ -4,6 +4,62 @@ import os from 'node:os';
 import path from 'node:path';
 import { translator } from '../../apps/desktop/renderer/src/i18n';
 import { languages, type Language } from '../../packages/domain/languages';
+import { fixture } from '../helpers';
+
+test('real Electron dialogs center on first paint and native window resize', async () => {
+  const f = await fixture();
+  const env: Record<string, string> = Object.fromEntries(
+    Object.entries(process.env).filter(
+      (pair): pair is [string, string] =>
+        typeof pair[1] === 'string' && pair[0] !== 'ELECTRON_RUN_AS_NODE',
+    ),
+  );
+  const executablePath = process.env.MINEDOCK_TEST_BINARY;
+  const desktop = await electron.launch({
+    executablePath,
+    args: executablePath ? [] : ['.'],
+    env: { ...env, MINEDOCK_DATA_DIR: f.root, MINEDOCK_TEST: '1' },
+  });
+  try {
+    const page = await desktop.firstWindow();
+    await expect(page.getByRole('dialog')).toBeVisible();
+    for (const [width, height] of [
+      [760, 520],
+      [1360, 920],
+      [1920, 1080],
+    ]) {
+      await desktop.evaluate(
+        ({ BrowserWindow }, size) => {
+          BrowserWindow.getAllWindows()[0]!.setSize(size[0]!, size[1]!);
+        },
+        [width!, height!],
+      );
+      await expect
+        .poll(async () =>
+          page.locator('dialog').evaluate((el) => {
+            const bounds = el.getBoundingClientRect();
+            return Math.max(
+              Math.abs(bounds.left + bounds.width / 2 - innerWidth / 2),
+              Math.abs(bounds.top + bounds.height / 2 - innerHeight / 2),
+            );
+          }),
+        )
+        .toBeLessThan(2);
+      await expect(page.locator('.dialog-footer').getByRole('button').last()).toBeInViewport();
+      if (width === 760 && !executablePath)
+        await page.screenshot({
+          path: 'test-results/native-dialog-760x520.png',
+          animations: 'disabled',
+        });
+    }
+    await page.keyboard.press('Escape');
+    await expect(page.getByRole('dialog')).toBeVisible();
+    await expect(page.locator('body')).toHaveCSS('overflow', 'hidden');
+  } finally {
+    await desktop.close();
+    await f.cleanup();
+  }
+});
 
 test('real Electron shell: setup, folders, localization, empty dashboard, runtime diagnostics', async () => {
   const root = await mkdtemp(path.join(os.tmpdir(), 'minedock-ui-'));
@@ -45,7 +101,9 @@ test('real Electron shell: setup, folders, localization, empty dashboard, runtim
     await page.getByRole('button', { name: 'Continue', exact: true }).click();
     await page.getByRole('button', { name: 'Open MineDock', exact: true }).click();
     await expect(page.getByRole('dialog')).toHaveCount(0);
-    await expect(page.getByText('Your first world starts here.')).toBeVisible();
+    await expect(
+      page.getByText(translator('en')('noServers'), { exact: true }).last(),
+    ).toBeVisible();
     await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
     await expect(page.locator('.button.nav.active')).toHaveCSS(
       'background-color',

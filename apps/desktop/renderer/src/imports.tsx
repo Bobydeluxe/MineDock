@@ -6,6 +6,7 @@ import { engineIds, engineDefinition } from '../../../../packages/domain/engines
 import { useApp } from './context';
 import { Button, Dialog, Field, Toggle } from './ui';
 import { Confirm } from './management';
+import { EngineIcon } from './engine-icon';
 export function ImportServerDialog({
   preview,
   onClose,
@@ -44,6 +45,10 @@ export function ImportServerDialog({
       <Dialog title={t('importServer')} closeLabel={t('close')} onClose={onClose}>
         <div className="dialog-body">
           <p className="muted">{t('importServerHelp')}</p>
+          <div className="review-engine">
+            <EngineIcon engine={engine} size={42} />
+            <strong>{engineDefinition(engine).displayName}</strong>
+          </div>
           <code className="confirm-name">{preview.sourcePath}</code>
           <p className="muted small-text">
             {t(preview.confidence === 'detected' ? 'importDetected' : 'importUncertain')}
@@ -110,7 +115,7 @@ export function ImportServerDialog({
           <p className="muted small-text">
             {t(copy ? 'copyImportedServerHelp' : 'originalImportedServerHelp')}
           </p>
-          <Button variant="ghost" onClick={() => setAdvanced(!advanced)}>
+          <Button variant="ghost" aria-expanded={advanced} onClick={() => setAdvanced(!advanced)}>
             {t('advanced')}
           </Button>
           {advanced && (

@@ -28,3 +28,9 @@ The owner has no CurseForge API key or Windows/Apple signing certificate. Secret
 Real game/client/crossplay sessions require personal EULA acceptance and clients. Historical-version coverage, interactive native OS installation, keychain/sleep behavior and extended power-loss/disk-full/load validation remain separate. CurseForge pack import has an official API/restrictions assessment, without a fake import button. Current final-run progress and actual results are recorded in validation.
 
 The owner explicitly approved PR #1 integration and beta publication. The pull request is merged, v0.3.0 has twenty verified public assets, all twelve public update targets passed signature checks, and a real Windows portable installer passed the actual updater download/hash path. Installation was not executed.
+
+## 0.3.1 UI revision
+
+The next source revision fixes the shared dialog placement and nested focus/scroll behavior, simplifies creation and navigation, adds eight original MIT engine symbols and updates all six languages. It refreshes the README with nine actual renderer captures in clearly disclosed demo mode, development/contribution guidance and issue/PR templates. Existing core services and migrations remain in use.
+
+Windows x64 production/NSIS/portable compilation and the full 22-case UI suite passed. Exact unit, packaged and CI results are recorded separately in [validation](validation.md). This revision has not been published as a new GitHub Release; the public 0.3.0 packages and their six-platform evidence remain distinct.

@@ -6,6 +6,8 @@ The 0.3.0 source extends the existing local desktop with eight engine adapters/c
 
 Earlier roadmap entries for those implemented services are no longer marked planned. A working adapter and fixture tests do not imply that every historical engine has been played on every native target.
 
+The unpublished 0.3.1 UI revision implements centered native dialogs with focus/scroll handling, simpler engine/resource/settings/review steps, eight original engine symbols, concise six-language navigation, improved light/dark styling and a documented screenshot workflow. The README, contribution instructions and issue/PR templates are updated. Its validation evidence is listed separately from the published 0.3.0 matrix.
+
 ## Remaining prerequisites and validation
 
 - Real client/server gameplay after personal EULA acceptance, including engine/loader historical-version coverage and Bedrock crossplay connectivity.

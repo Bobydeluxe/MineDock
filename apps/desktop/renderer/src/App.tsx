@@ -34,6 +34,7 @@ import { engineDefinition } from '../../../../packages/domain/engines';
 import { AppContext, useApp, type Run } from './context';
 import { Button, Empty, Loading, ErrorBox, bytes, duration, Dialog, Field } from './ui';
 import { CreateServer, Onboarding } from './wizard';
+import { EngineIcon } from './engine-icon';
 import { ImportServerDialog } from './imports';
 import type { ImportServerPreview } from '../../../../packages/domain/imports';
 import type { ModpackPreview } from '../../../../packages/domain/modpacks';
@@ -345,15 +346,16 @@ export function App() {
                 className={`nav server-link ${selected === s.id ? 'active' : ''}`}
                 onClick={() => setSelected(s.id)}
               >
-                <i className={`server-dot ${s.status}`} />
+                <span className="sidebar-engine">
+                  <EngineIcon engine={s.engine} size={24} />
+                  <i className={`server-dot ${s.status}`} aria-hidden="true" />
+                </span>
                 <span>{s.name}</span>
                 {s.status === 'running' && <span className="nav-count">{s.players.length}</span>}
               </Button>
             ))}
             {snapshot.servers.length === 0 && (
-              <small className="sidebar-empty">
-                {t('noSchedules').replace(t('noSchedules'), '—')}
-              </small>
+              <small className="sidebar-empty">0 · {t('servers')}</small>
             )}
           </nav>
           <div className="sidebar-bottom">
@@ -385,8 +387,8 @@ export function App() {
               </span>
               <Button
                 variant="ghost"
-                aria-label="Ctrl+K"
-                title="Ctrl+K"
+                aria-label={t('search')}
+                title={`${t('search')} · Ctrl+K`}
                 onClick={() => setPalette(true)}
               >
                 <Search size={16} />
@@ -395,7 +397,7 @@ export function App() {
             </div>
           </header>
           {snapshot.mock && <div className="demo-banner">{t('mock')}</div>}
-          <main>
+          <main tabIndex={-1}>
             {error && (
               <ErrorBox
                 error={error}
@@ -671,7 +673,7 @@ function Dashboard({
                   {t('local')}
                 </>
               ) : stat.label === 'allocatedMemory' ? (
-                <>{t('resources')} · JVM</>
+                <>{t('resources')}</>
               ) : stat.label === 'storage' ? (
                 <>
                   {snapshot.backups.length} {t('backups').toLowerCase()}
@@ -728,14 +730,11 @@ function Dashboard({
           <Empty icon={<Search />} title={t('noFilteredServers')} />
         ) : (
           <div className="server-grid">
-            {servers.map((server, i) => (
+            {servers.map((server) => (
               <article className="server-card" key={server.id}>
-                <div className={`server-art art-${i % 3}`}>
-                  <span className="terrain terrain-one" />
-                  <span className="terrain terrain-two" />
-                  <span className="terrain terrain-three" />
-                  <span className="voxel" />
-                  <span className="art-label">{server.engine.toUpperCase()}</span>
+                <div className="server-card-header">
+                  <EngineIcon engine={server.engine} size={44} />
+                  <span>{engineDefinition(server.engine).displayName}</span>
                   <Status server={server} />
                 </div>
                 <div className="server-card-body">
@@ -744,8 +743,9 @@ function Dashboard({
                     <ArrowUpRight size={17} />
                   </button>
                   <p className="server-engine">
-                    {engineDefinition(server.engine).displayName} <span>·</span> Minecraft{' '}
-                    {server.version}
+                    {server.engine === 'pocketmine'
+                      ? `${server.version} · Minecraft Bedrock ${server.minecraftVersion ?? t('unavailable')}`
+                      : `Minecraft ${server.version}`}
                   </p>
                   <div className="card-stats">
                     <div>
@@ -767,15 +767,17 @@ function Dashboard({
                       </strong>
                     </div>
                   </div>
-                  <div className="memory-bar">
-                    <span
-                      style={{
-                        width:
-                          Math.min(100, (server.memory / (server.memoryMax * 1024 ** 2)) * 100) +
-                          '%',
-                      }}
-                    />
-                  </div>
+                  {engineDefinition(server.engine).capabilities.javaMemory && (
+                    <div className="memory-bar">
+                      <span
+                        style={{
+                          width:
+                            Math.min(100, (server.memory / (server.memoryMax * 1024 ** 2)) * 100) +
+                            '%',
+                        }}
+                      />
+                    </div>
+                  )}
                   <div className="server-card-address">
                     <code>localhost:{server.port}</code>
                     <span>{duration(server.startedAt)}</span>

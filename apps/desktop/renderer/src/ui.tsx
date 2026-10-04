@@ -1,6 +1,8 @@
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
+  useId,
   useState,
   cloneElement,
   isValidElement,
@@ -10,6 +12,7 @@ import {
   type ReactNode,
   type DependencyList,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { LoaderCircle, X, AlertCircle } from 'lucide-react';
 import { AppContext } from './context';
 import { localizeMessage } from '../../../../packages/domain/localization';
@@ -126,41 +129,108 @@ export function Loading({ label }: { label: string }): ReactNode {
     </div>
   );
 }
+let activeDialogs = 0;
+let previousBodyOverflow = '';
 export function Dialog({
   title,
   children,
   onClose,
   closeLabel,
+  className = '',
 }: {
   title: string;
   children: ReactNode;
   onClose?: () => void;
   closeLabel: string;
+  className?: string;
 }): ReactNode {
   const ref = useRef<HTMLDialogElement>(null);
+  const opener = useRef(
+    document.activeElement instanceof HTMLElement ? document.activeElement : null,
+  );
+  const titleId = useId();
+  const backdropPress = useRef(false);
   const context = useContext(AppContext);
-  useEffect(() => {
+  const canClose = !!onClose && !context?.busy;
+  useLayoutEffect(() => {
     const dialog = ref.current;
-    const previous = document.activeElement as HTMLElement | null;
-    dialog?.showModal();
+    const previous = opener.current;
+    if (!dialog) return;
+    if (activeDialogs++ === 0) {
+      previousBodyOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+    }
+    dialog.showModal();
     return () => {
-      dialog?.close();
-      previous?.focus();
+      dialog.close();
+      if (--activeDialogs === 0) document.body.style.overflow = previousBodyOverflow;
+      queueMicrotask(() => {
+        if (dialog.open) return;
+        const target =
+          previous?.isConnected && previous.getClientRects().length > 0
+            ? previous
+            : document.querySelector<HTMLElement>('main');
+        target?.focus({ preventScroll: true });
+      });
     };
   }, []);
-  return (
+  const outside = (event: { clientX: number; clientY: number }) => {
+    const bounds = ref.current?.getBoundingClientRect();
+    return (
+      !!bounds &&
+      (event.clientX < bounds.left ||
+        event.clientX > bounds.right ||
+        event.clientY < bounds.top ||
+        event.clientY > bounds.bottom)
+    );
+  };
+  return createPortal(
     <dialog
       ref={ref}
+      aria-labelledby={titleId}
+      onKeyDown={(event) => {
+        if (event.key !== 'Tab') return;
+        const controls = Array.from(
+          event.currentTarget.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+          ),
+        ).filter((control) => control.tabIndex >= 0 && control.getClientRects().length > 0);
+        const first = controls[0],
+          last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) {
+          event.preventDefault();
+          last?.focus();
+        } else if (!event.shiftKey && document.activeElement === last) {
+          event.preventDefault();
+          first?.focus();
+        }
+      }}
       onCancel={(e) => {
         e.preventDefault();
-        onClose?.();
+        if (canClose) onClose?.();
       }}
-      className="dialog"
+      onPointerDown={(event) => {
+        backdropPress.current = outside(event);
+      }}
+      onPointerCancel={() => {
+        backdropPress.current = false;
+      }}
+      onClick={(event) => {
+        if (backdropPress.current && outside(event) && canClose) onClose?.();
+        backdropPress.current = false;
+      }}
+      className={`dialog ${className}`}
     >
       <header>
-        <h2>{title}</h2>
+        <h2 id={titleId}>{title}</h2>
         {onClose && (
-          <Button variant="ghost" aria-label={closeLabel} title={closeLabel} onClick={onClose}>
+          <Button
+            variant="ghost"
+            disabled={!canClose}
+            aria-label={closeLabel}
+            title={closeLabel}
+            onClick={onClose}
+          >
             <X size={20} />
           </Button>
         )}
@@ -175,7 +245,8 @@ export function Dialog({
         </div>
       )}
       {children}
-    </dialog>
+    </dialog>,
+    document.body,
   );
 }
 export function useData<T>(
