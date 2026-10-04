@@ -52,13 +52,21 @@ it('accepts ordinary official-runtime tar paths and rejects absolute/escaping li
       [{ name: 'runtime/hard', type: '1', link: '../outside' }],
       [{ name: 'runtime/device', type: '3' }],
       [
+        { name: 'runtime/a', type: '2', link: 'b' },
+        { name: 'runtime/b', type: '2', link: 'a' },
+      ],
+      [
+        { name: 'runtime/link', type: '2', link: 'folder' },
+        { name: 'runtime/link/file', text: 'unsafe linked write' },
+      ],
+      [
         { name: 'runtime/file', text: 'first' },
         { name: 'runtime/file', text: 'second' },
       ],
     ]) {
       await writeFile(filename, archive(entries));
       await expect(extractRuntimeTar(filename, destination)).rejects.toThrow(
-        /Unsafe|Duplicate|allowed/,
+        /Unsafe|Duplicate|allowed|Cyclic|linked directory/,
       );
       expect(await readFile(path.join(destination, 'runtime/file'), 'utf8')).toBe('native bytes');
     }
@@ -85,11 +93,15 @@ it.skipIf(process.platform === 'win32')(
           { name: 'runtime/lib/', type: '5' },
           { name: 'runtime/file', text: 'library' },
           { name: 'runtime/lib/link', type: '2', link: '../file' },
+          { name: 'runtime/lib/chained', type: '2', link: 'link' },
           { name: 'runtime/hard', type: '1', link: 'runtime/file' },
         ]),
       );
       await extractRuntimeTar(filename, destination);
       expect(await realpath(path.join(destination, 'runtime/lib/link'))).toBe(
+        path.join(destination, 'runtime/file'),
+      );
+      expect(await realpath(path.join(destination, 'runtime/lib/chained'))).toBe(
         path.join(destination, 'runtime/file'),
       );
       expect(await readFile(path.join(destination, 'runtime/hard'), 'utf8')).toBe('library');
