@@ -81,6 +81,17 @@ These are real captures of the running renderer in **explicitly labeled demo mod
 
 </details>
 
+<details>
+<summary>Actual Electron first start and empty dashboard</summary>
+
+These captures use the real desktop/preload/SQLite services with isolated test storage. The first-start dialog fits a small native window; the fresh dashboard contains no sample servers. No Minecraft process is running.
+
+![First-start language dialog in a small native Electron window](docs/screenshots/onboarding-desktop.png)
+
+![Fresh real desktop with no servers or demonstration banner](docs/screenshots/desktop-empty.png)
+
+</details>
+
 ## Development
 
 Requires **Node 24+ and pnpm 11+**. Build distribution packages on their native OS and architecture.

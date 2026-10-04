@@ -18,10 +18,14 @@ Memory presets remain first; custom memory and advanced world settings are folde
 
 Engine symbols also identify sidebar entries, dashboard cards, server headers, imports, modpack previews and marketplaces. Server tabs use concise labels and accompanying icons. Optional crossplay configuration and marketplace credentials are folded so frequent actions stay prominent.
 
+Settings synchronize when persisted preference values change. A background snapshot with the same values preserves unsaved language/theme edits; it no longer resets the form simply because IPC supplied a new object. A regression journey changes both preferences, invokes an unrelated folder action and verifies that the drafts survive before saving.
+
 ## Assets and screenshots
 
 Eight original SVG engine symbols are authored for MineDock under MIT, with no copied official logos or remote image dependency. See [asset provenance](../apps/desktop/renderer/src/assets/engines/README.md).
 
 `pnpm screenshots` captures the running Vite renderer in explicit demo mode at 1440 × 960. The visible banner and README captions disclose simulated server/player/console data. It captures dashboard, creation, summary, server overview, console, plugins, backups, worlds and light appearance. These are UI captures, not gameplay evidence. Native Electron tests separately use isolated filesystem/SQLite fixtures.
+
+The README also includes native first-start and empty-dashboard captures from `tests/ui/desktop.spec.ts`, using actual Electron/preload/SQLite services and isolated test storage. They are copied from `test-results` after the source desktop suite; the nine renderer demo captures remain a separate reproducible command.
 
 Targeted UI tests measure dialog centers relative to the actual viewport, repeat after resizing and internal scrolling, check visible footers/focus/backdrop/Escape/nesting, render all eight symbols, exercise Forge/NeoForge submissions and verify the new text in all six languages. Native Electron also checks first display and window resizing. See [validation](validation.md) for exact outcomes.

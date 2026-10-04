@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Archive,
   Download,
@@ -829,13 +829,22 @@ export function ActivityView() {
 export function SettingsView() {
   const { api, t, snapshot, run, busy } = useApp();
   const [settings, setSettings] = useState<Settings>(snapshot.settings);
+  const persistedSettings = useRef(snapshot.settings);
   const marketplace = useData(() => api.marketplaceSettings(), []);
   const [curseforgeKey, setCurseforgeKey] = useState('');
   const [historyLimit, setHistoryLimit] = useState(5);
   useEffect(() => {
     if (marketplace.data) setHistoryLimit(marketplace.data.historyLimit);
   }, [marketplace.data]);
-  useEffect(() => setSettings(snapshot.settings), [snapshot.settings]);
+  useEffect(() => {
+    // An unrelated snapshot refresh must not erase an unsaved preference edit.
+    const unchanged = (Object.keys(snapshot.settings) as (keyof Settings)[]).every(
+      (key) => persistedSettings.current[key] === snapshot.settings[key],
+    );
+    if (unchanged) return;
+    persistedSettings.current = snapshot.settings;
+    setSettings(snapshot.settings);
+  }, [snapshot.settings]);
   const folder = (key: 'serverRoot' | 'backupRoot') => {
     void run(() => api.selectFolder()).then((result) => {
       if (result.ok && result.value) setSettings((prev) => ({ ...prev, [key]: result.value! }));

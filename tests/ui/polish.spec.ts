@@ -248,6 +248,25 @@ for (const engine of ['Forge', 'NeoForge']) {
     }));
 }
 
+test('unsaved language and appearance survive an unrelated settings refresh', async () =>
+  demo(async (page) => {
+    await page
+      .locator('.sidebar-bottom')
+      .getByRole('button', { name: 'Settings', exact: true })
+      .click();
+    const language = page.getByLabel('Language', { exact: true });
+    const appearance = page.getByLabel('Appearance', { exact: true });
+    await language.selectOption('it');
+    await appearance.selectOption('light');
+    await page.getByRole('button', { name: 'Open folder', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'Save', exact: true })).toBeEnabled();
+    await expect(language).toHaveValue('it');
+    await expect(appearance).toHaveValue('light');
+    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await expect(page.locator('html')).toHaveAttribute('lang', 'it');
+    await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  }));
+
 test('new wizard labels and engine descriptions work in all six languages', async () =>
   demo(async (page) => {
     let current = 'en' as (typeof languages)[number]['code'];

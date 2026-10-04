@@ -4,7 +4,7 @@ This record distinguishes the **0.3.1 UI source revision** from the published **
 
 ## 0.3.1 UI revision
 
-The source fixes viewport centering and first-paint placement in the shared dialog, nested body scroll locks, keyboard focus/return, backdrop dismissal and bounded internal scrolling. It simplifies four-step creation, adds original bundled symbols for eight engines, improves light-theme Start contrast and navigation, and updates all six language catalogs. See [UI design](ui.md).
+The source fixes viewport centering and first-paint placement in the shared dialog, nested body scroll locks, keyboard focus/return, backdrop dismissal and bounded internal scrolling. It simplifies four-step creation, adds original bundled symbols for eight engines, improves light-theme Start contrast and navigation, and updates all six language catalogs. Unrelated snapshot refreshes preserve unsaved language/theme preferences. See [UI design](ui.md).
 
 Local validation on Windows 11 x64, Node 24 and pnpm 11.19:
 
@@ -12,17 +12,17 @@ Local validation on Windows 11 x64, Node 24 and pnpm 11.19:
 | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | ESLint and strict TypeScript                    | Passed                                                                                                 |
 | Vitest                                          | 147 passed, 4 platform-specific skips across the full run and the corrected 14-case localization rerun |
-| Full Playwright UI suite                        | 22 passed in 2.4 minutes                                                                               |
+| Full Playwright UI suite                        | 23 passed in the final local run                                                                       |
 | Packaged Windows x64 UI suite                   | 8 passed in 2.2 minutes against the compiled 0.3.1 executable                                          |
 | Production build, Windows NSIS and portable x64 | Passed; version 0.3.1, unsigned                                                                        |
 
-The UI suite includes eight real Electron cases, six existing explicit demo journeys and eight targeted UI cases. Targeted checks measure dialog centering at 480 × 500, 760 × 520, 1024 × 768 and 1920 × 1080, then resizing and internal scrolling; test nested dialogs, footer visibility, body locks, Tab/Shift+Tab, Escape/backdrop and focus restoration; load all eight icons; validate RAM/ports/step focus; submit Forge/NeoForge demo creation; check light-theme contrast and six-language copy. Native Electron separately checks first display and window sizes 760 × 520, 1360 × 920 and 1920 × 1080 against the actual content viewport.
+The UI suite includes eight real Electron cases, six existing explicit demo journeys and nine targeted UI cases. Targeted checks measure dialog centering at 480 × 500, 760 × 520, 1024 × 768 and 1920 × 1080, then resizing and internal scrolling; test nested dialogs, footer visibility, body locks, Tab/Shift+Tab, Escape/backdrop and focus restoration; load all eight icons; validate RAM/ports/step focus; submit Forge/NeoForge demo creation; check light-theme contrast, preservation of unsaved preferences and six-language copy. Native Electron separately checks first display and window sizes 760 × 520, 1360 × 920 and 1920 × 1080 against the actual content viewport.
 
-Each language now has **567 UI keys and 408 shared messages**. Nine current renderer captures were visually reviewed in dark/light appearance, including the complete console panel. Captures disclose explicit demo mode and simulated game data. Existing server imports, worlds, backups, files, players, schedules, runtimes and update behavior remain covered by the existing backend/UI suites. No real Minecraft EULA was accepted for this revision.
+Each language now has **567 UI keys and 408 shared messages**. Nine current renderer captures were visually reviewed in dark/light appearance, including the complete console panel. Two additional native Electron captures show first start and the fresh empty dashboard. Captures disclose explicit demo mode and simulated game data. Existing server imports, worlds, backups, files, players, schedules, runtimes and update behavior remain covered by the existing backend/UI suites. No real Minecraft EULA was accepted for this revision.
 
 The six-platform native execution below belongs to **0.3.0**, not a new 0.3.1 matrix. The latest public download remains 0.3.0; 0.3.1 is an unpublished source revision with a locally compiled Windows x64 package.
 
-The [Linux GitHub validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37219775900) at application source `d26461e` also passed frozen installation, lint, strict types, a fresh full unit run (**147 passed, 4 OS-specific skips**), production compilation and **all 22 UI cases** under Xvfb. The independent push validation passed as well. These are source-build/Electron checks, not a newly packaged six-platform 0.3.1 matrix.
+The [initial Linux GitHub validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37219775900) at application source `d26461e` passed frozen installation, lint, strict types, a fresh full unit run (**147 passed, 4 OS-specific skips**), production compilation and **all 22 then-existing UI cases** under Xvfb. Its independent push validation passed as well. A later repeat exposed an intermittent loss of a draft language selection. A deterministic regression reproduced it: an unrelated snapshot refresh reset unchanged persisted preferences over the form draft. The renderer now compares persisted values before synchronizing. The new regression and six-language journey both pass. Current-head CI results are available in [PR #4](https://github.com/Bobydeluxe/MineDock/pull/4/checks). These are source-build/Electron checks, not a newly packaged six-platform 0.3.1 matrix.
 
 ## 0.3.0 beta: local final checks
 

@@ -298,10 +298,11 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Tests cover migration preservation, paths/archives, resumable HTTP, dependency
   conflicts, imports, worlds, file operations, players/storage, schedules,
   runtimes, retention/recovery and signed-update tampering/refusal.
-- Twenty-two UI cases include actual Electron/main/preload/SQLite journeys and
+- Twenty-three UI cases include actual Electron/main/preload/SQLite journeys and
   explicit isolated demo scenarios; fixtures never become production data.
 - Packaged suite includes actual Electron journeys and native dialog resizing.
 - Six-language preference/reload/restart tested.
+- Unsaved language/theme edits survive unrelated background snapshot refreshes.
 - Opt-in official catalogs, actual Java/PHP probes and content transactions.
 - Opt-in real Paper bootstrap uses eula=false; no playable world created.
 - Real Minecraft clients/gameplay/crossplay/historical-engine compatibility
