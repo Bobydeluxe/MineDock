@@ -22,6 +22,8 @@ Each language now has **567 UI keys and 408 shared messages**. Nine current rend
 
 The six-platform native execution below belongs to **0.3.0**, not a new 0.3.1 matrix. The latest public download remains 0.3.0; 0.3.1 is an unpublished source revision with a locally compiled Windows x64 package.
 
+The [Linux GitHub validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37219775900) at application source `d26461e` also passed frozen installation, lint, strict types, a fresh full unit run (**147 passed, 4 OS-specific skips**), production compilation and **all 22 UI cases** under Xvfb. The independent push validation passed as well. These are source-build/Electron checks, not a newly packaged six-platform 0.3.1 matrix.
+
 ## 0.3.0 beta: local final checks
 
 Native workstation: Windows 11 x64, Node 24, pnpm 11.19.
