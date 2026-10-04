@@ -1,3 +1,4 @@
+import { resolveSystemPath } from '../security/paths';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { lstat, realpath, mkdir, rename, rm, rmdir } from 'node:fs/promises';
@@ -128,15 +129,15 @@ export class RetentionService {
     return policy;
   }
   private async root(): Promise<string> {
-    const root = path.resolve(this.repo.settings().backupRoot);
+    const root = resolveSystemPath(this.repo.settings().backupRoot);
     await mkdir(root, { recursive: true });
-    if ((await lstat(root)).isSymbolicLink() || path.resolve(await realpath(root)) !== root)
+    if ((await lstat(root)).isSymbolicLink() || resolveSystemPath(await realpath(root)) !== root)
       throw new DomainError('PATH', 'Backup retention does not allow linked storage folders.');
     return root;
   }
   private async candidate(backup: Backup, root: string): Promise<Candidate> {
     const item = this.repo.backup(backup.id);
-    if (path.resolve(item.path) !== path.join(root, backup.id + '.zip'))
+    if (resolveSystemPath(item.path) !== path.join(root, backup.id + '.zip'))
       throw new DomainError('PATH', 'This backup is outside the current retention folder.');
     const info = await lstat(item.path);
     if (!info.isFile() || info.isSymbolicLink() || info.size !== backup.size)
@@ -195,14 +196,14 @@ export class RetentionService {
     if (
       !/^[a-f0-9-]{36}$/i.test(journal.id) ||
       !path.isAbsolute(journal.root) ||
-      path.resolve(await realpath(journal.root)) !== path.resolve(journal.root)
+      resolveSystemPath(await realpath(journal.root)) !== resolveSystemPath(journal.root)
     )
       throw new DomainError('RECOVERY_PATH', 'Invalid backup retention recovery folder.');
     const trash = path.join(journal.root, '.retention-' + journal.id);
     for (const item of journal.candidates)
       if (
         !/^[a-f0-9-]{36}$/i.test(item.metadata.id) ||
-        path.resolve(item.path) !== path.join(journal.root, item.metadata.id + '.zip') ||
+        resolveSystemPath(item.path) !== path.join(journal.root, item.metadata.id + '.zip') ||
         item.metadata.serverId !== journal.serverId
       )
         throw new DomainError('RECOVERY_PATH', 'Invalid backup retention recovery archive.');
@@ -329,7 +330,7 @@ export class RetentionService {
     if (journal.state === 'prepared')
       for (const item of journal.candidates) {
         const registered = this.repo.backup(item.metadata.id);
-        if (path.resolve(registered.path) !== path.resolve(item.path))
+        if (resolveSystemPath(registered.path) !== resolveSystemPath(item.path))
           throw new DomainError(
             'RECOVERY_PATH',
             'Backup retention metadata changed during recovery.',

@@ -3,12 +3,12 @@ import { promisify } from 'node:util';
 import { mkdir, readdir, stat, rm, rename, rmdir } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import * as tar from 'tar';
 import { z } from 'zod';
 import { Repository } from '../database/database';
 import { DownloadManager, fetchJson } from '../minecraft/downloads';
 import { extractZip } from '../backups/archive';
-import { validateRelative, containedPath } from '../security/paths';
+import { containedPath } from '../security/paths';
+import { extractRuntimeTar } from '../security/runtime-tar';
 import { DomainError } from '../domain/errors';
 import type { Runtime } from '../domain/types';
 import type { OperationService } from '../core/operations';
@@ -227,60 +227,7 @@ export class RuntimeManager {
           signal: context?.signal,
           progress: (received) => context?.phase('extracting', received),
         });
-      else {
-        let bytes = 0,
-          count = 0;
-        let archiveError: unknown;
-        await tar.t({
-          file: archive,
-          onReadEntry: (entry) => {
-            try {
-              context?.signal.throwIfAborted();
-              validateRelative(entry.path.replace(/\/$/, ''));
-              bytes += entry.size;
-              if (
-                bytes > 2 * 1024 ** 3 ||
-                ++count > 50000 ||
-                ![
-                  'File',
-                  'Directory',
-                  'ExtendedHeader',
-                  'GlobalExtendedHeader',
-                  'SymbolicLink',
-                  'Link',
-                ].includes(entry.type)
-              )
-                throw new Error('Unsafe runtime archive.');
-              if (entry.type === 'SymbolicLink' || entry.type === 'Link') {
-                const link = entry.linkpath;
-                if (!link || path.posix.isAbsolute(link)) throw new Error('Unsafe runtime link.');
-                const target = path.posix.normalize(
-                  entry.type === 'Link'
-                    ? link
-                    : path.posix.join(path.posix.dirname(entry.path), link),
-                );
-                validateRelative(target);
-              }
-            } catch (error) {
-              archiveError = error;
-            }
-          },
-        });
-        if (archiveError) throw archiveError;
-        context?.signal.throwIfAborted();
-        await tar.x({
-          file: archive,
-          cwd: stage,
-          strict: true,
-          preservePaths: false,
-          filter: (_path, entry) => {
-            context?.signal.throwIfAborted();
-            return (
-              'type' in entry && ['File', 'Directory', 'SymbolicLink', 'Link'].includes(entry.type)
-            );
-          },
-        });
-      }
+      else await extractRuntimeTar(archive, stage, context?.signal);
       const search = async (folder: string): Promise<string | undefined> => {
         for (const entry of await readdir(folder, { withFileTypes: true })) {
           if (entry.isSymbolicLink()) continue;

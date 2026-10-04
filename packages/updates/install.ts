@@ -4,7 +4,7 @@ import { constants } from 'node:fs';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { DomainError } from '../domain/errors';
-import { containedPath } from '../security/paths';
+import { containedPath, resolveSystemPath } from '../security/paths';
 import type { VerifiedUpdate } from '../domain/updates';
 const windowsHelper = String.raw`param([Parameter(Mandatory=$true)][string]$RequestPath)
 $ErrorActionPreference = 'Stop'
@@ -139,11 +139,11 @@ export async function prepareUpdateLaunch(
       'UPDATE_PLATFORM',
       'The update installer does not match this operating system.',
     );
-  const canonical = path.resolve(destination),
+  const canonical = resolveSystemPath(destination),
     info = await lstat(canonical);
   if (
     info.isSymbolicLink() ||
-    path.resolve(await realpath(canonical)) !== canonical ||
+    resolveSystemPath(await realpath(canonical)) !== canonical ||
     (target === 'maczip' ? !info.isDirectory() || !canonical.endsWith('.app') : !info.isFile())
   )
     throw new DomainError(

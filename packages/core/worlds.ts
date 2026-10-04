@@ -6,7 +6,7 @@ import { OperationService } from './operations';
 import { engineDefinition } from '../domain/engines';
 import { DomainError, readableError } from '../domain/errors';
 import { parseProperties, serializeProperties } from '../domain/properties';
-import { containedPath, atomicWrite } from '../security/paths';
+import { containedPath, atomicWrite, resolveSystemPath } from '../security/paths';
 import { copyDirectory } from '../security/copy';
 import { readLevelMetadata, type LevelMetadata } from '../security/nbt';
 import { extractZip, sha256, zipDirectory } from '../backups/archive';
@@ -180,7 +180,10 @@ export class WorldService {
     const server = this.assertStopped(id),
       token = randomUUID(),
       info = await lstat(source);
-    if (info.isSymbolicLink() || path.resolve(await realpath(source)) !== path.resolve(source))
+    if (
+      info.isSymbolicLink() ||
+      resolveSystemPath(await realpath(source)) !== resolveSystemPath(source)
+    )
       throw new DomainError('PATH', 'Choose a world source without symbolic links.');
     const temporary = info.isFile();
     if (temporary && !/\.(zip|mcworld)$/i.test(source))
@@ -470,7 +473,7 @@ export class WorldService {
         (world) => world.name === existingWorldNameSchema.parse(name),
       );
     if (!world) throw new DomainError('WORLD', 'World not found.');
-    const relative = path.relative(server.path, path.resolve(destination));
+    const relative = path.relative(server.path, resolveSystemPath(destination));
     if (!relative.startsWith('..') && !path.isAbsolute(relative))
       throw new DomainError('PATH', 'Export the world outside its server folder.');
     await this.jobs.run('world.export', 'Export world', id, async (context) => {

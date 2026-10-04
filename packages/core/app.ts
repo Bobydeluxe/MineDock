@@ -1,5 +1,5 @@
 import { randomBytes, randomUUID } from 'node:crypto';
-import { mkdir, readFile, rm, statfs } from 'node:fs/promises';
+import { mkdir, readFile, rm, statfs, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { execFile } from 'node:child_process';
@@ -226,6 +226,7 @@ export class AppCore {
   }
   static async open(root: string, secrets?: SecretStore): Promise<AppCore> {
     await mkdir(root, { recursive: true });
+    root = await realpath(root);
     const core = new AppCore(root, secrets ?? (await LocalSecretStore.open(root)));
     await mkdir(core.repo.settings().serverRoot, { recursive: true });
     await mkdir(core.repo.settings().backupRoot, { recursive: true });

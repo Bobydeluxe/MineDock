@@ -5,7 +5,7 @@ import { Repository } from '../database/database';
 import { OperationService } from '../core/operations';
 import { RuntimeManager, inspectJava } from './runtime';
 import { PhpRuntimeManager, inspectPhp } from './php';
-import { containedPath } from '../security/paths';
+import { containedPath, resolveSystemPath } from '../security/paths';
 import { DomainError, readableError } from '../domain/errors';
 import {
   runtimeActionSchema,
@@ -16,7 +16,7 @@ import {
 import type { Runtime } from '../domain/types';
 import { guardRuntimeFolder } from './safety';
 const normalized = (value: string) =>
-  process.platform === 'win32' ? path.resolve(value).toLowerCase() : path.resolve(value);
+  process.platform === 'win32' ? resolveSystemPath(value).toLowerCase() : resolveSystemPath(value);
 export class RuntimeMaintenance {
   constructor(
     private readonly repo: Repository,

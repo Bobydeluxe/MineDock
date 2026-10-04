@@ -1,3 +1,4 @@
+import { resolveSystemPath } from '../security/paths';
 import path from 'node:path';
 import { Repository } from '../database/database';
 import { DomainError } from '../domain/errors';
@@ -10,7 +11,7 @@ export function guardRuntimeFolder(
   for (const operation of repo.operations()) {
     const checkpoint =
       operation.id === operationId ? undefined : repo.operationCheckpoint(operation.id);
-    if (checkpoint && path.resolve(checkpoint.destination) === path.resolve(folder))
+    if (checkpoint && resolveSystemPath(checkpoint.destination) === resolveSystemPath(folder))
       throw new DomainError(
         'RECOVERY',
         'Resolve the pending runtime recovery before changing its folder.',

@@ -4,7 +4,7 @@ import path from 'node:path';
 import { Repository } from '../database/database';
 import { OperationService } from './operations';
 import type { SecretStore } from '../security/secrets';
-import { containedPath, atomicWrite } from '../security/paths';
+import { containedPath, atomicWrite, resolveSystemPath } from '../security/paths';
 import { copyDirectory } from '../security/copy';
 import { readZipEntries } from '../security/zip-reader';
 import { zipDirectory } from '../backups/archive';
@@ -85,10 +85,10 @@ export class ServerImportService {
     return createHash('sha256').update(JSON.stringify(values.sort())).digest('hex');
   }
   async preview(source: string): Promise<ImportServerPreview> {
-    const root = path.resolve(source);
+    const root = resolveSystemPath(source);
     if (path.parse(root).root === root || (await lstat(root)).isSymbolicLink())
       throw new DomainError('PATH', 'Choose a dedicated server folder without symbolic links.');
-    if (path.resolve(await realpath(root)) !== root)
+    if (resolveSystemPath(await realpath(root)) !== root)
       throw new DomainError('PATH', 'The selected folder contains a symbolic link.');
     const entries = await readdir(root, { withFileTypes: true });
     if (entries.length > 10000)
@@ -346,7 +346,7 @@ export class ServerImportService {
         'PLATFORM',
         'This server engine is unavailable on this operating system.',
       );
-    if (this.repo.servers().some((server) => path.resolve(server.path) === source))
+    if (this.repo.servers().some((server) => resolveSystemPath(server.path) === source))
       throw new DomainError('IMPORT_DUPLICATE', 'This folder is already managed by MineDock.');
     const reserved = await this.reserved();
     if (definition.protocol === 'udp' && input.port === (input.ipv6Port ?? 19133))

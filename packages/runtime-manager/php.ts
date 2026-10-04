@@ -2,13 +2,13 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { mkdir, readdir, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
-import * as tar from 'tar';
 import { z } from 'zod';
 import { Repository } from '../database/database';
 import { DownloadManager, fetchJson } from '../minecraft/downloads';
 import { githubRelease, githubAssetHash } from '../minecraft/catalogs';
 import { extractZip } from '../backups/archive';
-import { validateRelative, containedPath } from '../security/paths';
+import { containedPath } from '../security/paths';
+import { extractRuntimeTar } from '../security/runtime-tar';
 import { DomainError } from '../domain/errors';
 import type { OperationService } from '../core/operations';
 import type { OperationContext } from '../domain/operations';
@@ -186,43 +186,7 @@ export class PhpRuntimeManager {
       context.phase('extracting');
       if (asset.name.endsWith('.zip'))
         await extractZip(archive, stage, 2 * 1024 ** 3, { signal: context.signal });
-      else {
-        let error: unknown;
-        let bytes = 0,
-          count = 0;
-        await tar.t({
-          file: archive,
-          onReadEntry: (entry) => {
-            try {
-              context.signal.throwIfAborted();
-              validateRelative(entry.path.replace(/\/$/, ''));
-              bytes += entry.size;
-              if (
-                bytes > 2 * 1024 ** 3 ||
-                ++count > 50000 ||
-                !['File', 'Directory', 'ExtendedHeader', 'GlobalExtendedHeader'].includes(
-                  entry.type,
-                )
-              )
-                throw new Error('Unsafe PHP runtime archive.');
-            } catch (e) {
-              error = e;
-            }
-          },
-        });
-        if (error) throw error;
-        context.signal.throwIfAborted();
-        await tar.x({
-          file: archive,
-          cwd: stage,
-          strict: true,
-          preservePaths: false,
-          filter: (_name, entry) => {
-            context.signal.throwIfAborted();
-            return 'type' in entry && ['File', 'Directory'].includes(entry.type);
-          },
-        });
-      }
+      else await extractRuntimeTar(archive, stage, context.signal);
       const find = async (folder: string): Promise<string | undefined> => {
         for (const entry of await readdir(folder, { withFileTypes: true })) {
           context.signal.throwIfAborted();

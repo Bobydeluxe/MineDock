@@ -13,6 +13,7 @@
   },
   "packageManager": "pnpm@11.19.0",
   "scripts": {
+    "postinstall": "node node_modules/electron/install.js",
     "dev": "node scripts/dev.mjs",
     "dev:mock": "vite --host 127.0.0.1 --mode mock",
     "build": "pnpm typecheck && vite build && node scripts/build-desktop.mjs",

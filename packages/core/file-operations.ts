@@ -2,7 +2,7 @@ import { mkdir, stat, lstat, readdir, rename, rm, realpath } from 'node:fs/promi
 import path from 'node:path';
 import { Repository } from '../database/database';
 import { OperationService } from './operations';
-import { containedPath, validateRelative } from '../security/paths';
+import { containedPath, validateRelative, resolveSystemPath } from '../security/paths';
 import { copyDirectory, copyRegularFile } from '../security/copy';
 import { extractZip, zipDirectory } from '../backups/archive';
 import { DomainError } from '../domain/errors';
@@ -181,7 +181,7 @@ export class FileOperations {
     const server = this.assertStopped(id),
       source = await containedPath(server.path, relative, true),
       name = path.basename(source);
-    const external = path.relative(server.path, path.resolve(destination));
+    const external = path.relative(server.path, resolveSystemPath(destination));
     if (!external.startsWith('..') && !path.isAbsolute(external))
       throw new DomainError('PATH', 'Export an archive outside its server folder.');
     await this.jobs.run('archive.export', 'Compress archive', id, async (context) => {
@@ -222,7 +222,7 @@ export class FileOperations {
     if (
       !archiveInfo.isFile() ||
       archiveInfo.isSymbolicLink() ||
-      path.resolve(await realpath(archive)) !== path.resolve(archive)
+      resolveSystemPath(await realpath(archive)) !== resolveSystemPath(archive)
     )
       throw new DomainError('PATH', 'Choose a regular ZIP archive without symbolic links.');
     this.protect(server, destination);

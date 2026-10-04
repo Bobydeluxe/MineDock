@@ -1,4 +1,4 @@
-import { mkdtemp, mkdir, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, writeFile, rm, realpath } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
@@ -9,7 +9,7 @@ import { serializeProperties } from '../packages/domain/properties';
 import { findAvailablePort } from '../packages/networking/network';
 import type { Server } from '../packages/domain/types';
 export async function fixture() {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'minedock-test-'));
+  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'minedock-test-')));
   const bus = new EventBus();
   const repo = new Repository(root, bus);
   const secrets = await LocalSecretStore.open(root);

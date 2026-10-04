@@ -1,3 +1,4 @@
+import { resolveSystemPath } from '../security/paths';
 import { randomUUID } from 'node:crypto';
 import path from 'node:path';
 import { lstat, rm, rename, realpath } from 'node:fs/promises';
@@ -127,14 +128,14 @@ export class OperationService {
     operation: Operation,
   ): Promise<void> {
     const registered = operation.serverId ? this.repo.server(operation.serverId).path : undefined;
-    const destination = path.resolve(checkpoint.destination);
+    const destination = resolveSystemPath(checkpoint.destination);
     const owned = [this.repo.settings().serverRoot, path.join(this.repo.root, 'runtimes')].some(
       (root) => {
-        const relative = path.relative(path.resolve(root), destination);
+        const relative = path.relative(resolveSystemPath(root), destination);
         return !!relative && !relative.startsWith('..') && !path.isAbsolute(relative);
       },
     );
-    const child = registered ? path.relative(path.resolve(registered), destination) : '';
+    const child = registered ? path.relative(resolveSystemPath(registered), destination) : '';
     const registeredChild = !!registered && ['plugins', 'mods', 'worlds'].includes(child);
     let approvedImport = false;
     if (
@@ -153,7 +154,7 @@ export class OperationService {
         approvedImport =
           history.approvedOriginal === true &&
           typeof history.preview?.sourcePath === 'string' &&
-          destination === path.resolve(history.preview.sourcePath, 'server.properties');
+          destination === resolveSystemPath(history.preview.sourcePath, 'server.properties');
       }
     }
     let approvedExport = false;
@@ -166,7 +167,7 @@ export class OperationService {
         .get(operation.id);
       approvedExport =
         !!row &&
-        path.resolve(String(row.path)) === destination &&
+        resolveSystemPath(String(row.path)) === destination &&
         checkpoint.staging === destination + '.minedock-' + operation.id + '.part' &&
         checkpoint.previous === destination + '.minedock-' + operation.id + '.previous';
     }
@@ -179,21 +180,24 @@ export class OperationService {
     )
       throw new DomainError('RECOVERY_PATH', 'Recovery path is outside managed data.');
     for (const filename of [destination, checkpoint.staging, checkpoint.previous]) {
-      if (path.dirname(path.resolve(filename)) !== path.dirname(destination))
+      if (path.dirname(resolveSystemPath(filename)) !== path.dirname(destination))
         throw new DomainError('RECOVERY_PATH', 'Recovery staging must be beside its destination.');
-      const parent = path.dirname(path.resolve(filename));
-      if (path.resolve(await realpath(parent)) !== parent)
+      const parent = path.dirname(resolveSystemPath(filename));
+      if (resolveSystemPath(await realpath(parent)) !== parent)
         throw new DomainError('RECOVERY_PATH', 'Recovery parent contains a symbolic link.');
       if (await exists(filename)) {
         if ((await lstat(filename)).isSymbolicLink())
           throw new DomainError('RECOVERY_PATH', 'Symbolic links are not allowed during recovery.');
-        if (path.resolve(await realpath(filename)) !== path.resolve(filename))
+        if (resolveSystemPath(await realpath(filename)) !== resolveSystemPath(filename))
           throw new DomainError('RECOVERY_PATH', 'Recovery path resolves outside its destination.');
       }
     }
     if (
-      new Set([destination, path.resolve(checkpoint.staging), path.resolve(checkpoint.previous)])
-        .size !== 3
+      new Set([
+        destination,
+        resolveSystemPath(checkpoint.staging),
+        resolveSystemPath(checkpoint.previous),
+      ]).size !== 3
     )
       throw new DomainError('RECOVERY_PATH', 'Recovery paths overlap.');
   }
@@ -204,7 +208,7 @@ export class OperationService {
     prepare: (staging: string) => Promise<void>,
     commit: () => void = () => {},
   ): Promise<void> {
-    const destination = path.resolve(target),
+    const destination = resolveSystemPath(target),
       operation = this.repo.operations().find((item) => item.id === context.id)!;
     const protectedRoots = [
       this.repo.settings().serverRoot,
@@ -215,7 +219,7 @@ export class OperationService {
     ];
     if (
       protectedRoots.some((root) => {
-        const relative = path.relative(path.resolve(root), destination);
+        const relative = path.relative(resolveSystemPath(root), destination);
         return relative === '' || (!relative.startsWith('..') && !path.isAbsolute(relative));
       }) ||
       ['app.db', 'app.db-wal', 'app.db-shm', '.secret-key'].some(
@@ -382,8 +386,8 @@ export class OperationService {
     );
     const fullServer =
       operation.serverId &&
-      path.resolve(checkpoint.destination) ===
-        path.resolve(this.repo.server(operation.serverId).path);
+      resolveSystemPath(checkpoint.destination) ===
+        resolveSystemPath(this.repo.server(operation.serverId).path);
     return {
       id,
       label: operation.label,

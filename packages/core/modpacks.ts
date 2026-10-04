@@ -14,7 +14,7 @@ import { javaForVersion } from '../minecraft/versions';
 import { ModrinthCatalog } from '../marketplace/modrinth';
 import { compatibleContent } from '../marketplace/content';
 import { extractZip, sha256 } from '../backups/archive';
-import { containedPath, validateRelative } from '../security/paths';
+import { containedPath, validateRelative, resolveSystemPath } from '../security/paths';
 import { DomainError, readableError } from '../domain/errors';
 import {
   createServerSchema,
@@ -160,7 +160,7 @@ export class ModpackService {
       !/\.mrpack$/i.test(source) ||
       !info.isFile() ||
       info.isSymbolicLink() ||
-      path.resolve(await realpath(source)) !== path.resolve(source)
+      resolveSystemPath(await realpath(source)) !== resolveSystemPath(source)
     )
       throw new DomainError('MODPACK', 'Choose a regular Modrinth .mrpack archive.');
     if (info.size > 512 * 1024 ** 2)
