@@ -9,7 +9,8 @@ import { serializeProperties } from '../packages/domain/properties';
 import { findAvailablePort } from '../packages/networking/network';
 import type { Server } from '../packages/domain/types';
 export async function fixture() {
-  const root = await realpath(await mkdtemp(path.join(os.tmpdir(), 'minedock-test-')));
+  const tempRoot = await realpath(os.tmpdir());
+  const root = await mkdtemp(path.join(tempRoot, 'minedock-test-'));
   const bus = new EventBus();
   const repo = new Repository(root, bus);
   const secrets = await LocalSecretStore.open(root);
@@ -77,7 +78,10 @@ export async function fixture() {
     rconPort,
     cleanup: async () => {
       repo.close();
-      if (!root.startsWith(path.join(os.tmpdir(), 'minedock-test-')))
+      if (
+        path.dirname(root) !== tempRoot ||
+        !/^minedock-test-[a-zA-Z0-9]+$/.test(path.basename(root))
+      )
         throw new Error('Unsafe fixture cleanup');
       await rm(root, { recursive: true, force: true });
     },

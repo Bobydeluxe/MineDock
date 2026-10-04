@@ -127,7 +127,9 @@ export class OperationService {
     checkpoint: SwapCheckpoint,
     operation: Operation,
   ): Promise<void> {
-    const registered = operation.serverId ? this.repo.server(operation.serverId).path : undefined;
+    const registered = operation.serverId
+      ? resolveSystemPath(this.repo.server(operation.serverId).path)
+      : undefined;
     const destination = resolveSystemPath(checkpoint.destination);
     const owned = [this.repo.settings().serverRoot, path.join(this.repo.root, 'runtimes')].some(
       (root) => {
