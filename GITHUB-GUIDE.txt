@@ -1,168 +1,54 @@
-MINEDOCK — GETTING STARTED WITH GITHUB
-Updated: 3 October 2026
-Visibility: public
-Repository: https://github.com/Bobydeluxe/MineDock
-Downloads: https://github.com/Bobydeluxe/MineDock/releases
+MINEDOCK — BEGINNER GITHUB GUIDE
+Primary project language: English
 
-Your Bobydeluxe account and public MineDock repository already exist.
-The source, tests, English documentation, MIT license and GitHub workflows
-are published. Release installers are distributed separately from source code.
-The setup steps below are useful for other projects too.
+Your public project: https://github.com/Bobydeluxe/MineDock
 
-======================================================================
 1. WHAT GITHUB DOES
-======================================================================
+GitHub stores the source code and its history. A repository is the project
+folder online. A commit records a change. A branch keeps a set of changes
+separate while they are being tested. A pull request lets you review and
+merge a branch. A release is a downloadable version of the application.
 
-GitHub hosts your application's source code and history.
-A repository is the project's space on GitHub.
-A commit is a saved set of changes.
-A push sends local commits from your computer to GitHub.
-A release provides a downloadable application version.
+2. USING MINEDOCK WITHOUT PROGRAMMING
+Open the repository, then Releases. Read the release notes and choose the
+package matching Windows/Linux/macOS and x64/ARM64. You do not need to
+download the source ZIP or install Node/pnpm just to use a built package.
+An older executable does not gain new features just because source code
+has been updated. Unsigned packages are identified in their release notes.
 
-Your repository is public: visitors can read and download the source.
-The MIT license permits use/modification subject to its conditions.
-Worlds, backups, secrets, runtimes and generated files are excluded by .gitignore.
+3. FINDING THE CODE AND FEATURE LIST
+The Code tab shows project files. README.md explains the application.
+MineDock-Features.txt lists implemented features and remaining limits.
+docs/validation.md records actual test/build results. docs/roadmap.md lists
+remaining prerequisites and future work. Click a file to read it online.
 
-======================================================================
-2. ACCOUNT CREATION — ALREADY COMPLETED FOR MINEDOCK
-======================================================================
+4. CHECKING AUTOMATED TESTS
+Open Actions. A green check means that workflow's steps passed. A red cross
+means a step failed; open the run and job to read its diagnostics. A build
+artifact is a CI output, not automatically a published release. Packaging
+success is not proof of Minecraft client gameplay or a valid OS signature.
 
-For another account, open https://github.com/signup and complete registration.
-Choose a username, keep credentials private and verify your email yourself.
-A free account is sufficient to start publishing a public project.
-Never send your password to Codex.
+5. REPORTING A PROBLEM
+Open Issues, then New issue. Describe your OS/architecture, MineDock version,
+what you did, what happened and the expected result. Include a sanitized
+error message. Never publish passwords, RCON secrets, API keys, private
+certificates, update signing keys, personal addresses or private worlds.
 
-Official instructions:
-https://docs.github.com/en/account-and-profile/how-tos/account-management/creating-an-account-on-github
+6. PUBLIC REPOSITORY AND SECRETS
+Everyone can see committed source code. Local servers/backups/data and
+private signing files are ignored by Git. Keep that protection. CI secrets
+are configured in repository Settings > Secrets and variables > Actions;
+they do not belong in a text/code file. CurseForge keys are configured
+privately in the application. No Windows/Apple certificate is required
+for an unsigned local build, but real signing needs the owner's credentials.
 
-======================================================================
-3. CONNECTING CODEX TO GITHUB
-======================================================================
+7. DEVELOPMENT WHEN YOU WANT TO EDIT THE APP
+Install Git, Node 24+ and pnpm 11+, clone this repository and follow
+docs/development.md. Work on a branch, run the checks, then create a pull
+request. End users can keep using release executables without those tools.
 
-You already connected GitHub and signed into the browser for this conversation.
-If prompted again, authenticate personally in the indicated GitHub window.
-An integration recommendation alone is not an authenticated connection.
-
-To request publication, state the intended project, owner and public/private
-visibility. For example: "Publish MineDock publicly under my Bobydeluxe account."
-Codex can use the tools available in that conversation to prepare and publish.
-
-======================================================================
-4. GITHUB DESKTOP FOR CHANGES WITHOUT COMMANDS
-======================================================================
-
-1. Download GitHub Desktop from https://desktop.github.com/ and install it.
-2. Open it and sign into your GitHub account.
-3. Use your username as your Git author name.
-4. Prefer GitHub's masked users.noreply.github.com email for public commits.
-
-Official instructions:
-https://docs.github.com/en/desktop/installing-and-authenticating-to-github-desktop/installing-github-desktop
-https://docs.github.com/en/desktop/configuring-and-customizing-github-desktop/configuring-git-for-github-desktop
-
-======================================================================
-5. ADD THIS EXISTING LOCAL PROJECT
-======================================================================
-
-Your project folder is:
-Documents > ChatGPT > Minecraft Serveur Manager
-
-It already contains a Git repository and its GitHub origin remote.
-Do not create another empty repository inside this folder.
-
-In GitHub Desktop:
-1. Choose File > Add local repository.
-2. Select the project folder above.
-3. Confirm Add repository.
-4. Review changes to source/documentation.
-5. Confirm that node_modules, data, dist and release remain excluded.
-
-If the repository is not recognized, ask Codex before moving/replacing files.
-An up-to-date checkout may show no changes; that is normal.
-
-Official instructions:
-https://docs.github.com/en/desktop/adding-and-cloning-repositories/adding-a-repository-from-your-local-computer-to-github-desktop?platform=windows
-
-======================================================================
-6. COMMIT AND PUBLISH SOURCE
-======================================================================
-
-MineDock is already published. For a new project:
-1. Review selected files and enter a short English Summary.
-2. Click Commit to save the selected changes locally.
-3. Click Publish repository.
-4. Select the owner, name and visibility.
-5. For a public repository, clear Keep this code private.
-6. Confirm publication.
-
-Suggested MineDock description:
-Local Minecraft Paper and Vanilla server manager with six interface languages.
-
-main is the primary branch. The README appears on the repository home page.
-Automatic checks appear under Actions. A local passing test does not prove
-that GitHub's machines have completed their checks successfully.
-
-Official instructions:
-https://docs.github.com/en/desktop/adding-and-cloning-repositories/adding-an-existing-project-to-github-using-github-desktop
-
-======================================================================
-7. PUBLISH INSTALLERS AS A RELEASE
-======================================================================
-
-MineDock executables exceed 100 MiB and are excluded from Git history.
-Attach them to a GitHub Release instead of adding them to the source repository.
-
-For the multilingual beta:
-1. Open the repository's Releases page and create a new release.
-2. Choose a new tag, v0.2.0, targeting the tested commit on main.
-3. Title: MineDock 0.2.0 beta — multilingual Windows x64.
-4. Describe features, validation and remaining limitations in English.
-5. Attach these files from release:
-   MineDock-0.2.0-Setup-x64.exe
-   MineDock-0.2.0-Portable-x64.exe
-   SHA256SUMS.txt
-6. Mark it as a pre-release/beta.
-7. Review attachments and publish when the release is ready.
-
-Example release description:
-"Local Paper/Vanilla manager with automatic Java, console, RCON, players,
-configuration, files, backups, schedules and Modrinth plugins. English is the
-default, with French, German, Spanish, Portuguese and Italian available.
-Executables are unsigned. Real-client gameplay validation remains pending
-after personal EULA acceptance. Platform packaging is not gameplay validation."
-
-Visitors can download installers without compiling source code.
-The build workflow retains CI artifacts but does not automatically publish
-a public release. Preserve previous release tags and assets; distribute a new
-version instead of silently replacing an older binary.
-
-Official instructions:
-https://docs.github.com/en/repositories/releasing-projects-on-github/managing-releases-in-a-repository
-https://docs.github.com/en/repositories/working-with-files/managing-large-files/about-large-files-on-github
-
-======================================================================
-8. SEND FUTURE CHANGES
-======================================================================
-
-1. Open GitHub Desktop and select MineDock.
-2. Review modified files.
-3. Write a short English Summary.
-4. Click Commit.
-5. Click Push origin.
-
-The published source updates. Existing release installers do not rebuild
-themselves: build and publish a new release to distribute application changes.
-
-======================================================================
-9. TROUBLESHOOTING
-======================================================================
-
-- Unverified account: confirm the GitHub email.
-- Sign-in requested: reconnect GitHub Desktop or the integration personally.
-- Repository name already used: inspect the existing repository before changing it.
-- File too large: use Releases for executables.
-- Red Actions check: give Codex the failing run's link for diagnosis.
-- Unclear message: copy its text into the conversation.
-
-Do not delete the working folder or .git to resolve an authentication/check issue.
-Use the repository link at the top to see the published project.
+8. RELEASES AND MINECRAFT LICENSING
+Only publish tested packages with accurate notes and matching checksums /
+signed update metadata. MineDock updates do not update Minecraft servers.
+Personally read and accept the Minecraft EULA in the app when required;
+automated tests deliberately stop at eula=false and do not consent for you.

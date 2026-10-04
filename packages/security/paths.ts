@@ -1,7 +1,48 @@
 import path from 'node:path';
-import { lstat, realpath, mkdir, rename, writeFile } from 'node:fs/promises';
+import { lstat, realpath, mkdir, rename, writeFile, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
+import { realpathSync, lstatSync } from 'node:fs';
 import { DomainError } from '../domain/errors';
+
+const systemAliases =
+  process.platform === 'darwin'
+    ? ['/var', '/tmp', '/etc'].flatMap((alias) => {
+        const target = '/private' + alias;
+        try {
+          return realpathSync(alias) === target ? [[alias, target] as const] : [];
+        } catch {
+          return [];
+        }
+      })
+    : [];
+/** Normalize verified macOS system aliases only; user-created links remain subject to containment checks. */
+export function resolveSystemPath(...parts: string[]): string {
+  const resolved = path.resolve(...parts);
+  for (const [alias, target] of systemAliases)
+    if (resolved === alias || resolved.startsWith(alias + path.sep))
+      return target + resolved.slice(alias.length);
+  if (process.platform === 'win32' && /~\d+(?:[\\/]|$)/.test(resolved)) {
+    const tail: string[] = [];
+    let existing = resolved;
+    while (true) {
+      try {
+        lstatSync(existing);
+        for (let cursor = existing; cursor !== path.dirname(cursor); cursor = path.dirname(cursor))
+          if (lstatSync(cursor).isSymbolicLink()) return resolved;
+        return path.join(realpathSync.native(existing), ...tail);
+      } catch (error) {
+        if (
+          (error as NodeJS.ErrnoException).code !== 'ENOENT' ||
+          existing === path.dirname(existing)
+        )
+          return resolved;
+        tail.unshift(path.basename(existing));
+        existing = path.dirname(existing);
+      }
+    }
+  }
+  return resolved;
+}
 
 export function validateRelative(relative: string): string {
   if (
@@ -47,6 +88,10 @@ export async function containedPath(
 export async function atomicWrite(filename: string, content: string | Buffer): Promise<void> {
   await mkdir(path.dirname(filename), { recursive: true });
   const temp = filename + '.' + randomUUID() + '.tmp';
-  await writeFile(temp, content, { mode: 0o600, flag: 'wx' });
-  await rename(temp, filename);
+  try {
+    await writeFile(temp, content, { mode: 0o600, flag: 'wx' });
+    await rename(temp, filename);
+  } finally {
+    await rm(temp, { force: true });
+  }
 }

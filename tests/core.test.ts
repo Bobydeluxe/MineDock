@@ -5,6 +5,29 @@ import { createHash } from 'node:crypto';
 import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 afterEach(() => vi.unstubAllGlobals());
+it('exports a verified backup through an atomic cancellable transaction without exposing application database targets', async () => {
+  const f = await fixture(),
+    core = await AppCore.open(f.root, f.secrets);
+  try {
+    const backup = await core.backups.create(f.server.id),
+      destination = path.join(f.root, 'selected-backup.zip');
+    await core.exportBackup(backup.id, destination);
+    const bytes = await readFile(destination);
+    expect(createHash('sha256').update(bytes).digest('hex')).toBe(backup.sha256);
+    expect(
+      core.repo
+        .operations()
+        .some((item) => item.kind === 'backup.export' && item.status === 'completed'),
+    ).toBe(true);
+    await expect(core.exportBackup(backup.id, path.join(f.root, 'app.db'))).rejects.toThrow(
+      'active MineDock',
+    );
+    expect(core.repo.server(f.server.id).name).toBe(f.server.name);
+  } finally {
+    await core.close();
+    await f.cleanup();
+  }
+});
 it('creates a server through the application service, persists settings and rolls a world back', async () => {
   const f = await fixture();
   const core = await AppCore.open(f.root, f.secrets);

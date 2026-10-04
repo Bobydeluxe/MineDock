@@ -1,7 +1,14 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import type { Api, AppEvent } from '../../packages/domain/types';
-const call = <T>(method: string, ...args: unknown[]): Promise<T> =>
-  ipcRenderer.invoke('minedock:' + method, ...args) as Promise<T>;
+import type { IpcResult } from '../../packages/domain/errors';
+const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
+  const result = (await ipcRenderer.invoke('minedock:' + method, ...args)) as IpcResult<T>;
+  if (result.ok) return result.value;
+  throw Object.assign(new Error(result.error.message), {
+    code: result.error.code,
+    retryable: result.error.retryable,
+  });
+};
 const api: Api = {
   snapshot: () => call('snapshot'),
   diagnostic: () => call('diagnostic'),
@@ -9,9 +16,25 @@ const api: Api = {
   selectFolder: () => call('selectFolder'),
   openFolder: (id) => call('openFolder', id),
   versions: (engine) => call('versions', engine),
+  builds: (engine, version) => call('builds', engine, version),
+  installers: (engine) => call('installers', engine),
   create: (input) => call('create', input),
+  previewServerImport: () => call('previewServerImport'),
+  importServer: (input) => call('importServer', input),
+  previewModpack: () => call('previewModpack'),
+  createModpack: (selection, input) => call('createModpack', selection, input),
+  worlds: (id) => call('worlds', id),
+  worldAction: (id, input) => call('worldAction', id, input),
+  previewWorldImport: (id, archive) => call('previewWorldImport', id, archive),
+  importWorld: (id, input) => call('importWorld', id, input),
+  exportWorld: (id, name) => call('exportWorld', id, name),
   retryInstallation: (id) => call('retryInstallation', id),
   cancelDownload: (id) => call('cancelDownload', id),
+  operations: () => call('operations'),
+  cancelOperation: (id) => call('cancelOperation', id),
+  dismissOperation: (id) => call('dismissOperation', id),
+  recoveryReview: (id) => call('recoveryReview', id),
+  resolveOperation: (id, input) => call('resolveOperation', id, input),
   start: (id) => call('start', id),
   stop: (id) => call('stop', id),
   restart: (id) => call('restart', id),
@@ -19,6 +42,8 @@ const api: Api = {
   logs: (id) => call('logs', id),
   command: (id, command) => call('command', id, command),
   players: (id) => call('players', id),
+  playerReport: (id) => call('playerReport', id),
+  moderatePlayer: (id, input) => call('moderatePlayer', id, input),
   properties: (id) => call('properties', id),
   saveProperties: (id, props) => call('saveProperties', id, props),
   configureServer: (id, options) => call('configureServer', id, options),
@@ -29,20 +54,60 @@ const api: Api = {
   deleteFile: (id, path, confirm) => call('deleteFile', id, path, confirm),
   uploadFile: (id, path) => call('uploadFile', id, path),
   exportFile: (id, path) => call('exportFile', id, path),
+  fileAction: (id, input) => call('fileAction', id, input),
+  compressArchive: (id, path) => call('compressArchive', id, path),
+  extractArchive: (id, input) => call('extractArchive', id, input),
   backup: (id) => call('backup', id),
   verifyBackup: (id) => call('verifyBackup', id),
   restore: (id, confirm) => call('restore', id, confirm),
   exportBackup: (id) => call('exportBackup', id),
   deleteBackup: (id, confirm) => call('deleteBackup', id, confirm),
+  retentionPolicy: (id) => call('retentionPolicy', id),
+  configureRetention: (id, input) => call('configureRetention', id, input),
+  previewRetention: (id) => call('previewRetention', id),
+  purgeRetention: (id, input) => call('purgeRetention', id, input),
+  updateStatus: () => call('updateStatus'),
+  configureUpdates: (automaticChecks) => call('configureUpdates', automaticChecks),
+  checkUpdates: () => call('checkUpdates'),
+  downloadUpdate: () => call('downloadUpdate'),
+  installUpdate: (confirmation) => call('installUpdate', confirmation),
   schedules: (input) => call('schedules', input),
   deleteSchedule: (id) => call('deleteSchedule', id),
+  toggleSchedule: (id, enabled) => call('toggleSchedule', id, enabled),
+  schedulePreview: (input) => call('schedulePreview', input),
   metrics: (id, hours) => call('metrics', id, hours),
+  storageOverview: (id) => call('storageOverview', id),
+  scanStorage: (id) => call('scanStorage', id),
+  revealStorageFile: (id, input) => call('revealStorageFile', id, input),
   runtimes: () => call('runtimes'),
   installRuntime: (major) => call('installRuntime', major),
-  search: (id, query) => call('search', id, query),
-  installContent: (id, project) => call('installContent', id, project),
+  runtimeEntries: () => call('runtimeEntries'),
+  runtimeHealth: (id) => call('runtimeHealth', id),
+  repairRuntime: (input) => call('repairRuntime', input),
+  deleteRuntime: (input) => call('deleteRuntime', input),
+  search: (id, query, provider) => call('search', id, query, provider),
+  installContent: (id, project, provider, version) =>
+    call('installContent', id, project, provider, version),
+  marketplaceSettings: () => call('marketplaceSettings'),
+  contentIcon: (url) => call('contentIcon', url),
+  crossplayStatus: (id) => call('crossplayStatus', id),
+  crossplayVersions: (id) => call('crossplayVersions', id),
+  configureCrossplay: (id, input) => call('configureCrossplay', id, input),
+  clearIconCache: () => call('clearIconCache'),
+  configureMarketplace: (input) => call('configureMarketplace', input),
   content: (id) => call('content', id),
   toggleContent: (id, content) => call('toggleContent', id, content),
+  contentVersions: (id, project, provider) => call('contentVersions', id, project, provider),
+  contentVersion: (provider, version) => call('contentVersion', provider, version),
+  contentUpdates: (id) => call('contentUpdates', id),
+  contentHistory: (id, content) => call('contentHistory', id, content),
+  manualContent: (id) => call('manualContent', id),
+  changeContentVersion: (id, content, version, confirmation) =>
+    call('changeContentVersion', id, content, version, confirmation),
+  uninstallContent: (id, content, confirmation) =>
+    call('uninstallContent', id, content, confirmation),
+  rollbackContent: (id, content, history, confirmation) =>
+    call('rollbackContent', id, content, history, confirmation),
   onEvent: (listener) => {
     const receive = (_event: Electron.IpcRendererEvent, event: AppEvent): void => listener(event);
     ipcRenderer.on('minedock:event', receive);

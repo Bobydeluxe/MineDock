@@ -1,33 +1,33 @@
-# V1 security
+# Security boundaries
 
-## Boundaries
+MineDock is local and runs with the current OS account permissions. It exposes no public administration API, tunnel or web panel. Its isolated renderer uses only validated named preload methods; main verifies the sender/frame/origin and validates all input. Server/installer processes use argument arrays and `shell: false`. The updater uses fixed native helper scripts only for operations requiring the OS installation flow.
 
-The application is local and runs with its OS account's permissions. It starts no web panel, public API, tunnel or network WebSocket. IPC validates renderer identity, main frame and exact URL; Zod validates input. Java starts through `spawn` with an argument array and `shell: false`.
+## Files, archives and recovery
 
-Free-form RCON commands grant server administration, not shell injection. Stop/save-hold operations belong to serialized services. Persistent tasks serve the same local account; they are not a remote visitor interface.
+Relative paths reject traversal, null bytes, absolute paths, Windows ADS/device names and ambiguous trailing characters. `lstat`/`realpath` checks reject user links/junctions in server browsing, copies and ZIP imports. Verified macOS system aliases and ordinary Windows short-path names are normalized without accepting user-created links. Native selection approves a specific external source or export target; data/runtime/cache roots remain protected from overwriting.
 
-## Files and archives
+ZIPs reject links, duplicate/case-colliding paths and Zip Slip; extraction is bounded and staged. Copies detect changing files. Server/archive operations normally allow at most 200,000 entries and 64 GB; the editor is limited to 2 MB. Modpacks impose tighter file/download limits. Official Java/PHP tar archives may contain validated relative library links confined to staging; device nodes, escaping/absolute links and duplicate files are rejected.
 
-Absolute paths, `..`, null bytes, Windows ADS, device names and ambiguous paths are rejected. Existing parents are checked with `lstat`/`realpath`; symbolic links/junctions are blocked in file browsing and ZIP operations. Restores extract to staging and cannot overwrite outside it. Entry collisions are rejected, with size/file-count limits.
+Destructive server/world/content/file operations require a stopped server, explicit confirmations where applicable and safety backups. Managed content operations affect tracked binaries; manual content/configuration is preserved. Retention protects manual/safety archives by default, verifies files before preview and requires fresh typed approval before deletion. Interrupted folder exchanges and purge batches have private persistent checkpoints. Uncertain copies are kept; unresolved server recovery blocks launch/mutation.
 
-The OS account and installed Java plugins are trusted. Plugins execute with that account's privileges, as with native Minecraft servers; this is not Docker isolation. A local actor able to modify folders concurrently can act outside the application. Future isolation must address that explicitly.
+Installed engines, mods and plugins are executable code with OS account privileges. This is not a container sandbox for Minecraft. A local actor with filesystem access can modify files concurrently; checks do not isolate MineDock from that actor.
 
 ## Network and downloads
 
-HTTPS only, fixed official/CDN host allowlists, checks on every redirect, timeouts, maximum sizes, temporary files and checksums before rename. Catalog retry is bounded. Content installation respects version/loader/server-side requirements. Downloads never silently replace existing unmanaged plugins.
+Only approved HTTPS sources are used; every redirect is rechecked and cross-host credentials are removed. Requests have bounded retries, timeouts and maximum sizes. Downloads go to partial files, verify official hashes when supplied and rename only after validation. Resume requires matching Range/entity validators and content ranges; otherwise it restarts cleanly. Providers refuse incompatible versions and restricted/missing download URLs. No site scraping, embedded personal CurseForge key or guessed private CDN bypass is used.
 
-Minecraft is reachable on the LAN when `server-ip` is empty. Minecraft also uses this bind for RCON: **never forward the RCON port to the Internet**. MineDock connects through loopback with a random 256-bit password. Set `server-ip=127.0.0.1` for strictly local use. MineDock does not change firewalls or routers automatically.
+Minecraft can be reachable on the LAN when its bind is empty. RCON uses a dedicated random 256-bit password and MineDock connects through loopback. Never forward RCON to the Internet. For strictly local Java use, bind `server-ip=127.0.0.1`. MineDock does not modify firewalls or router rules. Crossplay reserves/checks its UDP port and does not disable Java online-mode.
 
-## Secrets
+## Secrets and privacy
 
-SQLite's RCON secret is encrypted with Electron safeStorage when a suitable OS keychain is available. Fallback uses AES-256-GCM, a local 32-byte key and restrictive Unix permissions. On Windows it inherits user-profile ACLs. Preserve and protect the local key to recover secrets.
+RCON and optional CurseForge keys are encrypted with Electron safeStorage when a suitable OS keychain is available. The headless/development fallback uses AES-256-GCM and a private local 32-byte key; Windows inherits user-profile ACLs. Protect the data directory and its encryption key.
 
-Minecraft requires a plaintext RCON password in `server.properties`. Folder permissions protect it; graphical/text editors hide it. MineDock backups remove `rcon.password` and restore reinjects it. Raw export of this file is refused. Plugin configurations may hold additional secrets, remain in complete backups and must be treated as sensitive.
+Minecraft requires plaintext RCON configuration. The app hides that field, scrubs it from normal backups/ZIP exports and reinjects it on restore. Direct editor/export access to known authentication/secret files is refused. An explicitly approved original-server safety archive preserves original bytes privately, including original configuration secrets; treat it as sensitive. Arbitrary plugin configurations can also contain secrets in full backups.
 
-Audit records exclude passwords and free-form command text that could contain secrets. Displayed console output is redacted. Original Minecraft logs belong to Java; MineDock cannot guarantee that a plugin never writes sensitive data there.
+Audit omits secret-bearing free-form command text. Application diagnostics redact known secrets, tokens and addresses. Player tables contain observed identity/session information; IP-ban UI exposes a count only. Minecraft and plugins own their original logs and can write sensitive data there. Unknown external text is not a guarantee of secret-free content.
 
-## Data and distribution
+## Application updates and signing
 
-Server deletion preserves its folder in trash. Manual archives are not automatically purged. Backups precede major settings changes, file deletion, plugin installation and restores. Consistent SQLite snapshots run regularly. Do not remove the data folder containing the only encryption key.
+TLS alone never authorizes an update. The app verifies Ed25519 metadata against an embedded public key, stable version/dates, exact repository release URLs, native architecture/package type and signed SHA-256/size. Downloaded files are verified again before installation. Optional automatic checks are off by default; installation remains explicit and is blocked while servers or operations are active. It never updates a Minecraft server.
 
-Beta builds are unsigned. Remote accounts, RBAC and public tokens remain inactive pending implementation and dedicated review.
+The publisher private key stays outside Git/packages and is configured as an encrypted CI secret. Platform certificates/passwords use CI secrets/environment variables only. No official Windows or Apple certificate is currently provided; unsigned builds are explicitly reported. Platform certificate verification/notarization cannot be claimed without those real credentials. See [distribution](distribution.md) and [update-system](update-system.md).

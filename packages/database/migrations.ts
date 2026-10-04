@@ -15,4 +15,33 @@ export const migrations = [
     CREATE TABLE notifications (id INTEGER PRIMARY KEY, at TEXT NOT NULL, message TEXT NOT NULL, read INTEGER NOT NULL DEFAULT 0);
   `,
   },
+  {
+    version: 2,
+    sql: `
+      CREATE TABLE operations (id TEXT PRIMARY KEY, server_id TEXT, metadata TEXT NOT NULL, checkpoint TEXT);
+      CREATE INDEX operations_by_server ON operations(server_id);
+      CREATE TABLE download_partials (destination TEXT PRIMARY KEY, metadata TEXT NOT NULL);
+      CREATE TABLE content_history (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, content_id TEXT NOT NULL, metadata TEXT NOT NULL);
+      CREATE TABLE player_observations (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, metadata TEXT NOT NULL, PRIMARY KEY(server_id, name));
+      CREATE TABLE retention_policies (server_id TEXT PRIMARY KEY REFERENCES servers(id) ON DELETE CASCADE, metadata TEXT NOT NULL);
+      CREATE TABLE managed_runtimes (id TEXT PRIMARY KEY, metadata TEXT NOT NULL);
+      CREATE TABLE import_history (id TEXT PRIMARY KEY, server_id TEXT REFERENCES servers(id) ON DELETE SET NULL, metadata TEXT NOT NULL);
+      CREATE TABLE marketplace_settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+      CREATE TABLE storage_snapshots (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, metadata TEXT NOT NULL, PRIMARY KEY(server_id, at));
+    `,
+  },
+  {
+    version: 3,
+    sql: `CREATE TABLE world_history (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, at TEXT NOT NULL, action TEXT NOT NULL, metadata TEXT NOT NULL);
+      CREATE INDEX world_history_by_server_name ON world_history(server_id, name, at);`,
+  },
+  {
+    version: 4,
+    sql: `CREATE TABLE modpack_imports (token TEXT PRIMARY KEY, server_id TEXT REFERENCES servers(id) ON DELETE SET NULL, metadata TEXT NOT NULL);
+    CREATE TABLE authorized_exports (id TEXT PRIMARY KEY, path TEXT NOT NULL, created_at TEXT NOT NULL);`,
+  },
+  {
+    version: 5,
+    sql: `CREATE TABLE backup_retention_runs (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, metadata TEXT NOT NULL);`,
+  },
 ];

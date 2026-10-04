@@ -1,14 +1,18 @@
 import { z } from 'zod';
-import { randomUUID } from 'node:crypto';
-import { mkdir, rename, rm } from 'node:fs/promises';
-import path from 'node:path';
 import { Repository } from '../database/database';
 import { DownloadManager, fetchJson } from '../minecraft/downloads';
-import { containedPath, validateRelative } from '../security/paths';
 import type { Project, InstalledContent, Server } from '../domain/types';
+import type { ContentProject, ContentVersion } from '../domain/content';
+import { engineDefinition } from '../domain/engines';
+import { ManagedContentService, type ContentCatalog } from './content';
+import type { OperationService } from '../core/operations';
 const versionSchema = z.object({
   id: z.string(),
   project_id: z.string(),
+  version_type: z.enum(['release', 'beta', 'alpha']).optional(),
+  version_number: z.string().optional(),
+  date_published: z.string().optional(),
+  changelog: z.string().nullable().optional(),
   game_versions: z.array(z.string()),
   loaders: z.array(z.string()),
   files: z.array(
@@ -27,179 +31,169 @@ const versionSchema = z.object({
     }),
   ),
 });
+function version(value: unknown): ContentVersion {
+  const item = versionSchema.parse(value);
+  return {
+    id: item.id,
+    projectId: item.project_id,
+    name: item.version_number ?? item.id,
+    publishedAt: item.date_published ?? '',
+    changelog: item.changelog ?? '',
+    releaseType: item.version_type,
+    gameVersions: item.game_versions,
+    loaders: item.loaders,
+    files: item.files.map((file) => ({
+      ...file,
+      hash: { algorithm: 'sha512', value: file.hashes.sha512 },
+    })),
+    dependencies: item.dependencies.map((dependency) => ({
+      projectId: dependency.project_id ?? undefined,
+      versionId: dependency.version_id ?? undefined,
+      required: dependency.dependency_type === 'required',
+    })),
+  };
+}
 export interface MarketplaceProvider {
   search(server: Server, query: string): Promise<Project[]>;
 }
-export class ModrinthProvider implements MarketplaceProvider {
-  constructor(
-    private readonly repo: Repository,
-    private readonly downloads: DownloadManager,
-  ) {}
-  async search(server: Server, query: string): Promise<Project[]> {
-    if (server.engine !== 'paper') return [];
+export class ModrinthCatalog implements ContentCatalog {
+  readonly id = 'modrinth' as const;
+  async search(server: Server, query: string, signal?: AbortSignal): Promise<Project[]> {
+    const engine = engineDefinition(server.engine);
+    if (!engine.capabilities.marketplace) return [];
     const facets = JSON.stringify([
       [`versions:${server.version}`],
-      ['categories:paper'],
+      engine.contentLoaders.map((loader) => `categories:${loader}`),
       ['server_side:required', 'server_side:optional'],
     ]);
-    const schema = z.object({
-      hits: z.array(
-        z.object({
-          project_id: z.string(),
-          title: z.string(),
-          description: z.string(),
-          author: z.string(),
-          downloads: z.number(),
-          icon_url: z.string().nullable(),
-          categories: z.array(z.string()),
-        }),
-      ),
-    });
-    const data = schema.parse(
-      await fetchJson<unknown>(
-        `https://api.modrinth.com/v2/search?query=${encodeURIComponent(query.slice(0, 120))}&facets=${encodeURIComponent(facets)}&limit=20`,
-      ),
-    );
-    return data.hits.map((h) => ({
-      id: h.project_id,
-      title: h.title,
-      description: h.description,
-      author: h.author,
-      downloads: h.downloads,
-      iconUrl: h.icon_url ?? undefined,
-      categories: h.categories,
+    const data = z
+      .object({
+        hits: z.array(
+          z.object({
+            project_id: z.string(),
+            title: z.string(),
+            description: z.string(),
+            author: z.string(),
+            downloads: z.number(),
+            icon_url: z.string().nullable(),
+            categories: z.array(z.string()),
+          }),
+        ),
+      })
+      .parse(
+        await fetchJson(
+          `https://api.modrinth.com/v2/search?query=${encodeURIComponent(query.slice(0, 120))}&facets=${encodeURIComponent(facets)}&limit=20`,
+          undefined,
+          signal,
+        ),
+      );
+    return data.hits.map((hit) => ({
+      id: hit.project_id,
+      title: hit.title,
+      description: hit.description,
+      author: hit.author,
+      downloads: hit.downloads,
+      iconUrl: hit.icon_url ?? undefined,
+      categories: hit.categories,
+      provider: this.id,
+      kind: engine.capabilities.mods ? 'mod' : 'plugin',
     }));
   }
-  async install(server: Server, projectId: string): Promise<InstalledContent[]> {
-    if (server.engine !== 'paper')
-      throw new Error('The V1 marketplace only installs compatible Paper plugins.');
-    const plugins = path.join(server.path, 'plugins');
-    await mkdir(plugins, { recursive: true });
-    const stage = path.join(server.path, `.content-${randomUUID()}`);
-    await mkdir(stage);
-    const items: InstalledContent[] = [];
-    const visited = new Set<string>();
-    const installed = this.repo.content(server.id);
-    const moved: string[] = [];
-    const resolve = async (id: string, pinned?: string): Promise<void> => {
-      if (visited.has(id)) return;
-      visited.add(id);
-      if (visited.size > 25) throw new Error('Too many dependencies. Installation cancelled.');
-      const existing = installed.find((i) => i.projectId === id);
-      if (existing) {
-        if (!existing.enabled || (pinned && existing.versionId !== pinned))
-          throw new Error('An installed dependency is disabled or incompatible.');
-        return;
-      }
-      const project = z
-        .object({ id: z.string(), title: z.string(), server_side: z.string() })
-        .parse(
-          await fetchJson<unknown>(`https://api.modrinth.com/v2/project/${encodeURIComponent(id)}`),
-        );
-      if (project.server_side === 'unsupported')
-        throw new Error('This content is only for the Minecraft client.');
-      const version = pinned
-        ? versionSchema.parse(
-            await fetchJson<unknown>(
-              `https://api.modrinth.com/v2/version/${encodeURIComponent(pinned)}`,
-            ),
-          )
-        : z
-            .array(versionSchema)
-            .parse(
-              await fetchJson<unknown>(
-                `https://api.modrinth.com/v2/project/${encodeURIComponent(id)}/version?game_versions=${encodeURIComponent(JSON.stringify([server.version]))}&loaders=${encodeURIComponent(JSON.stringify(['paper']))}`,
-              ),
-            )[0];
-      if (
-        !version ||
-        version.project_id !== project.id ||
-        !version.game_versions.includes(server.version) ||
-        !version.loaders.some((l) => ['paper', 'spigot', 'bukkit'].includes(l))
-      )
-        throw new Error('No compatible server version.');
-      for (const dep of version.dependencies.filter((d) => d.dependency_type === 'required')) {
-        let depId = dep.project_id;
-        if (!depId && dep.version_id)
-          depId = versionSchema.parse(
-            await fetchJson<unknown>(
-              `https://api.modrinth.com/v2/version/${encodeURIComponent(dep.version_id)}`,
-            ),
-          ).project_id;
-        if (!depId) throw new Error('Unable to resolve a dependency.');
-        await resolve(depId, dep.version_id ?? undefined);
-      }
-      const file = version.files.find((f) => f.primary) ?? version.files[0];
-      if (
-        !file ||
-        !file.filename.endsWith('.jar') ||
-        path.basename(file.filename) !== file.filename
-      )
-        throw new Error('This project does not provide a plugin JAR.');
-      validateRelative(file.filename);
-      if (
-        items.some((i) => i.filename === file.filename) ||
-        installed.some((i) => i.filename === file.filename)
-      )
-        throw new Error('Filename conflict.');
-      await this.downloads.download(
-        file.url,
-        path.join(stage, file.filename),
-        project.title,
-        { algorithm: 'sha512', value: file.hashes.sha512 },
-        256 * 1024 ** 2,
+  async project(id: string, signal?: AbortSignal): Promise<ContentProject> {
+    const item = z
+      .object({
+        id: z.string(),
+        title: z.string(),
+        server_side: z.string(),
+        project_type: z.string().optional(),
+      })
+      .parse(
+        await fetchJson(
+          `https://api.modrinth.com/v2/project/${encodeURIComponent(id)}`,
+          undefined,
+          signal,
+        ),
       );
-      items.push({
-        id: randomUUID(),
-        serverId: server.id,
-        projectId: project.id,
-        title: project.title,
-        versionId: version.id,
-        filename: file.filename,
-        enabled: true,
-      });
+    return {
+      id: item.id,
+      title: item.title,
+      serverSide: item.server_side !== 'unsupported',
+      kind: item.project_type === 'plugin' ? 'plugin' : 'mod',
     };
+  }
+  async versions(
+    server: Server,
+    projectId: string,
+    signal?: AbortSignal,
+  ): Promise<ContentVersion[]> {
+    const data = z
+      .array(versionSchema)
+      .parse(
+        await fetchJson(
+          `https://api.modrinth.com/v2/project/${encodeURIComponent(projectId)}/version?game_versions=${encodeURIComponent(JSON.stringify([server.version]))}&loaders=${encodeURIComponent(JSON.stringify(engineDefinition(server.engine).contentLoaders))}`,
+          undefined,
+          signal,
+        ),
+      );
+    return data.map(version);
+  }
+  async version(id: string, signal?: AbortSignal): Promise<ContentVersion> {
+    return version(
+      await fetchJson(
+        `https://api.modrinth.com/v2/version/${encodeURIComponent(id)}`,
+        undefined,
+        signal,
+      ),
+    );
+  }
+  async allVersions(
+    projectId: string,
+    loaders: readonly string[],
+    signal?: AbortSignal,
+  ): Promise<ContentVersion[]> {
+    return z
+      .array(versionSchema)
+      .parse(
+        await fetchJson(
+          `https://api.modrinth.com/v2/project/${encodeURIComponent(projectId)}/version?loaders=${encodeURIComponent(JSON.stringify(loaders))}`,
+          undefined,
+          signal,
+        ),
+      )
+      .map(version);
+  }
+  async byHash(hash: string, signal?: AbortSignal): Promise<ContentVersion | null> {
+    z.string()
+      .regex(/^[a-f0-9]{128}$/i)
+      .parse(hash);
     try {
-      await resolve(projectId);
-      for (const item of items) {
-        const target = await containedPath(plugins, item.filename);
-        // Never replace an untracked plugin.
-        const { access } = await import('node:fs/promises');
-        try {
-          await access(target);
-          throw new Error('A plugin with the same filename already exists.');
-        } catch (e) {
-          if ((e as NodeJS.ErrnoException).code !== 'ENOENT') throw e;
-        }
-        await rename(path.join(stage, item.filename), target);
-        moved.push(target);
-      }
-      this.repo.db.exec('BEGIN');
-      try {
-        items.forEach((item) => this.repo.saveContent(item));
-        this.repo.db.exec('COMMIT');
-      } catch (e) {
-        this.repo.db.exec('ROLLBACK');
-        throw e;
-      }
-      this.repo.audit('content.installed', items.map((i) => i.title).join(', '), server.id);
-      return items;
-    } catch (e) {
-      for (const file of moved) await rm(file, { force: true });
-      throw e;
-    } finally {
-      await rm(stage, { recursive: true, force: true });
+      return version(
+        await fetchJson(
+          `https://api.modrinth.com/v2/version_file/${hash}?algorithm=sha512`,
+          undefined,
+          signal,
+        ),
+      );
+    } catch (error) {
+      if (error instanceof Error && /(?:HTTP|returned) 404/.test(error.message)) return null;
+      throw error;
     }
   }
-  async toggle(server: Server, id: string): Promise<void> {
-    const item = this.repo.content(server.id).find((i) => i.id === id);
-    if (!item) throw new Error('Plugin not found.');
-    const root = path.join(server.path, 'plugins');
-    const source = await containedPath(root, item.filename + (item.enabled ? '' : '.disabled'));
-    const target = await containedPath(root, item.filename + (item.enabled ? '.disabled' : ''));
-    await rename(source, target);
-    item.enabled = !item.enabled;
-    this.repo.saveContent(item);
-    this.repo.audit('content.toggled', `${item.title}: ${item.enabled}`, server.id);
+}
+/** Compatibility facade for existing callers; transaction logic is shared by all catalogs. */
+export class ModrinthProvider implements MarketplaceProvider {
+  readonly catalog = new ModrinthCatalog();
+  readonly manager: ManagedContentService;
+  constructor(repo: Repository, downloads: DownloadManager, jobs?: OperationService) {
+    this.manager = new ManagedContentService(repo, downloads, jobs);
+  }
+  search(server: Server, query: string): Promise<Project[]> {
+    return this.catalog.search(server, query);
+  }
+  install(server: Server, projectId: string, versionId?: string): Promise<InstalledContent[]> {
+    return this.manager.install(server, this.catalog, projectId, versionId);
+  }
+  toggle(server: Server, id: string): Promise<void> {
+    return this.manager.toggle(server, id);
   }
 }

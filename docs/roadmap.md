@@ -1,30 +1,22 @@
-# Beta scope and limitations
+# Implemented scope and remaining validation
 
-The local V1 core is implemented. [The implementation plan](plan.md) and [validation record](validation.md) describe what is exercised and tested.
+## Implemented
 
-## Before a stable public V1
+The 0.3.0 source extends the existing local desktop with eight engine adapters/capabilities, Java/PHP/native runtimes, mods/plugins/providers/history, Geyser/Floodgate controls, server/world/mrpack imports, advanced files/editor/ZIPs, persistent players, storage analysis, calendar/cron tasks, runtime repair/deletion, retention previews/purges, resumable downloads, cancellation/recovery and verified app-update infrastructure. These are accessible services and interface flows, covered by automated tests. See the [feature list](../MineDock-Features.txt) and [validation record](validation.md) for evidence and constraints.
 
-- Connect a real Minecraft client after the owner personally accepts the EULA. Existing live tests stop at that consent gate.
-- Validate historical Vanilla/Paper versions, Linux, macOS and arm64 on their actual platforms.
-- Add offset-based download resumption, automatic staging recovery after interruption and broader long-job cancellation. Retrying an incomplete installation already preserves its pinned version/build.
-- Broaden forced-shutdown, repeated-crash and disk-full testing.
-- Configure certificates, signatures and a verified update channel.
-- Arrange independent auditing and configurable retention policies.
+Earlier roadmap entries for those implemented services are no longer marked planned. A working adapter and fixture tests do not imply that every historical engine has been played on every native target.
 
-## Extensions after stabilization
+## Remaining prerequisites and validation
 
-Fabric/Forge/NeoForge/Purpur, BDS/PocketMine, server/modpack import, dedicated world import/export/duplication, plugin update comparison/rollback, CurseForge/Hangar, Geyser/Floodgate, Playit tunnels, Docker quotas, remote administration/local multi-user accounts, cloud backups and optional AI.
+- Real client/server gameplay after personal EULA acceptance, including engine/loader historical-version coverage and Bedrock crossplay connectivity.
+- Live authenticated CurseForge checks with an appropriate owner-provided key; clean CurseForge ZIP modpack import remains assessed but unavailable.
+- Real Windows Authenticode and Apple Developer ID/notarization credentials, followed by chain/notarization/stapling validation. Unsigned packaging is supported.
+- Actual newer-release installation/relaunch through each package's native installer/updater, including protected/non-writable locations; fixture helper tests do not replace this.
+- Native job results, OS-installed package behavior, permissions/shortcuts/keychain/sleep prevention and external network gameplay must be reported separately. Current CI evidence is in [validation](validation.md).
+- Independent security review and broader disk-full/power-loss/forced-shutdown testing.
 
-## Simplified V1 choices
+## Future scope
 
-- Tasks use minute intervals rather than daily calendars/cron or multiple warnings. Scheduled restart announces ten seconds.
-- In-memory console history is capped at 5,000 lines; full Minecraft logs stay on disk. Text editing validates JSON but has no syntax highlighting/YAML validation.
-- Files: browse, edit, create, import/export and delete. Rename/move/copy and general ZIP tools are not implemented in the UI.
-- Modrinth: Paper plugins, dependencies, pinned versions and enable/disable. Update checks, managed uninstall, version comparison and remote project icons are pending.
-- Players: live usernames and RCON moderation. UUID/ping/playtime and detailed persistent lists are not fabricated.
-- Server size refreshes periodically; storage category indexes and largest-file lists are pending.
-- Runtimes: install, detect and choose per server. UI repair/removal is pending.
-- Docker detection is informational; there is no Docker runner.
-- Six languages cover MineDock's interface and recognized diagnostics. External output and unknown errors retain their original text.
+General datapack/resource management, CurseForge pack resolution with permitted file access, Docker isolation/quotas, tunnels, remote accounts/RBAC, cloud backup providers and optional AI are future extensions. Informational Docker detection is not a Docker runner. PocketMine upstream has ended support; MineDock cannot promise future compatible upstream releases.
 
-Unavailable features are documented rather than represented by nonfunctional buttons.
+Unknown external diagnostics retain their original text. Ping/seed/statistics/UUIDs remain unavailable when no reliable local source exists. Retention purges require preview/confirmation; unattended archive deletion is not enabled. MineDock must remain open to supervise processes/tasks and does not configure firewalls/routers.

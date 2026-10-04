@@ -1,6 +1,20 @@
 import net from 'node:net';
 import os from 'node:os';
-export async function checkPort(port: number): Promise<boolean> {
+import dgram from 'node:dgram';
+export async function checkPort(
+  port: number,
+  protocol: 'tcp' | 'udp' = 'tcp',
+  ipv6 = false,
+): Promise<boolean> {
+  if (protocol === 'udp')
+    return new Promise((resolve) => {
+      const socket = dgram.createSocket(ipv6 ? 'udp6' : 'udp4');
+      socket.once('error', () => {
+        socket.close();
+        resolve(false);
+      });
+      socket.bind(port, ipv6 ? '::' : '0.0.0.0', () => socket.close(() => resolve(true)));
+    });
   return new Promise((resolve) => {
     const server = net.createServer();
     server.once('error', () => resolve(false));

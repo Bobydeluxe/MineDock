@@ -19,18 +19,27 @@ import type {
   Settings,
   Progress,
 } from '../../../../packages/domain/types';
+import type { ModpackPreview, ModpackSelection } from '../../../../packages/domain/modpacks';
 import { AppContext, useApp } from './context';
 import { translator } from './i18n';
 import { languages } from '../../../../packages/domain/languages';
 import { localizeMessage } from '../../../../packages/domain/localization';
+import {
+  engines,
+  engineIds,
+  engineDefinition,
+  type Edition,
+} from '../../../../packages/domain/engines';
 import { Dialog, Button, Field, Toggle, Loading, ErrorBox, useData, bytes } from './ui';
 
 export function CreateServer({
   onClose,
   onCreated,
+  modpack,
 }: {
   onClose: () => void;
   onCreated: (server: Server) => void;
+  modpack?: { preview: ModpackPreview; selection: ModpackSelection };
 }) {
   const { api, t, run, busy, snapshot } = useApp();
   const [step, setStep] = useState(0);
@@ -46,9 +55,9 @@ export function CreateServer({
     [api],
   );
   const [input, setInput] = useState<Omit<CreateServerInput, 'eula'> & { eula: boolean }>({
-    name: '',
-    engine: 'paper',
-    version: '',
+    name: modpack?.preview.name.slice(0, 60) ?? '',
+    engine: modpack?.preview.engine ?? 'paper',
+    version: modpack?.preview.minecraft ?? '',
     memoryMin: 1024,
     memoryMax: 4096,
     port: Math.max(25565, ...snapshot.servers.map((s) => s.port + 1)),
@@ -66,14 +75,35 @@ export function CreateServer({
     autoRestart: false,
     eula: false,
   });
-  const versions = useData(() => api.versions(input.engine), [input.engine]);
+  const versions = useData(
+    () => (modpack ? Promise.resolve([modpack.preview.minecraft]) : api.versions(input.engine)),
+    [input.engine, modpack?.preview.token],
+  );
   const selectedVersion = input.version || versions.data?.[0] || '';
+  const definition = engineDefinition(input.engine);
+  const [edition, setEdition] = useState<Edition>('java');
+  const hasLoader = ['fabric', 'forge', 'neoforge'].includes(input.engine);
+  const builds = useData(
+    () =>
+      modpack
+        ? Promise.resolve([modpack.preview.loader])
+        : hasLoader && selectedVersion
+          ? api.builds(input.engine, selectedVersion)
+          : Promise.resolve([]),
+    [input.engine, selectedVersion, modpack?.preview.token],
+  );
+  const installers = useData(() => api.installers(input.engine), [input.engine]);
+  const loaderVersion = input.loaderVersion || builds.data?.[0];
+  const installerVersion = input.installerVersion || installers.data?.[0];
   const update = <K extends keyof typeof input>(key: K, value: (typeof input)[K]) =>
     setInput((prev) => ({ ...prev, [key]: value }));
   const steps = [t('engine'), t('resources'), t('configuration'), t('ready')];
   const valid =
     step === 0
-      ? input.name.trim().length > 0 && selectedVersion && !versions.loading
+      ? input.name.trim().length > 0 &&
+        selectedVersion &&
+        !versions.loading &&
+        (!hasLoader || (!builds.loading && loaderVersion))
       : step === 1
         ? input.memoryMax >= input.memoryMin && input.memoryMin >= 256
         : step === 2
@@ -92,29 +122,74 @@ export function CreateServer({
       <div className="dialog-body wizard-body">
         <h2>{t('createTitle')}</h2>
         <p className="muted">{t('createSub')}</p>
+        {modpack && (
+          <p className="info-note">
+            {modpack.preview.name} · {modpack.preview.versionId} — {t('modpackPinnedHelp')}
+          </p>
+        )}
         {step === 0 && (
           <>
+            <Field label={t('edition')}>
+              <select
+                value={edition}
+                disabled={!!modpack}
+                onChange={(event) => {
+                  const value = event.target.value as Edition;
+                  setEdition(value);
+                  setInput((previous) => ({
+                    ...previous,
+                    engine: value === 'java' ? 'paper' : 'bedrock',
+                    version: '',
+                    loaderVersion: undefined,
+                    installerVersion: undefined,
+                    port: value === 'java' ? 25565 : 19132,
+                    ipv6Port: value === 'bedrock' ? 19133 : undefined,
+                  }));
+                }}
+              >
+                <option value="java">Java Edition</option>
+                <option value="bedrock">Bedrock Edition</option>
+              </select>
+            </Field>
             <div className="engine-options">
-              {(['paper', 'vanilla'] as const).map((engine) => (
-                <button
-                  key={engine}
-                  type="button"
-                  className={`engine-option ${input.engine === engine ? 'selected' : ''}`}
-                  onClick={() => {
-                    update('engine', engine);
-                    update('version', '');
-                  }}
-                >
-                  <span className="engine-icon">
-                    {engine === 'paper' ? <Layers size={25} /> : <ServerIcon size={25} />}
-                  </span>
-                  <strong>
-                    {engine === 'paper' ? 'Paper' : 'Vanilla'}
-                    {engine === input.engine && <CircleCheck size={17} />}
-                  </strong>
-                  <p>{t(engine === 'paper' ? 'paperHelp' : 'vanillaHelp')}</p>
-                </button>
-              ))}
+              {engineIds
+                .filter(
+                  (id) =>
+                    engines[id].edition === edition && (!modpack || id === modpack.preview.engine),
+                )
+                .map((engine) => (
+                  <button
+                    key={engine}
+                    type="button"
+                    disabled={!!modpack}
+                    className={`engine-option ${input.engine === engine ? 'selected' : ''}`}
+                    onClick={() => {
+                      update('engine', engine);
+                      update('version', '');
+                      update('loaderVersion', undefined);
+                      update('installerVersion', undefined);
+                    }}
+                  >
+                    <span className="engine-icon">
+                      {engine === 'paper' ? <Layers size={25} /> : <ServerIcon size={25} />}
+                    </span>
+                    <strong>
+                      {engines[engine].displayName}
+                      {engine === input.engine && <CircleCheck size={17} />}
+                    </strong>
+                    <p>
+                      {t(
+                        engines[engine].capabilities.mods
+                          ? 'modsHelp'
+                          : engines[engine].capabilities.plugins
+                            ? 'pluginsHelp'
+                            : engines[engine].edition === 'bedrock'
+                              ? 'nativeHelp'
+                              : 'vanillaHelp',
+                      )}
+                    </p>
+                  </button>
+                ))}
             </div>
             <Field label={t('name')}>
               <input
@@ -130,20 +205,63 @@ export function CreateServer({
             ) : versions.loading ? (
               <Loading label={t('loading')} />
             ) : (
-              <Field label={t('minecraftVersion')} hint={t('stableOnly')}>
-                <select value={selectedVersion} onChange={(e) => update('version', e.target.value)}>
+              <Field
+                label={t(input.engine === 'pocketmine' ? 'pocketmineVersion' : 'minecraftVersion')}
+                hint={t(modpack ? 'modpackPinnedHelp' : 'stableOnly')}
+              >
+                <select
+                  disabled={!!modpack}
+                  value={selectedVersion}
+                  onChange={(e) => update('version', e.target.value)}
+                >
                   {versions.data?.map((v, i) => (
                     <option key={v} value={v}>
                       {v}
-                      {i === 0 ? ` · ${t('latest')}` : ''}
+                      {i === 0 && !modpack ? ` · ${t('latest')}` : ''}
                     </option>
                   ))}
                 </select>
               </Field>
             )}
+            {input.engine === 'pocketmine' && <p className="hint">{t('pocketmineSupport')}</p>}
+            {hasLoader &&
+              (builds.error ? (
+                <ErrorBox error={builds.error} retry={builds.reload} retryLabel={t('retry')} />
+              ) : (
+                <Field label={t('loaderVersion')}>
+                  <select
+                    value={loaderVersion ?? ''}
+                    disabled={!!modpack}
+                    onChange={(event) => update('loaderVersion', event.target.value)}
+                  >
+                    {builds.data?.map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                </Field>
+              ))}
+            {input.engine === 'fabric' &&
+              (installers.error ? (
+                <ErrorBox
+                  error={installers.error}
+                  retry={installers.reload}
+                  retryLabel={t('retry')}
+                />
+              ) : (
+                <Field label={t('installerVersion')}>
+                  <select
+                    value={installerVersion ?? ''}
+                    onChange={(event) => update('installerVersion', event.target.value)}
+                  >
+                    {installers.data?.map((value) => (
+                      <option key={value}>{value}</option>
+                    ))}
+                  </select>
+                </Field>
+              ))}
           </>
         )}
-        {step === 1 && (
+        {step === 1 && definition.capabilities.javaMemory && (
           <>
             <div className="preset-grid">
               {[
@@ -196,6 +314,12 @@ export function CreateServer({
             </div>
           </>
         )}
+        {step === 1 && !definition.capabilities.javaMemory && (
+          <div className="info-note">
+            <Download size={20} />
+            <p>{t(definition.runtimeType === 'php' ? 'phpHelp' : 'nativeHelp')}</p>
+          </div>
+        )}
         {step === 2 && (
           <>
             <div className="form-grid">
@@ -241,6 +365,17 @@ export function CreateServer({
                   onChange={(e) => update('port', Number(e.target.value))}
                 />
               </Field>
+              {definition.protocol === 'udp' && (
+                <Field label={t('ipv6Port')}>
+                  <input
+                    type="number"
+                    min={1024}
+                    max={65535}
+                    value={input.ipv6Port ?? 19133}
+                    onChange={(event) => update('ipv6Port', Number(event.target.value))}
+                  />
+                </Field>
+              )}
             </div>
             <Field label={t('motd')}>
               <input
@@ -309,13 +444,17 @@ export function CreateServer({
               <div>
                 <span>{t('engine')}</span>
                 <strong>
-                  {input.engine === 'paper' ? 'Paper' : 'Vanilla'} · {selectedVersion}
+                  {definition.displayName} · {selectedVersion}
                 </strong>
               </div>
               <div>
                 <span>{t('resources')}</span>
                 <strong>
-                  {input.memoryMax / 1024} {t('gigabytes')} RAM
+                  {definition.capabilities.javaMemory
+                    ? `${input.memoryMax / 1024} ${t('gigabytes')} RAM`
+                    : definition.runtimeType === 'php'
+                      ? 'PHP'
+                      : 'Native'}
                 </strong>
               </div>
               <div>
@@ -329,14 +468,18 @@ export function CreateServer({
                 <strong>{input.port}</strong>
               </div>
             </div>
-            <div className="install-check">
-              <Check size={16} />
-              {t('automaticJava')}
-            </div>
-            <div className="install-check">
-              <ShieldCheck size={16} />
-              {t('automaticRcon')}
-            </div>
+            {definition.runtimeType === 'java' && (
+              <div className="install-check">
+                <Check size={16} />
+                {t('automaticJava')}
+              </div>
+            )}
+            {definition.capabilities.rcon && (
+              <div className="install-check">
+                <ShieldCheck size={16} />
+                {t('automaticRcon')}
+              </div>
+            )}
             <p className="muted small-text">{t('installHelp')}</p>
             <label className="eula-check">
               <input
@@ -408,11 +551,18 @@ export function CreateServer({
             variant="primary"
             disabled={!valid || busy}
             onClick={() => {
-              void run(() => api.create({ ...input, version: selectedVersion, eula: true })).then(
-                (result) => {
-                  if (result.ok) onCreated(result.value);
-                },
-              );
+              const request = {
+                ...input,
+                version: selectedVersion,
+                loaderVersion,
+                installerVersion,
+                eula: true as const,
+              };
+              void run(() =>
+                modpack ? api.createModpack(modpack.selection, request) : api.create(request),
+              ).then((result) => {
+                if (result.ok) onCreated(result.value);
+              });
             }}
           >
             <Download size={16} />

@@ -2,6 +2,12 @@ import { z } from 'zod';
 import { fetchJson } from './downloads';
 import type { Engine } from '../domain/types';
 import { DomainError } from '../domain/errors';
+import {
+  additionalCatalogs,
+  FabricCatalog,
+  type EngineArtifact,
+  type EngineSelection,
+} from './catalogs';
 const manifestSchema = z.object({
   versions: z.array(z.object({ id: z.string(), type: z.string(), url: z.string().url() })),
 });
@@ -46,6 +52,12 @@ export class MinecraftVersionService {
   async versions(engine: Engine): Promise<string[]> {
     const cached = this.cache.get(engine);
     if (cached && Date.now() - cached.at < 3600000) return cached.values;
+    const catalog = additionalCatalogs[engine];
+    if (catalog) {
+      const values = await catalog.versions();
+      this.cache.set(engine, { at: Date.now(), values });
+      return values;
+    }
     const manifest = manifestSchema.parse(
       await fetchJson<unknown>('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'),
     );
@@ -64,12 +76,10 @@ export class MinecraftVersionService {
     engine: Engine,
     version: string,
     pinnedBuild?: string,
-  ): Promise<{
-    url: string;
-    hash: { algorithm: 'sha1' | 'sha256'; value: string };
-    java: number;
-    build: string;
-  }> {
+    selection?: EngineSelection,
+  ): Promise<EngineArtifact> {
+    const catalog = additionalCatalogs[engine];
+    if (catalog) return catalog.artifact(version, pinnedBuild, selection);
     const manifest = manifestSchema.parse(
       await fetchJson<unknown>('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'),
     );
@@ -81,6 +91,8 @@ export class MinecraftVersionService {
       if (!meta.downloads.server)
         throw new DomainError('VERSION', 'This version does not provide an official server.');
       return {
+        filename: 'server.jar',
+        kind: 'jar',
         url: meta.downloads.server.url,
         hash: { algorithm: 'sha1', value: meta.downloads.server.sha1 },
         java,
@@ -102,10 +114,32 @@ export class MinecraftVersionService {
         'No stable Paper build for this version. Choose another version.',
       );
     return {
+      filename: file.name,
+      kind: 'jar',
       url: file.url,
       hash: { algorithm: 'sha256', value: file.checksums.sha256 },
       java: Math.max(java, javaForPaper(version)),
       build: String(build.id),
     };
+  }
+  async builds(engine: Engine, version: string): Promise<string[]> {
+    const catalog = additionalCatalogs[engine];
+    if (catalog) return catalog.builds(version);
+    if (engine === 'vanilla') return [version];
+    return paperSchema
+      .parse(
+        await fetchJson(
+          `https://fill.papermc.io/v3/projects/paper/versions/${encodeURIComponent(version)}/builds`,
+        ),
+      )
+      .filter((build) => build.channel === 'STABLE')
+      .sort((a, b) => b.id - a.id)
+      .map((build) => String(build.id));
+  }
+  async installers(engine: Engine): Promise<string[]> {
+    const catalog = additionalCatalogs[engine];
+    return catalog instanceof FabricCatalog
+      ? (await catalog.installers()).map((item) => item.version)
+      : [];
   }
 }

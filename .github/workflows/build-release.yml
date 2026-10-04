@@ -3,6 +3,15 @@ on:
   push:
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      official_checks:
+        description: 'Opt-in official catalog, Java/PHP and content checks (external downloads; no Minecraft/EULA acceptance)'
+        type: boolean
+        default: false
+      paper_eula_gate:
+        description: 'Opt-in real Paper bootstrap with eula=false (no playable world)'
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -11,11 +20,23 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: windows-latest
+          - os: windows-2025
+            arch: x64
             command: build:windows
-          - os: ubuntu-latest
+          - os: windows-11-arm
+            arch: arm64
+            command: build:windows
+          - os: ubuntu-24.04
+            arch: x64
             command: build:linux
-          - os: macos-latest
+          - os: ubuntu-24.04-arm
+            arch: arm64
+            command: build:linux
+          - os: macos-15-intel
+            arch: x64
+            command: build:mac
+          - os: macos-15
+            arch: arm64
             command: build:mac
     runs-on: ${{ matrix.os }}
     steps:
@@ -24,19 +45,76 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          architecture: ${{ matrix.arch }}
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - run: node -e "if(process.arch !== '${{ matrix.arch }}') throw new Error('Runner architecture mismatch')"
+      - run: pnpm lint
+      - run: pnpm typecheck
       - run: pnpm test
+      - if: github.event_name == 'workflow_dispatch' && inputs.official_checks
+        run: pnpm test:official --catalogs --runtimes --content
+        env:
+          MINEDOCK_GITHUB_TOKEN: ${{ github.token }}
+      - if: github.event_name == 'workflow_dispatch' && inputs.paper_eula_gate
+        run: pnpm test:live
       - run: pnpm ${{ matrix.command }}
         env:
-          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+          WINDOWS_CERTIFICATE: ${{ secrets.WINDOWS_CERTIFICATE }}
+          WINDOWS_CERTIFICATE_PASSWORD: ${{ secrets.WINDOWS_CERTIFICATE_PASSWORD }}
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+      - if: runner.os == 'Linux'
+        run: pnpm exec playwright install --with-deps chromium
+      - if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo chown root:root release/linux*/chrome-sandbox
+          sudo chmod 4755 release/linux*/chrome-sandbox
+          xvfb-run --auto-servernum pnpm test:packaged
+      - if: runner.os != 'Linux'
+        run: pnpm test:packaged
+      - if: runner.os == 'macOS'
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+        run: |
+          if [ -n "$APPLE_CERTIFICATE" ] && [ -n "$APPLE_ID" ]; then
+            for bundle in release/mac*/MineDock.app; do
+              codesign --verify --deep --strict "$bundle"
+              xcrun stapler validate "$bundle"
+              spctl --assess --type execute "$bundle"
+            done
+          fi
+      - run: pnpm updates:sign
+        env:
+          MINEDOCK_UPDATE_PRIVATE_KEY: ${{ secrets.MINEDOCK_UPDATE_PRIVATE_KEY }}
       - uses: actions/upload-artifact@v4
         with:
-          name: minedock-${{ matrix.os }}
+          name: minedock-${{ matrix.os }}-${{ matrix.arch }}
           path: |
             release/*.exe
             release/*.AppImage
             release/*.deb
             release/*.dmg
+            release/*.zip
+            release/update-*.json
           if-no-files-found: error
-      # No release publishing or updater feed until owned signing credentials are configured.
+      - uses: actions/upload-artifact@v4
+        if: always() && github.event_name == 'workflow_dispatch' && (inputs.official_checks || inputs.paper_eula_gate)
+        with:
+          name: official-checks-${{ matrix.os }}-${{ matrix.arch }}
+          path: |
+            data/official-validation/**/result.json
+            data/live-smoke/result.json
+          if-no-files-found: warn
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: diagnostics-${{ matrix.os }}-${{ matrix.arch }}
+          path: test-results/
+      # Verified update metadata is published only with the repository owner's release key.

@@ -9,15 +9,27 @@ import {
   Menu,
 } from 'electron';
 import path from 'node:path';
-import { copyFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { AppCore } from '../../packages/core/app';
-import { readableError } from '../../packages/domain/errors';
+import { readableError, structuredError } from '../../packages/domain/errors';
 import { localizeMessage } from '../../packages/domain/localization';
 import { engineSchema } from '../../packages/domain/types';
+import { marketplaceSchema } from '../../packages/domain/content';
+import { modpackSelectionSchema } from '../../packages/domain/modpacks';
+import { fileActionSchema, extractArchiveSchema } from '../../packages/domain/files';
+import { createServerSchema } from '../../packages/domain/types';
+import { recoveryActionSchema } from '../../packages/domain/operations';
+import { retentionPolicySchema, retentionPurgeSchema } from '../../packages/domain/retention';
+import {
+  worldActionSchema,
+  worldImportSchema,
+  existingWorldNameSchema,
+} from '../../packages/domain/worlds';
 import { containedPath } from '../../packages/security/paths';
 import { LocalSecretStore, redact, type SecretStore } from '../../packages/security/secrets';
+import { prepareUpdateLaunch, launchUpdate } from '../../packages/updates/install';
+import { DomainError } from '../../packages/domain/errors';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -63,10 +75,11 @@ function register(core: AppCore): void {
       )
         throw new Error('IPC origin rejected.');
       try {
-        return await action(...args);
+        return { ok: true, value: await action(...args) };
       } catch (e) {
         core.logger.write(`${method}: ${String(e)}`, true);
-        throw new Error(redact(readableError(e)));
+        const error = structuredError(e);
+        return { ok: false, error: { ...error, message: redact(error.message) } };
       }
     });
   };
@@ -75,11 +88,93 @@ function register(core: AppCore): void {
   handle('diagnostic', () => core.diagnostic());
   handle('settings', (value) => core.settings(value as Parameters<AppCore['settings']>[0]));
   handle('versions', (value) => core.versions.versions(engineSchema.parse(value)));
+  handle('builds', (engine, version) =>
+    core.versions.builds(
+      engineSchema.parse(engine),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9._-]{1,40}$/)
+        .parse(version),
+    ),
+  );
+  handle('installers', (engine) => core.versions.installers(engineSchema.parse(engine)));
   handle('create', (value) => core.create(value as Parameters<AppCore['create']>[0]));
+  handle('previewModpack', async () => {
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Modrinth modpacks', extensions: ['mrpack'] }],
+    });
+    return result.canceled || !result.filePaths[0]
+      ? null
+      : core.modpacks.preview(result.filePaths[0]);
+  });
+  handle('createModpack', (selection, input) =>
+    core.modpacks.create(modpackSelectionSchema.parse(selection), createServerSchema.parse(input)),
+  );
   handle('retryInstallation', (value) => core.retryInstallation(id(value)));
-  handle('cancelDownload', (value) => core.downloads.cancel(id(value)));
+  handle('worlds', (value) => core.worlds.list(id(value)));
+  handle('worldAction', (value, raw) =>
+    core.exclusive(id(value), async () => {
+      const input = worldActionSchema.parse(raw);
+      core.assertStopped(id(value));
+      await core.worlds.act(id(value), input);
+    }),
+  );
+  handle('previewWorldImport', async (value, archive) => {
+    const serverId = id(value),
+      zip = z.boolean().parse(archive);
+    core.assertStopped(serverId);
+    const result = await dialog.showOpenDialog(window!, {
+      properties: [zip ? 'openFile' : 'openDirectory'],
+      ...(zip ? { filters: [{ name: 'Minecraft worlds', extensions: ['zip', 'mcworld'] }] } : {}),
+    });
+    if (result.canceled || !result.filePaths[0]) return null;
+    return core.exclusive(serverId, () => core.worlds.preview(serverId, result.filePaths[0]!));
+  });
+  handle('importWorld', (value, raw) =>
+    core.exclusive(id(value), async () => {
+      const input = worldImportSchema.parse(raw);
+      core.assertStopped(id(value));
+      await core.worlds.import(id(value), input);
+    }),
+  );
+  handle('exportWorld', async (value, raw) => {
+    const serverId = id(value),
+      name = existingWorldNameSchema.parse(raw);
+    core.assertStopped(serverId);
+    const result = await dialog.showSaveDialog(window!, {
+      defaultPath: name + '.zip',
+      filters: [{ name: 'ZIP', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePath) return;
+    await core.exclusive(serverId, () => core.worlds.export(serverId, name, result.filePath!));
+  });
+  handle('cancelDownload', (value) => {
+    core.downloads.cancel(id(value));
+    core.jobs.cancel(id(value));
+  });
+  handle('operations', () => core.repo.operations());
+  handle('cancelOperation', (value) => core.jobs.cancel(id(value)));
+  handle('dismissOperation', (value) => core.jobs.dismiss(id(value)));
+  handle('recoveryReview', (value) => core.recoveryReview(id(value)));
+  handle('resolveOperation', (value, input) =>
+    core.resolveOperation(id(value), recoveryActionSchema.parse(input)),
+  );
   for (const action of ['start', 'stop', 'restart'] as const)
-    handle(action, (value) => core.exclusive(id(value), () => core.supervisor[action](id(value))));
+    handle(action, (value) =>
+      core.exclusive(id(value), () => {
+        if (
+          action !== 'stop' &&
+          core.repo
+            .operations()
+            .some(
+              (operation) => operation.serverId === id(value) && operation.status === 'attention',
+            )
+        )
+          throw new Error('Resolve interrupted operations before starting this server.');
+        return core.supervisor[action](id(value));
+      }),
+    );
   handle('remove', (value, confirm) => core.remove(id(value), text.parse(confirm)));
   handle('logs', (value) => core.supervisor.logs(id(value)));
   handle('players', (value) => core.supervisor.players(id(value)));
@@ -106,9 +201,16 @@ function register(core: AppCore): void {
   handle('readFile', (value, file) =>
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
+  handle('playerReport', (value) => core.players.report(id(value)));
+  handle('moderatePlayer', (value, input) =>
+    core.exclusive(id(value), () =>
+      core.players.moderate(id(value), input as Parameters<typeof core.players.moderate>[1]),
+    ),
+  );
   handle('writeFile', (value, file, content) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
+      core.fileOperations.protect(server, relative.parse(file));
       await core.files.write(
         server.path,
         relative.parse(file),
@@ -127,6 +229,7 @@ function register(core: AppCore): void {
   );
   handle('deleteFile', (value, file, confirm) =>
     core.exclusive(id(value), async () => {
+      core.fileOperations.protect(core.assertStopped(id(value)), relative.parse(file));
       await core.backups.create(id(value), 'before_file_delete');
       await core.files.delete(
         core.assertStopped(id(value)).path,
@@ -142,6 +245,16 @@ function register(core: AppCore): void {
     });
     return result.canceled ? null : (result.filePaths[0] ?? null);
   });
+  handle('previewServerImport', async () => {
+    const result = await dialog.showOpenDialog(window!, { properties: ['openDirectory'] });
+    if (result.canceled || !result.filePaths[0]) return null;
+    return core.imports.preview(result.filePaths[0]);
+  });
+  handle('importServer', (input) =>
+    core.exclusive('create', () =>
+      core.imports.import(input as Parameters<typeof core.imports.import>[0]),
+    ),
+  );
   handle('openFolder', async (value) => {
     const error = await shell.openPath(value ? core.repo.server(id(value)).path : core.root);
     if (error) throw new Error(error);
@@ -151,29 +264,153 @@ function register(core: AppCore): void {
     core.assertStopped(serverId);
     const result = await dialog.showOpenDialog(window!, { properties: ['openFile'] });
     if (result.canceled || !result.filePaths[0]) return;
-    await core.exclusive(serverId, () =>
-      core.files.upload(
-        core.assertStopped(serverId).path,
-        relative.parse(file),
-        result.filePaths[0]!,
-      ),
-    );
+    await core.exclusive(serverId, () => {
+      const server = core.assertStopped(serverId);
+      core.fileOperations.protect(
+        server,
+        path.join(relative.parse(file), path.basename(result.filePaths[0]!)),
+      );
+      return core.files.upload(server.path, relative.parse(file), result.filePaths[0]!);
+    });
     core.repo.audit('file.uploaded', path.basename(result.filePaths[0]), serverId);
   });
   handle('exportFile', async (value, file) => {
-    const source = await containedPath(core.repo.server(id(value)).path, relative.parse(file));
-    if (path.basename(source) === 'server.properties')
-      throw new Error('This file contains an RCON secret and cannot be exported directly.');
-    const result = await dialog.showSaveDialog(window!, { defaultPath: path.basename(source) });
-    if (result.filePath) await copyFile(source, result.filePath);
+    const serverId = id(value),
+      name = relative.parse(file);
+    await containedPath(core.repo.server(serverId).path, name);
+    const result = await dialog.showSaveDialog(window!, { defaultPath: path.basename(name) });
+    if (!result.canceled && result.filePath)
+      await core.exclusive(serverId, () =>
+        core.fileOperations.export(serverId, name, result.filePath!),
+      );
   });
   handle('backup', (value) => core.exclusive(id(value), () => core.backups.create(id(value))));
+  handle('fileAction', (value, input) =>
+    core.exclusive(id(value), () =>
+      core.fileOperations.act(id(value), fileActionSchema.parse(input)),
+    ),
+  );
+  handle('compressArchive', async (value, file) => {
+    const serverId = id(value),
+      name = relative.parse(file);
+    core.assertStopped(serverId);
+    const result = await dialog.showSaveDialog(window!, {
+      defaultPath: (path.basename(name) || core.repo.server(serverId).name) + '.zip',
+      filters: [{ name: 'ZIP archives', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePath) return;
+    await core.exclusive(serverId, () =>
+      core.fileOperations.compress(serverId, name, result.filePath!),
+    );
+  });
+  handle('extractArchive', async (value, raw) => {
+    const serverId = id(value),
+      input = extractArchiveSchema.parse(raw);
+    core.assertStopped(serverId);
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'ZIP archives', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return;
+    await core.exclusive(serverId, () =>
+      core.fileOperations.extract(serverId, result.filePaths[0]!, input),
+    );
+  });
   handle('verifyBackup', (value) => core.backups.verify(id(value)));
+  handle('updateStatus', () => core.updates.status());
+  handle('configureUpdates', (enabled) => core.updates.configure(z.boolean().parse(enabled)));
+  handle('checkUpdates', () => core.exclusive('updates', () => core.updates.check()));
+  handle('downloadUpdate', () => core.exclusive('updates', () => core.updates.download()));
+  handle('installUpdate', (confirmation) =>
+    core.exclusive('updates', async () => {
+      const prepared = await core.updates.installationFile();
+      if (text.parse(confirmation) !== 'MineDock ' + prepared.update.version)
+        throw new DomainError('CONFIRM', 'Incorrect confirmation.');
+      if (
+        core.repo
+          .servers()
+          .some(
+            (server) =>
+              core.supervisor.isRunning(server.id) ||
+              core.supervisor.isOrphaned(server.id) ||
+              ['installing', 'starting', 'stopping', 'backing_up', 'restoring'].includes(
+                server.status,
+              ),
+          ) ||
+        core.repo
+          .operations()
+          .some((operation) =>
+            ['pending', 'downloading', 'verifying', 'extracting', 'applying'].includes(
+              operation.status,
+            ),
+          )
+      )
+        throw new DomainError(
+          'UPDATE_INSTALL',
+          'Stop every server and finish active operations before installing an application update.',
+        );
+      if (['deb', 'dmg'].includes(prepared.update.artifact.target)) {
+        const error = await shell.openPath(prepared.file);
+        if (error)
+          throw new DomainError(
+            'UPDATE_INSTALL',
+            'The operating system could not open the verified package installer.',
+          );
+        core.repo.audit('app.update.installer_opened', prepared.update.version);
+        return;
+      }
+      const destination =
+        prepared.update.artifact.target === 'portable'
+          ? process.env.PORTABLE_EXECUTABLE_FILE
+          : prepared.update.artifact.target === 'appimage'
+            ? process.env.APPIMAGE
+            : prepared.update.artifact.target === 'maczip'
+              ? path.resolve(path.dirname(app.getPath('exe')), '../..')
+              : undefined;
+      const plan = await prepareUpdateLaunch(
+        await containedPath(core.root, 'updates'),
+        prepared.file,
+        prepared.update,
+        destination,
+      );
+      if (plan.requestFile)
+        core.repo.db
+          .prepare(
+            "INSERT INTO settings VALUES('pending-update',?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+          )
+          .run(
+            JSON.stringify({
+              request: plan.requestFile,
+              result: plan.resultFile,
+              version: prepared.update.version,
+              previous: plan.previous,
+            }),
+          );
+      await launchUpdate(plan);
+      core.repo.audit('app.update.install_requested', prepared.update.version);
+      setTimeout(() => app.quit(), 300);
+    }),
+  );
+  handle('retentionPolicy', (value) => core.retention.policy(id(value)));
+  handle('configureRetention', (value, input) =>
+    core.exclusive(id(value), () =>
+      Promise.resolve(core.retention.configure(id(value), retentionPolicySchema.parse(input))),
+    ),
+  );
+  handle('previewRetention', (value) =>
+    core.exclusive(id(value), () => core.retention.preview(id(value))),
+  );
+  handle('purgeRetention', (value, input) =>
+    core.exclusive(id(value), () =>
+      core.retention.purge(id(value), retentionPurgeSchema.parse(input)),
+    ),
+  );
   handle('restore', (value, confirm) => {
     const item = core.repo.backup(id(value));
-    return core.exclusive(item.metadata.serverId, () =>
-      core.backups.restore(id(value), text.parse(confirm)),
-    );
+    return core.exclusive(item.metadata.serverId, () => {
+      core.assertStopped(item.metadata.serverId);
+      return core.backups.restore(id(value), text.parse(confirm));
+    });
   });
   handle('deleteBackup', (value, confirm) => {
     const item = core.repo.backup(id(value));
@@ -182,32 +419,154 @@ function register(core: AppCore): void {
     );
   });
   handle('exportBackup', async (value) => {
+    const item = core.repo.backup(id(value));
     const result = await dialog.showSaveDialog(window!, { defaultPath: `${id(value)}.zip` });
-    if (result.filePath) await core.exportBackup(id(value), result.filePath);
+    if (!result.canceled && result.filePath)
+      await core.exclusive(item.metadata.serverId, () =>
+        core.exportBackup(id(value), result.filePath!),
+      );
   });
   handle('schedules', (value) =>
     core.scheduler.add(value as Parameters<typeof core.scheduler.add>[0]),
   );
   handle('deleteSchedule', (value) => core.repo.deleteSchedule(id(value)));
+  handle('toggleSchedule', (value, enabled) =>
+    core.scheduler.toggle(id(value), z.boolean().parse(enabled)),
+  );
+  handle('schedulePreview', (value) =>
+    core.scheduler.preview(value as Parameters<typeof core.scheduler.preview>[0]),
+  );
   handle('metrics', (value, hours) =>
     core.repo.metrics(id(value), z.number().min(1).max(168).parse(hours)),
   );
+  handle('storageOverview', (value) => core.storage.overview(id(value)));
+  handle('scanStorage', (value) => core.exclusive(id(value), () => core.storage.scan(id(value))));
+  handle('revealStorageFile', async (value, input) => {
+    const file = await core.storage.location(
+      id(value),
+      input as Parameters<typeof core.storage.location>[1],
+    );
+    shell.showItemInFolder(file);
+  });
   handle('runtimes', () => core.runtime.list());
-  handle('installRuntime', (major) => core.runtime.install(z.number().int().parse(major)));
-  handle('search', (value, query) =>
-    core.marketplace.search(core.repo.server(id(value)), z.string().max(120).parse(query)),
+  handle('installRuntime', (major) =>
+    core.exclusive('runtimes', () => core.runtime.install(z.number().int().parse(major))),
+  );
+  handle('runtimeEntries', () => core.runtimeMaintenance.list());
+  handle('runtimeHealth', (value) =>
+    core.runtimeMaintenance.health(z.string().min(1).max(160).parse(value)),
+  );
+  handle('repairRuntime', (input) =>
+    core.exclusive('runtimes', () =>
+      core.runtimeMaintenance.repair(input as Parameters<typeof core.runtimeMaintenance.repair>[0]),
+    ),
+  );
+  handle('deleteRuntime', (input) =>
+    core.exclusive('runtimes', () =>
+      core.runtimeMaintenance.delete(input as Parameters<typeof core.runtimeMaintenance.delete>[0]),
+    ),
+  );
+  handle('search', (value, query, provider) =>
+    core.jobs.run('marketplace.search', 'Search marketplace', id(value), (context) =>
+      catalog(provider).search(
+        core.repo.server(id(value)),
+        z.string().max(120).parse(query),
+        context.signal,
+      ),
+    ),
+  );
+  handle('marketplaceSettings', () => core.catalogs.settings());
+  handle('contentIcon', (value) => core.icons.get(z.string().url().max(2000).parse(value)));
+  handle('crossplayStatus', (value) => core.crossplay.status(core.repo.server(id(value))));
+  handle('crossplayVersions', (value) =>
+    core.jobs.run('crossplay.versions', 'Load crossplay versions', id(value), (context) =>
+      core.crossplay.versions(core.repo.server(id(value)), context.signal),
+    ),
+  );
+  handle('configureCrossplay', (value, input) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      await core.backups.create(server.id, 'before_crossplay');
+      await core.crossplay.configure(
+        server,
+        input as Parameters<typeof core.crossplay.configure>[1],
+      );
+    }),
+  );
+  handle('clearIconCache', () => core.icons.clean(true));
+  handle('configureMarketplace', (input) =>
+    core.catalogs.configure(input as Parameters<typeof core.catalogs.configure>[0]),
   );
   handle('content', (value) => core.repo.content(id(value)));
-  handle('installContent', (value, project) =>
+  const catalog = (provider: unknown) =>
+    core.catalogs.catalog(marketplaceSchema.parse(provider ?? 'modrinth'));
+  const identifier = z.string().regex(/^[a-zA-Z0-9_:+/.-]{1,150}$/);
+  handle('contentVersions', (value, project, provider) =>
+    core.jobs.run('marketplace.versions', 'Load content versions', id(value), (context) =>
+      catalog(provider).versions(
+        core.repo.server(id(value)),
+        identifier.parse(project),
+        context.signal,
+      ),
+    ),
+  );
+  handle('contentVersion', (provider, version) =>
+    core.jobs.run('marketplace.version', 'Load version details', undefined, (context) =>
+      catalog(provider).version(identifier.parse(version), context.signal),
+    ),
+  );
+  handle('contentUpdates', (value) =>
+    core.jobs.run('marketplace.updates', 'Check content updates', id(value), (context) =>
+      core.marketplace.manager.updates(core.repo.server(id(value)), catalog, context.signal),
+    ),
+  );
+  handle('contentHistory', (value, content) =>
+    core.marketplace.manager.history(core.repo.server(id(value)), id(content)),
+  );
+  handle('manualContent', (value) => core.marketplace.manager.manual(core.repo.server(id(value))));
+  handle('changeContentVersion', (value, content, version, confirm) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      const item = core.repo.content(server.id).find((item) => item.id === id(content));
+      if (!item || item.title !== text.parse(confirm)) throw new Error('Incorrect confirmation.');
+      await core.backups.create(server.id, 'before_content');
+      return core.marketplace.manager.install(
+        server,
+        catalog(item.provider ?? 'modrinth'),
+        item.projectId,
+        identifier.parse(version),
+        item.id,
+      );
+    }),
+  );
+  handle('uninstallContent', (value, content, confirm) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
       await core.backups.create(server.id, 'before_content');
-      return core.marketplace.install(
+      return core.marketplace.manager.uninstall(server, id(content), text.parse(confirm));
+    }),
+  );
+  handle('rollbackContent', (value, content, history, confirm) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      await core.backups.create(server.id, 'before_content');
+      return core.marketplace.manager.rollback(
         server,
-        z
-          .string()
-          .regex(/^[a-zA-Z0-9_-]{1,100}$/)
-          .parse(project),
+        id(content),
+        id(history),
+        text.parse(confirm),
+      );
+    }),
+  );
+  handle('installContent', (value, project, provider, version) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      await core.backups.create(server.id, 'before_content');
+      return core.marketplace.manager.install(
+        server,
+        catalog(provider),
+        identifier.parse(project),
+        version === undefined ? undefined : identifier.parse(version),
       );
     }),
   );
@@ -249,6 +608,23 @@ if (single)
             : fallback.decrypt(value.startsWith('aes:') ? value.slice(4) : value),
       };
       core = await AppCore.open(root, secrets);
+      core.updates.configureHost({
+        version: app.getVersion(),
+        packaged: app.isPackaged,
+        platform: process.platform,
+        arch: process.arch,
+        target:
+          process.platform === 'win32'
+            ? process.env.PORTABLE_EXECUTABLE_FILE
+              ? 'portable'
+              : 'nsis'
+            : process.platform === 'darwin'
+              ? 'maczip'
+              : process.env.APPIMAGE
+                ? 'appimage'
+                : 'deb',
+      });
+      await core.updates.recoverInstallation();
       Menu.setApplicationMenu(null);
       window = new BrowserWindow({
         width: 1360,
@@ -292,6 +668,7 @@ if (single)
       if (devUrl) await window.loadURL(devUrl);
       else await window.loadFile(rendererFile);
       await core.autoStart();
+      core.updates.startAutomaticChecks();
     })
     .catch((e) => {
       console.error(e);
