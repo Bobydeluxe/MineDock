@@ -26,3 +26,5 @@ Real official catalogs and Java/PHP probes are opt-in. Geyser/Floodgate/ViaVersi
 The owner has no CurseForge API key or Windows/Apple signing certificate. Secrets are never requested in public text. Provider/certificate infrastructure and unsigned packaging are present; authenticated API calls and OS signatures remain unvalidated. A separate publisher Ed25519 key is ignored locally and encrypted in CI; it is not an OS certificate.
 
 Real game/client/crossplay sessions require personal EULA acceptance and clients. Historical-version coverage, interactive native OS installation, keychain/sleep behavior and extended power-loss/disk-full/load validation remain separate. CurseForge pack import has an official API/restrictions assessment, without a fake import button. Current final-run progress and actual results are recorded in validation.
+
+The owner explicitly approved PR #1 integration and beta publication. The pull request is merged, v0.3.0 has twenty-one verified public assets, all twelve public update targets passed signature checks, and a real Windows portable installer passed the actual updater download/hash path. Installation was not executed.

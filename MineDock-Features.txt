@@ -262,8 +262,10 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Writable macOS ZIP bundle replacement; dmg uses system installer.
 - Persistent installation request/result checked on next startup.
 - Publisher CI secret configured separately from OS-signing certificates.
-- Published trusted feed and actual newer-version OS installation still require
-  validation before claiming production updater deployment.
+- Public v0.3.0 signed feed verified for all twelve native package targets.
+- Real public Windows portable download rechecked against signed size/hash.
+- Current 0.3.0 correctly reports no newer version.
+- Actual newer-version OS installation/relaunch remains unvalidated.
 
 ======================================================================
 17. SECURITY, DATABASE AND DISTRIBUTION — IMPLEMENTED
