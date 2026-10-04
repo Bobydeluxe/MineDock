@@ -16,6 +16,24 @@ import type { Runtime } from '../domain/types';
 import { executableArchitectures, normalizeArchitecture } from './architecture';
 import { guardRuntimeFolder } from './safety';
 const exec = promisify(execFile);
+/** Official Unix PHP archives retain a relative extension_dir; servers run in another folder. */
+export async function phpRuntimeArguments(filename: string): Promise<string[]> {
+  const directory = path.dirname(filename);
+  if (process.platform === 'win32' || path.basename(directory) !== 'bin') return [];
+  const root = path.dirname(directory),
+    extensions = path.join(root, 'lib/php/extensions');
+  try {
+    const folders = (await readdir(extensions, { withFileTypes: true })).filter(
+      (entry) => entry.isDirectory() && /^(?:no-)?debug-(?:non-)?zts-\d+$/.test(entry.name),
+    );
+    if (folders.length !== 1) return [];
+    const target = await containedPath(root, 'lib/php/extensions/' + folders[0]!.name);
+    return ['-d', 'extension_dir=' + target];
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === 'ENOENT') return [];
+    throw error;
+  }
+}
 export async function inspectPhp(
   filename: string,
   signal?: AbortSignal,
@@ -25,6 +43,7 @@ export async function inspectPhp(
     const output = await exec(
       filename,
       [
+        ...(await phpRuntimeArguments(filename)),
         '-r',
         'echo json_encode(["version"=>PHP_VERSION,"zts"=>(bool)PHP_ZTS,"architecture"=>php_uname("m")]);',
       ],

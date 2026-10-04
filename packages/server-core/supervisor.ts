@@ -20,6 +20,7 @@ import type { Server, LogLine } from '../domain/types';
 import { engineDefinition } from '../domain/engines';
 import { containedPath } from '../security/paths';
 import { PlayerService } from '../core/players';
+import { phpRuntimeArguments } from '../runtime-manager/php';
 export async function startCommand(
   server: Server,
 ): Promise<{ executable: string; args: string[] }> {
@@ -37,6 +38,7 @@ export async function startCommand(
     return {
       executable: server.runtimePath ?? '',
       args: [
+        ...(await phpRuntimeArguments(server.runtimePath ?? '')),
         '-d',
         'phar.readonly=0',
         await containedPath(server.path, server.entrypoint ?? 'PocketMine-MP.phar'),
@@ -287,6 +289,7 @@ export class ServerProcessSupervisor implements ServerRunner {
       windowsHide: true,
       env: {
         ...process.env,
+        ...(engine.runtimeType === 'php' ? { PHPRC: '' } : {}),
         ...(engine.runtimeType === 'native' && process.platform === 'linux'
           ? { LD_LIBRARY_PATH: server.path }
           : {}),
