@@ -70,7 +70,7 @@ pnpm test:live
 
 Official checks use isolated ignored data and real sources; runtime checks execute version probes only. The live Paper test deliberately writes `eula=false` and stops at the consent gate. No test accepts a real Minecraft EULA for you. See [development](docs/development.md), [distribution](docs/distribution.md), [update signing](docs/update-system.md), [imports](docs/import.md), [recovery](docs/recovery.md) and [architecture](docs/architecture.md).
 
-New to GitHub? Read [the beginner guide](GITHUB-GUIDE.txt). Issues and source are in [Bobydeluxe/MineDock](https://github.com/Bobydeluxe/MineDock).
+Issues and source are in [Bobydeluxe/MineDock](https://github.com/Bobydeluxe/MineDock).
 
 ## Preview
 
