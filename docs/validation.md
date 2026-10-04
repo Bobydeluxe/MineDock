@@ -1,49 +1,65 @@
 # MineDock validation
 
-Validation is performed on Windows 11 x64. The current multilingual beta is **0.2.0**; see [the roadmap](roadmap.md) for its scope. The 0.1.0 baseline passed strict TypeScript, ESLint, 52 unit/integration tests, two UI journeys, Windows packaging and the packaged Electron first-launch test on 3 October 2026.
+This record covers **0.3.0 beta**, validated on 4 October 2026. It distinguishes implementation, compilation, actual packaged execution, native probes and Minecraft gameplay. The previous 0.2.0 release passed 66 tests and two UI journeys on 3 October; those older checks are not evidence for the new extension.
 
-The 0.2.0 changes add English defaults, six complete UI/diagnostic catalogs, preference persistence checks, multilingual Electron navigation/reload/restart checks, and English project documentation.
+## Local final checks
 
-## Version 0.2.0 release checks
+Native workstation: Windows 11 x64, Node 24, pnpm 11.19.
 
-Validated on **3 October 2026**, Windows 11 x64:
+| Check                                     | Result                                                       |
+| ----------------------------------------- | ------------------------------------------------------------ |
+| Frozen dependency installation            | Passed                                                       |
+| ESLint                                    | Passed                                                       |
+| Strict TypeScript                         | Passed                                                       |
+| Vitest                                    | 147 passed, 4 platform-specific skips; 151 cases in 23 files |
+| Production main/preload/renderer build    | Passed                                                       |
+| Windows NSIS and portable x64 compilation | Passed; unsigned                                             |
+| Full UI suite                             | 13 passed in final local run                                 |
+| Packaged Windows suite                    | 7 passed in final local run                                  |
 
-| Check                        | Result                                                   |
-| ---------------------------- | -------------------------------------------------------- |
-| Strict TypeScript            | Passed                                                   |
-| ESLint                       | Passed                                                   |
-| Vitest                       | 66 tests passed in 6 files                               |
-| Playwright                   | Both UI journeys passed; all six languages checked       |
-| Packaged Windows application | Onboarding, six languages and restart persistence passed |
-| Windows packaging            | NSIS installer and portable x64 executable produced      |
+The catalogs contain **541 UI keys and 408 shared messages in each of six languages**. Tests verify matching keys/placeholders, canonical and legacy French diagnostics, preference persistence and composed crash explanations. Unknown external errors/console output remain original.
 
-The translation checks cover all 302 UI keys and 146 shared diagnostic messages for each language, including legacy French messages and interpolation values. English dashboard screenshots replace the earlier French screenshots.
+## Native platform matrix
 
-## Test coverage
+The [native distribution workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37210682159) at source `a0363174` passed on **all six native targets**, including installation, lint, types, units, opt-in official catalogs/runtime/content checks, real Paper eula=false bootstrap, package compilation, seven packaged Electron cases and publisher-signed update metadata generation.
 
-Unit/integration tests cover SQLite, encryption, contained paths and symlinks, property parsing, reserved ports, downloads/checksums/redirects, malicious ZIPs, fragmented RCON, Modrinth dependencies, live backup, restoration/rollback, schedules and crash restart limits. These tests use small purpose-built Node processes, not playable Minecraft servers.
+| Platform / architecture   | Configured | Compiled        | Actually executed | Automated packaged cases |
+| ------------------------- | ---------- | --------------- | ----------------- | ------------------------ |
+| Windows x64               | Yes        | NSIS + portable | Yes               | 7 passed                 |
+| Windows ARM64             | Yes        | NSIS + portable | Yes               | 7 passed                 |
+| Linux x64                 | Yes        | AppImage + deb  | Yes, Xvfb         | 7 passed                 |
+| Linux ARM64               | Yes        | AppImage + deb  | Yes, Xvfb         | 7 passed                 |
+| macOS Intel x64           | Yes        | dmg + zip       | Yes               | 7 passed                 |
+| macOS Apple Silicon ARM64 | Yes        | dmg + zip       | Yes               | 7 passed                 |
 
-The desktop UI journey uses the real Electron main/preload and temporary SQLite data: onboarding, diagnostics, preferences, empty dashboard, all six languages, persistence and renderer isolation. The second journey explicitly uses **demo mode**: creation, start, console, stop, backup, settings and restore. Screenshots also verify the final dark-theme colors.
+Execution uses the packaged native unpacked application and actual main/preload/SQLite/filesystem services. It does not mean NSIS/deb/dmg were interactively installed into the runner OS. Windows/Apple packages are unsigned; no certificate/keychain trust/notarization claim is made. The renderer sandbox and context isolation remain enabled; Linux uses the stock privileged sandbox helper under Xvfb.
 
-## Real-service baseline
+The [Validate workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37210679775) also passed installation, lint, types, units, production build and all thirteen UI cases under Linux Xvfb. Platform-specific unit skips reflect tests for another OS, not silently unsupported architectures. Native helper tests cover actual contained Unix links, macOS aliases, Windows short-path aliases and inert Windows/AppImage/macOS update replacements/rollback.
 
-On 3 October 2026, `pnpm test:live` accessed official catalogs containing 103 Vanilla releases and 55 Paper versions, downloaded Temurin Java 21 and Paper **1.21.11 build 132**, verified hashes and launched the real Java/Paper bootstrap. It reached the EULA check with `eula=false`. A compatible Modrinth plugin search also returned real results.
+## Automated feature and regression coverage
 
-The tested Paper JAR SHA-256 was:
+Backend tests cover schema-1 data/secret preservation through appended migrations; secure IPC/paths/archives; hash/redirect/resumable downloads; interrupted directory/native-file exchanges and reviewed recovery; pinned engines and runtime architecture; mods/providers/dependency conflicts/history/rollback; Geyser YAML/ports; imports and mrpack retry; real Java/Bedrock NBT/dimension metadata; file actions/YAML/ZIP; persisted actual player observations/lists/statistics; storage scans; cron/timezones/missed deadlines; retention previews/manual protection/interrupted batches; and signed-update wrong-key/tamper/expiry/version/URL/architecture/cache checks.
 
-```text
-5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba
-```
+Existing process/RCON/crash/backups/restore/trash/settings/theme/language flows remain covered. Purpose-built inert executables and temporary worlds are not playable Minecraft installations. Production has no demo fallback.
 
-Machine results remain in the validation workstation's ignored `data/live-smoke/result.json`. No test accepts a real server's EULA on the owner's behalf. Localization changes do not represent a new gameplay validation.
+Thirteen UI cases include real Electron onboarding/languages/restart/isolation, files/editor/ZIP, player/storage administration, Java dimension actions, Bedrock world import, recovery/retention and optional-update refusal/persistence. Explicit demo journeys exercise Paper/Fabric creation, original-server preview/import, daily scheduling, world actions and mrpack preview. The packaged suite selects seven actual Electron cases; demo data never enters production.
 
-## CI and limits
+## Actual official services and native probes
 
-The [0.1.0 Validate workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37150089013) passed on Ubuntu, including dependency installation, lint, TypeScript, tests, build and both UI journeys under Xvfb. The [subsequent platform build workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37150702487) produced Windows, Linux and macOS packages successfully. Packaging does not itself verify downloaded Java runtimes or gameplay on those OSes.
+Opt-in official checks query real Vanilla/Paper/Purpur/Fabric/Forge/NeoForge/PocketMine catalogs and BDS where upstream supports the native OS/architecture. The known stable Java test selection is Minecraft 1.21.11. Selected results include Paper build 132, Purpur 2568, Fabric loader 0.19.5/installer 1.1.2, Forge 61.2.1, NeoForge 21.11.45, BDS 1.26.52.3 and PocketMine release 5.44.3 (Bedrock game version 1.26.30).
 
-- A real Minecraft client connection/gameplay session still requires validation after personal wizard EULA acceptance.
-- Windows executables are unsigned. NSIS installation onto the host system is not performed by these smoke tests.
-- Linux, macOS, arm64 and historical Minecraft versions require platform-specific gameplay/native integration validation.
-- Power loss, disk-full conditions and very large servers have not undergone extended load testing.
+Official Temurin Java 21 is downloaded, checked and executed for a version/architecture probe on all six targets. Official PocketMine PHP 8.2.30 ZTS is hash-verified/probed on available native targets. Linux/Windows ARM64 report the unavailable official PHP asset rather than downloading x64. Native Linux/macOS extension paths are resolved explicitly before the PHP probe/server launch.
 
-Distributions include the project license and [third-party notices](THIRD_PARTY_NOTICES.md). Final Windows checksums are in `release/SHA256SUMS.txt`.
+Real Hangar metadata/icons and Geyser/Floodgate/ViaVersion downloads are exercised in isolated sentinel profiles without any Minecraft executable/EULA. Checks verify hashes, managed records, YAML/UDP settings and an unchanged world sentinel. This validates a real content transaction, not a Java/Bedrock client connection.
+
+`test:live` downloads/verifies Java and Paper 1.21.11 build 132, executes the real bootstrap and stops at **eula=false**. The checked JAR SHA-256 is `5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba`. No real EULA is accepted and no playable world is created. Results are stored in ignored `data/official-validation/PLATFORM-ARCH/result.json` / `data/live-smoke/result.json` and opt-in CI artifacts.
+
+## Unvalidated external conditions and limits
+
+- Real client gameplay, ready/save/stop behavior across every upstream engine/version, Bedrock crossplay and Internet/firewall connectivity need owner consent and actual clients.
+- Live authenticated CurseForge requests need the currently absent API key. Provider restriction/dependency/download failure paths are covered by deterministic tests. CurseForge pack import is assessed, not available.
+- Authenticode and Apple Developer ID/notarization/stapling trust require currently absent owner certificates/credentials. Configuration and unsigned native packaging are tested.
+- A published trusted production feed and actual newer-version install/relaunch through each OS installer remain distinct from signed metadata/helper tests. The legacy unsigned release is refused correctly.
+- Interactive NSIS/deb/dmg installation, OS keychain behavior, sleep prevention on every OS, extended very-large-server/disk-full/power-loss load tests and independent security review remain unvalidated.
+
+Nonfatal build output currently includes an upstream Zod annotation warning and a renderer chunk-size warning. These do not disable checks; the editor is split into a lazy chunk. License and third-party notices ship in each package.

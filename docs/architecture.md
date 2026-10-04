@@ -1,39 +1,34 @@
-# Architecture and decisions
+# Architecture
 
-## Initial state and scope
+MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQLite application. There is one main-process application core and one typed preload contract, with no companion web service or parallel backend. The renderer does not own process, filesystem or download APIs.
 
-The repository began empty. V1 implements Java, Vanilla/Paper, native processes, local administration and data protection. Advanced requirements are explicitly tracked in [the roadmap](roadmap.md). No account, cloud or AI assistant is required.
+## Boundaries
 
-## Electron for V1
+`BrowserWindow` retains `sandbox: true`, `contextIsolation: true` and `nodeIntegration: false`. Main validates the sender, main frame, exact URL and Zod input for every named IPC. Preload unwraps structured results into readable typed errors. Native file/folder choices authorize specific imports/exports; they do not grant the renderer arbitrary filesystem access. Production requires this bridge; demo data is selected only by explicit Vite mock mode.
 
-The bundled Node main process combines process streams, TCP RCON, runtime extraction, network streaming and SQLite. This avoids an external Node service or a second Rust implementation. The original workspace already had Node 24 and no Rust toolchain. Delivery and testing favored Electron despite its larger memory footprint. React depends on the preload `Api` contract rather than Electron APIs.
+## Services
 
-The window uses `sandbox: true`, `contextIsolation: true` and `nodeIntegration: false`. Preload exposes only named contract methods, never `ipcRenderer`, `fs`, arbitrary PIDs or execution primitives. Main verifies renderer identity and URL for every call. External pages are never embedded in a privileged renderer.
+- `packages/domain`: capabilities for eight engines, Java/PHP/native runtime types, DTOs/schemas, properties, languages and messages. The renderer and services use the same capabilities.
+- `packages/core/app.ts`: service composition, per-server exclusions, preferences, audit and shutdown. Imports, modpacks, worlds, file operations, players and storage reuse the repository, downloads, backups and operation journal.
+- `packages/minecraft`: official engine catalogs, artifact resolution, pinned installs and bounded installer processes. Forge and NeoForge resolve their own structures and argument files.
+- `packages/runtime-manager`: official native runtimes, real executable/version/architecture probes, repair and usage guards.
+- `packages/server-core` and `packages/rcon`: actual subprocess streams, engine readiness, lifecycle, metrics, player observations and authenticated RCON where supported.
+- `packages/marketplace`: Modrinth/CurseForge/Hangar catalog providers, Geyser metadata, raster icons and a shared transactional content service.
+- `packages/backups`: verified archives, full-server staged restore and journaled retention batches.
+- `packages/security` and `packages/networking`: path containment, bounded copies/archives/NBT, secrets, allowed hosts, ports and native architecture checks.
+- `packages/updates`: pinned publisher signatures, update state, verified downloads and native installation helpers.
+- `apps/desktop/renderer`: capability-aware panels with bundled EN/FR/DE/ES/PT/IT catalogs; CodeMirror loads on demand.
 
-## Layers
+## Persistence and transactions
 
-- Domain: DTOs, Zod validation, property parsing, errors, states and language definitions.
-- Application: `AppCore` orchestrates services, serializes mutations per server and centralizes audit.
-- Infrastructure: processes, downloads, files, SQLite and secrets.
-- Presentation: React, six complete language catalogs and themes. Mock data requires the explicit Vite `mock` mode.
+Native Node SQLite uses WAL, foreign keys, busy timeouts and integrity checks. Published migration 1 is unchanged. Versions 2–5 append long operations/checkpoints, partial downloads, content history, players, retention, runtimes, imports, marketplace settings, storage/world history, modpack approvals, authorized exports and retention-batch journals. A WAL checkpoint and database copy precede a schema upgrade; migrations run in transactions. Database snapshots also run at startup and hourly.
 
-`ServerRunner`, `SecretStore`, `BackupStorageProvider` and `MarketplaceProvider` define boundaries for future implementations. V1 providers are concrete; future providers are not empty functions presented as working features.
+Long work persists its kind, status, phase, progress and safe checkpoint paths. Preparation occurs beside the destination. The operation validates ownership, keeps the previous copy, swaps the prepared files and commits profile/content metadata before cleanup. Startup recovery distinguishes prepared from committed states; it rolls back safely or reports attention. Ambiguous copies are preserved for explicit review. Native exports persist their exact authorized destination. Retention journals a group of archive moves and the database commit.
 
-## Data
+File and database renames are not a distributed transaction. Journals close recoverable interruption windows; impossible or ambiguous states remain blocked and visible. See [recovery](recovery.md).
 
-Electron embeds native Node SQLite without a separate native module to rebuild. `migrations.ts` holds versioned SQL and `PRAGMA user_version` records the version. `quick_check` checks integrity; a copy precedes migration, followed by a schema transaction. WAL and foreign keys are enabled. A consistent database snapshot is taken on opening and hourly.
+## Events and shutdown
 
-Tables store profiles, preferences, archives, tasks, events, metrics, installed content, player history and runtimes. Application code types JSON profiles; time indexes support metric retention. Future remote accounts require their own migrations. Language preferences already stored by earlier versions remain valid.
+The existing event bus carries server state, logs, metrics, progress and audit. Console IPC batches every 100 ms, at most 500 lines per server per batch. The renderer retains 5,000 virtualized lines. Active processes are sampled every five seconds, metrics are saved every fifteen seconds and retained seven days. Player session observations are persisted separately from game statistics.
 
-## Events and load
-
-The bus carries states, logs, metrics, progress and audit. Console IPC sends batches every 100 ms, capped at 500 lines per server per batch. No administrative web server starts. Active processes are sampled every five seconds, metrics persist every fifteen seconds, are aggregated on read and retained seven days. The renderer caps console history at 5,000 lines and virtualizes it. Java retains its own logs on disk.
-
-## Sources
-
-- [Paper Downloads Service](https://docs.papermc.io/misc/downloads-service/): v3 API, identified User-Agent, stable builds and SHA-256.
-- [Paper Java requirements](https://docs.papermc.io/paper/getting-started/): recommendations separate from Mojang, including Java 25 for 26.1+.
-- [Modrinth API](https://docs.modrinth.com/api/): version/loader/server-side filters and SHA-512.
-- [Electron security](https://www.electronjs.org/docs/latest/tutorial/security) and [safeStorage](https://www.electronjs.org/docs/latest/api/safe-storage).
-
-Mojang supplies `javaVersion.majorVersion` in version metadata. Historical mapping is only a fallback.
+Shutdown stops schedulers/updater checks, cancels long jobs and downloads, waits for pending work, stops servers gracefully, flushes logs and snapshots/closes SQLite. Persisted orphan PIDs are never killed automatically because they may have been reused. Minecraft logs remain external server data.

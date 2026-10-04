@@ -1,15 +1,18 @@
-# Distribution
+# Build commands
 
-`pnpm build` produces `dist/main.cjs`, `dist/preload.cjs`, the Vite renderer and icon. Services are bundled; Electron includes Node and Chromium. End users do not install Node or pnpm.
+```sh
+pnpm install --frozen-lockfile
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm build:windows  # native Windows x64/ARM64
+pnpm build:linux    # native Linux x64/ARM64
+pnpm build:mac      # native macOS Intel/Apple Silicon
+pnpm test:packaged
+pnpm updates:sign
+```
 
-On Windows, `pnpm build:windows` produces NSIS and portable builds in `release/`. NSIS installs for the current user and offers a destination-folder choice. The portable executable self-extracts, while persistent data remains in the user profile. `pnpm test:packaged` launches `release/win-unpacked/MineDock.exe` with temporary data.
+`build` writes bundled main/preload, the renderer and dependency notices to `dist/`. End users need no Node/pnpm. Native packaging writes `release/`, including an unpacked application for tests. Cross-OS packaging is refused by the script; choose a native CI runner. Keep `PRODUCT.version` and `package.json` synchronized.
 
-`pnpm build:linux` produces AppImage/deb and `pnpm build:mac` produces DMG. CI builds all three platforms. Successful packaging does not verify Minecraft gameplay, downloaded runtimes or every native integration on each OS. Runtime/network support includes x64 and arm64; local Windows delivery was tested on x64.
-
-Debian metadata uses Bobydeluxe's masked GitHub maintainer email. Support belongs in the public repository's issues, linked through `homepage`; the masked email is not a support inbox.
-
-Beta artifacts are **unsigned**. Stable distribution needs Windows signing credentials, a macOS signing identity and notarization. Configure platform `CSC_LINK` and `CSC_KEY_PASSWORD` secrets and verify the signature chain in CI.
-
-The tag workflow uploads build artifacts; it does not publish a GitHub Release. Beta releases are published separately with their unsigned status stated. Verified automatic app updates require a maintainer-owned endpoint and a cryptographic verification policy and are disabled until configured.
-
-Icons are original. Keep the `PRODUCT` version and `package.json` packaging version synchronized. English is the project's primary language; bundled catalogs provide six app languages without network requests.
+Local unsigned packaging is supported without platform certificates. Optional signing/notarization and the separate updater publisher key are explained in [distribution](distribution.md) and [update-system](update-system.md). The workflow uploads artifacts; only tested artifacts with matching metadata should be published as a release. [Validation](validation.md) distinguishes compilation, execution, automated tests and real gameplay.
