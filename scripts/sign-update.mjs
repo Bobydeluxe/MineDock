@@ -37,8 +37,8 @@ const targets =
       ]
     : platform === 'linux'
       ? [
-          ['appimage', `MineDock-${pkg.version}-${arch}.AppImage`],
-          ['deb', `MineDock-${pkg.version}-${arch}.deb`],
+          ['appimage', `MineDock-${pkg.version}-${arch === 'x64' ? 'x86_64' : arch}.AppImage`],
+          ['deb', `MineDock-${pkg.version}-${arch === 'x64' ? 'amd64' : arch}.deb`],
         ]
       : [
           ['maczip', `MineDock-${pkg.version}-${arch}.zip`],
