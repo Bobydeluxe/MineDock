@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, lazy, Suspense } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 import {
   ArrowLeft,
@@ -11,8 +11,6 @@ import {
   Terminal,
   Send,
   Search,
-  RefreshCw,
-  Archive,
   Folder,
   FileText,
   Upload,
@@ -20,13 +18,17 @@ import {
   Download,
   Trash2,
   FolderOpen,
-  Puzzle,
   Globe2,
-  ShieldCheck,
 } from 'lucide-react';
 import type { Server, LogLine, FileEntry } from '../../../../packages/domain/types';
+import { engineDefinition } from '../../../../packages/domain/engines';
 import { useApp } from './context';
 import { Status, ServerActions } from './App';
+import { ContentView } from './content';
+import { WorldsView } from './worlds';
+import { FileTools, ArchiveTools } from './file-tools';
+import { StorageView } from './storage';
+import { PlayersView } from './players';
 import {
   Button,
   Field,
@@ -41,6 +43,9 @@ import {
   Dialog,
 } from './ui';
 import { BackupsView, SchedulesView, PropertiesView, Confirm } from './management';
+const TextEditor = lazy(() =>
+  import('./editor').then((module) => ({ default: module.TextEditor })),
+);
 const tabs = [
   'overview',
   'console',
@@ -73,24 +78,43 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
             <Status server={server} />
           </div>
           <p>
-            {server.engine === 'paper' ? 'Paper' : 'Vanilla'}{' '}
-            <span className="dot-separator">·</span> Minecraft {server.version}{' '}
-            <span className="dot-separator">·</span> Java {server.javaMajor}
+            {engineDefinition(server.engine).displayName} <span className="dot-separator">·</span>{' '}
+            {server.engine === 'pocketmine'
+              ? `${server.version} · Minecraft Bedrock ${server.minecraftVersion ?? t('unavailable')}`
+              : `Minecraft ${server.version}`}{' '}
+            <span className="dot-separator">·</span>{' '}
+            {engineDefinition(server.engine).runtimeType === 'java'
+              ? `Java ${server.javaMajor}`
+              : engineDefinition(server.engine).runtimeType === 'php'
+                ? 'PHP'
+                : 'Bedrock Edition'}
           </p>
         </div>
         <ServerActions server={server} />
       </div>
       {server.error && <ErrorBox error={server.error} />}
+      {server.engine === 'pocketmine' && <p className="hint">{t('pocketmineSupport')}</p>}
       <nav className="tabs" aria-label={t('serverDetails')}>
-        {tabs.map((value) => (
-          <button
-            key={value}
-            className={tab === value ? 'selected' : ''}
-            onClick={() => setTab(value)}
-          >
-            {t(value)}
-          </button>
-        ))}
+        {tabs
+          .filter(
+            (value) =>
+              value !== 'plugins' ||
+              engineDefinition(server.engine).capabilities.plugins ||
+              engineDefinition(server.engine).capabilities.mods,
+          )
+          .map((value) => (
+            <button
+              key={value}
+              className={tab === value ? 'selected' : ''}
+              onClick={() => setTab(value)}
+            >
+              {t(
+                value === 'plugins' && engineDefinition(server.engine).capabilities.mods
+                  ? 'mods'
+                  : value,
+              )}
+            </button>
+          ))}
       </nav>
       {tab === 'overview' && (
         <>
@@ -222,8 +246,8 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       )}
       {tab === 'console' && <ConsoleView server={server} />}
       {tab === 'players' && <PlayersView server={server} />}
-      {tab === 'world' && <WorldView server={server} onSettings={() => setTab('settings')} />}
-      {tab === 'plugins' && <PluginsView server={server} />}
+      {tab === 'world' && <WorldsView server={server} />}
+      {tab === 'plugins' && <ContentView server={server} />}
       {tab === 'files' && <FilesView server={server} />}
       {tab === 'backups' && <BackupsView serverId={server.id} />}
       {tab === 'schedules' && <SchedulesView serverId={server.id} />}
@@ -233,16 +257,16 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
           <PropertiesView server={server} />
           <section className="panel danger-panel">
             <h2>
-              {t('delete')} · {server.name}
+              {t(server.externalFolder ? 'detachServer' : 'delete')} · {server.name}
             </h2>
-            <p>{t('deleteServerHelp')}</p>
+            <p>{t(server.externalFolder ? 'detachImportedServerHelp' : 'deleteServerHelp')}</p>
             <Button
               variant="danger"
               disabled={busy || !!server.pid || server.status === 'installing'}
               onClick={() => setRemove(true)}
             >
               <Trash2 size={15} />
-              {t('delete')}
+              {t(server.externalFolder ? 'detachServer' : 'delete')}
             </Button>
           </section>
         </>
@@ -250,7 +274,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       {remove && (
         <Confirm
           name={server.name}
-          help={t('deleteServerHelp')}
+          help={t(server.externalFolder ? 'detachImportedServerHelp' : 'deleteServerHelp')}
           onClose={() => setRemove(false)}
           onConfirm={() => {
             void run(() => api.remove(server.id, server.name)).then((r) => {
@@ -446,143 +470,6 @@ function ConsoleView({ server }: { server: Server }) {
     </section>
   );
 }
-function PlayersView({ server }: { server: Server }) {
-  const { api, t, run, busy } = useApp();
-  const online = useData(() => api.players(server.id), [server.id]);
-  const [name, setName] = useState('');
-  const [action, setAction] = useState('whitelist add');
-  const execute = (cmd: string) => {
-    void run(() => api.command(server.id, cmd)).then(() => online.reload());
-  };
-  return (
-    <>
-      <section className="panel">
-        <div className="section-heading">
-          <h2>
-            {t('connectedPlayers')}
-            <span className="count">{server.players.length}</span>
-          </h2>
-          <Button onClick={online.reload}>
-            <RefreshCw size={15} />
-            {t('refresh')}
-          </Button>
-        </div>
-        {online.error && (
-          <ErrorBox error={online.error} retry={online.reload} retryLabel={t('retry')} />
-        )}
-        {!server.players.length ? (
-          <Empty icon={<Users size={30} />} title={t('noPlayers')} subtitle={t('noPlayersSub')} />
-        ) : (
-          server.players.map((player) => (
-            <div className="player-row" key={player}>
-              <span className="avatar">{player.slice(0, 2).toUpperCase()}</span>
-              <div>
-                <strong>{player}</strong>
-                <small className="green">{t('running')}</small>
-              </div>
-              <div className="actions">
-                <Button disabled={busy} onClick={() => execute(`whitelist add ${player}`)}>
-                  <ShieldCheck size={14} />
-                  {t('whitelist')}
-                </Button>
-                <Button disabled={busy} onClick={() => execute(`kick ${player}`)}>
-                  {t('kick')}
-                </Button>
-                <Button variant="danger" disabled={busy} onClick={() => execute(`ban ${player}`)}>
-                  {t('ban')}
-                </Button>
-              </div>
-            </div>
-          ))
-        )}
-      </section>
-      <section className="panel">
-        <h2>{t('moderate')}</h2>
-        <div className="form-grid">
-          <Field label={t('playerName')}>
-            <input value={name} onChange={(e) => setName(e.target.value)} maxLength={16} />
-          </Field>
-          <Field label={t('action')}>
-            <select value={action} onChange={(e) => setAction(e.target.value)}>
-              {[
-                ['whitelist add', 'whitelistAdd'],
-                ['op', 'op'],
-                ['deop', 'deop'],
-                ['kick', 'kick'],
-                ['ban', 'ban'],
-              ].map(([cmd, label]) => (
-                <option value={cmd} key={cmd}>
-                  {t(label as 'op' | 'deop' | 'kick' | 'ban' | 'whitelistAdd')}
-                </option>
-              ))}
-            </select>
-          </Field>
-        </div>
-        <Button
-          variant="primary"
-          disabled={busy || server.status !== 'running' || !/^[A-Za-z0-9_]{1,16}$/.test(name)}
-          onClick={() => execute(`${action} ${name}`)}
-        >
-          {t('send')}
-        </Button>
-      </section>
-    </>
-  );
-}
-function WorldView({ server, onSettings }: { server: Server; onSettings: () => void }) {
-  const { api, t, run, busy } = useApp();
-  const properties = useData(() => api.properties(server.id), [server.id]);
-  return (
-    <section className="panel">
-      <div className="section-heading">
-        <h2>{t('currentWorld')}</h2>
-        <Globe2 size={20} />
-      </div>
-      {properties.error ? (
-        <ErrorBox error={properties.error} retry={properties.reload} retryLabel={t('retry')} />
-      ) : properties.loading ? (
-        <Loading label={t('loading')} />
-      ) : (
-        <>
-          <div className="world-card">
-            <span className="world-icon">
-              <Globe2 size={40} />
-            </span>
-            <div>
-              <h2>{properties.data?.['level-name'] ?? 'world'}</h2>
-              <p>
-                {t('seed')} : {properties.data?.['level-seed'] || '—'}
-              </p>
-              <span className="badge">Minecraft {server.version}</span>
-            </div>
-          </div>
-          <p className="muted">{t('worldHelp')}</p>
-          <div className="actions">
-            <Button
-              variant="primary"
-              disabled={busy || server.status === 'starting'}
-              onClick={() => {
-                void run(() => api.backup(server.id));
-              }}
-            >
-              <Archive size={16} />
-              {t('backup')}
-            </Button>
-            <Button
-              onClick={() => {
-                void run(() => api.openFolder(server.id));
-              }}
-            >
-              <FolderOpen size={16} />
-              {t('openFolder')}
-            </Button>
-            <Button onClick={onSettings}>{t('settings')}</Button>
-          </div>
-        </>
-      )}
-    </section>
-  );
-}
 function FilesView({ server }: { server: Server }) {
   const { api, t, run, busy } = useApp();
   const [folder, setFolder] = useState('');
@@ -591,7 +478,16 @@ function FilesView({ server }: { server: Server }) {
   const [name, setName] = useState('');
   const [remove, setRemove] = useState<FileEntry>();
   const entries = useData(() => api.files(server.id, folder), [server.id, folder]);
-  const stopped = !server.pid && server.status !== 'installing';
+  const stopped = !server.pid && ['stopped', 'crashed', 'error'].includes(server.status);
+  const protectedEditor =
+    editor &&
+    [
+      'server.properties',
+      'eula.txt',
+      server.entrypoint,
+      server.launchArgsFile,
+      'user_jvm_args.txt',
+    ].includes(editor.path);
   const child = (name: string) => [folder, name].filter(Boolean).join('/');
   const open = (entry: FileEntry) => {
     if (entry.directory) setFolder(child(entry.name));
@@ -630,6 +526,12 @@ function FilesView({ server }: { server: Server }) {
           <span>/ {folder}</span>
         </div>
         <div className="actions">
+          <ArchiveTools
+            id={server.id}
+            folder={folder}
+            disabled={!stopped}
+            reload={entries.reload}
+          />
           <Button
             disabled={busy || !stopped}
             onClick={() => {
@@ -682,6 +584,12 @@ function FilesView({ server }: { server: Server }) {
               <span>{entry.directory ? '—' : bytes(entry.size)}</span>
               <time>{new Date(entry.modified).toLocaleDateString()}</time>
               <div className="actions">
+                <FileTools
+                  id={server.id}
+                  path={child(entry.name)}
+                  disabled={!stopped}
+                  reload={entries.reload}
+                />
                 {!entry.directory && (
                   <Button
                     variant="ghost"
@@ -712,20 +620,21 @@ function FilesView({ server }: { server: Server }) {
         <Dialog title={editor.path} closeLabel={t('close')} onClose={() => setEditor(undefined)}>
           <div className="dialog-body editor-body">
             {!stopped && <p className="warning-text">{t('readOnly')}</p>}
-            <textarea
-              aria-label={t('fileContent')}
-              className="code-editor"
-              spellCheck={false}
-              readOnly={!stopped || editor.path === 'server.properties'}
-              value={editor.content}
-              onChange={(e) => setEditor({ ...editor, content: e.target.value })}
-            />
+            <Suspense fallback={<Loading label={t('loading')} />}>
+              <TextEditor
+                label={t('fileContent')}
+                path={editor.path}
+                readOnly={!stopped || !!protectedEditor}
+                value={editor.content}
+                onChange={(content) => setEditor({ ...editor, content })}
+              />
+            </Suspense>
           </div>
           <footer className="dialog-footer">
             <Button onClick={() => setEditor(undefined)}>{t('close')}</Button>
             <Button
               variant="primary"
-              disabled={!stopped || busy || editor.path === 'server.properties'}
+              disabled={!stopped || busy || !!protectedEditor}
               onClick={() => {
                 void run(() => api.writeFile(server.id, editor.path, editor.content)).then(
                   (result) => {
@@ -799,132 +708,6 @@ function FilesView({ server }: { server: Server }) {
     </section>
   );
 }
-function PluginsView({ server }: { server: Server }) {
-  const { api, t, run, busy } = useApp();
-  const [query, setQuery] = useState('');
-  const [search, setSearch] = useState('');
-  const installed = useData(() => api.content(server.id), [server.id]);
-  const projects = useData(
-    () => (server.engine === 'paper' ? api.search(server.id, search) : Promise.resolve([])),
-    [server.id, search],
-  );
-  if (server.engine !== 'paper')
-    return <Empty icon={<Puzzle size={32} />} title={t('vanillaPlugins')} />;
-  return (
-    <>
-      <section className="panel">
-        <div className="section-heading">
-          <div>
-            <h2>{t('marketplaceTitle')}</h2>
-            <p>{t('marketplaceSub')}</p>
-          </div>
-          <Puzzle size={25} />
-        </div>
-        <form
-          className="marketplace-search"
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (query === search) projects.reload();
-            else setSearch(query);
-          }}
-        >
-          <div className="search-input">
-            <Search size={17} />
-            <input
-              aria-label={t('searchPlugins')}
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder={t('searchPlugins')}
-            />
-          </div>
-          <Button type="submit" variant="primary">
-            {t('search')}
-          </Button>
-        </form>
-        {projects.error ? (
-          <ErrorBox error={projects.error} retry={projects.reload} retryLabel={t('retry')} />
-        ) : projects.loading ? (
-          <Loading label={t('loading')} />
-        ) : !projects.data?.length ? (
-          <Empty icon={<Search />} title={t('noResults')} />
-        ) : (
-          <div className="plugin-grid">
-            {projects.data.map((project) => (
-              <article key={project.id} className="plugin-card">
-                <div className="plugin-title">
-                  <span className="plugin-icon">
-                    <Puzzle size={24} />
-                  </span>
-                  <div>
-                    <h3>{project.title}</h3>
-                    <small>{project.author}</small>
-                  </div>
-                </div>
-                <p>{project.description}</p>
-                <footer>
-                  <small>
-                    {Intl.NumberFormat().format(project.downloads)} {t('downloads')}
-                  </small>
-                  <Button
-                    disabled={
-                      busy ||
-                      !!server.pid ||
-                      installed.data?.some((p) => p.projectId === project.id)
-                    }
-                    onClick={() => {
-                      void run(() => api.installContent(server.id, project.id)).then(() =>
-                        installed.reload(),
-                      );
-                    }}
-                  >
-                    <Download size={14} />
-                    {t(
-                      installed.data?.some((p) => p.projectId === project.id)
-                        ? 'installed'
-                        : 'install',
-                    )}
-                  </Button>
-                </footer>
-              </article>
-            ))}
-          </div>
-        )}
-      </section>
-      <section className="panel">
-        <h2>{t('installed')}</h2>
-        {installed.error && (
-          <ErrorBox error={installed.error} retry={installed.reload} retryLabel={t('retry')} />
-        )}
-        {!installed.data?.length ? (
-          <p className="muted">{t('noContent')}</p>
-        ) : (
-          installed.data.map((item) => (
-            <div className="installed-row" key={item.id}>
-              <Puzzle size={20} />
-              <div>
-                <strong>{item.title}</strong>
-                <small>
-                  {item.filename} · {item.versionId}
-                </small>
-              </div>
-              <span className="badge">{t(item.enabled ? 'enabled' : 'disabled')}</span>
-              <Button
-                disabled={busy || !!server.pid}
-                onClick={() => {
-                  void run(() => api.toggleContent(server.id, item.id)).then(() =>
-                    installed.reload(),
-                  );
-                }}
-              >
-                {t('toggle')}
-              </Button>
-            </div>
-          ))
-        )}
-      </section>
-    </>
-  );
-}
 function AnalyticsView({ serverId }: { serverId: string }) {
   const { api, t } = useApp();
   const [hours, setHours] = useState(1);
@@ -943,47 +726,50 @@ function AnalyticsView({ serverId }: { serverId: string }) {
   );
   const data = [...(metrics.data ?? []), ...live];
   return (
-    <section className="panel">
-      <div className="section-heading">
-        <div>
-          <h2>{t('analytics')}</h2>
-          <p>{t('analyticsHelp')}</p>
+    <>
+      <section className="panel">
+        <div className="section-heading">
+          <div>
+            <h2>{t('analytics')}</h2>
+            <p>{t('analyticsHelp')}</p>
+          </div>
+          <select
+            aria-label={t('analytics')}
+            value={hours}
+            onChange={(e) => setHours(Number(e.target.value))}
+          >
+            {[
+              [1, 'lastHour'],
+              [6, 'sixHours'],
+              [24, 'day'],
+              [168, 'week'],
+            ].map(([value, key]) => (
+              <option key={value} value={value}>
+                {t(key as 'lastHour' | 'sixHours' | 'day' | 'week')}
+              </option>
+            ))}
+          </select>
         </div>
-        <select
-          aria-label={t('analytics')}
-          value={hours}
-          onChange={(e) => setHours(Number(e.target.value))}
-        >
-          {[
-            [1, 'lastHour'],
-            [6, 'sixHours'],
-            [24, 'day'],
-            [168, 'week'],
-          ].map(([value, key]) => (
-            <option key={value} value={value}>
-              {t(key as 'lastHour' | 'sixHours' | 'day' | 'week')}
-            </option>
-          ))}
-        </select>
-      </div>
-      {metrics.error ? (
-        <ErrorBox error={metrics.error} retry={metrics.reload} retryLabel={t('retry')} />
-      ) : metrics.loading ? (
-        <Loading label={t('loading')} />
-      ) : !data.length ? (
-        <Empty icon={<Cpu size={32} />} title={t('noMetrics')} />
-      ) : (
-        <div className="chart-grid">
-          <Chart label={t('cpu')} values={data.map((m) => m.cpu)} suffix="%" />
-          <Chart
-            label={t('memory')}
-            values={data.map((m) => m.memory / 1024 ** 3)}
-            color="#9ba8dd"
-            suffix={` ${t('gigabytes')}`}
-          />
-          <Chart label={t('players')} values={data.map((m) => m.players)} color="#e4b879" />
-        </div>
-      )}
-    </section>
+        {metrics.error ? (
+          <ErrorBox error={metrics.error} retry={metrics.reload} retryLabel={t('retry')} />
+        ) : metrics.loading ? (
+          <Loading label={t('loading')} />
+        ) : !data.length ? (
+          <Empty icon={<Cpu size={32} />} title={t('noMetrics')} />
+        ) : (
+          <div className="chart-grid">
+            <Chart label={t('cpu')} values={data.map((m) => m.cpu)} suffix="%" />
+            <Chart
+              label={t('memory')}
+              values={data.map((m) => m.memory / 1024 ** 3)}
+              color="#9ba8dd"
+              suffix={` ${t('gigabytes')}`}
+            />
+            <Chart label={t('players')} values={data.map((m) => m.players)} color="#e4b879" />
+          </div>
+        )}
+      </section>
+      <StorageView serverId={serverId} />
+    </>
   );
 }

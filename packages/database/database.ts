@@ -14,6 +14,7 @@ import type {
 } from '../domain/types';
 import { EventBus } from '../core/events';
 import { redact } from '../security/secrets';
+import type { Operation, DownloadPartial, SwapCheckpoint } from '../domain/operations';
 
 export class Repository {
   readonly db: DatabaseSync;
@@ -32,8 +33,12 @@ export class Repository {
     const version = Number(this.db.prepare('PRAGMA user_version').get()?.user_version ?? 0);
     if (version > migrations.length)
       throw new Error('This database requires a newer version of MineDock.');
-    if (existed && version < migrations.length)
+    if (existed && version < migrations.length) {
+      const checkpoint = this.db.prepare('PRAGMA wal_checkpoint(FULL)').get();
+      if (checkpoint?.busy)
+        throw new Error('The database is busy. Close the other MineDock process before upgrading.');
       copyFileSync(filename, filename + `.before-v${version + 1}.bak`);
+    }
     for (const migration of migrations.filter((m) => m.version > version)) {
       this.db.exec('BEGIN IMMEDIATE');
       try {
@@ -237,6 +242,52 @@ export class Repository {
         'INSERT INTO player_history VALUES(?,?,?,?) ON CONFLICT(server_id,name) DO UPDATE SET last_seen=excluded.last_seen',
       )
       .run(id, name, at, at);
+  }
+  operations(): Operation[] {
+    return this.db
+      .prepare(
+        "SELECT metadata FROM operations WHERE rowid IN (SELECT rowid FROM operations ORDER BY rowid DESC LIMIT 200) OR checkpoint IS NOT NULL OR json_extract(metadata,'$.status') NOT IN ('completed','cancelled','failed') OR json_extract(metadata,'$.recoverable')=1 ORDER BY rowid DESC",
+      )
+      .all()
+      .map((r) => JSON.parse(String(r.metadata)) as Operation);
+  }
+  saveOperation(operation: Operation, checkpoint?: SwapCheckpoint): void {
+    this.db
+      .prepare(
+        'INSERT INTO operations VALUES(?,?,?,?) ON CONFLICT(id) DO UPDATE SET metadata=excluded.metadata, checkpoint=COALESCE(excluded.checkpoint, operations.checkpoint)',
+      )
+      .run(
+        operation.id,
+        operation.serverId ?? null,
+        JSON.stringify(operation),
+        checkpoint ? JSON.stringify(checkpoint) : null,
+      );
+    this.bus.emit({ type: 'changed' });
+  }
+  operationCheckpoint(id: string): SwapCheckpoint | undefined {
+    const value = this.db
+      .prepare('SELECT checkpoint FROM operations WHERE id=?')
+      .get(id)?.checkpoint;
+    return value ? (JSON.parse(String(value)) as SwapCheckpoint) : undefined;
+  }
+  clearOperationCheckpoint(id: string): void {
+    this.db.prepare('UPDATE operations SET checkpoint=NULL WHERE id=?').run(id);
+  }
+  partial(destination: string): DownloadPartial | undefined {
+    const value = this.db
+      .prepare('SELECT metadata FROM download_partials WHERE destination=?')
+      .get(destination)?.metadata;
+    return value ? (JSON.parse(String(value)) as DownloadPartial) : undefined;
+  }
+  savePartial(value: DownloadPartial): void {
+    this.db
+      .prepare(
+        'INSERT INTO download_partials VALUES(?,?) ON CONFLICT(destination) DO UPDATE SET metadata=excluded.metadata',
+      )
+      .run(value.destination, JSON.stringify(value));
+  }
+  deletePartial(destination: string): void {
+    this.db.prepare('DELETE FROM download_partials WHERE destination=?').run(destination);
   }
   async snapshotDatabase(): Promise<void> {
     await backup(this.db, path.join(this.root, 'app.db.daily.bak'));

@@ -1,5 +1,5 @@
 import path from 'node:path';
-import { lstat, realpath, mkdir, rename, writeFile } from 'node:fs/promises';
+import { lstat, realpath, mkdir, rename, writeFile, rm } from 'node:fs/promises';
 import { randomUUID } from 'node:crypto';
 import { DomainError } from '../domain/errors';
 
@@ -47,6 +47,10 @@ export async function containedPath(
 export async function atomicWrite(filename: string, content: string | Buffer): Promise<void> {
   await mkdir(path.dirname(filename), { recursive: true });
   const temp = filename + '.' + randomUUID() + '.tmp';
-  await writeFile(temp, content, { mode: 0o600, flag: 'wx' });
-  await rename(temp, filename);
+  try {
+    await writeFile(temp, content, { mode: 0o600, flag: 'wx' });
+    await rename(temp, filename);
+  } finally {
+    await rm(temp, { force: true });
+  }
 }

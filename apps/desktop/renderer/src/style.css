@@ -2162,3 +2162,183 @@ textarea {
   color: var(--muted);
   margin-top: 8px;
 }
+.content-changelog {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 240px;
+  overflow: auto;
+  background: var(--input);
+  padding: 14px;
+  font: inherit;
+  font-size: 13px;
+}
+.managed-world {
+  align-items: flex-start;
+  margin-top: 16px;
+}
+.managed-world .world-details {
+  flex: 1;
+  min-width: 0;
+}
+.managed-world .world-details p {
+  overflow-wrap: anywhere;
+}
+.managed-world .actions {
+  flex-wrap: wrap;
+}
+.modpack-files {
+  max-height: 300px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin: 16px 0;
+}
+.modpack-file {
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  overflow-wrap: anywhere;
+}
+.modpack-file label {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.highlighted-editor {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.highlighted-editor .cm-editor {
+  background: var(--input);
+  color: var(--text);
+  font:
+    13px/1.6 ui-monospace,
+    Consolas,
+    monospace;
+}
+.highlighted-editor .cm-scroller {
+  min-height: 340px;
+  max-height: 60vh;
+  overflow: auto;
+}
+.highlighted-editor .cm-gutters {
+  background: var(--panel);
+  color: var(--muted);
+  border-color: var(--border);
+}
+.highlighted-editor .cm-activeLine {
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+.file-toolbar {
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.file-toolbar .actions {
+  flex-wrap: wrap;
+}
+.storage-panel {
+  margin-top: 20px;
+}
+.storage-totals {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.storage-totals strong {
+  font-size: 26px;
+}
+.storage-totals span {
+  color: var(--muted);
+}
+.storage-categories {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+.storage-categories > div {
+  display: grid;
+  gap: 6px;
+}
+.storage-categories meter {
+  width: 100%;
+  accent-color: var(--accent);
+}
+.storage-file {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.storage-file > div {
+  flex: 1;
+  min-width: 0;
+}
+.storage-file strong {
+  overflow-wrap: anywhere;
+}
+.storage-file small {
+  display: block;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.player-filters {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  margin: 18px 0;
+}
+.known-player {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  margin: 14px 0;
+}
+.player-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px;
+  margin: 14px 0;
+}
+.player-details dt {
+  color: var(--muted);
+  font-size: 12px;
+}
+.player-details dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.player-details small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.runtime-details {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 14px;
+}
+.runtime-details code {
+  display: block;
+  overflow-wrap: anywhere;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.runtime-details p {
+  margin-bottom: 10px;
+}
+.runtime-details .actions,
+.runtime-install-options {
+  flex-wrap: wrap;
+}
+.runtime-install-options {
+  display: flex;
+  gap: 8px;
+  margin-top: 18px;
+}

@@ -207,9 +207,9 @@ export function useData<T>(
   return { data, error, loading, reload: () => setKey((k) => k + 1) };
 }
 export function bytes(value: number): string {
-  if (!value) return '0 MB';
-  const unit = value >= 1024 ** 3 ? 1024 ** 3 : 1024 ** 2;
-  return `${(value / unit).toFixed(1)} ${unit === 1024 ** 3 ? 'GB' : 'MB'}`;
+  if (!Number.isFinite(value) || value <= 0) return '0 B';
+  const index = Math.min(4, Math.floor(Math.log(value) / Math.log(1024)));
+  return `${(value / 1024 ** index).toFixed(index === 0 ? 0 : 1)} ${['B', 'KB', 'MB', 'GB', 'TB'][index]}`;
 }
 export function duration(start?: string): string {
   if (!start) return '—';

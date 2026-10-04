@@ -6,6 +6,7 @@ import type {
   Backup,
   InstalledContent,
 } from '../../../../packages/domain/types';
+import type { WorldSummary } from '../../../../packages/domain/worlds';
 export function createMockApi(): Api {
   const listeners = new Set<(event: AppEvent) => void>();
   const emit = (event: AppEvent): void => {
@@ -13,7 +14,7 @@ export function createMockApi(): Api {
   };
   const server = (
     name: string,
-    engine: 'paper' | 'vanilla',
+    engine: Server['engine'],
     status: Server['status'],
     port: number,
   ): Server => ({
@@ -69,6 +70,33 @@ export function createMockApi(): Api {
     mock: true,
   };
   const content: InstalledContent[] = [];
+  const demoWorlds = new Map<string, WorldSummary[]>();
+  const worlds = (id: string): WorldSummary[] => {
+    if (!demoWorlds.has(id))
+      demoWorlds.set(id, [
+        {
+          name: 'world',
+          active: true,
+          folders: ['world', 'world_nether', 'world_the_end'],
+          bytes: 1024,
+          files: 3,
+          modified: new Date().toISOString(),
+          seed: '123456',
+        },
+      ]);
+    return demoWorlds.get(id)!;
+  };
+  const demoVersion = () => ({
+    id: 'demo',
+    projectId: 'demo',
+    name: 'Demo version',
+    publishedAt: '2026-01-01T00:00:00Z',
+    changelog: 'This is an explicit demo fixture.',
+    gameVersions: data.servers.map((server) => server.version),
+    loaders: ['paper', 'fabric', 'forge', 'neoforge'],
+    files: [{ url: 'https://cdn.modrinth.com/demo.jar', filename: 'luckperms.jar', primary: true }],
+    dependencies: [],
+  });
   const texts = new Map<string, string>();
   const get = (id: string): Server => {
     const value = data.servers.find((s) => s.id === id);
@@ -131,7 +159,107 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    worlds: async (id) => structuredClone(worlds(id)),
+    worldAction: async (id, input) => {
+      const entries = worlds(id),
+        world = entries.find((entry) => entry.name === input.name);
+      if (!world || input.confirmation !== input.name)
+        throw new Error('Incorrect world confirmation.');
+      if (input.action === 'duplicate')
+        entries.push({
+          ...world,
+          name: input.newName!,
+          active: false,
+          folders: world.folders.map((folder) => input.newName! + folder.slice(world.name.length)),
+        });
+      else if (input.action === 'rename') {
+        world.folders = world.folders.map(
+          (folder) => input.newName! + folder.slice(world.name.length),
+        );
+        world.name = input.newName!;
+      } else if (input.action === 'select')
+        for (const entry of entries) entry.active = entry === world;
+      else {
+        if (world.active) throw new Error('Select another world first.');
+        entries.splice(entries.indexOf(world), 1);
+      }
+      audit('demo.world.' + input.action, input.name, id);
+      emit({ type: 'changed' });
+    },
+    previewWorldImport: async () => ({
+      token: crypto.randomUUID(),
+      name: 'demo_import',
+      edition: 'java',
+      folders: ['demo_import'],
+      bytes: 1024,
+      files: 1,
+      warnings: [],
+    }),
+    importWorld: async (id, input) => {
+      if (input.confirmation !== input.name) throw new Error('Incorrect confirmation.');
+      worlds(id).push({
+        name: input.name,
+        folders: [input.name],
+        bytes: 1024,
+        files: 1,
+        modified: new Date().toISOString(),
+        active: false,
+      });
+      emit({ type: 'changed' });
+    },
+    exportWorld: async (id, name) => {
+      audit('demo.world.export', name, id);
+    },
     snapshot: async () => structuredClone(data),
+    previewModpack: async () => ({
+      token: crypto.randomUUID(),
+      name: 'Explicit demo modpack',
+      versionId: 'demo',
+      minecraft: '1.21.11',
+      engine: 'fabric',
+      loader: 'demo',
+      java: 21,
+      files: [
+        { path: 'mods/required.jar', size: 1024, side: 'required', available: true },
+        { path: 'mods/client.jar', size: 512, side: 'unsupported', available: true },
+      ],
+      overrides: ['server-overrides/config/demo.json'],
+      ignoredOverrides: [],
+      bytes: 1024,
+      warnings: [],
+    }),
+    createModpack: async (selection, input) => {
+      if (selection.confirmation !== 'Explicit demo modpack')
+        throw new Error('Incorrect confirmation.');
+      const item = { ...server(input.name, input.engine, 'stopped', input.port), ...input };
+      data.servers.push(item);
+      emit({ type: 'changed' });
+      return item;
+    },
+    previewServerImport: async () => ({
+      token: crypto.randomUUID(),
+      sourcePath: 'C:/Demo/existing-server',
+      name: 'Existing demo server',
+      engine: 'paper',
+      version: '1.21.11',
+      entrypoint: 'server.jar',
+      entrypoints: ['server.jar'],
+      properties: { 'server-port': '25568', 'level-name': 'world' },
+      worlds: ['world'],
+      plugins: 0,
+      mods: 0,
+      confidence: 'detected',
+      warnings: [],
+      eulaAccepted: true,
+    }),
+    importServer: async (input) => {
+      const item = server(input.name, input.engine, 'stopped', input.port);
+      item.imported = true;
+      item.externalFolder = !input.copy;
+      data.servers.push(item);
+      emit({ type: 'changed' });
+      return item;
+    },
     diagnostic: async () => ({
       platform: 'win32',
       arch: 'x64',
@@ -154,6 +282,8 @@ export function createMockApi(): Api {
       audit('demo.folder', 'Simulated folder.');
     },
     versions: async () => ['1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.20.6'],
+    builds: async () => ['demo'],
+    installers: async () => ['demo'],
     create: async (input) => {
       const s = { ...server(input.name, input.engine, 'stopped', input.port), ...input };
       data.servers.push(s);
@@ -163,6 +293,87 @@ export function createMockApi(): Api {
     },
     cancelDownload: async () => {
       audit('demo.download', 'Simulated cancellation.');
+    },
+    operations: async () => [],
+    updateStatus: async () => ({
+      currentVersion: '0.3.0',
+      automaticChecks: false,
+      trustedKeyConfigured: false,
+      packaged: false,
+    }),
+    configureUpdates: async (automaticChecks) => ({
+      currentVersion: '0.3.0',
+      automaticChecks,
+      trustedKeyConfigured: false,
+      packaged: false,
+    }),
+    checkUpdates: async () => ({
+      currentVersion: '0.3.0',
+      automaticChecks: false,
+      trustedKeyConfigured: false,
+      packaged: false,
+      error: 'Application updates are unavailable in demo mode.',
+    }),
+    downloadUpdate: async () => {
+      throw new Error('Application updates are unavailable in demo mode.');
+    },
+    installUpdate: async () => {
+      throw new Error('Application updates are unavailable in demo mode.');
+    },
+    retentionPolicy: async () => ({
+      mode: 'disabled',
+      count: 10,
+      days: 7,
+      hourly: 24,
+      daily: 7,
+      weekly: 4,
+      monthly: 12,
+      includeManual: false,
+      timezone: 'UTC',
+    }),
+    configureRetention: async (_id, input) => {
+      audit('demo.retention', 'Demo retention policy');
+      return input;
+    },
+    previewRetention: async (id) => ({
+      token: crypto.randomUUID(),
+      serverId: id,
+      createdAt: new Date().toISOString(),
+      policy: {
+        mode: 'disabled',
+        count: 10,
+        days: 7,
+        hourly: 24,
+        daily: 7,
+        weekly: 4,
+        monthly: 12,
+        includeManual: false,
+        timezone: 'UTC',
+      },
+      archives: [],
+      bytes: 0,
+      protectedCount: 0,
+      unavailableCount: 0,
+    }),
+    purgeRetention: async () => {
+      audit('demo.retention', 'Demo retention preview purge');
+    },
+    cancelOperation: async () => {
+      audit('demo.cancel', 'Simulated cancellation.');
+    },
+    dismissOperation: async () => {
+      audit('demo.dismiss', 'Simulated dismissal.');
+    },
+    recoveryReview: async (id) => ({
+      id,
+      label: 'Demo operation',
+      copies: [],
+      rollbackAvailable: false,
+      backups: [],
+      preservedCopies: [],
+    }),
+    resolveOperation: async () => {
+      audit('operation.resolved', 'Demo recovery');
     },
     retryInstallation: async (id) => {
       change(id, 'stopped');
@@ -280,6 +491,69 @@ export function createMockApi(): Api {
     exportFile: async (id) => {
       audit('demo.export', 'Simulated export', id);
     },
+    fileAction: async (id, input) => {
+      const value = texts.get(id + ':' + input.source) ?? '# Demo file\n';
+      texts.set(id + ':' + input.destination, value);
+      if (input.action !== 'copy') texts.delete(id + ':' + input.source);
+      audit('demo.files.' + input.action, input.destination, id);
+    },
+    compressArchive: async (id, folder) => {
+      audit('demo.archive.export', folder, id);
+    },
+    extractArchive: async (id, input) => {
+      audit('demo.archive.extract', input.destination, id);
+    },
+    runtimeEntries: async () => [],
+    runtimeHealth: async (id) => ({
+      id,
+      status: 'unavailable',
+      checkedAt: new Date().toISOString(),
+    }),
+    repairRuntime: async (input) => {
+      audit('demo.runtime.repair', input.id);
+    },
+    deleteRuntime: async (input) => {
+      audit('demo.runtime.delete', input.id);
+    },
+    playerReport: async (id) => ({
+      players: get(id).players.map((name) => ({
+        name,
+        joins: 1,
+        observedMs: 0,
+        online: true,
+        operator: false,
+        whitelisted: false,
+        banned: false,
+      })),
+      actions: ['whitelistAdd', 'whitelistRemove', 'op', 'deop', 'kick', 'ban', 'pardon'],
+      warnings: [],
+    }),
+    moderatePlayer: async (id, input) => {
+      audit('demo.player.' + input.action, input.name, id);
+      return 'Demo command sent.';
+    },
+    storageOverview: async () => ({ history: [] }),
+    scanStorage: async () => ({
+      at: new Date().toISOString(),
+      serverBytes: 0,
+      totalBytes: 0,
+      files: 0,
+      excludedEntries: 0,
+      largest: [],
+      categories: {
+        worlds: 0,
+        plugins: 0,
+        mods: 0,
+        logs: 0,
+        backups: 0,
+        config: 0,
+        cache: 0,
+        other: 0,
+      },
+    }),
+    revealStorageFile: async (id, input) => {
+      audit('demo.storage.reveal', input.relativePath, id);
+    },
     backup,
     verifyBackup: async () => true,
     restore: async (id, confirmation) => {
@@ -310,6 +584,15 @@ export function createMockApi(): Api {
       data.schedules = data.schedules.filter((s) => s.id !== id);
       emit({ type: 'changed' });
     },
+    toggleSchedule: async (id, enabled) => {
+      const job = data.schedules.find((value) => value.id === id);
+      if (job) job.enabled = enabled;
+      emit({ type: 'changed' });
+    },
+    schedulePreview: async (input) =>
+      Array.from({ length: 5 }, (_, i) =>
+        new Date(Date.now() + (i + 1) * input.intervalMinutes * 60000).toISOString(),
+      ),
     metrics: async () =>
       Array.from({ length: 30 }, (_, i) => ({
         at: new Date(Date.now() - (30 - i) * 15000).toISOString(),
@@ -358,6 +641,39 @@ export function createMockApi(): Api {
       return () => {
         listeners.delete(fn);
       };
+    },
+    marketplaceSettings: async () => ({ curseforgeConfigured: false, historyLimit: 5 }),
+    contentIcon: async () => null,
+    crossplayStatus: async (id) => ({
+      supported: ['paper', 'purpur', 'fabric', 'neoforge'].includes(get(id).engine),
+      geyserInstalled: false,
+      floodgateInstalled: false,
+      configured: false,
+    }),
+    crossplayVersions: async () => ({ geyser: [], floodgate: [] }),
+    configureCrossplay: async () => {
+      throw new Error('Crossplay configuration is unavailable in this demo.');
+    },
+    clearIconCache: async () => {},
+    configureMarketplace: async (input) => ({
+      curseforgeConfigured: false,
+      historyLimit: input.historyLimit,
+    }),
+    contentVersions: async () => [demoVersion()],
+    contentUpdates: async () => [],
+    contentHistory: async () => [],
+    manualContent: async () => [],
+    contentVersion: async () => demoVersion(),
+    changeContentVersion: async () => {
+      throw new Error('Version changes are unavailable in this demo.');
+    },
+    uninstallContent: async (_id, contentId) => {
+      const index = content.findIndex((item) => item.id === contentId);
+      if (index >= 0) content.splice(index, 1);
+      emit({ type: 'changed' });
+    },
+    rollbackContent: async () => {
+      throw new Error('Rollback is unavailable in this demo.');
     },
   };
 }

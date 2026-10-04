@@ -9,7 +9,6 @@ import {
   Clock,
   Activity,
   Folder,
-  Coffee,
   Settings2,
   Check,
   Save,
@@ -19,9 +18,22 @@ import type { Server, Settings, Backup, ScheduleInput } from '../../../../packag
 import { PRODUCT } from '../../../../packages/domain/types';
 import { languages } from '../../../../packages/domain/languages';
 import { localizeMessage } from '../../../../packages/domain/localization';
+import { describeCron } from '../../../../packages/domain/cron-description';
+import { engineDefinition } from '../../../../packages/domain/engines';
 import { useApp } from './context';
 import { activityLabel, type Key } from './i18n';
 import { Button, Field, Toggle, Dialog, Empty, ErrorBox, Loading, useData, bytes } from './ui';
+import { RuntimeControls } from './runtime-controls';
+import { RecoveryDialog } from './recovery';
+import { RetentionControls } from './retention';
+import { UpdateControls } from './updates';
+const scheduleDate = (at: string, language: string, timeZone: string) => {
+  try {
+    return new Date(at).toLocaleString(language, { timeZone });
+  } catch {
+    return new Date(at).toISOString();
+  }
+};
 export function Confirm({
   name,
   help,
@@ -184,6 +196,7 @@ export function BackupsView({ serverId }: { serverId?: string }) {
           </div>
         )}
       </section>
+      {selected && <RetentionControls key={selected} serverId={selected} />}
       {confirmation && (
         <Confirm
           name={name}
@@ -209,6 +222,34 @@ export function SchedulesView({ serverId }: { serverId: string }) {
   const [action, setAction] = useState<ScheduleInput['action']>('backup');
   const [minutes, setMinutes] = useState(360);
   const [command, setCommand] = useState('');
+  const [mode, setMode] = useState<'interval' | 'daily' | 'cron'>('interval');
+  const [time, setTime] = useState('03:00');
+  const [cron, setCron] = useState('0 4 * * *');
+  const [timezone, setTimezone] = useState(Intl.DateTimeFormat().resolvedOptions().timeZone);
+  const [warningTimes, setWarningTimes] = useState('600,300,60,30,10');
+  const [warningMessage, setWarningMessage] = useState(
+    '[MineDock] Restarting in {seconds} seconds.',
+  );
+  const input: ScheduleInput = {
+    serverId,
+    action,
+    intervalMinutes: minutes,
+    command,
+    enabled: true,
+    mode,
+    time,
+    cron,
+    timezone,
+    warnings: warningTimes
+      .split(',')
+      .filter((value) => value.trim())
+      .map(Number),
+    warningMessage,
+  };
+  const preview = useData(
+    () => (adding ? api.schedulePreview(input) : Promise.resolve([])),
+    [adding, mode, time, cron, timezone, minutes, action, command],
+  );
   const jobs = snapshot.schedules.filter((s) => s.serverId === serverId);
   const actionLabel = (value: string): string =>
     t(
@@ -242,11 +283,17 @@ export function SchedulesView({ serverId }: { serverId: string }) {
               </span>
               <div>
                 <strong>
-                  {actionLabel(job.action)} · {job.intervalMinutes} min
+                  {actionLabel(job.action)} ·{' '}
+                  {job.mode === 'daily'
+                    ? `${t('daily')} ${job.time}`
+                    : job.mode === 'cron'
+                      ? describeCron(job.cron ?? '', snapshot.settings.language)
+                      : `${job.intervalMinutes} min`}
                 </strong>
                 <small>
                   {t('nextRun')} :{' '}
-                  {new Date(job.nextRun).toLocaleString(snapshot.settings.language)}
+                  {scheduleDate(job.nextRun, snapshot.settings.language, job.timezone ?? timezone)}
+                  {job.mode !== 'interval' && ` · ${job.timezone ?? timezone}`}
                 </small>
                 {job.lastError && (
                   <span className="warning-text">
@@ -254,6 +301,15 @@ export function SchedulesView({ serverId }: { serverId: string }) {
                   </span>
                 )}
               </div>
+              <span className="badge">{t(job.enabled ? 'enabled' : 'disabled')}</span>
+              <Button
+                disabled={busy}
+                onClick={() => {
+                  void run(() => api.toggleSchedule(job.id, !job.enabled));
+                }}
+              >
+                {t(job.enabled ? 'pause' : 'resume')}
+              </Button>
               <Button
                 variant="ghost"
                 aria-label={t('delete')}
@@ -281,36 +337,88 @@ export function SchedulesView({ serverId }: { serverId: string }) {
                 ))}
               </select>
             </Field>
-            <Field label={t('interval')}>
-              <input
-                type="number"
-                min={5}
-                max={525600}
-                value={minutes}
-                onChange={(e) => setMinutes(Number(e.target.value))}
-              />
+            <Field label={t('scheduleMode')}>
+              <select value={mode} onChange={(event) => setMode(event.target.value as typeof mode)}>
+                <option value="interval">{t('interval')}</option>
+                <option value="daily">{t('daily')}</option>
+                <option value="cron">{t('advanced')} · Cron</option>
+              </select>
             </Field>
+            {mode === 'interval' && (
+              <Field label={t('interval')}>
+                <input
+                  type="number"
+                  min={5}
+                  max={525600}
+                  value={minutes}
+                  onChange={(e) => setMinutes(Number(e.target.value))}
+                />
+              </Field>
+            )}
+            {mode === 'daily' && (
+              <Field label={t('dailyTime')}>
+                <input type="time" value={time} onChange={(event) => setTime(event.target.value)} />
+              </Field>
+            )}
+            {mode === 'cron' && (
+              <Field
+                label={t('cronExpression')}
+                hint={describeCron(cron, snapshot.settings.language)}
+              >
+                <input value={cron} onChange={(event) => setCron(event.target.value)} />
+              </Field>
+            )}
+            {mode !== 'interval' && (
+              <Field label={t('timezone')}>
+                <input value={timezone} onChange={(event) => setTimezone(event.target.value)} />
+              </Field>
+            )}
             {action === 'command' && (
               <Field label={t('command')}>
                 <input value={command} onChange={(e) => setCommand(e.target.value)} />
               </Field>
+            )}
+            {action === 'restart' && (
+              <details className="advanced">
+                <summary>{t('advanced')}</summary>
+                <Field label={t('restartWarnings')}>
+                  <input
+                    value={warningTimes}
+                    onChange={(event) => setWarningTimes(event.target.value)}
+                  />
+                </Field>
+                <Field label={t('warningMessage')}>
+                  <input
+                    value={warningMessage}
+                    onChange={(event) => setWarningMessage(event.target.value)}
+                  />
+                </Field>
+              </details>
+            )}
+            {preview.error ? (
+              <ErrorBox error={preview.error} />
+            ) : (
+              <div className="details-list">
+                <h3>{t('upcomingRuns')}</h3>
+                {preview.data?.map((at) => (
+                  <p key={at}>{scheduleDate(at, snapshot.settings.language, timezone)}</p>
+                ))}
+              </div>
             )}
           </div>
           <footer className="dialog-footer">
             <Button onClick={() => setAdding(false)}>{t('cancel')}</Button>
             <Button
               variant="primary"
-              disabled={busy || minutes < 5 || (action === 'command' && !command.trim())}
+              disabled={
+                busy ||
+                minutes < 5 ||
+                preview.loading ||
+                !!preview.error ||
+                (action === 'command' && !command.trim())
+              }
               onClick={() => {
-                void run(() =>
-                  api.schedules({
-                    serverId,
-                    action,
-                    intervalMinutes: minutes,
-                    command,
-                    enabled: true,
-                  }),
-                ).then((result) => {
+                void run(() => api.schedules(input)).then((result) => {
                   if (result.ok) setAdding(false);
                 });
               }}
@@ -320,6 +428,73 @@ export function SchedulesView({ serverId }: { serverId: string }) {
           </footer>
         </Dialog>
       )}
+    </>
+  );
+}
+export function OperationsView() {
+  const { snapshot, t, api, run, busy } = useApp();
+  const [review, setReview] = useState<string>();
+  return (
+    <>
+      <div className="page-heading">
+        <div>
+          <h1>{t('operations')}</h1>
+          <p>{t('operationsHelp')}</p>
+        </div>
+      </div>
+      <section className="panel">
+        {snapshot.operations?.length ? (
+          snapshot.operations.map((operation) => (
+            <div className="activity-row" key={operation.id}>
+              <div>
+                <strong>{operation.label}</strong>
+                <small>
+                  {new Date(operation.updatedAt).toLocaleString(snapshot.settings.language)} ·{' '}
+                  {snapshot.servers.find((server) => server.id === operation.serverId)?.name}
+                </small>
+                {operation.error && (
+                  <p className="warning-text">
+                    {localizeMessage(operation.error, snapshot.settings.language)}
+                  </p>
+                )}
+              </div>
+              <span className="badge">{t(('operation.' + operation.status) as Key)}</span>
+              {['pending', 'downloading', 'verifying', 'extracting', 'applying'].includes(
+                operation.status,
+              ) && (
+                <Button
+                  onClick={() => {
+                    void api.cancelOperation(operation.id);
+                  }}
+                >
+                  {t('cancel')}
+                </Button>
+              )}
+              {operation.status === 'attention' && !operation.recoverable && (
+                <Button
+                  disabled={busy}
+                  onClick={() => {
+                    void run(() => api.dismissOperation(operation.id));
+                  }}
+                >
+                  {t('acknowledge')}
+                </Button>
+              )}
+              {operation.status === 'attention' && operation.recoverable && (
+                <Button disabled={busy} onClick={() => setReview(operation.id)}>
+                  {t('reviewRecovery')}
+                </Button>
+              )}
+              {operation.preservedCopies?.map((copy) => (
+                <small key={copy}>{copy}</small>
+              ))}
+            </div>
+          ))
+        ) : (
+          <Empty icon={<Clock size={25} />} title={t('noActivity')} />
+        )}
+      </section>
+      {review && <RecoveryDialog id={review} onClose={() => setReview(undefined)} />}
     </>
   );
 }
@@ -417,7 +592,21 @@ export function PropertiesView({ server }: { server: Server }) {
               <section className="panel" key={section}>
                 <h2>{t(section)}</h2>
                 {properties
-                  .filter((p) => p.section === section)
+                  .filter(
+                    (p) =>
+                      p.section === section &&
+                      (engineDefinition(server.engine).edition === 'java' ||
+                        ![
+                          'simulation-distance',
+                          'pvp',
+                          'hardcore',
+                          'enable-command-block',
+                          'white-list',
+                          'motd',
+                          'generate-structures',
+                          'spawn-protection',
+                        ].includes(p.key)),
+                  )
                   .map((prop) =>
                     prop.type === 'boolean' ? (
                       <Toggle
@@ -506,48 +695,58 @@ function ServerOptionsView({ server }: { server: Server }) {
   return (
     <section className="panel">
       <h2>
-        {t('resources')} · Java {server.javaMajor}
+        {t('resources')}{' '}
+        {engineDefinition(server.engine).runtimeType === 'java' && `· Java ${server.javaMajor}`}
       </h2>
-      <div className="form-grid">
-        <Field label={`${t('memoryMin')} (${t('megabytes')})`}>
-          <input
-            type="number"
-            min={256}
-            step={256}
-            disabled={!stopped}
-            value={options.memoryMin}
-            onChange={(e) => setOptions((prev) => ({ ...prev, memoryMin: Number(e.target.value) }))}
-          />
-        </Field>
-        <Field label={`${t('memoryMax')} (${t('megabytes')})`}>
-          <input
-            type="number"
-            min={512}
-            step={256}
-            disabled={!stopped}
-            value={options.memoryMax}
-            onChange={(e) => setOptions((prev) => ({ ...prev, memoryMax: Number(e.target.value) }))}
-          />
-        </Field>
-      </div>
-      <Field label={t('runtimes')}>
-        <select
-          disabled={!stopped}
-          value={options.javaPath}
-          onChange={(e) => setOptions((prev) => ({ ...prev, javaPath: e.target.value }))}
-        >
-          <option value={server.javaPath}>{server.javaPath || t('notInstalled')}</option>
-          {runtimes.data
-            ?.filter(
-              (runtime) => runtime.major === server.javaMajor && runtime.path !== server.javaPath,
-            )
-            .map((runtime) => (
-              <option key={runtime.path} value={runtime.path}>
-                {runtime.path}
-              </option>
-            ))}
-        </select>
-      </Field>
+      {engineDefinition(server.engine).capabilities.javaMemory && (
+        <>
+          <div className="form-grid">
+            <Field label={`${t('memoryMin')} (${t('megabytes')})`}>
+              <input
+                type="number"
+                min={256}
+                step={256}
+                disabled={!stopped}
+                value={options.memoryMin}
+                onChange={(e) =>
+                  setOptions((prev) => ({ ...prev, memoryMin: Number(e.target.value) }))
+                }
+              />
+            </Field>
+            <Field label={`${t('memoryMax')} (${t('megabytes')})`}>
+              <input
+                type="number"
+                min={512}
+                step={256}
+                disabled={!stopped}
+                value={options.memoryMax}
+                onChange={(e) =>
+                  setOptions((prev) => ({ ...prev, memoryMax: Number(e.target.value) }))
+                }
+              />
+            </Field>
+          </div>
+          <Field label={t('runtimes')}>
+            <select
+              disabled={!stopped}
+              value={options.javaPath}
+              onChange={(e) => setOptions((prev) => ({ ...prev, javaPath: e.target.value }))}
+            >
+              <option value={server.javaPath}>{server.javaPath || t('notInstalled')}</option>
+              {runtimes.data
+                ?.filter(
+                  (runtime) =>
+                    runtime.major === server.javaMajor && runtime.path !== server.javaPath,
+                )
+                .map((runtime) => (
+                  <option key={runtime.path} value={runtime.path}>
+                    {runtime.path}
+                  </option>
+                ))}
+            </select>
+          </Field>
+        </>
+      )}
       <Toggle
         disabled={!stopped}
         label={t('autoStart')}
@@ -560,9 +759,15 @@ function ServerOptionsView({ server }: { server: Server }) {
         checked={options.autoRestart}
         onChange={(value) => setOptions((prev) => ({ ...prev, autoRestart: value }))}
       />
-      <p className="muted small-text">{t('ramHelp')}</p>
+      {engineDefinition(server.engine).capabilities.javaMemory && (
+        <p className="muted small-text">{t('ramHelp')}</p>
+      )}
       <Button
-        disabled={busy || !stopped || !options.javaPath}
+        disabled={
+          busy ||
+          !stopped ||
+          (engineDefinition(server.engine).runtimeType === 'java' && !options.javaPath)
+        }
         onClick={() => {
           void run(() => api.configureServer(server.id, options));
         }}
@@ -624,7 +829,12 @@ export function ActivityView() {
 export function SettingsView() {
   const { api, t, snapshot, run, busy } = useApp();
   const [settings, setSettings] = useState<Settings>(snapshot.settings);
-  const runtimes = useData(() => api.runtimes(), []);
+  const marketplace = useData(() => api.marketplaceSettings(), []);
+  const [curseforgeKey, setCurseforgeKey] = useState('');
+  const [historyLimit, setHistoryLimit] = useState(5);
+  useEffect(() => {
+    if (marketplace.data) setHistoryLimit(marketplace.data.historyLimit);
+  }, [marketplace.data]);
   useEffect(() => setSettings(snapshot.settings), [snapshot.settings]);
   const folder = (key: 'serverRoot' | 'backupRoot') => {
     void run(() => api.selectFolder()).then((result) => {
@@ -720,53 +930,92 @@ export function SettingsView() {
               {t('openFolder')}
             </Button>
           </section>
+          <section className="panel">
+            <h2>{t('marketplaceSettings')}</h2>
+            <p className="muted small-text">{t('curseforgeKeyHelp')}</p>
+            {marketplace.error && (
+              <ErrorBox
+                error={marketplace.error}
+                retry={marketplace.reload}
+                retryLabel={t('retry')}
+              />
+            )}
+            <p>
+              <span className="badge">
+                {t(marketplace.data?.curseforgeConfigured ? 'configured' : 'notConfigured')}
+              </span>{' '}
+              CurseForge
+            </p>
+            <Field label={t('apiKey')}>
+              <input
+                type="password"
+                autoComplete="new-password"
+                value={curseforgeKey}
+                onChange={(event) => setCurseforgeKey(event.target.value)}
+                maxLength={1000}
+              />
+            </Field>
+            <Field label={t('contentHistoryLimit')}>
+              <input
+                type="number"
+                min={0}
+                max={20}
+                value={historyLimit}
+                onChange={(event) => setHistoryLimit(Number(event.target.value))}
+              />
+            </Field>
+            <p className="muted small-text">{t('contentHistoryLimitHelp')}</p>
+            <div className="button-group">
+              <Button
+                disabled={busy}
+                onClick={() => {
+                  void run(() => api.clearIconCache());
+                }}
+              >
+                {t('clearIconCache')}
+              </Button>
+              <Button
+                disabled={busy}
+                onClick={() => {
+                  void run(() =>
+                    api.configureMarketplace({
+                      historyLimit,
+                      curseforgeKey: curseforgeKey || undefined,
+                    }),
+                  ).then((result) => {
+                    if (result.ok) {
+                      setCurseforgeKey('');
+                      marketplace.reload();
+                    }
+                  });
+                }}
+              >
+                {t('saveMarketplace')}
+              </Button>
+              {marketplace.data?.curseforgeConfigured && (
+                <Button
+                  variant="danger"
+                  disabled={busy}
+                  onClick={() => {
+                    void run(() =>
+                      api.configureMarketplace({ historyLimit, curseforgeKey: '' }),
+                    ).then((result) => {
+                      if (result.ok) {
+                        setCurseforgeKey('');
+                        marketplace.reload();
+                      }
+                    });
+                  }}
+                >
+                  {t('removeApiKey')}
+                </Button>
+              )}
+            </div>
+          </section>
         </div>
         <div>
-          <section className="panel">
-            <div className="section-heading">
-              <h2>{t('runtimes')}</h2>
-              <Coffee size={20} />
-            </div>
-            <p className="muted small-text">{t('runtimeHelp')}</p>
-            {runtimes.error && (
-              <ErrorBox error={runtimes.error} retry={runtimes.reload} retryLabel={t('retry')} />
-            )}
-            {[8, 11, 17, 21, 25].map((major) => {
-              const installed = runtimes.data?.filter((r) => r.major === major);
-              return (
-                <div className="runtime-row" key={major}>
-                  <span className="runtime-icon">
-                    <Coffee size={20} />
-                  </span>
-                  <div>
-                    <strong>Java {major}</strong>
-                    <small>
-                      {installed?.length
-                        ? t(
-                            installed.some((r) => r.source === 'managed')
-                              ? 'managed'
-                              : 'systemRuntime',
-                          )
-                        : t('notInstalled')}
-                    </small>
-                  </div>
-                  {installed?.length ? (
-                    <ShieldCheck size={18} className="green" />
-                  ) : (
-                    <Button
-                      disabled={busy}
-                      onClick={() => {
-                        void run(() => api.installRuntime(major)).then(() => runtimes.reload());
-                      }}
-                    >
-                      <Download size={14} />
-                      {t('install')}
-                    </Button>
-                  )}
-                </div>
-              );
-            })}
-          </section>
+          <RuntimeControls />
+          <UpdateControls />
           <section className="panel">
             <div className="section-heading">
               <h2>{t('about')}</h2>

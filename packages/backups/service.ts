@@ -10,6 +10,13 @@ import { atomicWrite } from '../security/paths';
 import { DomainError } from '../domain/errors';
 import type { Backup } from '../domain/types';
 import { z } from 'zod';
+import type { OperationService } from '../core/operations';
+import type { OperationContext } from '../domain/operations';
+import { engineDefinition } from '../domain/engines';
+import { engineSchema, installedContentSchema } from '../domain/types';
+import { modpackProfileSchema } from '../domain/modpacks';
+import { containedPath } from '../security/paths';
+import { findAvailablePort } from '../networking/network';
 const maximumBackupSize = 64 * 1024 ** 3;
 export interface BackupStorageProvider {
   root(): string;
@@ -26,8 +33,24 @@ export class BackupService {
     private readonly runner: ServerProcessSupervisor,
     private readonly secrets: SecretStore,
     private readonly provider: BackupStorageProvider,
+    private readonly jobs?: OperationService,
   ) {}
-  async create(id: string, reason = 'manual'): Promise<Backup> {
+  async create(id: string, reason = 'manual', signal?: AbortSignal): Promise<Backup> {
+    return this.jobs
+      ? this.jobs.run(
+          'backup',
+          'Backup',
+          id,
+          (context) => this.createArchive(id, reason, context),
+          signal,
+        )
+      : this.createArchive(id, reason);
+  }
+  private async createArchive(
+    id: string,
+    reason: string,
+    context?: OperationContext,
+  ): Promise<Backup> {
     const server = this.repo.server(id);
     if (server.installationComplete === false)
       throw new DomainError('INSTALL', 'Finish installation before backing up this server.');
@@ -36,10 +59,12 @@ export class BackupService {
     if (['installing', 'starting', 'stopping', 'restoring'].includes(server.status))
       throw new DomainError('BUSY', 'Wait for the current operation to finish.');
     const active = this.runner.isRunning(id);
+    if (active && !engineDefinition(server.engine).capabilities.liveBackup)
+      throw new DomainError('RUNNING', 'Stop this server before creating a consistent backup.');
     const previous = server.status;
     const root = this.provider.root();
     await mkdir(root, { recursive: true });
-    const size = await directorySize(server.path);
+    const size = await directorySize(server.path, context?.signal);
     const disk = await statfs(root);
     if (size > maximumBackupSize)
       throw new DomainError('SIZE', 'This server exceeds the V1 backup limit (64 GB).');
@@ -64,18 +89,33 @@ export class BackupService {
         format: 1,
         profile: {
           engine: server.engine,
+          modpack: server.modpack,
           version: server.version,
+          minecraftVersion: server.minecraftVersion,
           build: server.build,
           javaMajor: server.javaMajor,
           javaPath: server.javaPath,
           memoryMin: server.memoryMin,
           memoryMax: server.memoryMax,
+          entrypoint: server.entrypoint,
+          crossplayPort: server.crossplayPort,
+          launchArgsFile: server.launchArgsFile,
+          runtimePath: server.runtimePath,
+          loaderVersion: server.loaderVersion,
+          installerVersion: server.installerVersion,
         },
         content: this.repo.content(id),
       });
-      await zipDirectory(server.path, temporary, manifest);
-      const checksum = await sha256(temporary);
+      context?.phase('applying');
+      await zipDirectory(server.path, temporary, manifest, {
+        signal: context?.signal,
+        progress: (received) => context?.phase('applying', received, size),
+      });
+      context?.signal.throwIfAborted();
+      context?.phase('verifying');
+      const checksum = await sha256(temporary, context?.signal);
       const info = await stat(temporary);
+      context?.signal.throwIfAborted();
       await rename(temporary, filename);
       const meta: Backup = {
         id: backupId,
@@ -121,9 +161,9 @@ export class BackupService {
       }
     }
   }
-  async verify(id: string): Promise<boolean> {
+  async verify(id: string, signal?: AbortSignal): Promise<boolean> {
     const item = this.repo.backup(id);
-    const valid = (await sha256(item.path)) === item.metadata.sha256;
+    const valid = (await sha256(item.path, signal)) === item.metadata.sha256;
     this.repo.audit(
       'backup.verified',
       valid ? 'SHA-256 integrity verified.' : 'The backup is corrupted.',
@@ -132,18 +172,40 @@ export class BackupService {
     );
     return valid;
   }
-  async restore(id: string, confirmation: string): Promise<void> {
+  async restore(id: string, confirmation: string, recovery = false): Promise<void> {
+    const item = this.repo.backup(id);
+    return this.jobs
+      ? this.jobs.run('backup.restore', 'Restore', item.metadata.serverId, (context) =>
+          this.prepareRestore(id, confirmation, context, recovery),
+        )
+      : this.prepareRestore(id, confirmation, undefined, recovery);
+  }
+  private async prepareRestore(
+    id: string,
+    confirmation: string,
+    context?: OperationContext,
+    recovery = false,
+  ): Promise<void> {
     const item = this.repo.backup(id);
     const server = this.repo.server(item.metadata.serverId);
     if (confirmation !== server.name)
       throw new DomainError('CONFIRM', 'The confirmation name is incorrect.');
     if (this.runner.isRunning(server.id) || this.runner.isOrphaned(server.id))
       throw new DomainError('RUNNING', 'Stop the server before restoring a backup.');
-    if (!(await this.verify(id)))
+    if (!(await this.verify(id, context?.signal)))
       throw new DomainError('INTEGRITY', 'Corrupted backup. Restore cancelled.');
-    await this.create(server.id, 'before_restore');
+    const originalExists = await stat(server.path).then(
+      () => true,
+      (error: NodeJS.ErrnoException) => {
+        if (error.code === 'ENOENT' && recovery) return false;
+        throw error;
+      },
+    );
+    if (originalExists) await this.create(server.id, 'before_restore', context?.signal);
     const stage = path.join(path.dirname(server.path), `${server.id}.restore-${randomUUID()}`);
     const original = stage + '.previous';
+    const beforeProfile = { ...server };
+    const beforeContent = this.repo.content(server.id);
     let swapped = false;
     server.status = 'restoring';
     this.repo.saveServer(server);
@@ -152,66 +214,109 @@ export class BackupService {
       // ZIP sizes are checked while extracting; disk errors preserve the original directory.
       if (Number(info.bavail) * Number(info.bsize) < item.metadata.size + 128 * 1024 ** 2)
         throw new DomainError('DISK', 'Not enough disk space to prepare the restore.');
-      await extractZip(item.path, stage, maximumBackupSize);
+      context?.phase('extracting');
+      await extractZip(item.path, stage, maximumBackupSize, {
+        signal: context?.signal,
+        progress: (received) => context?.phase('extracting', received),
+      });
       const manifestSchema = z.object({
         format: z.literal(1),
         profile: z.object({
-          engine: z.enum(['paper', 'vanilla']),
+          engine: engineSchema,
+          modpack: modpackProfileSchema.optional(),
           version: z.string(),
+          minecraftVersion: z.string().optional(),
           build: z.string(),
           javaMajor: z.number(),
           javaPath: z.string(),
           memoryMin: z.number(),
           memoryMax: z.number(),
+          entrypoint: z.string().optional(),
+          crossplayPort: z.number().int().min(1024).max(65535).optional(),
+          launchArgsFile: z.string().optional(),
+          runtimePath: z.string().optional(),
+          loaderVersion: z.string().optional(),
+          installerVersion: z.string().optional(),
         }),
-        content: z.array(
-          z.object({
-            id: z.string().uuid(),
-            serverId: z.string().uuid(),
-            projectId: z.string(),
-            title: z.string(),
-            versionId: z.string(),
-            filename: z.string(),
-            enabled: z.boolean(),
-          }),
-        ),
+        content: z.array(installedContentSchema),
       });
       const manifest = manifestSchema.parse(
         JSON.parse(await readFile(path.join(stage, '.minedock-backup.json'), 'utf8')),
       );
       await rm(path.join(stage, '.minedock-backup.json'));
       const props = parseProperties(await readFile(path.join(stage, 'server.properties'), 'utf8'));
-      props['rcon.password'] = this.secrets.decrypt(this.repo.secret(server.id));
       // Keep managed network ports stable across restores.
       const current = parseProperties(
-        await readFile(path.join(server.path, 'server.properties'), 'utf8'),
+        originalExists ? await readFile(path.join(server.path, 'server.properties'), 'utf8') : '',
       );
-      props['rcon.port'] = current['rcon.port'] ?? '';
-      props['enable-rcon'] = 'true';
+      const engine = engineDefinition(manifest.profile.engine);
+      if (engine.capabilities.rcon) {
+        props['rcon.password'] = this.secrets.decrypt(this.repo.secret(server.id));
+        props['rcon.port'] =
+          current['rcon.port'] ??
+          String(await findAvailablePort(Math.min(server.port + 10, 65400)));
+        props['enable-rcon'] = 'true';
+      }
       props['server-port'] = String(server.port);
       await atomicWrite(path.join(stage, 'server.properties'), serializeProperties(props));
-      await stat(path.join(stage, 'server.jar'));
-      await rename(server.path, original);
-      try {
-        await rename(stage, server.path);
-        swapped = true;
-      } catch (e) {
-        await rename(original, server.path);
-        throw e;
-      }
+      await stat(
+        await containedPath(
+          stage,
+          manifest.profile.launchArgsFile ?? manifest.profile.entrypoint ?? 'server.jar',
+        ),
+      );
       Object.assign(server, manifest.profile);
+      server.minecraftVersion = manifest.profile.minecraftVersion;
+      server.entrypoint = manifest.profile.entrypoint;
+      server.crossplayPort = manifest.profile.crossplayPort;
+      server.modpack = manifest.profile.modpack;
+      server.launchArgsFile = manifest.profile.launchArgsFile;
+      server.runtimePath = manifest.profile.runtimePath;
+      server.loaderVersion = manifest.profile.loaderVersion;
+      server.installerVersion = manifest.profile.installerVersion;
       server.difficulty = props.difficulty as typeof server.difficulty;
       server.gamemode = props.gamemode as typeof server.gamemode;
       server.maxPlayers = Number(props['max-players']);
       server.viewDistance = Number(props['view-distance']);
-      server.simulationDistance = Number(props['simulation-distance']);
-      server.motd = props.motd ?? '';
+      server.simulationDistance = Number(props['simulation-distance'] ?? server.simulationDistance);
+      server.motd = props.motd ?? props['server-name'] ?? '';
       server.seed = props['level-seed'] ?? '';
       server.pvp = props.pvp === 'true';
-      server.whitelist = props['white-list'] === 'true';
+      server.whitelist = (props['white-list'] ?? props['allow-list']) === 'true';
       server.onlineMode = props['online-mode'] === 'true';
       server.error = undefined;
       server.status = 'stopped';
+      if (context && this.jobs) {
+        await this.jobs.swap(
+          context,
+          {
+            destination: server.path,
+            staging: stage,
+            previous: original,
+            beforeProfile,
+            beforeContent,
+          },
+          () => {
+            this.repo.db.prepare('DELETE FROM installed_content WHERE server_id=?').run(server.id);
+            for (const content of manifest.content) {
+              if (content.serverId !== server.id) throw new Error('Inconsistent content metadata.');
+              this.repo.saveContent(content);
+            }
+            this.repo.saveServer(server);
+          },
+        );
+        swapped = true;
+        this.repo.audit('backup.restored', item.metadata.name, server.id);
+        return;
+      }
+      await rename(server.path, original);
+      try {
+        await rename(stage, server.path);
+        swapped = true;
+      } catch (error) {
+        await rename(original, server.path);
+        throw error;
+      }
       this.repo.db.exec('BEGIN');
       try {
         this.repo.db.prepare('DELETE FROM installed_content WHERE server_id=?').run(server.id);

@@ -22,6 +22,7 @@ import {
   X,
   Download,
   LoaderCircle,
+  FolderInput,
 } from 'lucide-react';
 import type { Snapshot, Server, Progress } from '../../../../packages/domain/types';
 import { PRODUCT } from '../../../../packages/domain/types';
@@ -29,12 +30,17 @@ import { api } from './api';
 import { translator, activityLabel } from './i18n';
 import { localizeMessage } from '../../../../packages/domain/localization';
 import { defaultLanguage } from '../../../../packages/domain/languages';
+import { engineDefinition } from '../../../../packages/domain/engines';
 import { AppContext, useApp, type Run } from './context';
 import { Button, Empty, Loading, ErrorBox, bytes, duration, Dialog, Field } from './ui';
 import { CreateServer, Onboarding } from './wizard';
+import { ImportServerDialog } from './imports';
+import type { ImportServerPreview } from '../../../../packages/domain/imports';
+import type { ModpackPreview } from '../../../../packages/domain/modpacks';
+import { ModpackDialog } from './modpacks';
 import { ServerPage } from './server';
-import { BackupsView, ActivityView, SettingsView } from './management';
-type Page = 'dashboard' | 'backups' | 'activity' | 'settings';
+import { BackupsView, ActivityView, SettingsView, OperationsView } from './management';
+type Page = 'dashboard' | 'backups' | 'activity' | 'settings' | 'operations';
 export function Status({ server }: { server: Server }) {
   const { t } = useApp();
   return (
@@ -87,7 +93,12 @@ export function ServerActions({ server, compact = false }: { server: Server; com
       <Button
         title={t('backup')}
         aria-label={t('backup')}
-        disabled={busy || transitional || server.status === 'starting'}
+        disabled={
+          busy ||
+          transitional ||
+          server.status === 'starting' ||
+          (active && !engineDefinition(server.engine).capabilities.liveBackup)
+        }
         onClick={() => {
           void run(() => api.backup(server.id));
         }}
@@ -106,6 +117,8 @@ export function App() {
   const [page, setPage] = useState<Page>('dashboard');
   const [selected, setSelected] = useState<string>();
   const [create, setCreate] = useState(false);
+  const [importPreview, setImportPreview] = useState<ImportServerPreview>();
+  const [packPreview, setPackPreview] = useState<ModpackPreview>();
   const [progress, setProgress] = useState<Progress[]>([]);
   const [palette, setPalette] = useState(false);
   const [paletteSearch, setPaletteSearch] = useState('');
@@ -284,6 +297,7 @@ export function App() {
             </Button>
             <Button
               className={!selectedServer && page === 'backups' ? 'nav active' : 'nav'}
+              aria-label={t('backups')}
               variant="ghost"
               onClick={() => navigate('backups')}
             >
@@ -298,6 +312,18 @@ export function App() {
             >
               <Activity size={18} />
               {t('activity')}
+            </Button>
+            <Button
+              variant="ghost"
+              className={!selectedServer && page === 'operations' ? 'nav active' : 'nav'}
+              aria-label={t('operations')}
+              onClick={() => navigate('operations')}
+            >
+              <Download size={18} />
+              {t('operations')}
+              {snapshot.operations?.some((operation) => operation.status === 'attention') && (
+                <span className="nav-count">!</span>
+              )}
             </Button>
           </nav>
           <div className="sidebar-heading">
@@ -388,6 +414,16 @@ export function App() {
             ) : page === 'dashboard' ? (
               <Dashboard
                 onCreate={() => setCreate(true)}
+                onImport={() => {
+                  void run(() => api!.previewServerImport()).then((result) => {
+                    if (result.ok && result.value) setImportPreview(result.value);
+                  });
+                }}
+                onModpack={() => {
+                  void run(() => api!.previewModpack()).then((result) => {
+                    if (result.ok && result.value) setPackPreview(result.value);
+                  });
+                }}
                 onOpen={setSelected}
                 onActivity={() => navigate('activity')}
               />
@@ -395,6 +431,8 @@ export function App() {
               <BackupsView />
             ) : page === 'activity' ? (
               <ActivityView />
+            ) : page === 'operations' ? (
+              <OperationsView />
             ) : (
               <SettingsView />
             )}
@@ -412,6 +450,30 @@ export function App() {
           />
         )}
         {!snapshot.settings.onboarded && <Onboarding />}
+        {packPreview && (
+          <ModpackDialog
+            preview={packPreview}
+            onClose={() => {
+              if (!busy) setPackPreview(undefined);
+            }}
+            onCreated={(server) => {
+              setPackPreview(undefined);
+              setSelected(server.id);
+            }}
+          />
+        )}
+        {importPreview && (
+          <ImportServerDialog
+            preview={importPreview}
+            onClose={() => {
+              if (!busy) setImportPreview(undefined);
+            }}
+            onCreated={(server) => {
+              setImportPreview(undefined);
+              setSelected(server.id);
+            }}
+          />
+        )}
         {toast && (
           <div
             role={toast.error ? 'alert' : 'status'}
@@ -515,10 +577,14 @@ export function App() {
 }
 function Dashboard({
   onCreate,
+  onImport,
+  onModpack,
   onOpen,
   onActivity,
 }: {
   onCreate: () => void;
+  onImport: () => void;
+  onModpack: () => void;
   onOpen: (id: string) => void;
   onActivity: () => void;
 }) {
@@ -572,10 +638,20 @@ function Dashboard({
           <h1>{t('welcome')}</h1>
           <p>{t('welcomeSub')}</p>
         </div>
-        <Button variant="primary" onClick={onCreate}>
-          <Plus size={17} />
-          {t('newServer')}
-        </Button>
+        <div className="actions">
+          <Button onClick={onImport}>
+            <FolderInput size={17} />
+            {t('importServer')}
+          </Button>
+          <Button onClick={onModpack}>
+            <FolderInput size={17} />
+            {t('importModpack')}
+          </Button>
+          <Button variant="primary" onClick={onCreate}>
+            <Plus size={17} />
+            {t('newServer')}
+          </Button>
+        </div>
       </div>
       <div className="metric-grid">
         {statistics.map((stat) => (
@@ -668,7 +744,7 @@ function Dashboard({
                     <ArrowUpRight size={17} />
                   </button>
                   <p className="server-engine">
-                    {server.engine === 'paper' ? 'Paper' : 'Vanilla'} <span>·</span> Minecraft{' '}
+                    {engineDefinition(server.engine).displayName} <span>·</span> Minecraft{' '}
                     {server.version}
                   </p>
                   <div className="card-stats">

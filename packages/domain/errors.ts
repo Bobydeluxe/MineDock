@@ -7,6 +7,29 @@ export class DomainError extends Error {
     this.name = 'DomainError';
   }
 }
+export interface StructuredError {
+  code: string;
+  message: string;
+  retryable: boolean;
+}
+export type IpcResult<T> = { ok: true; value: T } | { ok: false; error: StructuredError };
+export function structuredError(error: unknown): StructuredError {
+  return {
+    code:
+      error instanceof DomainError
+        ? error.code
+        : error instanceof Error && error.name === 'AbortError'
+          ? 'CANCELLED'
+          : error instanceof Error && error.name === 'ZodError'
+            ? 'VALIDATION'
+            : 'INTERNAL',
+    message:
+      error instanceof Error && error.name === 'AbortError'
+        ? 'Operation cancelled.'
+        : readableError(error),
+    retryable: error instanceof DomainError && ['NETWORK', 'BUSY', 'DOWNLOAD'].includes(error.code),
+  };
+}
 export function readableError(error: unknown): string {
   if (error instanceof DomainError) return error.message;
   if (error instanceof Error) {

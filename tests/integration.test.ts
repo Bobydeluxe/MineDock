@@ -10,6 +10,7 @@ import { containedPath } from '../packages/security/paths';
 import { FileService } from '../packages/core/files';
 import { SchedulerService } from '../packages/core/scheduler';
 import { Repository } from '../packages/database/database';
+import { migrations } from '../packages/database/migrations';
 import { rconCommand } from '../packages/rcon/client';
 import { sha256 } from '../packages/backups/archive';
 async function until(test: () => boolean): Promise<void> {
@@ -68,7 +69,7 @@ it('SQLite persistence, migrations, metrics retention and encryption', async () 
   try {
     expect(f.repo.secret(f.server.id)).not.toContain('test-secret');
     expect(f.secrets.decrypt(f.repo.secret(f.server.id))).toBe('test-secret');
-    expect(f.repo.db.prepare('PRAGMA user_version').get()?.user_version).toBe(1);
+    expect(f.repo.db.prepare('PRAGMA user_version').get()?.user_version).toBe(migrations.length);
     f.repo.addMetric(f.server.id, {
       at: new Date().toISOString(),
       cpu: 10,

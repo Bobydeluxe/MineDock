@@ -17,6 +17,44 @@ import { DomainError } from '../domain/errors';
 import { redact, type SecretStore } from '../security/secrets';
 import { rconCommand } from '../rcon/client';
 import type { Server, LogLine } from '../domain/types';
+import { engineDefinition } from '../domain/engines';
+import { containedPath } from '../security/paths';
+import { PlayerService } from '../core/players';
+export async function startCommand(
+  server: Server,
+): Promise<{ executable: string; args: string[] }> {
+  const engine = engineDefinition(server.engine);
+  if (engine.runtimeType === 'native')
+    return {
+      executable: await containedPath(
+        server.path,
+        server.entrypoint ??
+          (process.platform === 'win32' ? 'bedrock_server.exe' : 'bedrock_server'),
+      ),
+      args: [],
+    };
+  if (engine.runtimeType === 'php')
+    return {
+      executable: server.runtimePath ?? '',
+      args: [
+        '-d',
+        'phar.readonly=0',
+        await containedPath(server.path, server.entrypoint ?? 'PocketMine-MP.phar'),
+        '--no-wizard',
+        '--disable-ansi',
+      ],
+    };
+  const args = [`-Xms${server.memoryMin}M`, `-Xmx${server.memoryMax}M`];
+  if (server.launchArgsFile) {
+    await stat(await containedPath(server.path, server.launchArgsFile));
+    args.push('@' + server.launchArgsFile, 'nogui');
+  } else {
+    const entry = server.entrypoint ?? 'server.jar';
+    await stat(await containedPath(server.path, entry));
+    args.push('-jar', entry, 'nogui');
+  }
+  return { executable: server.runtimePath ?? server.javaPath, args };
+}
 
 interface Instance {
   process: ChildProcessWithoutNullStreams;
@@ -37,6 +75,7 @@ export type ProcessLauncher = (
   options: SpawnOptionsWithoutStdio,
 ) => ChildProcessWithoutNullStreams;
 export class ServerProcessSupervisor implements ServerRunner {
+  readonly playerData: PlayerService;
   private readonly instances = new Map<string, Instance>();
   private readonly buffers = new Map<string, LogLine[]>();
   private readonly retryTimers = new Map<string, NodeJS.Timeout>();
@@ -56,8 +95,14 @@ export class ServerProcessSupervisor implements ServerRunner {
       spawn(file, args, { ...options, stdio: 'pipe' }),
     private readonly requestStart?: (id: string) => Promise<void>,
   ) {
+    this.playerData = new PlayerService(
+      repo,
+      (id, command) => this.command(id, command),
+      (id) => this.isRunning(id),
+    );
     // Never kill a persisted PID: after a crash it may have been reused by another application.
     for (const server of repo.servers()) {
+      this.playerData.endSessions(server.id, true);
       if (server.pid) {
         try {
           process.kill(server.pid, 0);
@@ -117,6 +162,7 @@ export class ServerProcessSupervisor implements ServerRunner {
     // ANSI escape bytes are expected in Minecraft console output.
     // eslint-disable-next-line no-control-regex
     const cleaned = redact(text.replace(/\x1b\[[0-9;]*m/g, '').slice(0, 16000));
+    this.playerData.observeLog(id, cleaned);
     const level =
       error || /\bERROR\b|Exception/.test(cleaned)
         ? 'ERROR'
@@ -134,7 +180,11 @@ export class ServerProcessSupervisor implements ServerRunner {
     this.buffers.set(id, lines);
     this.bus.emit({ type: 'log', serverId: id, line });
     const instance = this.instances.get(id);
-    if (instance && !instance.ready && /Done \([\d.,]+s\)!/.test(text)) {
+    if (
+      instance &&
+      !instance.ready &&
+      engineDefinition(this.repo.server(id).engine).readyPattern.test(text)
+    ) {
       instance.ready = true;
       clearTimeout(instance.startupTimer);
       const server = this.repo.server(id);
@@ -142,8 +192,12 @@ export class ServerProcessSupervisor implements ServerRunner {
       this.repo.saveServer(server);
       this.repo.audit('server.started', server.name, id);
     }
-    const joined = /\b([A-Za-z0-9_]{1,16}) joined the game/.exec(text)?.[1];
-    const left = /\b([A-Za-z0-9_]{1,16}) left the game/.exec(text)?.[1];
+    const joined =
+      /(?:^|[\s:])([A-Za-z0-9_.]{1,32}) joined the game/.exec(text)?.[1] ??
+      /Player connected: (.{1,32}?), xuid:/.exec(text)?.[1];
+    const left =
+      /(?:^|[\s:])([A-Za-z0-9_.]{1,32}) left the game/.exec(text)?.[1] ??
+      /Player disconnected: (.{1,32}?), xuid:/.exec(text)?.[1];
     if (joined || left) {
       const server = this.repo.server(id);
       if (joined) {
@@ -163,23 +217,59 @@ export class ServerProcessSupervisor implements ServerRunner {
       );
     if (this.instances.has(id)) throw new DomainError('RUNNING', 'This server is already running.');
     const server = this.repo.server(id);
-    if (server.status === 'installing' || !server.javaPath || server.installationComplete === false)
+    const engine = engineDefinition(server.engine);
+    const runtime = server.runtimePath ?? server.javaPath;
+    if (
+      runtime &&
+      this.repo.operations().some((operation) => {
+        if (
+          !/^runtime\.(?:install|repair|delete)$/.test(operation.kind) ||
+          (!operation.recoverable &&
+            ['completed', 'failed', 'cancelled'].includes(operation.status))
+        )
+          return false;
+        const checkpoint = this.repo.operationCheckpoint(operation.id);
+        if (!checkpoint) return false;
+        const relative = path.relative(checkpoint.destination, runtime);
+        return !relative.startsWith('..') && !path.isAbsolute(relative);
+      })
+    )
+      throw new DomainError(
+        'RUNTIME_BUSY',
+        'Resolve or finish this runtime operation before starting its servers.',
+      );
+    if (
+      server.status === 'installing' ||
+      (engine.runtimeType === 'java' && !server.javaPath) ||
+      server.installationComplete === false
+    )
       throw new DomainError('INSTALL', 'Server installation is not complete.');
     const props = parseProperties(
       await readFile(path.join(server.path, 'server.properties'), 'utf8'),
     );
     if (props['online-mode'] !== 'true')
       this.repo.audit('server.warning', 'Minecraft account verification is disabled.', id);
-    if (!(await checkPort(server.port)))
+    if (!(await checkPort(server.port, engine.protocol)))
       throw new DomainError(
         'PORT',
         `Port ${server.port} is already in use. Change it in settings.`,
       );
-    if (!(await checkPort(Number(props['rcon.port']))))
+    if (engine.capabilities.rcon && !(await checkPort(Number(props['rcon.port']))))
       throw new DomainError('PORT', `RCON port ${props['rcon.port']} is already in use.`);
-    await stat(server.javaPath);
-    await stat(path.join(server.path, 'server.jar'));
-    if (!/eula\s*=\s*true/.test(await readFile(path.join(server.path, 'eula.txt'), 'utf8')))
+    if (server.crossplayPort && !(await checkPort(server.crossplayPort, 'udp')))
+      throw new DomainError('PORT', 'The Geyser UDP port is already in use.');
+    if (
+      engine.protocol === 'udp' &&
+      server.ipv6Port &&
+      !(await checkPort(server.ipv6Port, 'udp', true))
+    )
+      throw new DomainError('PORT', 'The IPv6 UDP port is already in use.');
+    const launch = await startCommand(server);
+    await stat(launch.executable);
+    if (
+      engine.edition === 'java' &&
+      !/eula\s*=\s*true/.test(await readFile(path.join(server.path, 'eula.txt'), 'utf8'))
+    )
       throw new DomainError(
         'EULA',
         'You must accept the Minecraft EULA before starting the server.',
@@ -191,11 +281,17 @@ export class ServerProcessSupervisor implements ServerRunner {
     server.exitCode = undefined;
     server.startedAt = new Date().toISOString();
     this.repo.saveServer(server);
-    const child = this.launch(
-      server.javaPath,
-      [`-Xms${server.memoryMin}M`, `-Xmx${server.memoryMax}M`, '-jar', 'server.jar', 'nogui'],
-      { cwd: server.path, shell: false, windowsHide: true },
-    );
+    const child = this.launch(launch.executable, launch.args, {
+      cwd: server.path,
+      shell: false,
+      windowsHide: true,
+      env: {
+        ...process.env,
+        ...(engine.runtimeType === 'native' && process.platform === 'linux'
+          ? { LD_LIBRARY_PATH: server.path }
+          : {}),
+      },
+    });
     let ended!: () => void;
     const completion = new Promise<void>((resolve) => {
       ended = resolve;
@@ -232,6 +328,7 @@ export class ServerProcessSupervisor implements ServerRunner {
       clearTimeout(startupTimer);
       instance.lines.forEach((line) => line.close());
       this.instances.delete(id);
+      this.playerData.endSessions(id);
       clearProcessUsage(child.pid);
       const latest = this.repo.server(id);
       latest.pid = undefined;
@@ -302,11 +399,11 @@ export class ServerProcessSupervisor implements ServerRunner {
     const server = this.repo.server(id);
     server.status = 'stopping';
     this.repo.saveServer(server);
-    if (instance.ready) {
+    if (instance.ready && engineDefinition(server.engine).capabilities.rcon) {
       try {
         await this.command(id, 'save-all flush');
       } catch (e) {
-        this.log(id, `RCON indisponible : ${String(e)}`);
+        this.log(id, `RCON unavailable: ${String(e)}`);
       }
     }
     instance.process.stdin.write('stop\n');
@@ -356,6 +453,16 @@ export class ServerProcessSupervisor implements ServerRunner {
     if (!this.instances.has(id))
       throw new DomainError('STOPPED', 'Start the server before sending a command.');
     const server = this.repo.server(id);
+    if (!engineDefinition(server.engine).capabilities.rcon) {
+      if (/[\r\n\0]/.test(command) || Buffer.byteLength(command) > 4096)
+        throw new DomainError('COMMAND', 'Invalid command.');
+      await new Promise<void>((resolve, reject) =>
+        this.instances
+          .get(id)!
+          .process.stdin.write(command + '\n', (error) => (error ? reject(error) : resolve())),
+      );
+      return 'Command sent. See the console for its response.';
+    }
     const props = parseProperties(
       await readFile(path.join(server.path, 'server.properties'), 'utf8'),
     );
@@ -367,11 +474,14 @@ export class ServerProcessSupervisor implements ServerRunner {
   }
   async players(id: string): Promise<string[]> {
     if (!this.instances.get(id)?.ready) return [];
+    if (!engineDefinition(this.repo.server(id).engine).capabilities.rcon)
+      return this.repo.server(id).players;
     const output = await this.command(id, 'list');
     const names = (output.split(':').slice(1).join(':').trim() || '')
       .split(',')
       .map((n) => n.trim())
-      .filter((n) => /^[A-Za-z0-9_]{1,16}$/.test(n));
+      .filter((n) => /^[A-Za-z0-9_.]{1,32}$/.test(n));
+    this.playerData.observeOnline(id, names);
     const server = this.repo.server(id);
     server.players = names;
     this.repo.saveServer(server);
@@ -389,6 +499,7 @@ export class ServerProcessSupervisor implements ServerRunner {
           const usage = await processUsage(instance.process.pid);
           if (!this.instances.has(id)) continue;
           const server = this.repo.server(id);
+          this.playerData.observeOnline(id, server.players);
           server.cpu = usage.cpu;
           server.memory = usage.memory;
           this.repo.saveServer(server);
