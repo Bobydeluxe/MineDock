@@ -245,6 +245,11 @@ kbd,
 :root[data-theme='light'] .button.primary {
   color: white;
 }
+:root[data-theme='light'] .card-footer .button.primary {
+  color: var(--accent);
+  background: var(--accent-dark);
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+}
 .button.primary:hover:not(:disabled) {
   filter: brightness(1.1);
 }
@@ -544,108 +549,7 @@ kbd,
 .server-card:hover {
   border-color: #4c5652;
 }
-.server-art {
-  height: 106px;
-  background: linear-gradient(120deg, #192a24, #22362c 52%, #233932);
-  position: relative;
-  overflow: hidden;
-  image-rendering: pixelated;
-}
-.server-art:after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(0deg, rgba(17, 22, 19, 0.45), transparent);
-  pointer-events: none;
-}
-.art-1 {
-  background: linear-gradient(120deg, #222636, #35314a, #2a3041);
-}
-.art-2 {
-  background: linear-gradient(120deg, #2b2b21, #41432b, #2a3b29);
-}
-.terrain {
-  position: absolute;
-  display: block;
-  clip-path: polygon(
-    0 40%,
-    10% 40%,
-    10% 27%,
-    18% 27%,
-    18% 43%,
-    30% 43%,
-    30% 18%,
-    40% 18%,
-    40% 28%,
-    53% 28%,
-    53% 52%,
-    63% 52%,
-    63% 35%,
-    73% 35%,
-    73% 22%,
-    85% 22%,
-    85% 42%,
-    100% 42%,
-    100% 100%,
-    0 100%
-  );
-  width: 120%;
-  height: 75px;
-  bottom: 0;
-  left: -10px;
-  background: rgba(104, 133, 98, 0.28);
-}
-.terrain-two {
-  transform: translateX(45px) translateY(20px) scale(1.1);
-  background: rgba(19, 41, 29, 0.8);
-}
-.terrain-three {
-  transform: translateX(-10px) translateY(43px) scale(1.1);
-  background: rgba(10, 25, 20, 0.9);
-}
-.art-1 .terrain {
-  background: rgba(114, 109, 149, 0.3);
-}
-.art-1 .terrain-two,
-.art-1 .terrain-three {
-  background: rgba(24, 27, 46, 0.8);
-}
-.art-2 .terrain {
-  background: rgba(139, 147, 86, 0.3);
-}
-.art-2 .terrain-two,
-.art-2 .terrain-three {
-  background: rgba(28, 39, 21, 0.8);
-}
-.voxel {
-  display: block;
-  position: absolute;
-  height: 30px;
-  width: 30px;
-  right: 30px;
-  top: 40px;
-  background: linear-gradient(135deg, #64765a 50%, #42563b 50%);
-  transform: rotate(45deg);
-  opacity: 0.4;
-}
-.art-label {
-  position: absolute;
-  z-index: 1;
-  bottom: 12px;
-  left: 17px;
-  font-size: 8px;
-  letter-spacing: 1.7px;
-  color: #acb9b2;
-}
-.server-art .status {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  z-index: 1;
-  font-size: 9px;
-  padding: 5px 8px;
-  background: rgba(9, 17, 13, 0.65);
-}
+
 .status {
   display: inline-flex;
   gap: 6px;
@@ -993,20 +897,42 @@ textarea {
   outline-offset: 3px;
 }
 .dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
   color: var(--text);
   border: 1px solid var(--border);
   background: var(--panel);
   border-radius: 12px;
   padding: 0;
   width: min(640px, calc(100vw - 40px));
-  max-height: 90vh;
+  height: fit-content;
+  max-width: calc(100vw - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow: hidden;
   box-shadow: 0 20px 100px #0008;
+}
+.dialog[open] {
+  display: flex;
+  flex-direction: column;
+  animation: dialog-enter 140ms ease-out;
+}
+@keyframes dialog-enter {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 .dialog::backdrop {
   background: #070a0cc9;
   backdrop-filter: blur(4px);
 }
 .dialog > header {
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1014,6 +940,9 @@ textarea {
   border-bottom: 1px solid var(--border);
 }
 .dialog-body {
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
   padding: 25px;
 }
 .dialog-body h2 {
@@ -1021,14 +950,13 @@ textarea {
   margin-bottom: 7px;
 }
 .dialog-footer {
+  flex-shrink: 0;
   display: flex;
   justify-content: space-between;
   gap: 10px;
   padding: 18px 24px;
   border-top: 1px solid var(--border);
   background: color-mix(in srgb, var(--bg) 40%, var(--panel));
-  position: sticky;
-  bottom: 0;
 }
 .wizard-progress {
   display: flex;
@@ -1037,14 +965,14 @@ textarea {
   padding: 18px 24px 0;
   gap: 7px;
 }
-.wizard-progress > div {
+.wizard-progress > li {
   display: flex;
   align-items: center;
   gap: 7px;
   font-size: 10px;
   color: var(--muted);
 }
-.wizard-progress > div > span {
+.wizard-progress > li > span {
   width: 20px;
   height: 20px;
   border: 1px solid var(--border);
@@ -1053,10 +981,10 @@ textarea {
   place-items: center;
   font-size: 9px;
 }
-.wizard-progress > div.current {
+.wizard-progress > li.current {
   color: var(--accent);
 }
-.wizard-progress > div.current > span {
+.wizard-progress > li.current > span {
   border-color: var(--accent);
   background: var(--accent-dark);
 }
@@ -2097,7 +2025,7 @@ textarea {
   .console-toolbar select {
     max-width: 90px;
   }
-  .wizard-progress > div {
+  .wizard-progress > li {
     font-size: 8px;
     gap: 4px;
   }
@@ -2341,4 +2269,339 @@ textarea {
   display: flex;
   gap: 8px;
   margin-top: 18px;
+}
+
+/* Shared desktop layouts: engine identity, dialogs and frequently used actions. */
+.engine-mark {
+  display: block;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+:root[data-theme='light'] .engine-mark {
+  filter: saturate(1.15) brightness(0.7);
+}
+.server-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 18px 0;
+}
+.server-card-header > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+.server-card-header .status {
+  margin-left: auto;
+}
+.server-name {
+  text-align: left;
+}
+.server-name h3 {
+  font-size: 19px;
+  font-weight: 600;
+}
+.server-card-body {
+  padding: 14px 18px 16px;
+}
+.title-with-status {
+  flex-wrap: wrap;
+}
+.server-link > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 14px 2px;
+}
+.tabs button svg {
+  opacity: 0.7;
+  flex-shrink: 0;
+}
+.tabs button.selected svg {
+  color: var(--accent);
+  opacity: 1;
+}
+.create-dialog {
+  width: min(800px, calc(100vw - 40px));
+}
+.wizard-progress {
+  flex-shrink: 0;
+  padding: 20px 26px;
+  margin: 0;
+  border-bottom: 1px solid var(--border);
+}
+.wizard-progress > li {
+  font-size: 12px;
+  gap: 9px;
+}
+.wizard-progress > li > span {
+  width: 26px;
+  height: 26px;
+  font-size: 11px;
+}
+.wizard-body {
+  padding: 24px 26px;
+}
+.wizard-body h2 {
+  font-size: 23px;
+  line-height: 1.3;
+}
+.wizard-body .step-description {
+  font-size: 13px;
+  margin-bottom: 24px;
+  max-width: 64ch;
+}
+.edition-options {
+  display: flex;
+  gap: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  width: fit-content;
+}
+.edition-options button {
+  border-radius: 5px;
+  padding: 8px 16px;
+  color: var(--muted);
+  font-size: 12px;
+}
+.edition-options button[aria-pressed='true'] {
+  background: var(--hover);
+  color: var(--text);
+  box-shadow: 0 1px 3px #0002;
+}
+.engine-options {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin: 18px 0 24px;
+}
+.engine-options:has(> :nth-child(2):last-child) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.engine-option {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr);
+  gap: 12px;
+  padding: 16px;
+  border-radius: 9px;
+  transition:
+    background 140ms,
+    border-color 140ms;
+}
+.engine-option:hover:not(:disabled) {
+  background: var(--hover);
+  border-color: var(--muted);
+}
+.engine-option.selected {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.engine-option strong {
+  margin: 0;
+  font-size: 13px;
+  gap: 4px;
+  line-height: 1.4;
+}
+.engine-option strong svg {
+  flex-shrink: 0;
+  width: 15px;
+}
+.engine-option p {
+  grid-column: 1 / -1;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.preset-grid {
+  margin: 22px 0;
+}
+.preset-grid > button {
+  font-size: 13px;
+  padding: 20px;
+  border-radius: 9px;
+}
+.preset-grid > button:hover:not(:disabled) {
+  background: var(--hover);
+}
+.memory-custom {
+  margin: 20px 0;
+}
+.form-section-title {
+  margin: 22px 0 8px;
+  font-size: 14px;
+}
+.review-engine {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 20px 0;
+}
+.review-engine strong {
+  font-size: 18px;
+  overflow-wrap: anywhere;
+}
+.review-engine p {
+  font-size: 13px;
+  margin-top: 4px;
+}
+.installation-summary {
+  margin: 20px 0;
+  border-radius: 9px;
+}
+.installation-summary > div {
+  align-items: baseline;
+  font-size: 13px;
+}
+.installation-summary strong {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.dialog > header h2 {
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+.dialog > header .button {
+  flex-shrink: 0;
+}
+.dialog-error {
+  flex-shrink: 0;
+  max-height: 25dvh;
+  overflow: auto;
+}
+.field input,
+.field select,
+.field textarea {
+  min-width: 0;
+}
+.actions {
+  flex-wrap: wrap;
+}
+:root[data-theme='light'] .status.running {
+  color: #326b38;
+  background: #eef5ee;
+  border-color: #b7cbb8;
+}
+:root[data-theme='light'] .status.starting,
+:root[data-theme='light'] .status.installing,
+:root[data-theme='light'] .status.stopping {
+  color: #815611;
+}
+@media (max-width: 1100px) {
+  .tabs {
+    gap: 16px;
+  }
+}
+@media (max-width: 700px) {
+  .dialog,
+  .create-dialog {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    max-height: calc(100dvh - 24px);
+  }
+  .dialog > header,
+  .dialog-footer {
+    padding: 14px 18px;
+  }
+  .dialog-body,
+  .wizard-body {
+    padding: 20px 18px;
+  }
+  .wizard-progress {
+    padding: 14px 18px;
+    gap: 8px;
+  }
+  .wizard-progress > li {
+    font-size: 10px;
+    gap: 5px;
+  }
+  .wizard-progress > li > span {
+    width: 22px;
+    height: 22px;
+  }
+  .engine-options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .engine-option {
+    padding: 13px;
+    gap: 9px;
+  }
+  .preset-grid {
+    gap: 8px;
+  }
+  .preset-grid > button {
+    padding: 14px;
+  }
+  .installation-summary > div {
+    gap: 10px;
+  }
+  .server-card-header {
+    flex-wrap: wrap;
+  }
+}
+@media (max-width: 460px) {
+  .wizard-progress > li {
+    font-size: 0;
+  }
+  .wizard-progress > li > span {
+    font-size: 11px;
+  }
+  .engine-options {
+    grid-template-columns: 1fr;
+  }
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .dialog-footer {
+    flex-wrap: wrap;
+  }
+  .installation-summary > div {
+    flex-direction: column;
+    gap: 4px;
+  }
+  .installation-summary strong {
+    text-align: left;
+  }
+}
+
+.optional-panel > summary {
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 13px;
+}
+.optional-panel[open] > summary {
+  color: var(--text);
+  margin-bottom: 18px;
+}
+.optional-panel > .panel {
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+.preset-grid small {
+  font-size: 11px;
+  color: var(--accent);
+}
+
+.sidebar-engine {
+  position: relative;
+  flex-shrink: 0;
+  width: 24px;
+  overflow: visible !important;
+}
+.sidebar-engine .server-dot {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  border: 2px solid var(--sidebar);
+  width: 9px;
+  height: 9px;
+}
+.server-engine {
+  font-size: 12px;
+}
+.error-box span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }

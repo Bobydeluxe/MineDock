@@ -930,8 +930,8 @@ export function SettingsView() {
               {t('openFolder')}
             </Button>
           </section>
-          <section className="panel">
-            <h2>{t('marketplaceSettings')}</h2>
+          <details className="panel optional-panel">
+            <summary>{t('marketplaceSettings')}</summary>
             <p className="muted small-text">{t('curseforgeKeyHelp')}</p>
             {marketplace.error && (
               <ErrorBox
@@ -1011,7 +1011,7 @@ export function SettingsView() {
                 </Button>
               )}
             </div>
-          </section>
+          </details>
         </div>
         <div>
           <RuntimeControls />

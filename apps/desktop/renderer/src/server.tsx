@@ -19,9 +19,16 @@ import {
   Trash2,
   FolderOpen,
   Globe2,
+  Archive,
+  Puzzle,
+  CalendarClock,
+  Settings2,
+  ChartNoAxesCombined,
+  LayoutDashboard,
 } from 'lucide-react';
 import type { Server, LogLine, FileEntry } from '../../../../packages/domain/types';
 import { engineDefinition } from '../../../../packages/domain/engines';
+import { EngineIcon } from './engine-icon';
 import { useApp } from './context';
 import { Status, ServerActions } from './App';
 import { ContentView } from './content';
@@ -58,6 +65,18 @@ const tabs = [
   'analytics',
   'settings',
 ] as const;
+const tabIcons = {
+  overview: LayoutDashboard,
+  console: Terminal,
+  players: Users,
+  world: Globe2,
+  plugins: Puzzle,
+  files: Folder,
+  backups: Archive,
+  schedules: CalendarClock,
+  analytics: ChartNoAxesCombined,
+  settings: Settings2,
+};
 export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: () => void }) {
   const { t, api, snapshot, run, busy } = useApp();
   const [tab, setTab] = useState<(typeof tabs)[number]>('overview');
@@ -74,6 +93,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
             {t('servers')}
           </div>
           <div className="title-with-status">
+            <EngineIcon engine={server.engine} size={42} />
             <h1>{server.name}</h1>
             <Status server={server} />
           </div>
@@ -106,12 +126,19 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
             <button
               key={value}
               className={tab === value ? 'selected' : ''}
+              aria-pressed={tab === value}
               onClick={() => setTab(value)}
             >
+              {(() => {
+                const Icon = tabIcons[value];
+                return <Icon size={15} aria-hidden="true" />;
+              })()}
               {t(
                 value === 'plugins' && engineDefinition(server.engine).capabilities.mods
                   ? 'mods'
-                  : value,
+                  : value === 'world'
+                    ? 'worlds'
+                    : value,
               )}
             </button>
           ))}
@@ -148,7 +175,9 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
               </div>
               <strong>{bytes(server.memory)}</strong>
               <div className="metric-footer">
-                {t('memoryAllocated')} · {server.memoryMax / 1024} {t('gigabytes')}
+                {engineDefinition(server.engine).capabilities.javaMemory
+                  ? `${t('memoryAllocated')} · ${server.memoryMax / 1024} ${t('gigabytes')}`
+                  : t('resources')}
               </div>
             </div>
             <div className="metric-card">

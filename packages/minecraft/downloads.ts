@@ -58,7 +58,7 @@ export function approvedUrl(value: string): URL {
   return url;
 }
 const headers = {
-  'User-Agent': 'MineDock/0.3.0 (local desktop manager; https://github.com/Bobydeluxe/MineDock)',
+  'User-Agent': 'MineDock/0.3.1 (local desktop manager; https://github.com/Bobydeluxe/MineDock)',
 };
 export async function fetchApproved(
   url: string,

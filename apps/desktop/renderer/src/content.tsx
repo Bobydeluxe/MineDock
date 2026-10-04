@@ -7,6 +7,7 @@ import { useApp } from './context';
 import { Button, Field, Empty, ErrorBox, Loading, Dialog, useData, bytes } from './ui';
 import { Confirm } from './management';
 import { CrossplayView } from './crossplay';
+import { EngineIcon } from './engine-icon';
 export function ContentView({ server }: { server: Server }) {
   const { api, t, run, busy } = useApp();
   const [query, setQuery] = useState(''),
@@ -34,7 +35,6 @@ export function ContentView({ server }: { server: Server }) {
     return <Empty icon={<Puzzle />} title={t('vanillaPlugins')} />;
   return (
     <>
-      {engineDefinition(server.engine).capabilities.crossplay && <CrossplayView server={server} />}
       {supported && (
         <section className="panel">
           <div className="section-heading">
@@ -42,7 +42,7 @@ export function ContentView({ server }: { server: Server }) {
               <h2>{t('marketplaceTitle')}</h2>
               <p>{t('contentMarketplaceHelp')}</p>
             </div>
-            <Puzzle size={25} />
+            <EngineIcon engine={server.engine} size={36} />
           </div>
           <form
             className="marketplace-search"
@@ -235,6 +235,12 @@ export function ContentView({ server }: { server: Server }) {
           ))
         )}
       </section>
+      {engineDefinition(server.engine).capabilities.crossplay && (
+        <details className="panel optional-panel">
+          <summary>{t('configureCrossplay')} · Geyser / Floodgate</summary>
+          <CrossplayView server={server} />
+        </details>
+      )}
       {selection && (
         <ContentVersions
           server={server}

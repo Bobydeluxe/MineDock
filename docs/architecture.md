@@ -19,6 +19,8 @@ MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQL
 - `packages/updates`: pinned publisher signatures, update state, verified downloads and native installation helpers.
 - `apps/desktop/renderer`: capability-aware panels with bundled EN/FR/DE/ES/PT/IT catalogs; CodeMirror loads on demand.
 
+The renderer shares one native dialog wrapper, portaled to `document.body` and opened before paint in the browser top layer. It manages nested body scroll locks, focus, bounded internal scrolling and explicit dismissal. Eight bundled original SVG symbols identify engines across creation, server lists, details and imports. These interface components preserve the same preload/service contracts; see [UI design](ui.md).
+
 ## Persistence and transactions
 
 Native Node SQLite uses WAL, foreign keys, busy timeouts and integrity checks. Published migration 1 is unchanged. Versions 2–5 append long operations/checkpoints, partial downloads, content history, players, retention, runtimes, imports, marketplace settings, storage/world history, modpack approvals, authorized exports and retention-batch journals. A WAL checkpoint and database copy precede a schema upgrade; migrations run in transactions. Database snapshots also run at startup and hourly.

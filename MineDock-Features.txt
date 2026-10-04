@@ -1,5 +1,5 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Source version: 0.3.0 beta
+Source version: 0.3.1 beta (UI revision; not yet published)
 Updated: 4 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
@@ -20,6 +20,10 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Translated MineDock dialogs, errors, crash explanations and task descriptions.
 - Original Minecraft console output, file contents and external content retained.
 - Light, dark and system themes; server status and recent activity.
+- Centered native dialogs with body scroll lock, internal scrolling, keyboard
+  focus containment/restoration, accessible names and guarded backdrop/Escape.
+- Four-step engine/resource/settings/review wizard with original offline engine
+  icons, edition selection, collapsed advanced options and port/RAM validation.
 - OS/architecture, memory, disk-space, Java and local-network diagnostics.
 - Port availability and reservations; native file/folder dialogs and reveal.
 - Single application instance; optional sleep prevention while servers run.
@@ -264,7 +268,7 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Publisher CI secret configured separately from OS-signing certificates.
 - Public v0.3.0 signed feed verified for all twelve native package targets.
 - Real public Windows portable download rechecked against signed size/hash.
-- Current 0.3.0 correctly reports no newer version.
+- Published 0.3.0 correctly reported no newer version in the feed validation.
 - Actual newer-version OS installation/relaunch remains unvalidated.
 
 ======================================================================
@@ -294,9 +298,9 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Tests cover migration preservation, paths/archives, resumable HTTP, dependency
   conflicts, imports, worlds, file operations, players/storage, schedules,
   runtimes, retention/recovery and signed-update tampering/refusal.
-- Thirteen UI cases include actual Electron/main/preload/SQLite journeys and
+- Twenty-two UI cases include actual Electron/main/preload/SQLite journeys and
   explicit isolated demo scenarios; fixtures never become production data.
-- Packaged suite: seven actual Electron journeys.
+- Packaged suite includes actual Electron journeys and native dialog resizing.
 - Six-language preference/reload/restart tested.
 - Opt-in official catalogs, actual Java/PHP probes and content transactions.
 - Opt-in real Paper bootstrap uses eula=false; no playable world created.

@@ -1,9 +1,13 @@
-# Contributing
+# Contributing to MineDock
 
-Read [development](docs/development.md), [architecture](docs/architecture.md) and [security](docs/security.md). Keep UI, services and system access separate. Validate incoming data. Never construct shell commands from user input or access files outside an authorized root.
+Use Node 24+ and pnpm 11+. Run `pnpm install --frozen-lockfile`, then `pnpm dev` for actual desktop services or `pnpm dev:mock` for the clearly labeled demonstration.
 
-English is the primary language for code, documentation, issues and pull requests. Add application text to all six language catalogs as described in [localization](docs/localization.md). Preserve Minecraft commands, property names, external output and user content.
+Before submitting a change, run `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` and the relevant UI tests. Native package changes also need `pnpm test:packaged` against a freshly compiled package. Record the OS, architecture and exact source tested. See [development](docs/development.md) and [validation](docs/validation.md).
 
-Schema changes require a new migration. Destructive actions require suitable UI confirmation. Add behavioral tests for lifecycle, archives and security boundaries.
+UI changes should retain keyboard access, small-window scrolling, light/dark readability and all six languages. New English keys must have real FR/DE/ES/PT/IT translations with matching placeholders. Use the shared `Dialog` and `EngineIcon` components. `pnpm screenshots` regenerates the README captures from the explicitly labeled demo; keep captions clear about sample data.
 
-Before submitting, run `pnpm format`, `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:ui` and `pnpm build`. Never commit server data, secrets, downloaded runtimes or build artifacts.
+Keep main-process operations behind the typed IPC boundary. Preserve existing database migrations; append a migration when required. Use existing safety backups, operation checkpoints and recovery guards for file mutations. Do not add production demo fallbacks or assume an unavailable upstream architecture works.
+
+Tests use temporary, owned data. Official downloads and runtime probes are opt-in. Never accept a real Minecraft EULA or start a playable server on another person's behalf. Do not commit API keys, signing keys/certificates, private backups, server data or unredacted logs.
+
+A pull request should describe the user-visible problem, the final behavior and the validation actually performed. Include updated captures for visible changes and explain remaining platform or external-service limits. New original code/assets follow the project MIT license; document provenance for any third-party assets.
