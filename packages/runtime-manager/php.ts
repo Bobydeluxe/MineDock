@@ -19,6 +19,7 @@ const exec = promisify(execFile);
 export async function inspectPhp(
   filename: string,
   signal?: AbortSignal,
+  diagnostic?: (message: string) => void,
 ): Promise<{ version: string; zts: boolean; architecture: string } | null> {
   try {
     const output = await exec(
@@ -27,7 +28,7 @@ export async function inspectPhp(
         '-r',
         'echo json_encode(["version"=>PHP_VERSION,"zts"=>(bool)PHP_ZTS,"architecture"=>php_uname("m")]);',
       ],
-      { windowsHide: true, timeout: 10000, signal },
+      { windowsHide: true, timeout: 10000, signal, env: { ...process.env, PHPRC: '' } },
     );
     const detected = z
       .object({ version: z.string(), zts: z.boolean(), architecture: z.string() })
@@ -41,6 +42,7 @@ export async function inspectPhp(
     };
   } catch (error) {
     if (signal?.aborted) throw error;
+    diagnostic?.(error instanceof Error ? error.message.slice(0, 1500) : 'PHP probe failed.');
     return null;
   }
 }
@@ -202,7 +204,12 @@ export class PhpRuntimeManager {
         return undefined;
       };
       const executable = await find(stage);
-      const inspected = executable ? await inspectPhp(executable, context.signal) : null;
+      let diagnostic = '';
+      const inspected = executable
+        ? await inspectPhp(executable, context.signal, (message) => {
+            diagnostic = message;
+          })
+        : null;
       if (
         !executable ||
         !inspected?.zts ||
@@ -211,7 +218,8 @@ export class PhpRuntimeManager {
       )
         throw new DomainError(
           'PHP',
-          'The downloaded PHP runtime does not match PocketMine requirements.',
+          'The downloaded PHP runtime does not match PocketMine requirements.' +
+            (diagnostic ? '\n' + diagnostic : ''),
         );
       const runtime: Runtime = {
         path: path.join(destination, path.relative(stage, executable)),

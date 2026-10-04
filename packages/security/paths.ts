@@ -29,7 +29,7 @@ export function resolveSystemPath(...parts: string[]): string {
         lstatSync(existing);
         for (let cursor = existing; cursor !== path.dirname(cursor); cursor = path.dirname(cursor))
           if (lstatSync(cursor).isSymbolicLink()) return resolved;
-        return path.join(realpathSync(existing), ...tail);
+        return path.join(realpathSync.native(existing), ...tail);
       } catch (error) {
         if (
           (error as NodeJS.ErrnoException).code !== 'ENOENT' ||

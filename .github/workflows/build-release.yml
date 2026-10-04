@@ -54,6 +54,8 @@ jobs:
       - run: pnpm test
       - if: github.event_name == 'workflow_dispatch' && inputs.official_checks
         run: pnpm test:official --catalogs --runtimes --content
+        env:
+          MINEDOCK_GITHUB_TOKEN: ${{ github.token }}
       - if: github.event_name == 'workflow_dispatch' && inputs.paper_eula_gate
         run: pnpm test:live
       - run: pnpm ${{ matrix.command }}

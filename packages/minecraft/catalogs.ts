@@ -53,6 +53,11 @@ const githubReleaseSchema = z.object({
   ),
 });
 export type GithubRelease = z.infer<typeof githubReleaseSchema>;
+function githubHeaders(): Record<string, string> {
+  return process.env.MINEDOCK_GITHUB_TOKEN
+    ? { Authorization: `Bearer ${process.env.MINEDOCK_GITHUB_TOKEN}` }
+    : {};
+}
 export async function githubRelease(
   repository: 'pmmp/PocketMine-MP' | 'pmmp/PHP-Binaries',
   tag?: string,
@@ -61,7 +66,7 @@ export async function githubRelease(
   return githubReleaseSchema.parse(
     await fetchJson(
       `https://api.github.com/repos/${repository}/releases/${tag ? 'tags/' + encodeURIComponent(tag) : 'latest'}`,
-      undefined,
+      githubHeaders(),
       signal,
     ),
   );
@@ -277,7 +282,10 @@ export class PocketMineCatalog implements EngineCatalog {
     return z
       .array(githubReleaseSchema)
       .parse(
-        await fetchJson('https://api.github.com/repos/pmmp/PocketMine-MP/releases?per_page=100'),
+        await fetchJson(
+          'https://api.github.com/repos/pmmp/PocketMine-MP/releases?per_page=100',
+          githubHeaders(),
+        ),
       )
       .filter(
         (v) => !v.prerelease && !v.draft && v.assets.some((a) => a.name === 'PocketMine-MP.phar'),

@@ -34,6 +34,7 @@ async function main(): Promise<void> {
     if (flags.has('--catalogs')) {
       const results = [];
       for (const engine of engineIds) {
+        console.log(`Checking official ${engine} catalog...`);
         try {
           const versions = await core.versions.versions(engine);
           if (!versions.length) throw new Error(`${engine}: empty official catalog.`);
@@ -142,6 +143,10 @@ async function main(): Promise<void> {
     }
     await writeFile(path.join(root, 'result.json'), JSON.stringify(report, null, 2));
     console.log('No Minecraft executable was launched and no real EULA was accepted.');
+  } catch (error) {
+    report.failure = error instanceof Error ? error.message : 'Official validation failed.';
+    await writeFile(path.join(root, 'result.json'), JSON.stringify(report, null, 2));
+    throw error;
   } finally {
     await core.close();
   }
