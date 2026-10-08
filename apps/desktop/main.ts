@@ -7,6 +7,7 @@ import {
   safeStorage,
   powerSaveBlocker,
   Menu,
+  Notification,
 } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -39,6 +40,8 @@ import { LocalSecretStore, redact, type SecretStore } from '../../packages/secur
 import { prepareUpdateLaunch, launchUpdate } from '../../packages/updates/install';
 import { DomainError } from '../../packages/domain/errors';
 import { packKindSchema, packRequestSchema, packActionSchema } from '../../packages/domain/packs';
+import { healthSettingsSchema } from '../../packages/domain/health';
+import { translator } from './renderer/src/i18n';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -211,6 +214,17 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('health', (value) => core.health.report(id(value)));
+  handle('healthSettings', () => core.health.settings());
+  handle('configureHealth', (value) => core.health.configure(healthSettingsSchema.parse(value)));
+  handle('notices', () => core.health.notices());
+  handle('readNotices', (value) => core.health.read(z.string().uuid().optional().parse(value)));
+  handle('crashReport', (value) => core.health.crash(id(value)));
+  handle('revealCrash', async (value) => {
+    const server = core.repo.server(id(value)),
+      report = await core.health.crash(server.id);
+    if (report.path) shell.showItemInFolder(await containedPath(server.path, report.path));
+  });
   handle('packSearch', (value, kind, query) =>
     core.packs.search(
       core.repo.server(id(value)),
@@ -824,6 +838,19 @@ if (single)
         callback(false),
       );
       core.bus.subscribe((event) => {
+        if (
+          event.type === 'notice' &&
+          core?.health.settings().nativeNotifications &&
+          Notification.isSupported()
+        ) {
+          const t = translator(core.repo.settings().language);
+          new Notification({
+            title: event.notice.serverId
+              ? core.repo.server(event.notice.serverId).name
+              : 'MineDock',
+            body: t(('notice.' + event.notice.code) as Parameters<typeof t>[0]),
+          }).show();
+        }
         if (event.type === 'log') {
           const lines = consoleBatches.get(event.serverId) ?? [];
           lines.push(event.line);

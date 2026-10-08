@@ -17,4 +17,6 @@ Stage 1 implementation: world-scoped datapacks, required dependency preview, con
 
 ## Validation boundaries
 
+Stage 2 implementation: a bounded persisted notification centre with read/all-read, preference switches, thirty-second CPU/working-set thresholds and fifteen-minute deduplication; native Electron notifications when supported and enabled. Health reports backup age, crash/install state, free disk and host memory. The crash viewer reads a bounded tail from the latest report/log, redacts secrets and links possible managed content to matching evidence without asserting causality. Migration 7 only adds notice storage. Lint, types and unit regression passed: 190 tests, four platform skips. JVM heap/swap and external reachability are not inferred from process memory or local connectivity.
+
 This Windows workspace can validate local files, SQLite, Electron and Windows packages. macOS/Linux installation and an actual multiplayer game need their own environments. A local port check alone cannot establish Internet reachability. A local resource pack requires an accessible HTTP(S) URL before clients can download it.

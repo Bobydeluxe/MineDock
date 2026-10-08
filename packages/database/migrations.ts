@@ -59,4 +59,10 @@ export const migrations = [
       CREATE INDEX mod_events_by_server_time ON mod_events(server_id,at);
     `,
   },
+  {
+    version: 7,
+    sql: `CREATE TABLE survival_notices (id TEXT PRIMARY KEY, server_id TEXT REFERENCES servers(id) ON DELETE CASCADE, code TEXT NOT NULL, metadata TEXT NOT NULL);
+    CREATE INDEX survival_notices_by_server ON survival_notices(server_id,code);
+  `,
+  },
 ];

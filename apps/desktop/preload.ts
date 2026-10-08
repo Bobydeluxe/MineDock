@@ -10,6 +10,13 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  health: (id) => call('health', id),
+  healthSettings: () => call('healthSettings'),
+  configureHealth: (input) => call('configureHealth', input),
+  notices: () => call('notices'),
+  readNotices: (id) => call('readNotices', id),
+  crashReport: (id) => call('crashReport', id),
+  revealCrash: (id) => call('revealCrash', id),
   packSearch: (id, kind, query) => call('packSearch', id, kind, query),
   packInventory: (id, kind, world) => call('packInventory', id, kind, world),
   packVersions: (id, kind, project) => call('packVersions', id, kind, project),

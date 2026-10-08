@@ -53,6 +53,7 @@ import { recoveryActionSchema, type RecoveryAction } from '../domain/operations'
 import { copyRegularFile } from '../security/copy';
 import { sha256 } from '../backups/archive';
 import { PackService } from '../marketplace/packs';
+import { HealthService } from './health';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -84,6 +85,7 @@ export class AppCore {
   readonly storage: StorageService;
   readonly players: PlayerService;
   readonly packs: PackService;
+  readonly health: HealthService;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -94,6 +96,7 @@ export class AppCore {
     private readonly secrets: SecretStore,
   ) {
     this.repo = new Repository(root, this.bus);
+    this.health = new HealthService(this.repo, this.bus);
     this.logger = new Logger(path.join(root, 'logs'));
     this.downloads = new DownloadManager(this.bus, this.repo);
     this.jobs = new OperationService(this.repo, this.bus, this.logger);
@@ -700,6 +703,7 @@ export class AppCore {
   }
   async close(): Promise<void> {
     this.closing = true;
+    this.health.close();
     clearInterval(this.maintenance);
     const updateShutdown = this.updates.close();
     this.downloads.cancelAll();

@@ -159,6 +159,31 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    health: async () => ({
+      state: 'healthy',
+      issues: [],
+      hostFreeBytes: 0,
+      memorySource: 'process-working-set',
+    }),
+    healthSettings: async () => ({
+      nativeNotifications: false,
+      crash: true,
+      backupFailed: true,
+      offline: true,
+      update: true,
+      lowDisk: true,
+      playerJoin: false,
+      playerLeave: false,
+      cpuPercent: 90,
+      memoryPercent: 90,
+      diskFreeGiB: 2,
+      backupAgeHours: 48,
+    }),
+    configureHealth: async (input) => input,
+    notices: async () => [],
+    readNotices: async () => {},
+    crashReport: async () => ({ text: '', diagnosis: '', evidence: [], candidates: [] }),
+    revealCrash: async () => {},
     packSearch: async () => [],
     packInventory: async () => ({ installed: [], manual: [], problems: [] }),
     packVersions: async () => [],

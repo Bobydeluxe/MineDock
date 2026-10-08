@@ -37,6 +37,7 @@ import { FileTools, ArchiveTools } from './file-tools';
 import { StorageView } from './storage';
 import { PlayersView } from './players';
 import { PacksView } from './packs';
+import { HealthView } from './health';
 import {
   Button,
   Field,
@@ -155,6 +156,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       )}
       {tab === 'overview' && (
         <>
+          <HealthView server={server} />
           <div className="metric-grid">
             <div className="metric-card">
               <div className="metric-label">

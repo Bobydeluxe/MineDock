@@ -40,8 +40,9 @@ import type { ImportServerPreview } from '../../../../packages/domain/imports';
 import type { ModpackPreview } from '../../../../packages/domain/modpacks';
 import { ModpackDialog } from './modpacks';
 import { ServerPage } from './server';
+import { NotificationsView } from './health';
 import { BackupsView, ActivityView, SettingsView, OperationsView } from './management';
-type Page = 'dashboard' | 'backups' | 'activity' | 'settings' | 'operations';
+type Page = 'dashboard' | 'backups' | 'activity' | 'settings' | 'operations' | 'notifications';
 export function Status({ server }: { server: Server }) {
   const { t } = useApp();
   return (
@@ -289,6 +290,14 @@ export function App() {
           </div>
           <nav aria-label={t('dashboard')}>
             <Button
+              className={!selectedServer && page === 'notifications' ? 'nav active' : 'nav'}
+              variant="ghost"
+              onClick={() => navigate('notifications')}
+            >
+              <Activity size={18} />
+              {t('notifications')}
+            </Button>
+            <Button
               className={!selectedServer && page === 'dashboard' ? 'nav active' : 'nav'}
               variant="ghost"
               onClick={() => navigate('dashboard')}
@@ -429,6 +438,8 @@ export function App() {
                 onOpen={setSelected}
                 onActivity={() => navigate('activity')}
               />
+            ) : page === 'notifications' ? (
+              <NotificationsView />
             ) : page === 'backups' ? (
               <BackupsView />
             ) : page === 'activity' ? (

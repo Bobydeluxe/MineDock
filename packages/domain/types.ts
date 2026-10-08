@@ -288,6 +288,7 @@ export interface Progress {
   error?: string;
 }
 export type AppEvent =
+  | { type: 'notice'; notice: import('./health').Notice }
   | { type: 'server'; server: Server }
   | { type: 'log'; serverId: string; line: LogLine }
   | { type: 'logs'; serverId: string; lines: LogLine[] }
@@ -307,6 +308,15 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  health(id: string): Promise<import('./health').HealthReport>;
+  healthSettings(): Promise<import('./health').HealthSettings>;
+  configureHealth(
+    input: import('./health').HealthSettings,
+  ): Promise<import('./health').HealthSettings>;
+  notices(): Promise<import('./health').Notice[]>;
+  readNotices(id?: string): Promise<void>;
+  crashReport(id: string): Promise<import('./health').CrashReport>;
+  revealCrash(id: string): Promise<void>;
   packSearch(id: string, kind: import('./packs').PackKind, query: string): Promise<Project[]>;
   packInventory(
     id: string,
