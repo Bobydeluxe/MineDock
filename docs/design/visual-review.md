@@ -8,10 +8,10 @@ The existing sidebar, page order, cards, tabs, creation/import steps, dialogs an
 
 | Role               | Dark                    | Light                  |
 | ------------------ | ----------------------- | ---------------------- |
-| Background         | `#111a1e`               | `#f3f1eb`              |
-| Sidebar            | `#162228`               | `#e8ede9`              |
-| Panel              | `#1c2a30`               | `#fcfbf7`              |
-| Card               | `#213138`               | `#ffffff`              |
+| Background         | Charcoal `#151515`      | `#f3f1eb`              |
+| Sidebar            | `#1c1c1c`               | `#e8ede9`              |
+| Panel              | `#232323`               | `#fcfbf7`              |
+| Card               | `#292929`               | `#ffffff`              |
 | Primary identity   | Oxidized teal `#80cabe` | Mineral teal `#17695f` |
 | Secondary identity | Copper `#d0aa83`        | Copper `#875731`       |
 | Success            | `#a2d299`               | `#376b35`              |
@@ -20,6 +20,8 @@ The existing sidebar, page order, cards, tabs, creation/import steps, dialogs an
 | Information        | `#a5c6e2`               | `#315f84`              |
 
 `apps/desktop/renderer/src/tokens.css` owns surfaces, three text levels, primary/secondary accents, semantic colors, control boundaries, hover/selection/focus, console/syntax colors, radii, overlay shadows and 140–180 ms transitions. Existing layout selectors keep their dimensions, spacing and responsive breakpoints. Buttons/fields use a 4 px radius, cards 8 px and dialogs 12 px. The native UI font stays readable; brand typography, label weights and tabular figures distinguish identity and hierarchy. There are no downloaded fonts or new runtime UI libraries.
+
+Owner review found the first dark proposal too blue. The current dark background, sidebar, panels, cards, inputs and console use neutral charcoal grays, with warmer neutral text/borders. Teal/copper remain accents and semantic information remains blue. The approved light palette, including its console, is unchanged.
 
 Sidebar selections have an inset rail. Server cards use state rails and semantic status markers; metric panels and administration panels use different surfaces. Copper is reserved for secondary context such as worlds, archives and groups. Only the workspace carries a nearly transparent module grid. Shadows serve overlays and menus. Engine symbols retain their individual geometry/color without the shared enclosing tile. Mod/plugin icons keep their own identity.
 
@@ -39,6 +41,12 @@ The left images are explicitly historical comparisons. The right images represen
 | Light creation  | ![Previous light creation wizard](before/create-server-light.png) | ![Current light creation wizard](../screenshots/create-server-light.png) |
 | Light server    | ![Previous light server overview](before/server-light.png)        | ![Current light server overview](../screenshots/server-light.png)        |
 | Light mods      | ![Previous light installed mods](before/mods-light.png)           | ![Current light installed mods](../screenshots/mods-light.png)           |
+
+The first teal/copper proposal was too blue in dark appearance. This additional comparison shows that proposal at its immutable source revision beside the neutral charcoal refinement. The approved light design stays unchanged.
+
+| First dark proposal (historical)                                                                                                                                  | Current charcoal dark appearance                                    |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| ![First blue-tinted dark proposal](https://raw.githubusercontent.com/Bobydeluxe/MineDock/863c6fce35cc6a1810919b76f02e6a937233bb6e/docs/screenshots/dashboard.png) | ![Refined neutral charcoal dashboard](../screenshots/dashboard.png) |
 
 The native comparison measures **181 rectangles across 26 views/states**: sidebar, header, page actions, metric/server grids and cards, dialogs, wizard steps/options/footer, tabs, mod panels and installed rows. Positions, sizes, display/position modes, grid columns, gaps and padding agree within **0.5 CSS pixels**. This is evidence for the sampled native capture profile; responsive behavior is checked separately at 760 × 520, 1360 × 900, 1920 × 1080 and 2560 × 1440, in both themes. Existing small-dialog tests also cover 480 × 500.
 

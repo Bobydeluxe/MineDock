@@ -12,7 +12,7 @@
 
 ## Project status
 
-MineDock is a **beta** for Windows, Linux and macOS. The latest published version is **0.3.0**. Current development source is **0.3.1**, with centered dialogs, a simpler creation wizard, original engine symbols and the complete Modrinth mod manager. A separate visual-review branch adds the mineral teal/copper design in the screenshots while preserving the existing layout and journeys. These changes have not been published as a new release; public 0.3.0 packages predate them. See the [before/after review](docs/design/visual-review.md).
+MineDock is a **beta** for Windows, Linux and macOS. The latest published version is **0.3.0**. Current development source is **0.3.1**, with centered dialogs, a simpler creation wizard, original engine symbols and the complete Modrinth mod manager. A separate visual-review branch adds the mineral teal/copper design with neutral charcoal dark surfaces in the screenshots while preserving the existing layout and journeys. These changes have not been published as a new release; public 0.3.0 packages predate them. See the [before/after review](docs/design/visual-review.md).
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 

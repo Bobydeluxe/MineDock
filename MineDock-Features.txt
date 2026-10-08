@@ -20,7 +20,7 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Translated MineDock dialogs, errors, crash explanations and task descriptions.
 - Original Minecraft console output, file contents and external content retained.
 - Light, dark and system themes; server status and recent activity.
-- Proposed mineral teal/copper visual identity, with layered slate/warm surfaces,
+- Proposed mineral teal/copper visual identity, with layered charcoal/warm surfaces,
   shared tokens, semantic states, restrained radii and keyboard-visible focus.
 - Existing sidebar, pages, card positions and user journeys retained.
 - Current native Electron gallery and historical before/after comparison.

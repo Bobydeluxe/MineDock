@@ -6,6 +6,8 @@ The 0.3.1 visual-review source gives the existing interface a mineral teal/coppe
 
 `apps/desktop/renderer/src/tokens.css` centralizes dark/light surfaces, text levels, semantic states, control borders, focus, selection, console/editor colors, radii and short transitions. The sidebar uses an inset selection rail; server cards, metrics and administration panels have distinct surfaces. Copper identifies secondary world/archive context. Eight server states and mod/plugin badges use readable semantic colors. Console output retains its own dark surface in both themes. Keyboard focus remains visible and reduced-motion preferences disable transient indicators.
 
+Owner review refined the dark surfaces to neutral charcoal grays, with neutral text, borders and overlays. Teal/copper remain accents. All 76 calculated light-theme tokens remain unchanged, including the light console, whose previous inherited colors are now explicitly preserved.
+
 These presentation changes do not alter persistence, security boundaries, downloads, process supervision or update rules. English remains the default with the existing six offline languages.
 
 ## Dialogs

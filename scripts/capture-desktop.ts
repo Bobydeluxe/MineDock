@@ -378,6 +378,17 @@ if (!process.argv.includes('--first-start')) {
       await api.start(id);
     }, paper.id);
     await expect(page.locator('.status.running')).toBeVisible();
+    // Let the real process sampler populate metrics before photographing active views.
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async (id) => {
+            const api = (window as unknown as { minedock: Api }).minedock;
+            return (await api.snapshot()).servers.find((server) => server.id === id)?.memory ?? 0;
+          }, paper.id),
+        { timeout: 15000 },
+      )
+      .toBeGreaterThan(0);
     await capture('console-active');
     await tabs.getByRole('button', { name: 'Overview', exact: true }).click();
     await capture('server-active');

@@ -1,21 +1,21 @@
-/* MineDock: mineral surfaces, oxidized teal identity and restrained copper.
+/* MineDock: charcoal/warm surfaces, oxidized teal identity and restrained copper.
    Color and elevation live here; layout dimensions remain in style.css. */
 :root {
   color-scheme: dark;
-  --background: #111a1e;
-  --surface-sidebar: #162228;
-  --surface-panel: #1c2a30;
-  --surface-card: #213138;
-  --surface-interactive: #293c43;
-  --surface-hover: #30464e;
-  --surface-input: #142127;
-  --surface-modal: #223239;
-  --surface-console: #101b21;
-  --surface-disabled: #1d2b31;
-  --text-primary: #e5edef;
-  --text-secondary: #c0cdd1;
-  --text-muted: #9eb1b8;
-  --text-quiet: #91a5ad;
+  --background: #151515;
+  --surface-sidebar: #1c1c1c;
+  --surface-panel: #232323;
+  --surface-card: #292929;
+  --surface-interactive: #333333;
+  --surface-hover: #3b3b3b;
+  --surface-input: #1a1a1a;
+  --surface-modal: #2c2c2c;
+  --surface-console: #121212;
+  --surface-disabled: #252525;
+  --text-primary: #ecebe8;
+  --text-secondary: #cfceca;
+  --text-muted: #b0aea8;
+  --text-quiet: #a6a39c;
   --accent-primary: #80cabe;
   --accent-primary-hover: #99dacd;
   --accent-on-primary: #102c29;
@@ -24,19 +24,19 @@
   --warning: #e6be79;
   --danger: #f0a4a5;
   --info: #a5c6e2;
-  --border-subtle: #34474e;
-  --border-control: #607b85;
-  --border-hover: #72909b;
+  --border-subtle: #3e3e3e;
+  --border-control: #7d7d78;
+  --border-hover: #90908a;
   --focus: #a0e0d4;
-  --console-text: #d0dee3;
-  --console-muted: #92abb6;
+  --console-text: #dbdad6;
+  --console-muted: #aaa79f;
   --console-success: #a8d5a0;
   --console-warning: #ebc486;
   --console-danger: #ffb2ad;
   --console-info: #abd1ee;
-  --console-border: #465e69;
-  --overlay: #081217bd;
-  --shadow-color: #050d1259;
+  --console-border: #53534f;
+  --overlay: #0a0a0ac2;
+  --shadow-color: #00000066;
   --texture-line: #80cabe0a;
 }
 :root[data-theme='light'] {
@@ -69,6 +69,11 @@
   --overlay: #10282682;
   --shadow-color: #213d3526;
   --texture-line: #17695f09;
+  /* Preserve the approved light console when neutralizing the dark theme. */
+  --surface-console: #101b21;
+  --console-text: #d0dee3;
+  --console-muted: #92abb6;
+  --console-border: #465e69;
 }
 :root {
   --font-ui: 'Segoe UI', Inter, system-ui, sans-serif;
