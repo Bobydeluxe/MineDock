@@ -1,6 +1,6 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Source version: 0.3.1 beta (UI revision; not yet published)
-Updated: 4 October 2026
+Source version: 0.3.1 beta (development UI and mod manager; not yet published)
+Updated: 8 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
 English is the primary project language and default application language.
@@ -70,11 +70,25 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Server trash/recovery; removing a managed-original profile keeps its folder.
 
 ======================================================================
-4. MODS, PLUGINS AND MARKETPLACES — IMPLEMENTED
+4. MOD MANAGEMENT AND PLUGINS — IMPLEMENTED
 ======================================================================
-- Modrinth server plugins and loader-compatible mods.
+- Modrinth is the sole mod catalogue for Fabric, Forge and NeoForge.
+- Discover / Installed / Updates, exact server compatibility, pagination,
+  debounced search, category/side/recent filters and official catalogue sorting.
+- Recommended stable installation with named required/optional dependencies.
+- Atomic batch install/update, validated hashes and staged rollback on failure.
+- Local favorites, reusable collections and compatible destination previews.
+- Version locks exclude bulk updates; explicit version changes remain possible.
+- Selected enable/disable/uninstall, shared dependency retention and optional
+  removal of unused automatic dependencies.
+- Metadata-only manual JAR scans and opt-in exact Modrinth hash identification.
+- Local mod operations work offline; cached catalogue responses are marked.
+- Pre-start health checks for all launch paths; critical known problems block.
+- Minecraft/loader change analysis and backed-up engine migration.
+- Bounded disk metadata/hash cache and batched updates (100 mods/request).
+- Mod operation history and archived compatible versions in SQLite.
+- Modrinth server plugins remain available alongside Hangar plugins.
 - Hangar plugins on supported engines.
-- CurseForge official API with owner key, encrypted storage and missing-key UI.
 - Search, real metadata, selected versions, changelogs and compatibility filters.
 - Pinned required dependencies; bounded traversal, cycles/conflicts rejected.
 - Distribution restrictions and unavailable download URLs respected.
@@ -145,8 +159,6 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Actual known mod provenance recorded; unknown provenance remains manual.
 - Approved archive retained for complete retry after failure/interruption.
 - Profile/modpack metadata preserved in backups and recovery.
-- CurseForge modpack restrictions/integration assessment documented in
-  docs/marketplaces.md; no CurseForge pack importer is exposed yet.
 
 ======================================================================
 9. ADVANCED FILES — IMPLEMENTED
@@ -277,7 +289,8 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Electron sandbox/context isolation; renderer has no Node access.
 - Narrow typed preload, payload/frame/origin/sender validation, structured errors.
 - No production fallback to demo/mock backend.
-- Original SQLite migration 1 preserved; append-only migrations 2 through 5.
+- Published SQLite migrations 1–5 preserved; appended migration 6.
+- Retired catalogue credentials removed; existing binaries retained as local mods.
 - WAL checkpoint/database backup before upgrade; persistent feature histories.
 - Path/size/archive/link checks; verified native system aliases normalized.
 - Encrypted local secrets and redacted logs/audit.
@@ -298,7 +311,7 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Tests cover migration preservation, paths/archives, resumable HTTP, dependency
   conflicts, imports, worlds, file operations, players/storage, schedules,
   runtimes, retention/recovery and signed-update tampering/refusal.
-- Twenty-three UI cases include actual Electron/main/preload/SQLite journeys and
+- Twenty-four UI cases include actual Electron/main/preload/SQLite journeys and
   explicit isolated demo scenarios; fixtures never become production data.
 - Packaged suite includes actual Electron journeys and native dialog resizing.
 - Six-language preference/reload/restart tested.
@@ -307,7 +320,6 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Opt-in real Paper bootstrap uses eula=false; no playable world created.
 - Real Minecraft clients/gameplay/crossplay/historical-engine compatibility
   unvalidated without owner consent and clients.
-- CurseForge live requests require the missing API key.
 - OS signing/notarization require missing certificates/credentials.
 - Interactive NSIS/deb/dmg installation, keychain behavior, large-server load,
   disk-full and extended power-loss testing remain separate validation work.
@@ -316,7 +328,6 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 ======================================================================
 19. FUTURE OPTIONS — NOT IMPLEMENTED
 ======================================================================
-- General CurseForge modpack importer after authorized API integration.
 - General datapack/resource-pack installation and compatibility.
 - Docker runner/isolation; cloud synchronization/hosting.
 - Remote multi-user roles/accounts and hosted server management.

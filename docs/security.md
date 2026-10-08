@@ -14,13 +14,13 @@ Installed engines, mods and plugins are executable code with OS account privileg
 
 ## Network and downloads
 
-Only approved HTTPS sources are used; every redirect is rechecked and cross-host credentials are removed. Requests have bounded retries, timeouts and maximum sizes. Downloads go to partial files, verify official hashes when supplied and rename only after validation. Resume requires matching Range/entity validators and content ranges; otherwise it restarts cleanly. Providers refuse incompatible versions and restricted/missing download URLs. No site scraping, embedded personal CurseForge key or guessed private CDN bypass is used.
+Only approved HTTPS sources are used; every redirect is rechecked and cross-host credentials are removed. Requests have bounded retries, timeouts and maximum sizes. Downloads go to partial files, verify official hashes when supplied and rename only after validation. Resume requires matching Range/entity validators and content ranges; otherwise it restarts cleanly. Providers refuse incompatible versions and restricted/missing download URLs. No site scraping or guessed CDN URLs are used. Mod downloads and every redirect must stay on the official Modrinth CDN, with SHA-512/SHA-1 verification, size limits and staging.
 
 Minecraft can be reachable on the LAN when its bind is empty. RCON uses a dedicated random 256-bit password and MineDock connects through loopback. Never forward RCON to the Internet. For strictly local Java use, bind `server-ip=127.0.0.1`. MineDock does not modify firewalls or router rules. Crossplay reserves/checks its UDP port and does not disable Java online-mode.
 
 ## Secrets and privacy
 
-RCON and optional CurseForge keys are encrypted with Electron safeStorage when a suitable OS keychain is available. The headless/development fallback uses AES-256-GCM and a private local 32-byte key; Windows inherits user-profile ACLs. Protect the data directory and its encryption key.
+RCON secrets are encrypted with Electron safeStorage when a suitable OS keychain is available. The headless/development fallback uses AES-256-GCM and a private local 32-byte key; Windows inherits user-profile ACLs. Protect the data directory and its encryption key.
 
 Minecraft requires plaintext RCON configuration. The app hides that field, scrubs it from normal backups/ZIP exports and reinjects it on restore. Direct editor/export access to known authentication/secret files is refused. An explicitly approved original-server safety archive preserves original bytes privately, including original configuration secrets; treat it as sensitive. Arbitrary plugin configurations can also contain secrets in full backups.
 

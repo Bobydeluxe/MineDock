@@ -10,8 +10,9 @@ The unpublished 0.3.1 UI revision implements centered native dialogs with focus/
 
 ## Remaining prerequisites and validation
 
+The development mod manager now uses Modrinth exclusively for Fabric/Forge/NeoForge mods, with real staged file/SQLite transactions, named dependencies, batched updates, archived rollback, locks, collections, manual identification and pre-start health checks. Appended migration 6 retains existing binaries and published migrations. This work remains an unpublished source revision; a future minor release will receive its version after the complete release validation. Visual review changes belong to a separate PR and do not authorize a release.
+
 - Real client/server gameplay after personal EULA acceptance, including engine/loader historical-version coverage and Bedrock crossplay connectivity.
-- Live authenticated CurseForge checks with an appropriate owner-provided key; clean CurseForge ZIP modpack import remains assessed but unavailable.
 - Real Windows Authenticode and Apple Developer ID/notarization credentials, followed by chain/notarization/stapling validation. Unsigned packaging is supported.
 - Actual newer-release installation/relaunch through each package's native installer/updater, including protected/non-writable locations; fixture helper tests do not replace this.
 - Native job results, OS-installed package behavior, permissions/shortcuts/keychain/sleep prevention and external network gameplay must be reported separately. Current CI evidence is in [validation](validation.md).
@@ -19,6 +20,6 @@ The unpublished 0.3.1 UI revision implements centered native dialogs with focus/
 
 ## Future scope
 
-General datapack/resource management, CurseForge pack resolution with permitted file access, Docker isolation/quotas, tunnels, remote accounts/RBAC, cloud backup providers and optional AI are future extensions. Informational Docker detection is not a Docker runner. PocketMine upstream has ended support; MineDock cannot promise future compatible upstream releases.
+General datapack/resource management, Docker isolation/quotas, tunnels, remote accounts/RBAC, cloud backup providers and optional AI remain future extensions.
 
 Unknown external diagnostics retain their original text. Ping/seed/statistics/UUIDs remain unavailable when no reliable local source exists. Retention purges require preview/confirmation; unattended archive deletion is not enabled. MineDock must remain open to supervise processes/tasks and does not configure firewalls/routers.

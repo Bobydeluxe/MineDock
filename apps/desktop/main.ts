@@ -15,6 +15,14 @@ import { AppCore } from '../../packages/core/app';
 import { readableError, structuredError } from '../../packages/domain/errors';
 import { localizeMessage } from '../../packages/domain/localization';
 import { engineSchema } from '../../packages/domain/types';
+import {
+  modSearchSchema,
+  modPlanInputSchema,
+  modBulkSchema,
+  modCollectionSchema,
+  modId,
+  modTargetSchema,
+} from '../../packages/domain/mods';
 import { marketplaceSchema } from '../../packages/domain/content';
 import { modpackSelectionSchema } from '../../packages/domain/modpacks';
 import { fileActionSchema, extractArchiveSchema } from '../../packages/domain/files';
@@ -475,6 +483,101 @@ function register(core: AppCore): void {
       ),
     ),
   );
+  handle('modSearch', (value, input) =>
+    core.mods.search(core.repo.server(id(value)), modSearchSchema.parse(input)),
+  );
+  handle('modInventory', (value, force) =>
+    core.mods.inventory(core.repo.server(id(value)), z.boolean().optional().parse(force)),
+  );
+  handle('modDetail', (value, project) =>
+    core.mods.detail(core.repo.server(id(value)), modId.parse(project)),
+  );
+  handle('modPlan', (value, input) =>
+    core.jobs.run('mods.plan', 'Review mods', id(value), (context) =>
+      core.mods.plan(core.repo.server(id(value)), modPlanInputSchema.parse(input), context.signal),
+    ),
+  );
+  handle('modApply', (value, token) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      await core.backups.create(server.id, 'before_mods');
+      return core.mods.apply(server, id(token));
+    }),
+  );
+  handle('modUpdates', (value) =>
+    core.jobs.run('mods.updates', 'Check mod updates', id(value), (context) =>
+      core.mods.updates(core.repo.server(id(value)), context.signal),
+    ),
+  );
+  handle('modPin', (value, content, pinned) =>
+    core.exclusive(id(value), async () =>
+      core.mods.pin(core.repo.server(id(value)), id(content), z.boolean().parse(pinned)),
+    ),
+  );
+  handle('modRemoval', (value, ids) =>
+    core.mods.removal(
+      core.repo.server(id(value)),
+      z.array(z.string().uuid()).min(1).max(300).parse(ids),
+    ),
+  );
+  handle('modBulk', (value, raw) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value)),
+        input = modBulkSchema.parse(raw);
+      if (input.confirmation !== server.name)
+        throw new DomainError('CONFIRM', 'Incorrect confirmation.');
+      await core.backups.create(server.id, 'before_mods');
+      return core.mods.bulk(server, input);
+    }),
+  );
+  handle('modLibrary', () => core.mods.library());
+  handle('modFavorite', (value, project, favorite) =>
+    core.mods.favorite(
+      core.repo.server(id(value)),
+      modId.parse(project),
+      z.boolean().parse(favorite),
+    ),
+  );
+  handle('modCollection', (input) => core.mods.collection(modCollectionSchema.parse(input)));
+  handle('modDeleteCollection', (value) => core.mods.deleteCollection(id(value)));
+  handle('modHistory', (value) => core.mods.history(core.repo.server(id(value))));
+  handle('modReveal', async (value, content) => {
+    const server = core.repo.server(id(value)),
+      item = core.repo.content(server.id).find((item) => item.id === id(content));
+    if (!item) throw new DomainError('CONTENT', 'Managed content not found.');
+    shell.showItemInFolder(
+      await containedPath(
+        path.join(server.path, 'mods'),
+        item.filename + (item.enabled ? '' : '.disabled'),
+      ),
+    );
+  });
+  handle('modManualToggle', (value, filename) =>
+    core.exclusive(id(value), () =>
+      core.mods.manualToggle(core.assertStopped(id(value)), z.string().max(240).parse(filename)),
+    ),
+  );
+  handle('modIdentify', (value, filename) =>
+    core.exclusive(id(value), () =>
+      core.mods.identify(core.assertStopped(id(value)), z.string().max(240).parse(filename)),
+    ),
+  );
+  handle('modMigration', (value, target) =>
+    core.jobs.run(
+      'mods.migration',
+      'Review Minecraft and loader compatibility',
+      id(value),
+      (context) =>
+        core.mods.migration(
+          core.repo.server(id(value)),
+          modTargetSchema.parse(target),
+          context.signal,
+        ),
+    ),
+  );
+  handle('modMigrate', (value, target, confirmation) =>
+    core.migrateMods(id(value), modTargetSchema.parse(target), text.parse(confirmation)),
+  );
   handle('marketplaceSettings', () => core.catalogs.settings());
   handle('contentIcon', (value) => core.icons.get(z.string().url().max(2000).parse(value)));
   handle('crossplayStatus', (value) => core.crossplay.status(core.repo.server(id(value))));
@@ -550,12 +653,19 @@ function register(core: AppCore): void {
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
       await core.backups.create(server.id, 'before_content');
-      return core.marketplace.manager.rollback(
+      const item = core.repo.content(server.id).find((item) => item.id === id(content));
+      await core.marketplace.manager.rollback(
         server,
         id(content),
         id(history),
         text.parse(confirm),
       );
+      if (item && ['fabric', 'forge', 'neoforge'].includes(server.engine))
+        core.mods.recordRollback(
+          server,
+          item,
+          core.repo.content(server.id).find((value) => value.id === item.id)?.versionName,
+        );
     }),
   );
   handle('installContent', (value, project, provider, version) =>

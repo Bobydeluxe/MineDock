@@ -43,7 +43,7 @@ export class LocalSecretStore implements SecretStore {
 export function redact(text: string): string {
   return text
     .replace(
-      /(password|rcon\.password|token|secret|authorization|x-api-key|api[-_]?key|curseforgeKey)(\s*[=:]\s*|\s+)[^\s,;]+/gi,
+      /(password|rcon\.password|token|secret|authorization|x-api-key|api[-_]?key|[a-z]+Key)(\s*[=:]\s*|\s+)[^\s,;]+/gi,
       '$1=[redacted]',
     )
     .replace(/\b(?:\d{1,3}\.){3}\d{1,3}\b/g, '[ip]')

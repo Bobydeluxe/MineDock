@@ -1,5 +1,19 @@
 # MineDock validation
 
+## Development mod manager, 4–8 October 2026
+
+The source remains 0.3.1 while review is pending. Windows 11 x64 / Node 24 / pnpm 11.19: lint and strict TypeScript pass; the full unit run passes **183 cases with four OS-specific skips (187 total in 24 files)**. The full source UI suite passes **24 cases**. Windows NSIS and portable x64 compile unsigned; the packaged suite includes **nine actual Electron cases**, including the mod management journey. No new public release or new six-platform packaging matrix is claimed.
+
+The 37 mod-manager cases cover Fabric/Forge/NeoForge JAR transactions; named required and optional dependencies; constraints, conflicts, pins and shared dependency removal; updates and archived rollback; cancellation and failed-batch preservation; manual metadata/hash identification; favorites and destination collections; offline local administration; bounded caches and 300-mod updates in three requests; appended schema-6 upgrade with preserved encrypted RCON secrets and old binaries; rejected retired download hosts; local startup blocking; and whole-server migration preserving world/configuration/property bytes, including comments and line endings, or restoring the old profile/files on failure.
+
+The new UI case exercises search, a recommended version and required dependency install, installed records, locks, collections, explicit update checks, bulk lock exclusion, individual update, archived rollback, optional automatic orphan removal and collection reinstall. Only external API/CDN responses are fixtures. The production preload/core, readable ZIP JAR bytes, downloads, hashes, SQLite, backup service, folder transactions and history run unchanged.
+
+An isolated real Modrinth probe downloaded and SHA-512-verified Lithium `mc1.21.1-0.15.4-fabric`, FerriteCore `7.0.3-fabric` and Krypton `0.2.8` for Fabric 1.21.1 / loader 0.19.5. Local health reported zero problems. The current API environment array format was verified and has a regression. Native catalogue/installed screenshots use this profile without a demo provider. No Minecraft process or game client was run by the probe.
+
+Manual metadata is not exhaustive runtime compatibility evidence. Unknown embedded identifiers are warnings; proven managed missing/exact-version dependencies and corrupted or incompatible files block starts. Migration refuses unidentified manual content. OS certificates, gameplay, native macOS/Linux packages for this source revision and interactive installer execution remain separate validation.
+
+Historical results below describe their exact earlier source/release revisions.
+
 This record distinguishes the **0.3.1 UI source revision** from the published **0.3.0 beta**, both checked on 4 October 2026. Compilation, actual packaged execution, native probes and Minecraft gameplay are separate evidence. The previous 0.2.0 release passed 66 tests and two UI journeys on 3 October; those older checks are not evidence for the extension or UI revision.
 
 ## 0.3.1 UI revision
@@ -85,7 +99,6 @@ After publication, the actual UpdateService verified the public feed for all twe
 ## Unvalidated external conditions and limits
 
 - Real client gameplay, ready/save/stop behavior across every upstream engine/version, Bedrock crossplay and Internet/firewall connectivity need owner consent and actual clients.
-- Live authenticated CurseForge requests need the currently absent API key. Provider restriction/dependency/download failure paths are covered by deterministic tests. CurseForge pack import is assessed, not available.
 - Authenticode and Apple Developer ID/notarization/stapling trust require currently absent owner certificates/credentials. Configuration and unsigned native packaging are tested.
 - Actual newer-version installation/relaunch through each OS installer remains separate from the validated public feed/download and native helper fixtures. The legacy unsigned release is refused correctly.
 - Interactive NSIS/deb/dmg installation, OS keychain behavior, sleep prevention on every OS, extended very-large-server/disk-full/power-loss load tests and independent security review remain unvalidated.

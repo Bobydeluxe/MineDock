@@ -5,7 +5,6 @@ import { mkdir, readFile, writeFile, stat } from 'node:fs/promises';
 import { fixture } from './helpers';
 import { ManagedContentService, type ContentCatalog } from '../packages/marketplace/content';
 import { HangarCatalog } from '../packages/marketplace/hangar';
-import { CurseForgeCatalog } from '../packages/marketplace/curseforge';
 import { MarketplaceRegistry } from '../packages/marketplace/registry';
 import { IconCache } from '../packages/marketplace/icons';
 import { DownloadManager, fetchApproved } from '../packages/minecraft/downloads';
@@ -256,7 +255,7 @@ it('cancels staged copying and recovers pending operations older than the visibl
 it('bounds saved binary history and never offers an older stable version as an update', async () => {
   const f = await fixture(),
     manager = new ManagedContentService(f.repo, new DownloadManager(f.bus)),
-    registry = new MarketplaceRegistry(f.repo, f.secrets);
+    registry = new MarketplaceRegistry(f.repo);
   try {
     downloadsFixture();
     registry.configure({ historyLimit: 1 });
@@ -276,23 +275,6 @@ it('bounds saved binary history and never offers an older stable version as an u
     expect((await manager.updates(f.server, () => provider))[0]?.status).toBe('upToDate');
     versions.splice(2, 1);
     expect((await manager.updates(f.server, () => provider))[0]?.status).toBe('unknown');
-  } finally {
-    await f.cleanup();
-  }
-});
-it('stores CurseForge keys encrypted and removes them without exposing the secret in settings or audits', async () => {
-  const f = await fixture();
-  try {
-    const registry = new MarketplaceRegistry(f.repo, f.secrets);
-    registry.configure({ curseforgeKey: 'private-fixture-api-key', historyLimit: 5 });
-    expect(registry.settings()).toEqual({ curseforgeConfigured: true, historyLimit: 5 });
-    const raw = f.repo.db
-      .prepare("SELECT value FROM marketplace_settings WHERE key='curseforge-key'")
-      .get()?.value;
-    expect(String(raw)).not.toContain('private-fixture');
-    expect(JSON.stringify(f.repo.activity())).not.toContain('private-fixture');
-    registry.configure({ curseforgeKey: '', historyLimit: 2 });
-    expect(registry.settings().curseforgeConfigured).toBe(false);
   } finally {
     await f.cleanup();
   }
@@ -336,48 +318,7 @@ it('uses Hangar PAPER metadata and verified downloads with explicit snapshot IDs
     await f.cleanup();
   }
 });
-it('obeys CurseForge distribution and missing-download restrictions and strips credentials across redirect hosts', async () => {
-  const provider = new CurseForgeCatalog(() => undefined);
-  await expect(provider.project('1')).rejects.toThrow('API key');
-  let allowed = false;
-  vi.stubGlobal(
-    'fetch',
-    vi.fn(
-      async (url: string) =>
-        new Response(
-          JSON.stringify({
-            data: url.endsWith('/mods/1')
-              ? {
-                  id: 1,
-                  name: 'mod',
-                  summary: 'summary',
-                  authors: [],
-                  downloadCount: 2,
-                  logo: null,
-                  categories: [],
-                  allowModDistribution: allowed,
-                }
-              : {
-                  id: 2,
-                  modId: 1,
-                  isAvailable: true,
-                  displayName: 'version',
-                  fileName: 'mod.jar',
-                  releaseType: 1,
-                  fileDate: '2026-01-01',
-                  downloadUrl: null,
-                  gameVersions: ['1.21.11', 'Fabric'],
-                  hashes: [{ value: 'b'.repeat(40), algo: 1 }],
-                  dependencies: [],
-                },
-          }),
-        ),
-    ),
-  );
-  const configured = new CurseForgeCatalog(() => 'secret-fixture');
-  await expect(configured.project('1')).rejects.toThrow('does not allow');
-  allowed = true;
-  await expect(configured.version('1:2')).rejects.toThrow('authorized download');
+it('strips credentials across approved redirect hosts', async () => {
   const calls: Record<string, string>[] = [];
   vi.stubGlobal(
     'fetch',
@@ -391,7 +332,7 @@ it('obeys CurseForge distribution and missing-download restrictions and strips c
         : new Response('file');
     }),
   );
-  await fetchApproved('https://api.curseforge.com/v1/mods/1', AbortSignal.timeout(1000), {
+  await fetchApproved('https://api.modrinth.com/v2/project/fixture', AbortSignal.timeout(1000), {
     'x-api-key': 'secret-fixture',
   });
   expect(calls[0]?.['x-api-key']).toBe('secret-fixture');

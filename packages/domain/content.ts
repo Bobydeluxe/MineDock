@@ -1,5 +1,5 @@
 import { z } from 'zod';
-export const marketplaceIds = ['modrinth', 'curseforge', 'hangar', 'geyser'] as const;
+export const marketplaceIds = ['modrinth', 'hangar', 'geyser'] as const;
 export const marketplaceSchema = z.enum(marketplaceIds);
 export type MarketplaceId = (typeof marketplaceIds)[number];
 export type ContentKind = 'plugin' | 'mod' | 'datapack' | 'resourcepack';
@@ -11,6 +11,7 @@ export interface ContentVersion {
   changelog: string;
   releaseType?: 'release' | 'beta' | 'alpha' | 'snapshot';
   minimumJava?: number;
+  serverSide?: boolean;
   gameVersions: string[];
   loaders: string[];
   files: {
@@ -19,7 +20,12 @@ export interface ContentVersion {
     primary: boolean;
     hash?: { algorithm: 'md5' | 'sha1' | 'sha256' | 'sha512'; value: string };
   }[];
-  dependencies: { projectId?: string; versionId?: string; required: boolean }[];
+  dependencies: {
+    projectId?: string;
+    versionId?: string;
+    required: boolean;
+    type?: 'required' | 'optional' | 'incompatible' | 'embedded';
+  }[];
 }
 export interface ContentProject {
   id: string;
@@ -27,9 +33,20 @@ export interface ContentProject {
   serverSide: boolean;
   kind: ContentKind;
   sideUnknown?: boolean;
+  description?: string;
+  body?: string;
+  author?: string;
+  iconUrl?: string;
+  categories?: string[];
+  downloads?: number;
+  updatedAt?: string;
+  gameVersions?: string[];
+  loaders?: string[];
+  clientSide?: string;
+  environment?: string;
+  slug?: string;
 }
 export interface MarketplaceSettings {
-  curseforgeConfigured: boolean;
   historyLimit: number;
 }
 export interface ContentHistory {

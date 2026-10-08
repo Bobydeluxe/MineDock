@@ -44,4 +44,19 @@ export const migrations = [
     version: 5,
     sql: `CREATE TABLE backup_retention_runs (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, metadata TEXT NOT NULL);`,
   },
+  {
+    version: 6,
+    sql: `
+      DELETE FROM marketplace_settings WHERE key='curseforge-key';
+      UPDATE marketplace_settings SET value='1' WHERE key='content-history-limit' AND CAST(value AS INTEGER)<1;
+      UPDATE installed_content SET metadata=json_set(metadata,'$.provider','local','$.source','local') WHERE json_extract(metadata,'$.provider')='curseforge';
+      UPDATE content_history SET metadata=json_set(metadata,'$.item.provider','local','$.item.source','local') WHERE json_extract(metadata,'$.item.provider')='curseforge';
+      UPDATE operations SET checkpoint=replace(checkpoint,'"provider":"curseforge"','"provider":"local"') WHERE checkpoint IS NOT NULL;
+      CREATE TABLE mod_cache (key TEXT PRIMARY KEY, metadata TEXT NOT NULL, expires INTEGER NOT NULL);
+      CREATE TABLE mod_favorites (project_id TEXT PRIMARY KEY, metadata TEXT NOT NULL);
+      CREATE TABLE mod_collections (id TEXT PRIMARY KEY, metadata TEXT NOT NULL);
+      CREATE TABLE mod_events (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, metadata TEXT NOT NULL);
+      CREATE INDEX mod_events_by_server_time ON mod_events(server_id,at);
+    `,
+  },
 ];

@@ -28,6 +28,7 @@ export interface ContentCatalog {
 }
 export function compatibleContent(server: Server, version: ContentVersion): boolean {
   return (
+    version.serverSide !== false &&
     (!version.minimumJava || server.javaMajor >= version.minimumJava) &&
     version.gameVersions.includes(server.version) &&
     engineDefinition(server.engine).contentLoaders.some((loader) =>
@@ -47,7 +48,7 @@ export class ManagedContentService {
       throw new DomainError('CONTENT', 'This engine does not support managed mods or plugins.');
     return folder;
   }
-  private async transaction<T>(
+  async transaction<T>(
     server: Server,
     action: (
       stage: string,
@@ -142,7 +143,7 @@ export class ManagedContentService {
     if (!item) throw new DomainError('CONTENT', 'Managed content not found.');
     return item;
   }
-  private async verifyFile(root: string, item: InstalledContent): Promise<string> {
+  async verifyFile(root: string, item: InstalledContent): Promise<string> {
     const filename = await containedPath(root, item.filename + (item.enabled ? '' : '.disabled'));
     if (item.sha256 && (await sha256(filename)) !== item.sha256)
       throw new DomainError(
@@ -368,11 +369,8 @@ export class ManagedContentService {
     await resolve(projectId, selectedVersion, true);
     return created;
   }
-  private async preserve(server: Server, item: InstalledContent, source: string): Promise<void> {
-    const limit = this.repo.db
-      .prepare("SELECT value FROM marketplace_settings WHERE key='content-history-limit'")
-      .get();
-    if (limit && Number(limit.value) === 0) return;
+  async preserve(server: Server, item: InstalledContent, source: string): Promise<void> {
+    // Every replaced binary remains available for rollback, even after upgrading old settings.
     const id = randomUUID(),
       root = path.join(this.repo.root, 'content-history', server.id, item.id);
     await mkdir(root, { recursive: true });
@@ -395,7 +393,7 @@ export class ManagedContentService {
     const setting = this.repo.db
         .prepare("SELECT value FROM marketplace_settings WHERE key='content-history-limit'")
         .get(),
-      limit = setting ? Number(setting.value) : 5;
+      limit = setting ? Math.max(1, Number(setting.value)) : 5;
     const rows = this.repo.db
         .prepare('SELECT metadata FROM content_history WHERE server_id=? ORDER BY rowid DESC')
         .all(server.id),
@@ -499,6 +497,32 @@ export class ManagedContentService {
         'DEPENDENCIES',
         'A required dependency of the previous version is missing or disabled.',
       );
+    if (
+      history.item.dependencyVersions?.some(
+        (dependency) =>
+          dependency.versionId &&
+          !this.repo
+            .content(server.id)
+            .some(
+              (value) =>
+                value.projectId === dependency.projectId &&
+                value.versionId === dependency.versionId &&
+                value.enabled,
+            ),
+      )
+    )
+      throw new DomainError(
+        'DEPENDENCIES',
+        'A required dependency of the previous version is missing or disabled.',
+      );
+    if (
+      history.item.conflicts?.some((dependency) =>
+        this.repo
+          .content(server.id)
+          .some((value) => value.projectId === dependency && value.enabled),
+      )
+    )
+      throw new DomainError('DEPENDENCIES', 'The selected mods include incompatible dependencies.');
     const source = await containedPath(
       path.join(this.repo.root, 'content-history', server.id, item.id),
       history.id + '.jar',
@@ -511,18 +535,22 @@ export class ManagedContentService {
         const current = await this.verifyFile(stage, item);
         await this.preserve(server, item, current);
         await rm(current);
+        const restored = {
+          ...history.item,
+          pinned: item.pinned,
+          automatic: item.automatic,
+          enabled: item.enabled,
+        };
         const target = await containedPath(
           stage,
-          history.item.filename + (history.item.enabled ? '' : '.disabled'),
+          restored.filename + (restored.enabled ? '' : '.disabled'),
         );
         await copyFile(source, target, 1);
         return {
           value: undefined,
           items: this.repo
             .content(server.id)
-            .map((value) =>
-              value.id === id ? { ...history.item, sha256: history.sha256 } : value,
-            ),
+            .map((value) => (value.id === id ? { ...restored, sha256: history.sha256 } : value)),
         };
       },
       'Rollback content',
@@ -560,6 +588,10 @@ export class ManagedContentService {
     const result: ContentUpdate[] = [];
     for (const item of this.repo.content(server.id)) {
       signal?.throwIfAborted();
+      if (item.provider === 'local') {
+        result.push({ contentId: item.id, installedVersion: item.versionId, status: 'manual' });
+        continue;
+      }
       try {
         const catalog = catalogFor(item.provider ?? 'modrinth'),
           versions = await catalog.versions(server, item.projectId, signal),

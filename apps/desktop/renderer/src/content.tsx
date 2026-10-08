@@ -1,3 +1,4 @@
+import { ModsView } from './mods';
 import { useState } from 'react';
 import { Download, Puzzle, Search, RefreshCw, Trash2, RotateCcw } from 'lucide-react';
 import type { Server, Project, InstalledContent } from '../../../../packages/domain/types';
@@ -9,6 +10,13 @@ import { Confirm } from './management';
 import { CrossplayView } from './crossplay';
 import { EngineIcon } from './engine-icon';
 export function ContentView({ server }: { server: Server }) {
+  return engineDefinition(server.engine).capabilities.mods ? (
+    <ModsView server={server} />
+  ) : (
+    <PluginContentView server={server} />
+  );
+}
+function PluginContentView({ server }: { server: Server }) {
   const { api, t, run, busy } = useApp();
   const [query, setQuery] = useState(''),
     [search, setSearch] = useState(''),
@@ -24,7 +32,6 @@ export function ContentView({ server }: { server: Server }) {
     () => (supported ? api.search(server.id, search, provider) : Promise.resolve([])),
     [server.id, search, provider],
   );
-  const settings = useData(() => api.marketplaceSettings(), []);
   const reload = () => {
     installed.reload();
     manual.reload();
@@ -61,9 +68,6 @@ export function ContentView({ server }: { server: Server }) {
               {['paper', 'purpur'].includes(server.engine) && (
                 <option value="hangar">Hangar</option>
               )}
-              {engineDefinition(server.engine).capabilities.mods && (
-                <option value="curseforge">CurseForge</option>
-              )}
             </select>
             <div className="search-input">
               <Search size={17} />
@@ -78,11 +82,6 @@ export function ContentView({ server }: { server: Server }) {
               {t('search')}
             </Button>
           </form>
-          {provider === 'curseforge' && (
-            <p className="muted small-text">
-              {t(settings.data?.curseforgeConfigured ? 'curseforgeSideHelp' : 'curseforgeKeyHelp')}
-            </p>
-          )}
           {projects.error ? (
             <ErrorBox error={projects.error} retry={projects.reload} retryLabel={t('retry')} />
           ) : projects.loading ? (
@@ -184,7 +183,8 @@ export function ContentView({ server }: { server: Server }) {
                         author: '',
                         downloads: 0,
                         categories: [],
-                        provider: item.provider ?? 'modrinth',
+                        provider:
+                          item.provider === 'local' ? 'modrinth' : (item.provider ?? 'modrinth'),
                       },
                       item,
                     })
@@ -343,9 +343,6 @@ function ContentVersions({
       >
         <div className="dialog-body">
           <p className="muted">{t('versionSelectionHelp')}</p>
-          {provider === 'curseforge' && (
-            <p className="muted small-text">{t('curseforgeSideHelp')}</p>
-          )}
           {item && (
             <p>
               {t('installed')}: <strong>{item.versionName ?? item.versionId}</strong>

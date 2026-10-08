@@ -365,6 +365,20 @@ export class ModpackService {
                 filename: path.basename(file.path),
                 enabled: true,
                 provider: 'modrinth',
+                source: 'mrpack',
+                automatic: false,
+                fileHash: { algorithm: 'sha512', value: file.hashes.sha512 },
+                publishedAt: version.publishedAt,
+                releaseType: version.releaseType,
+                iconUrl: project.iconUrl,
+                author: project.author,
+                categories: project.categories,
+                dependencyVersions: version.dependencies
+                  .filter((dependency) => dependency.required && dependency.projectId)
+                  .map((dependency) => ({
+                    projectId: dependency.projectId!,
+                    versionId: dependency.versionId,
+                  })),
                 kind: 'mod',
                 folder: 'mods',
                 sha256: await sha256(target, context.signal),

@@ -642,7 +642,53 @@ export function createMockApi(): Api {
         listeners.delete(fn);
       };
     },
-    marketplaceSettings: async () => ({ curseforgeConfigured: false, historyLimit: 5 }),
+    modSearch: async () => ({ items: [], total: 0, offset: 0, offline: true }),
+    modInventory: async (id) => ({
+      installed: content.filter((item) => item.serverId === id),
+      manual: [],
+      problems: [],
+      scannedAt: new Date().toISOString(),
+    }),
+    modDetail: async () => {
+      throw new Error('Modrinth is unavailable in this demo.');
+    },
+    modPlan: async () => {
+      throw new Error('Mod installation requires the desktop app.');
+    },
+    modApply: async () => {
+      throw new Error('Mod installation requires the desktop app.');
+    },
+    modUpdates: async () => ({ updates: [], offline: true, checkedAt: new Date().toISOString() }),
+    modPin: async () => {
+      throw new Error('Mod actions require the desktop app.');
+    },
+    modRemoval: async () => ({ selected: [], unused: [], shared: [], blocked: [] }),
+    modBulk: async () => {
+      throw new Error('Mod actions require the desktop app.');
+    },
+    modLibrary: async () => ({ favorites: [], collections: [] }),
+    modFavorite: async () => {
+      throw new Error('Favorites require the desktop app.');
+    },
+    modCollection: async () => {
+      throw new Error('Collections require the desktop app.');
+    },
+    modDeleteCollection: async () => {
+      throw new Error('Collections require the desktop app.');
+    },
+    modHistory: async () => [],
+    modReveal: async () => {},
+    modManualToggle: async () => {
+      throw new Error('Mod actions require the desktop app.');
+    },
+    modIdentify: async () => false,
+    modMigration: async () => {
+      throw new Error('Migration requires the desktop app.');
+    },
+    modMigrate: async () => {
+      throw new Error('Migration requires the desktop app.');
+    },
+    marketplaceSettings: async () => ({ historyLimit: 5 }),
     contentIcon: async () => null,
     crossplayStatus: async (id) => ({
       supported: ['paper', 'purpur', 'fabric', 'neoforge'].includes(get(id).engine),
@@ -656,7 +702,6 @@ export function createMockApi(): Api {
     },
     clearIconCache: async () => {},
     configureMarketplace: async (input) => ({
-      curseforgeConfigured: false,
       historyLimit: input.historyLimit,
     }),
     contentVersions: async () => [demoVersion()],
