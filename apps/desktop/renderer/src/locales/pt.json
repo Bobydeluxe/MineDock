@@ -830,5 +830,13 @@
   "reach.reachable": "Acessível",
   "reach.unreachable": "Inacessível",
   "reach.unknown": "Desconhecido",
-  "reach.firewall": "Firewall e router não são verificados nem alterados automaticamente. UDP local fica desconhecido."
+  "reach.firewall": "Firewall e router não são verificados nem alterados automaticamente. UDP local fica desconhecido.",
+  "package.title": "Mover para outro PC",
+  "package.help": "O pacote .minedock contém mundos, conteúdos e perfil. Java e motor são instalados para o PC destino. Por padrão omite configurações arbitrárias mods/plugins e limpa URL do resource pack. Inclui listas e mundos.",
+  "package.sensitive": "Incluir configurações mods/plugins; podem conter segredos e opções privadas.",
+  "package.export": "Exportar pacote MineDock",
+  "package.import": "Importar pacote MineDock",
+  "package.trust": "Importe apenas pacotes de confiança. Mods/plugins executam código. Copia dados, adapta portas/RAM e mantém original. Internet necessária para motor/runtime.",
+  "package.containsSensitive": "Este pacote inclui configurações que podem conter segredos. Mantenha privado.",
+  "package.accept": "Revi o pacote e aceito EULA Minecraft quando aplicável (minecraft.net/eula)."
 }

@@ -10,6 +10,10 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  exportPackage: (id, sensitive, confirmation) =>
+    call('exportPackage', id, sensitive, confirmation),
+  previewPackage: () => call('previewPackage'),
+  importPackage: (input) => call('importPackage', input),
   testReachability: (id, input) => call('testReachability', id, input),
   mapPlan: (id, kind) => call('mapPlan', id, kind),
   mapApply: (id, input) => call('mapApply', id, input),

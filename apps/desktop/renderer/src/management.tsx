@@ -28,6 +28,7 @@ import { RecoveryDialog } from './recovery';
 import { RetentionControls } from './retention';
 import { UpdateControls } from './updates';
 import { SnapshotControls } from './snapshots';
+import { PackageControls } from './packages';
 const scheduleDate = (at: string, language: string, timeZone: string) => {
   try {
     return new Date(at).toLocaleString(language, { timeZone });
@@ -201,6 +202,7 @@ export function BackupsView({ serverId }: { serverId?: string }) {
         <SnapshotControls server={snapshot.servers.find((s) => s.id === selected)!} />
       )}
       {selected && <RetentionControls key={selected} serverId={selected} />}
+      <PackageControls server={snapshot.servers.find((s) => s.id === selected)} />
       {confirmation && (
         <Confirm
           name={name}

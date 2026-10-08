@@ -161,6 +161,11 @@ export function createMockApi(): Api {
   return {
     performance: async () => ({ samples: [], lags: [] }),
     configDocuments: async () => [],
+    exportPackage: async () => {},
+    previewPackage: async () => null,
+    importPackage: async () => {
+      throw new Error('Use the desktop application to import a package.');
+    },
     testReachability: async () => ({
       local: 'unknown',
       external: 'unknown',

@@ -62,6 +62,7 @@ import { PerformanceService } from './performance';
 import { jvmArguments } from '../domain/performance';
 import { ConfigurationService } from './configuration';
 import { MapAssistant } from './maps';
+import { PackageService } from './packages';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -101,6 +102,7 @@ export class AppCore {
   readonly performance: PerformanceService;
   readonly configuration: ConfigurationService;
   readonly maps: MapAssistant;
+  readonly packages: PackageService;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -208,6 +210,7 @@ export class AppCore {
     this.performance = new PerformanceService(this);
     this.configuration = new ConfigurationService(this, secrets);
     this.maps = new MapAssistant(this);
+    this.packages = new PackageService(this);
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.skins = new PlayerSkins(this.icons);
@@ -283,6 +286,7 @@ export class AppCore {
     await core.worlds.cleanPreviews();
     await core.modpacks.cleanup(true);
     await core.fileOperations.cleanTemporaryArchives();
+    await core.packages.clean();
     await core.repo.snapshotDatabase();
     return core;
   }
@@ -747,6 +751,7 @@ export class AppCore {
     await updateShutdown;
     await this.scheduler.close();
     await Promise.allSettled([...this.operations.values()]);
+    await this.packages.close();
     await this.maintenanceWork;
     await this.supervisor.close();
     await this.repo.snapshotDatabase();

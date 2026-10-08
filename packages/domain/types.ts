@@ -312,6 +312,9 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  exportPackage(id: string, includeSensitive: boolean, confirmation: string): Promise<void>;
+  previewPackage(): Promise<import('./package').PackagePreview | null>;
+  importPackage(input: z.infer<typeof import('./package').packageImportSchema>): Promise<Server>;
   testReachability(
     id: string,
     input: z.input<typeof import('../networking/reachability').reachabilitySchema>,

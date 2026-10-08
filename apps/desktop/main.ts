@@ -222,6 +222,28 @@ function register(core: AppCore): void {
     core.performance.report(id(value), z.number().int().min(1).max(168).parse(hours)),
   );
   handle('configDocuments', (value) => core.configuration.documents(id(value)));
+  handle('exportPackage', async (value, sensitive, confirmation) => {
+    const serverId = id(value);
+    core.assertStopped(serverId);
+    const includesSensitive = z.boolean().parse(sensitive),
+      name = text.parse(confirmation);
+    const result = await dialog.showSaveDialog(window!, {
+      defaultPath: 'MineDock-server.minedock',
+      filters: [{ name: 'MineDock package', extensions: ['minedock'] }],
+    });
+    if (!result.canceled && result.filePath)
+      await core.packages.export(serverId, result.filePath, includesSensitive, name);
+  });
+  handle('previewPackage', async () => {
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'MineDock package', extensions: ['minedock'] }],
+    });
+    return result.canceled || !result.filePaths[0]
+      ? null
+      : core.packages.preview(result.filePaths[0]);
+  });
+  handle('importPackage', (input) => core.packages.import(input));
   handle('testReachability', (value, input) =>
     testReachability(core.repo.server(id(value)), input),
   );
