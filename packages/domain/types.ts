@@ -23,7 +23,7 @@ import type {
   ManualContent,
 } from './content';
 
-export const PRODUCT = { name: 'MineDock', version: '0.3.1' } as const;
+export const PRODUCT = { name: 'MineDock', version: '0.4.0' } as const;
 export const engineSchema = z.enum(engineIds);
 export type Engine = z.infer<typeof engineSchema>;
 export type ServerStatus =

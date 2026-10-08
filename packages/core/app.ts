@@ -1,5 +1,5 @@
 import { randomBytes, randomUUID } from 'node:crypto';
-import { mkdir, readFile, rm, statfs, realpath } from 'node:fs/promises';
+import { mkdir, readFile, rm, statfs, realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { execFile } from 'node:child_process';
@@ -198,6 +198,49 @@ export class AppCore {
       this.downloads,
       this.marketplace.manager,
     );
+    this.health.setChecks(async (id) => {
+      const server = this.repo.server(id);
+      const issues: import('../domain/health').HealthIssue[] = [];
+      const definition = engineDefinition(server.engine);
+      const runtime =
+        definition.runtimeType === 'java'
+          ? (server.runtimePath ?? server.javaPath)
+          : definition.runtimeType === 'php'
+            ? server.runtimePath
+            : undefined;
+      if (
+        definition.runtimeType !== 'native' &&
+        (!runtime ||
+          !(await stat(runtime).then(
+            (s) => s.isFile(),
+            () => false,
+          )))
+      ) {
+        issues.push({ code: 'runtime', severity: 'problem' });
+        this.health.push(id, 'runtime');
+      }
+      if (
+        !server.pid &&
+        ['stopped', 'crashed'].includes(server.status) &&
+        !(await checkPort(server.port, definition.protocol))
+      )
+        issues.push({ code: 'port', severity: 'problem' });
+      if (
+        definition.contentFolder &&
+        ['paper', 'purpur', 'fabric', 'quilt', 'forge', 'neoforge'].includes(server.engine)
+      ) {
+        const scan = await this.mods.inventory(server);
+        if (scan.problems.length) {
+          issues.push({
+            code: 'content',
+            severity: scan.problems.some((p) => p.severity === 'critical') ? 'problem' : 'warning',
+            detail: String(scan.problems.length),
+          });
+          this.health.push(id, 'content');
+        }
+      }
+      return issues;
+    });
     this.incremental = new IncrementalBackups(
       this.repo,
       this.jobs,
@@ -269,11 +312,12 @@ export class AppCore {
           this.repo.retainMetrics();
           await this.repo.snapshotDatabase();
           await this.refreshStorage();
+          await this.migration.checkLatest();
         })
         .catch((e) => this.logger.write(String(e), true));
     }, 3600000);
     this.maintenance.unref();
-    this.logger.write('MineDock started.');
+    this.logger.write('MineDock ' + PRODUCT.version + ' started.');
   }
   static async open(root: string, secrets?: SecretStore): Promise<AppCore> {
     await mkdir(root, { recursive: true });

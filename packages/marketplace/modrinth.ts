@@ -306,6 +306,7 @@ export class ModrinthCatalog implements ContentCatalog {
         slug: z.string().optional(),
         team: z.string().optional(),
         project_type: z.string().optional(),
+        status: z.string().optional(),
       })
       .parse(
         await this.request(
@@ -317,6 +318,7 @@ export class ModrinthCatalog implements ContentCatalog {
     return {
       id: item.id,
       title: item.title,
+      archived: item.status === 'archived',
       serverSide: item.environment
         ? supportsServer(item.environment)
         : ['required', 'optional'].includes(item.server_side ?? ''),

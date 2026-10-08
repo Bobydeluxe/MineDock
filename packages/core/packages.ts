@@ -47,11 +47,14 @@ export class PackageService {
   }
   private async inventory(root: string) {
     const files: PackageManifest['files'] = [];
-    let bytes = 0;
+    let bytes = 0,
+      entries = 2;
     const walk = async (relative: string): Promise<void> => {
       for (const entry of await readdir(await containedPath(root, relative, true), {
         withFileTypes: true,
       })) {
+        if (++entries > 100000)
+          throw new DomainError('SIZE', 'Package exceeds the archive entry limit.');
         const child = path.join(relative, entry.name),
           file = await containedPath(root, child),
           info = await lstat(file);
@@ -164,7 +167,9 @@ export class PackageService {
             profile,
             javaRequired: server.javaMajor,
             jvm: server.jvm,
-            packs: (server.packs ?? []).map(pack => includeSensitive ? pack : { ...pack, url: undefined }),
+            packs: (server.packs ?? []).map((pack) =>
+              includeSensitive ? pack : { ...pack, url: undefined },
+            ),
             activeResourcePack: includeSensitive ? server.activeResourcePack : undefined,
             content: this.core.repo.content(id),
             files: await this.inventory(data),
@@ -280,9 +285,16 @@ export class PackageService {
         throw new DomainError('PATH', 'Invalid content filename.');
     }
     for (const pack of manifest.packs) {
-      validateRelative(pack.filename);
-      if (pack.world) validateRelative(pack.world);
+      if (validateRelative(pack.filename) !== path.basename(pack.filename))
+        throw new DomainError('PATH', 'Invalid pack filename.');
+      if (pack.world && !/^[A-Za-z\d_-]{1,120}$/.test(pack.world))
+        throw new DomainError('PATH', 'Invalid pack world name.');
     }
+    const props = parseProperties(
+      await readFile(await containedPath(data, 'server.properties'), 'utf8'),
+    );
+    if (props['level-name'] && !/^[A-Za-z\d _-]{1,120}$/.test(props['level-name']))
+      throw new DomainError('PATH', 'Invalid package world name.');
   }
   private async available(
     start: number,
@@ -290,7 +302,7 @@ export class PackageService {
     reserved: Set<number>,
     ipv6 = false,
   ) {
-    for (let port = start; port <= 65535; port++)
+    for (let port = start; port <= Math.min(65535, start + 255); port++)
       if (!reserved.has(port) && (await checkPort(port, protocol, ipv6))) return port;
     throw new DomainError('PORT', 'No available game port.');
   }
@@ -342,6 +354,22 @@ export class PackageService {
           }
           const restored: Record<string, string> = {
             ...sourceProps,
+            ...Object.fromEntries(
+              Object.entries(props).filter(([key]) =>
+                [
+                  'online-mode',
+                  'gamemode',
+                  'difficulty',
+                  'max-players',
+                  'view-distance',
+                  'simulation-distance',
+                  'pvp',
+                  'white-list',
+                  'level-seed',
+                  'motd',
+                ].includes(key),
+              ),
+            ),
             'server-port': String(server.port),
             'rcon.port': props['rcon.port'] ?? '',
             'rcon.password': props['rcon.password'] ?? '',

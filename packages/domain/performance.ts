@@ -52,6 +52,8 @@ export interface LagEvent {
   at: string;
   tps?: number;
   mspt?: number;
+  cpu?: number;
+  memory?: number;
   logs: string[];
 }
 export interface PerformanceReport {

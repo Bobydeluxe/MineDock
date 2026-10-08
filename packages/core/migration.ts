@@ -16,6 +16,7 @@ import { fetchJson } from '../minecraft/downloads';
 import { z } from 'zod';
 import { containedPath } from '../security/paths';
 import { copyDirectory } from '../security/copy';
+import { checkPort } from '../networking/network';
 import type { Server } from '../domain/types';
 function fail(message: string): never {
   throw new DomainError('MIGRATION', message);
@@ -34,7 +35,27 @@ export class MigrationService {
     const manifest = z
       .object({ latest: z.object({ release: z.string() }) })
       .parse(await fetchJson('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'));
-    return manifest.latest.release;
+    const release = manifest.latest.release;
+    const newer = (version: string) => {
+      if (!/^\d+(?:\.\d+){1,2}$/.test(version) || !/^\d+(?:\.\d+){1,2}$/.test(release))
+        return false;
+      const a = release.split('.').map(Number),
+        b = version.split('.').map(Number);
+      for (let i = 0; i < Math.max(a.length, b.length); i++) {
+        if ((a[i] ?? 0) !== (b[i] ?? 0)) return (a[i] ?? 0) > (b[i] ?? 0);
+      }
+      return false;
+    };
+    for (const candidate of this.core.repo.servers())
+      if (engineDefinition(candidate.engine).edition === 'java' && newer(candidate.version))
+        this.core.health.minecraftRelease(candidate.id, release);
+    return release;
+  }
+  async checkLatest() {
+    const server = this.core.repo
+      .servers()
+      .find((s) => engineDefinition(s.engine).edition === 'java');
+    if (server) await this.latest(server.id);
   }
   async review(id: string, raw: MigrationTarget): Promise<MigrationReview> {
     const target = migrationTargetSchema.parse(raw),
@@ -190,6 +211,12 @@ export class MigrationService {
     const input = cloneSchema.parse(raw),
       server = this.core.assertStopped(id);
     if (input.confirmation !== server.name) fail('Confirm the server name.');
+    const reserved = await this.core.reservedPorts();
+    const protocol = engineDefinition(server.engine).protocol;
+    let port = input.port;
+    while (reserved.has(port) || !(await checkPort(port, protocol))) {
+      if (++port > Math.min(65535, input.port + 255)) fail('No available game port.');
+    }
     const stage = await containedPath(this.core.root, 'clone-' + randomUUID());
     await mkdir(stage);
     try {
@@ -238,7 +265,7 @@ export class MigrationService {
         launchArgsFile: server.launchArgsFile,
         copy: true,
         acceptEula: false,
-        port: input.port,
+        port,
         memoryMin: server.memoryMin,
         memoryMax: server.memoryMax,
         confirmation: input.name,

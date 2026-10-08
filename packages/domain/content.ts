@@ -28,6 +28,7 @@ export interface ContentVersion {
   }[];
 }
 export interface ContentProject {
+  archived?: boolean;
   id: string;
   title: string;
   serverSide: boolean;

@@ -777,7 +777,7 @@
   "console.errors": "Errori",
   "console.from": "Da",
   "console.to": "Fino a",
-  "console.truncated": "Massimo 500 righe / 16 MB / 40 log non compressi.",
+  "console.truncated": "Risultati limitati a 500 righe / 16 MB / 40 file di log di testo o gzip.",
   "console.announcement": "Annuncio",
   "console.delay": "Attesa (secondi)",
   "console.addStep": "Aggiungi passaggio",
@@ -838,5 +838,13 @@
   "package.import": "Importa pacchetto MineDock",
   "package.trust": "Importa solo pacchetti fidati. Mod/plugin eseguono codice. Copia dati, adatta porte/RAM, conserva originale. Internet necessario per motore/runtime.",
   "package.containsSensitive": "Pacchetto include configurazioni che possono contenere segreti. Tienilo privato.",
-  "package.accept": "Ho verificato il pacchetto e accetto EULA Minecraft ove applicabile (minecraft.net/eula)."
+  "package.accept": "Ho verificato il pacchetto e accetto EULA Minecraft ove applicabile (minecraft.net/eula).",
+  "health.runtime": "Runtime assente o non disponibile",
+  "health.port": "La porta del gioco è già in uso",
+  "health.minecraftUpdate": "È disponibile una nuova versione di Minecraft",
+  "notice.minecraftUpdate": "Nuova versione di Minecraft",
+  "notice.content": "Il contenuto richiede una verifica",
+  "notice.runtime": "Il runtime richiede una verifica",
+  "pack.updateHelp": "Controlla le versioni compatibili di Modrinth quando necessario. I pacchetti locali o offline mantengono una compatibilità sconosciuta. Le dipendenze obbligatorie vengono verificate prima di ogni aggiornamento.",
+  "modArchived": "Questo progetto è archiviato su Modrinth. Verifica lo stato di manutenzione prima di installarlo."
 }

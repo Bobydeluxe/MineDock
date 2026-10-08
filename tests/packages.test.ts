@@ -87,6 +87,21 @@ it('rejects checksum tampering before creating a server and requires sensitive-e
     await zipDirectory(expanded, bad);
     await expect(core.packages.preview(bad)).rejects.toThrow('checksum');
     expect(core.repo.servers()).toHaveLength(1);
+    const manifest = JSON.parse(await readFile(path.join(expanded, 'manifest.json'), 'utf8'));
+    const world = manifest.files.find((file: { path: string }) => file.path === 'world/level.dat');
+    world.sha256 = await sha256(path.join(expanded, 'server/world/level.dat'));
+    world.bytes = (await stat(path.join(expanded, 'server/world/level.dat'))).size;
+    const propsFile = path.join(expanded, 'server/server.properties');
+    await writeFile(propsFile, 'level-name=../outside\n');
+    const properties = manifest.files.find(
+      (file: { path: string }) => file.path === 'server.properties',
+    );
+    properties.sha256 = await sha256(propsFile);
+    properties.bytes = (await stat(propsFile)).size;
+    await writeFile(path.join(expanded, 'manifest.json'), JSON.stringify(manifest));
+    const unsafe = path.join(f.root, 'unsafe.minedock');
+    await zipDirectory(expanded, unsafe, undefined, { preserveServerProperties: true });
+    await expect(core.packages.preview(unsafe)).rejects.toThrow('world name');
   } finally {
     await core.close();
     await f.cleanup();

@@ -1332,11 +1332,14 @@ textarea {
   gap: 21px;
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
+  overflow-y: hidden;
   margin: 0 0 26px;
 }
 .tabs button {
   padding-top: 3px;
   font-size: 11px;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 .overview-columns {
   display: grid;

@@ -1063,6 +1063,7 @@ function ModDetails({
                 </div>
               </div>
               <p>{project.description}</p>
+              {project.archived && <p className="warning-text">{t('modArchived')}</p>}
               <p className="muted">
                 {project.categories?.join(' · ')} ·{' '}
                 {project.updatedAt && new Date(project.updatedAt).toLocaleDateString()}

@@ -56,69 +56,75 @@ export function ConsoleToolsView({ server }: { server: Server }) {
       ))}
       {open && (
         <Dialog title={t('console.history')} closeLabel={t('close')} onClose={() => setOpen(false)}>
-          <div className="form-grid">
-            <Field label={t('searchLogs')}>
-              <input value={query} onChange={(e) => setQuery(e.target.value)} />
-            </Field>
-            <Field label={t('playerName')}>
-              <input value={player} onChange={(e) => setPlayer(e.target.value)} />
-            </Field>
-            <Field label={t('console.category')}>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value as typeof category)}
-              >
-                {(['all', 'chat', 'warnings', 'errors'] as const).map((c) => (
-                  <option key={c} value={c}>
-                    {t(
-                      c === 'all'
-                        ? 'allLevels'
-                        : c === 'chat'
-                          ? 'console.chat'
-                          : c === 'warnings'
-                            ? 'console.warnings'
-                            : 'console.errors',
-                    )}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            <Field label={t('console.from')}>
-              <input type="datetime-local" value={from} onChange={(e) => setFrom(e.target.value)} />
-            </Field>
-            <Field label={t('console.to')}>
-              <input type="datetime-local" value={to} onChange={(e) => setTo(e.target.value)} />
-            </Field>
+          <div className="dialog-body">
+            <div className="form-grid">
+              <Field label={t('searchLogs')}>
+                <input value={query} onChange={(e) => setQuery(e.target.value)} />
+              </Field>
+              <Field label={t('playerName')}>
+                <input value={player} onChange={(e) => setPlayer(e.target.value)} />
+              </Field>
+              <Field label={t('console.category')}>
+                <select
+                  value={category}
+                  onChange={(e) => setCategory(e.target.value as typeof category)}
+                >
+                  {(['all', 'chat', 'warnings', 'errors'] as const).map((c) => (
+                    <option key={c} value={c}>
+                      {t(
+                        c === 'all'
+                          ? 'allLevels'
+                          : c === 'chat'
+                            ? 'console.chat'
+                            : c === 'warnings'
+                              ? 'console.warnings'
+                              : 'console.errors',
+                      )}
+                    </option>
+                  ))}
+                </select>
+              </Field>
+              <Field label={t('console.from')}>
+                <input
+                  type="datetime-local"
+                  value={from}
+                  onChange={(e) => setFrom(e.target.value)}
+                />
+              </Field>
+              <Field label={t('console.to')}>
+                <input type="datetime-local" value={to} onChange={(e) => setTo(e.target.value)} />
+              </Field>
+            </div>
+            <Button
+              disabled={busy}
+              onClick={() => {
+                void run(() =>
+                  api.searchHistoricalLogs(server.id, {
+                    query,
+                    player,
+                    category,
+                    from: from ? new Date(from).toISOString() : undefined,
+                    to: to ? new Date(to).toISOString() : undefined,
+                  }),
+                ).then((r) => {
+                  if (r.ok) setResult(r.value);
+                });
+              }}
+            >
+              {t('search')}
+            </Button>
+            {result && (
+              <>
+                <p>
+                  {result.files} {t('files')} · {result.lines.length} ·{' '}
+                  {result.truncated ? t('console.truncated') : ''}
+                </p>
+                <pre style={{ maxHeight: 400, overflow: 'auto', whiteSpace: 'pre-wrap' }}>
+                  {result.lines.map((l) => l.file + ' · ' + l.text).join('\n')}
+                </pre>
+              </>
+            )}
           </div>
-          <Button
-            disabled={busy}
-            onClick={() => {
-              void run(() =>
-                api.searchHistoricalLogs(server.id, {
-                  query,
-                  player,
-                  category,
-                  from: from ? new Date(from).toISOString() : undefined,
-                  to: to ? new Date(to).toISOString() : undefined,
-                }),
-              ).then((r) => {
-                if (r.ok) setResult(r.value);
-              });
-            }}
-          >
-            {t('search')}
-          </Button>
-          {result && (
-            <>
-              <p>
-                {result.files} {t('files')} · {result.lines.length} ·{' '}
-                {result.truncated ? t('console.truncated') : ''}
-              </p>
-              <pre style={{ maxHeight: 400, overflow: 'auto', whiteSpace: 'pre-wrap' }}>
-                {result.lines.map((l) => l.file + ' · ' + l.text).join('\n')}
-              </pre>
-            </>
-          )}
         </Dialog>
       )}
       {builder && (
@@ -127,94 +133,98 @@ export function ConsoleToolsView({ server }: { server: Server }) {
           closeLabel={t('close')}
           onClose={() => setBuilder(false)}
         >
-          <Field label={t('name')}>
-            <input value={name} onChange={(e) => setName(e.target.value)} maxLength={80} />
-          </Field>
-          {steps.map((step, index) => (
-            <div className="installed-row" key={index}>
-              <select
-                aria-label={t('action')}
-                value={step.type}
-                onChange={(e) => {
-                  const type = e.target.value as MacroInput['steps'][number]['type'];
-                  setSteps(
-                    steps.map((s, i) =>
-                      i === index
-                        ? type === 'delay'
-                          ? { type, seconds: 30 }
-                          : type === 'announce'
-                            ? { type, message: '' }
-                            : { type }
-                        : s,
-                    ),
-                  );
-                }}
-              >
-                {(['announce', 'delay', 'save', 'backup', 'stop', 'restart'] as const).map(
-                  (type) => (
-                    <option key={type} value={type}>
-                      {t(
-                        type === 'announce'
-                          ? 'console.announcement'
-                          : type === 'delay'
-                            ? 'console.delay'
-                            : type,
-                      )}
-                    </option>
-                  ),
-                )}
-              </select>
-              {step.type === 'announce' && (
-                <input
-                  aria-label={t('console.announcement')}
-                  value={step.message}
-                  onChange={(e) =>
-                    setSteps(
-                      steps.map((s, i) => (i === index ? { ...step, message: e.target.value } : s)),
-                    )
-                  }
-                />
-              )}{' '}
-              {step.type === 'delay' && (
-                <input
-                  aria-label={t('console.delay')}
-                  type="number"
-                  value={step.seconds}
-                  min={1}
-                  max={300}
-                  onChange={(e) =>
+          <div className="dialog-body">
+            <Field label={t('name')}>
+              <input value={name} onChange={(e) => setName(e.target.value)} maxLength={80} />
+            </Field>
+            {steps.map((step, index) => (
+              <div className="installed-row" key={index}>
+                <select
+                  aria-label={t('action')}
+                  value={step.type}
+                  onChange={(e) => {
+                    const type = e.target.value as MacroInput['steps'][number]['type'];
                     setSteps(
                       steps.map((s, i) =>
-                        i === index ? { ...step, seconds: Number(e.target.value) } : s,
+                        i === index
+                          ? type === 'delay'
+                            ? { type, seconds: 30 }
+                            : type === 'announce'
+                              ? { type, message: '' }
+                              : { type }
+                          : s,
                       ),
-                    )
-                  }
-                />
-              )}
-              <Button
-                disabled={steps.length === 1}
-                onClick={() => setSteps(steps.filter((_, i) => i !== index))}
-              >
-                {t('delete')}
-              </Button>
-            </div>
-          ))}
-          <Button
-            disabled={steps.length >= 20}
-            onClick={() => setSteps([...steps, { type: 'save' }])}
-          >
-            {t('console.addStep')}
-          </Button>
-          <Button
-            disabled={busy || !name.trim()}
-            onClick={() => {
-              void run(() => api.saveMacro(server.id, { name, steps })).then((r) => {
-                if (r.ok) setBuilder(false);
-              });
-            }}
-          >
-            {t('save')}
-          </Button>
+                    );
+                  }}
+                >
+                  {(['announce', 'delay', 'save', 'backup', 'stop', 'restart'] as const).map(
+                    (type) => (
+                      <option key={type} value={type}>
+                        {t(
+                          type === 'announce'
+                            ? 'console.announcement'
+                            : type === 'delay'
+                              ? 'console.delay'
+                              : type,
+                        )}
+                      </option>
+                    ),
+                  )}
+                </select>
+                {step.type === 'announce' && (
+                  <input
+                    aria-label={t('console.announcement')}
+                    value={step.message}
+                    onChange={(e) =>
+                      setSteps(
+                        steps.map((s, i) =>
+                          i === index ? { ...step, message: e.target.value } : s,
+                        ),
+                      )
+                    }
+                  />
+                )}{' '}
+                {step.type === 'delay' && (
+                  <input
+                    aria-label={t('console.delay')}
+                    type="number"
+                    value={step.seconds}
+                    min={1}
+                    max={300}
+                    onChange={(e) =>
+                      setSteps(
+                        steps.map((s, i) =>
+                          i === index ? { ...step, seconds: Number(e.target.value) } : s,
+                        ),
+                      )
+                    }
+                  />
+                )}
+                <Button
+                  disabled={steps.length === 1}
+                  onClick={() => setSteps(steps.filter((_, i) => i !== index))}
+                >
+                  {t('delete')}
+                </Button>
+              </div>
+            ))}
+            <Button
+              disabled={steps.length >= 20}
+              onClick={() => setSteps([...steps, { type: 'save' }])}
+            >
+              {t('console.addStep')}
+            </Button>
+            <Button
+              disabled={busy || !name.trim()}
+              onClick={() => {
+                void run(() => api.saveMacro(server.id, { name, steps })).then((r) => {
+                  if (r.ok) setBuilder(false);
+                });
+              }}
+            >
+              {t('save')}
+            </Button>
+          </div>
         </Dialog>
       )}
     </details>

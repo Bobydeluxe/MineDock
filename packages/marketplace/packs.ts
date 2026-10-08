@@ -30,7 +30,13 @@ function fail(message: string): never {
   throw new DomainError('PACK', message);
 }
 const fingerprint = (server: Server) =>
-  JSON.stringify([server.version, server.path, server.packs, server.activeResourcePack]);
+  JSON.stringify([
+    server.engine,
+    server.version,
+    server.path,
+    server.packs,
+    server.activeResourcePack,
+  ]);
 export class PackService {
   private plans = new Map<
     string,
@@ -110,7 +116,8 @@ export class PackService {
   }
   async plan(server: Server, raw: PackRequest): Promise<PackPlan> {
     const input = packRequestSchema.parse(raw);
-    await this.scope(server, input.kind, input.world);
+    const selectedScope = await this.scope(server, input.kind, input.world);
+    if (input.kind === 'datapack') input.world = path.dirname(selectedScope);
     const plan: PackPlan = { token: randomUUID(), entries: [], optional: [], conflicts: [] };
     const resolved = new Map<string, string>(),
       visiting = new Set<string>();
@@ -283,7 +290,7 @@ export class PackService {
               .map((d) => d.projectId!),
           };
           packs = [...packs.filter((p) => p.id !== item.id), item];
-        if (old && server.activeResourcePack === old.id) {
+          if (old && server.activeResourcePack === old.id) {
             const config = await containedPath(stage, 'server.properties'),
               props = parseProperties(await readFile(config, 'utf8'));
             props['resource-pack'] = item.url!;
@@ -366,8 +373,15 @@ export class PackService {
           await atomicWrite(config, serializeProperties(props));
           profile.activeResourcePack = item.id;
         } else {
-          if (server.activeResourcePack === item.id)
-            fail('Choose another resource pack before removing the selected pack.');
+          if (server.activeResourcePack === item.id) {
+            if (input.action !== 'remove') fail('The selected resource pack cannot be disabled.');
+            const config = await containedPath(stage, 'server.properties'),
+              props = parseProperties(await readFile(config, 'utf8'));
+            delete props['resource-pack'];
+            delete props['resource-pack-sha1'];
+            await atomicWrite(config, serializeProperties(props));
+            profile.activeResourcePack = undefined;
+          }
           if (input.action === 'remove') {
             await rm(file);
             profile.packs = profile.packs.filter((p) => p.id !== item.id);

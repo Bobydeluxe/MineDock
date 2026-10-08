@@ -777,7 +777,7 @@
   "console.errors": "Erreurs",
   "console.from": "Depuis",
   "console.to": "Jusqu’à",
-  "console.truncated": "Résultats limités à 500 lignes / 16 Mo / 40 fichiers de logs non compressés.",
+  "console.truncated": "Résultats limités à 500 lignes / 16 Mo / 40 fichiers de logs texte ou gzip.",
   "console.announcement": "Annonce",
   "console.delay": "Délai (secondes)",
   "console.addStep": "Ajouter une étape",
@@ -838,5 +838,13 @@
   "package.import": "Importer un package MineDock",
   "package.trust": "Importez uniquement des packages de confiance. Les mods/plugins exécutent du code. Les données sont copiées, les ports et la RAM adaptés ; le package original reste intact. Internet est nécessaire pour installer moteur/runtime.",
   "package.containsSensitive": "Ce package inclut des configurations pouvant contenir des secrets. Gardez-le privé.",
-  "package.accept": "J’ai vérifié ce package et j’accepte l’EULA Minecraft si applicable (minecraft.net/eula)."
+  "package.accept": "J’ai vérifié ce package et j’accepte l’EULA Minecraft si applicable (minecraft.net/eula).",
+  "health.runtime": "Runtime absent ou inaccessible",
+  "health.port": "Le port du jeu est déjà utilisé",
+  "health.minecraftUpdate": "Une nouvelle version de Minecraft est disponible",
+  "notice.minecraftUpdate": "Nouvelle version de Minecraft",
+  "notice.content": "Le contenu nécessite une vérification",
+  "notice.runtime": "Le runtime nécessite une vérification",
+  "pack.updateHelp": "Vérifiez les versions Modrinth compatibles à la demande. Les packs locaux ou hors ligne gardent une compatibilité inconnue. Les dépendances obligatoires sont vérifiées avant toute mise à jour.",
+  "modArchived": "Ce projet est archivé sur Modrinth. Vérifiez son état de maintenance avant de l’installer."
 }

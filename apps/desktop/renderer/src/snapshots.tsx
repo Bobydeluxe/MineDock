@@ -108,42 +108,44 @@ export function SnapshotControls({ server }: { server: Server }) {
           closeLabel={t('close')}
           onClose={() => setPreview(undefined)}
         >
-          <p>{t('snapshot.restoreHelp')}</p>
-          <strong>{t('snapshot.replaced')}</strong>
-          <ul>
-            {preview.replaced.map((p) => (
-              <li key={p}>{p}</li>
-            ))}
-          </ul>
-          <details>
-            <summary>
-              {t('files')} ({preview.paths.length})
-            </summary>
-            <pre style={{ maxHeight: 240, overflow: 'auto' }}>{preview.paths.join('\n')}</pre>
-          </details>
-          <Field label={t('confirmHelp')}>
-            <input
-              value={confirmation}
-              onChange={(e) => setConfirmation(e.target.value)}
-              placeholder={server.name}
-            />
-          </Field>
-          <Button
-            disabled={busy || confirmation !== server.name}
-            variant="danger"
-            onClick={() => {
-              void run(() => api.restorePartial(server.id, preview.token, confirmation)).then(
-                (r) => {
-                  if (r.ok) {
-                    setPreview(undefined);
-                    data.reload();
-                  }
-                },
-              );
-            }}
-          >
-            {t('restore')}
-          </Button>
+          <div className="dialog-body">
+            <p>{t('snapshot.restoreHelp')}</p>
+            <strong>{t('snapshot.replaced')}</strong>
+            <ul>
+              {preview.replaced.map((p) => (
+                <li key={p}>{p}</li>
+              ))}
+            </ul>
+            <details>
+              <summary>
+                {t('files')} ({preview.paths.length})
+              </summary>
+              <pre style={{ maxHeight: 240, overflow: 'auto' }}>{preview.paths.join('\n')}</pre>
+            </details>
+            <Field label={t('confirmHelp')}>
+              <input
+                value={confirmation}
+                onChange={(e) => setConfirmation(e.target.value)}
+                placeholder={server.name}
+              />
+            </Field>
+            <Button
+              disabled={busy || confirmation !== server.name}
+              variant="danger"
+              onClick={() => {
+                void run(() => api.restorePartial(server.id, preview.token, confirmation)).then(
+                  (r) => {
+                    if (r.ok) {
+                      setPreview(undefined);
+                      data.reload();
+                    }
+                  },
+                );
+              }}
+            >
+              {t('restore')}
+            </Button>
+          </div>
         </Dialog>
       )}
     </section>

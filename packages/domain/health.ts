@@ -10,6 +10,9 @@ export const noticeCodes = [
   'playerJoin',
   'playerLeave',
   'lag',
+  'minecraftUpdate',
+  'content',
+  'runtime',
 ] as const;
 export type NoticeCode = (typeof noticeCodes)[number];
 export interface Notice {
@@ -39,7 +42,17 @@ export const healthSettingsSchema = z
   .strict();
 export type HealthSettings = z.infer<typeof healthSettingsSchema>;
 export interface HealthIssue {
-  code: 'crash' | 'installation' | 'backupOld' | 'lowDisk' | 'highMemory' | 'highCpu' | 'content';
+  code:
+    | 'crash'
+    | 'installation'
+    | 'backupOld'
+    | 'lowDisk'
+    | 'highMemory'
+    | 'highCpu'
+    | 'content'
+    | 'runtime'
+    | 'port'
+    | 'minecraftUpdate';
   severity: 'warning' | 'problem';
   detail?: string;
 }

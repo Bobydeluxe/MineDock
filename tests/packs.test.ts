@@ -130,12 +130,49 @@ it('rejects stale plans, wrong versions, world traversal and dependency conflict
     await expect(f.service.apply({ ...f.server, version: '1.20.1' }, plan.token)).rejects.toThrow(
       'changed',
     );
+    await expect(f.service.apply({ ...f.server, engine: 'fabric' }, plan.token)).rejects.toThrow(
+      'changed',
+    );
     vi.mocked(f.catalog.packVersions).mockResolvedValue([
       { ...f.version('root'), gameVersions: ['1.20.1'] },
     ]);
     await expect(f.service.plan(f.server, { kind: 'datapack', projectId: 'root' })).rejects.toThrow(
       'compatible',
     );
+  } finally {
+    await f.cleanup();
+  }
+});
+it('uses the active custom world and clears properties when removing the selected resource pack', async () => {
+  const f = await setup();
+  try {
+    await mkdir(path.join(f.server.path, 'survival'));
+    await writeFile(path.join(f.server.path, 'server.properties'), 'level-name=survival\n');
+    const plan = await f.service.plan(f.server, { kind: 'datapack', projectId: 'root' });
+    await f.service.apply(f.server, plan.token);
+    let server = f.repo.server(f.server.id);
+    expect(server.packs?.every((p) => p.world === 'survival')).toBe(true);
+    expect((await f.service.inventory(server, 'datapack')).installed).toHaveLength(2);
+    const source = path.join(f.root, 'local.zip');
+    await writeFile(source, f.bytes);
+    await f.service.import(server, 'resourcepack', source);
+    server = f.repo.server(server.id);
+    const pack = server.packs!.find((p) => p.kind === 'resourcepack')!;
+    await f.service.action(server, {
+      id: pack.id,
+      action: 'select',
+      confirmation: server.name,
+      url: 'https://example.com/pack.zip',
+    });
+    await f.service.action(f.repo.server(server.id), {
+      id: pack.id,
+      action: 'remove',
+      confirmation: server.name,
+    });
+    expect(f.repo.server(server.id).activeResourcePack).toBeUndefined();
+    const props = await readFile(path.join(server.path, 'server.properties'), 'utf8');
+    expect(props).not.toMatch(/^resource-pack=/m);
+    expect(props).not.toMatch(/^resource-pack-sha1=/m);
   } finally {
     await f.cleanup();
   }

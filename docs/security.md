@@ -33,3 +33,11 @@ Audit omits secret-bearing free-form command text. Application diagnostics redac
 TLS alone never authorizes an update. The app verifies Ed25519 metadata against an embedded public key, stable version/dates, exact repository release URLs, native architecture/package type and signed SHA-256/size. Downloaded files are verified again before installation. Optional automatic checks are off by default; installation remains explicit and is blocked while servers or operations are active. It never updates a Minecraft server.
 
 The publisher private key stays outside Git/packages and is configured as an encrypted CI secret. Platform certificates/passwords use CI secrets/environment variables only. No official Windows or Apple certificate is currently provided; unsigned builds are explicitly reported. Platform certificate verification/notarization cannot be claimed without those real credentials. See [distribution](distribution.md) and [update-system](update-system.md).
+
+## Survival evolution review
+
+Incremental manifests and `.minedock` archives validate paths, inventory bounds and SHA-256 before staged application. Snapshot objects are immutable and there is no automatic garbage collection. Packages exclude known secrets and arbitrary plugin configurations by default; plugin configuration requires explicit opt-in, managed RCON is always removed/regenerated, and worlds/player files may still contain private information. See [package policy](package-format.md).
+
+Configuration history is encrypted and bounded; saves/restores require a fresh file hash and preserve a current copy. YAML parsing bounds aliases/depth and only safe scalar options enter the graphical editor. Map assistants prepare loopback binding, and only backend-validated loopback URLs can be opened. The optional fixed external reachability observer receives a public address/port only after explicit consent. Minecraft version checks use the official manifest; app updater consent remains independent.
+
+The [internal security review](security-audit.md) records evidence and unresolved risks. It is not an independent audit. Windows helper execution now avoids `DETACHED_PROCESS`; the exact old/new packaged validation and public-0.3.0 limitation are recorded separately from unit helper tests.

@@ -71,96 +71,98 @@ export function MigrationControls({ server }: { server: Server }) {
           closeLabel={t('close')}
           onClose={() => setOpen(false)}
         >
-          <p>{t('migration.worldHelp')}</p>
-          <Field label={t('engine')}>
-            <select
-              value={engine}
-              onChange={(e) => {
-                setEngine(e.target.value as MigrationTarget['engine']);
-                setReview(undefined);
-              }}
-            >
-              {(server.engine === 'paper' || server.engine === 'purpur'
-                ? ['paper', 'purpur']
-                : [server.engine]
-              ).map((e) => (
-                <option key={e} value={e}>
-                  {e}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label={t('version')}>
-            <select
-              value={version}
-              onChange={(e) => {
-                setVersion(e.target.value);
-                setReview(undefined);
-              }}
-            >
-              {[...new Set([server.version, ...(versions.data ?? [])])].map((v) => (
-                <option key={v} value={v}>
-                  {v}
-                </option>
-              ))}
-            </select>
-          </Field>
-          {versions.error && <ErrorBox error={versions.error} />}
-          <Button
-            disabled={busy || !stopped}
-            onClick={() => {
-              void run(() => api.migrationReview(server.id, { engine, version })).then((r) => {
-                if (r.ok) setReview(r.value);
-              });
-            }}
-          >
-            {t('migration.analyze')}
-          </Button>
-          {review && (
-            <>
-              <p>
-                Java {review.javaMajor} ·{' '}
-                {t(review.blocked ? 'migration.blocked' : 'migration.ready')}
-              </p>
-              {review.items.map((item, index) => (
-                <div className="installed-row" key={index}>
-                  <strong>{item.title}</strong>
-                  <span
-                    className={`badge ${item.status === 'incompatible' ? 'danger' : item.status === 'unknown' ? 'warning' : 'enabled'}`}
-                  >
-                    {t(
-                      item.status === 'update'
-                        ? 'updateAvailable'
-                        : item.status === 'compatible'
-                          ? 'compatible'
-                          : item.status,
-                    )}
-                  </span>
-                  <small>{item.version}</small>
-                </div>
-              ))}
-              <Field label={t('confirmHelp')}>
-                <input
-                  value={confirmation}
-                  onChange={(e) => setConfirmation(e.target.value)}
-                  placeholder={server.name}
-                />
-              </Field>
-              <Button
-                variant="danger"
-                disabled={busy || review.blocked || confirmation !== server.name}
-                onClick={() => {
-                  void run(() => api.applyMigration(server.id, review.token, confirmation)).then(
-                    (r) => {
-                      if (r.ok) setOpen(false);
-                    },
-                  );
+          <div className="dialog-body">
+            <p>{t('migration.worldHelp')}</p>
+            <Field label={t('engine')}>
+              <select
+                value={engine}
+                onChange={(e) => {
+                  setEngine(e.target.value as MigrationTarget['engine']);
+                  setReview(undefined);
                 }}
               >
-                {t('migration.apply')}
-              </Button>
-            </>
-          )}
+                {(server.engine === 'paper' || server.engine === 'purpur'
+                  ? ['paper', 'purpur']
+                  : [server.engine]
+                ).map((e) => (
+                  <option key={e} value={e}>
+                    {e}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field label={t('version')}>
+              <select
+                value={version}
+                onChange={(e) => {
+                  setVersion(e.target.value);
+                  setReview(undefined);
+                }}
+              >
+                {[...new Set([server.version, ...(versions.data ?? [])])].map((v) => (
+                  <option key={v} value={v}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            {versions.error && <ErrorBox error={versions.error} />}
+            <Button
+              disabled={busy || !stopped}
+              onClick={() => {
+                void run(() => api.migrationReview(server.id, { engine, version })).then((r) => {
+                  if (r.ok) setReview(r.value);
+                });
+              }}
+            >
+              {t('migration.analyze')}
+            </Button>
+            {review && (
+              <>
+                <p>
+                  Java {review.javaMajor} ·{' '}
+                  {t(review.blocked ? 'migration.blocked' : 'migration.ready')}
+                </p>
+                {review.items.map((item, index) => (
+                  <div className="installed-row" key={index}>
+                    <strong>{item.title}</strong>
+                    <span
+                      className={`badge ${item.status === 'incompatible' ? 'danger' : item.status === 'unknown' ? 'warning' : 'enabled'}`}
+                    >
+                      {t(
+                        item.status === 'update'
+                          ? 'updateAvailable'
+                          : item.status === 'compatible'
+                            ? 'compatible'
+                            : item.status,
+                      )}
+                    </span>
+                    <small>{item.version}</small>
+                  </div>
+                ))}
+                <Field label={t('confirmHelp')}>
+                  <input
+                    value={confirmation}
+                    onChange={(e) => setConfirmation(e.target.value)}
+                    placeholder={server.name}
+                  />
+                </Field>
+                <Button
+                  variant="danger"
+                  disabled={busy || review.blocked || confirmation !== server.name}
+                  onClick={() => {
+                    void run(() => api.applyMigration(server.id, review.token, confirmation)).then(
+                      (r) => {
+                        if (r.ok) setOpen(false);
+                      },
+                    );
+                  }}
+                >
+                  {t('migration.apply')}
+                </Button>
+              </>
+            )}
+          </div>
         </Dialog>
       )}
       {clone && (
@@ -169,38 +171,40 @@ export function MigrationControls({ server }: { server: Server }) {
           closeLabel={t('close')}
           onClose={() => setClone(false)}
         >
-          <Field label={t('name')}>
-            <input value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />
-          </Field>
-          <Field label={t('port')}>
-            <input type="number" value={port} onChange={(e) => setPort(Number(e.target.value))} />
-          </Field>
-          <Field label={t('migration.cloneMode')}>
-            <select value={mode} onChange={(e) => setMode(e.target.value as CloneInput['mode'])}>
-              <option value="complete">{t('migration.complete')}</option>
-              <option value="newWorld">{t('migration.newWorld')}</option>
-            </select>
-          </Field>
-          <p>{t('migration.cloneHelp')}</p>
-          <Field label={t('confirmHelp')}>
-            <input
-              value={confirmation}
-              onChange={(e) => setConfirmation(e.target.value)}
-              placeholder={server.name}
-            />
-          </Field>
-          <Button
-            disabled={busy || !name.trim() || confirmation !== server.name}
-            onClick={() => {
-              void run(() => api.cloneServer(server.id, { name, port, mode, confirmation })).then(
-                (r) => {
-                  if (r.ok) setClone(false);
-                },
-              );
-            }}
-          >
-            {t('migration.clone')}
-          </Button>
+          <div className="dialog-body">
+            <Field label={t('name')}>
+              <input value={name} maxLength={60} onChange={(e) => setName(e.target.value)} />
+            </Field>
+            <Field label={t('port')}>
+              <input type="number" value={port} onChange={(e) => setPort(Number(e.target.value))} />
+            </Field>
+            <Field label={t('migration.cloneMode')}>
+              <select value={mode} onChange={(e) => setMode(e.target.value as CloneInput['mode'])}>
+                <option value="complete">{t('migration.complete')}</option>
+                <option value="newWorld">{t('migration.newWorld')}</option>
+              </select>
+            </Field>
+            <p>{t('migration.cloneHelp')}</p>
+            <Field label={t('confirmHelp')}>
+              <input
+                value={confirmation}
+                onChange={(e) => setConfirmation(e.target.value)}
+                placeholder={server.name}
+              />
+            </Field>
+            <Button
+              disabled={busy || !name.trim() || confirmation !== server.name}
+              onClick={() => {
+                void run(() => api.cloneServer(server.id, { name, port, mode, confirmation })).then(
+                  (r) => {
+                    if (r.ok) setClone(false);
+                  },
+                );
+              }}
+            >
+              {t('migration.clone')}
+            </Button>
+          </div>
         </Dialog>
       )}
     </section>

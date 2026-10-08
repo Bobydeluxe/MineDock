@@ -51,7 +51,13 @@ export class PerformanceService {
       );
     const before = new Date(Date.now() - 7 * 86400000).toISOString();
     this.core.repo.db.prepare('DELETE FROM performance_samples WHERE at<?').run(before);
-    if ((tick.tps !== undefined && tick.tps < 18) || (tick.mspt !== undefined && tick.mspt > 50)) {
+    const thresholds = this.core.health.settings();
+    if (
+      (tick.tps !== undefined && tick.tps < 18) ||
+      (tick.mspt !== undefined && tick.mspt > 50) ||
+      metric.cpu >= thresholds.cpuPercent ||
+      metric.memory >= (server.memoryMax * 1024 ** 2 * thresholds.memoryPercent) / 100
+    ) {
       const last = this.core.repo.db
         .prepare('SELECT at FROM lag_events WHERE server_id=? ORDER BY id DESC LIMIT 1')
         .get(id);
@@ -60,6 +66,8 @@ export class PerformanceService {
           at: metric.at,
           tps: tick.tps,
           mspt: tick.mspt,
+          cpu: metric.cpu,
+          memory: metric.memory,
           logs: this.core.supervisor
             .logs(id)
             .slice(-20)

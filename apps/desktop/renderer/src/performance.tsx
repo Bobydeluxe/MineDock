@@ -3,7 +3,7 @@ import type { Server } from '../../../../packages/domain/types';
 import type { JvmOptions } from '../../../../packages/domain/performance';
 import { recommendMemory } from '../../../../packages/domain/performance';
 import { useApp } from './context';
-import { Button, Field, ErrorBox, useData, Chart } from './ui';
+import { Button, Field, ErrorBox, useData, Chart, bytes } from './ui';
 export function PerformanceView({ server }: { server: Server }) {
   const { api, t } = useApp(),
     [hours, setHours] = useState(1),
@@ -48,6 +48,9 @@ export function PerformanceView({ server }: { server: Server }) {
           <details key={lag.at}>
             <summary>
               {new Date(lag.at).toLocaleString()} · {lag.tps ?? '—'} TPS · {lag.mspt ?? '—'} MSPT
+              {' · '}
+              {lag.cpu === undefined ? '—' : lag.cpu.toFixed(1)}% CPU ·{' '}
+              {lag.memory === undefined ? '—' : bytes(lag.memory)}
             </summary>
             <pre style={{ maxHeight: 200, overflow: 'auto', whiteSpace: 'pre-wrap' }}>
               {lag.logs.join('\n')}
@@ -67,8 +70,8 @@ export function MemoryJvmControls({ server }: { server: Server }) {
   if (!['vanilla', 'paper', 'purpur', 'fabric', 'forge', 'neoforge'].includes(server.engine))
     return null;
   return (
-    <section className="panel">
-      <h2>{t('performance.ram')}</h2>
+    <details className="panel">
+      <summary>{t('performance.ram')}</summary>
       <p>{t('performance.ramHelp')}</p>
       <div className="actions">
         {(['small', 'friends', 'modded'] as const).map((value) => (
@@ -157,6 +160,6 @@ export function MemoryJvmControls({ server }: { server: Server }) {
       >
         {t('save')}
       </Button>
-    </section>
+    </details>
   );
 }

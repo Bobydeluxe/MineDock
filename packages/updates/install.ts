@@ -214,6 +214,51 @@ export async function prepareUpdateLaunch(
   };
 }
 export async function launchUpdate(plan: InstallLaunch): Promise<void> {
+  if (process.platform === 'win32') {
+    // ShellExecute through Start-Process gives the installer/helper its own lifetime.
+    // DETACHED_PROCESS skips PowerShell initialization on some Windows hosts;
+    // an ordinary inherited child can instead be terminated when Electron closes.
+    const literal = (value: string) => "'" + value.replaceAll("'", "''") + "'";
+    const argumentsLiteral = plan.args
+      .map((value) => literal('"' + value.replaceAll('"', '\\"') + '"'))
+      .join(',');
+    const script =
+      "$ErrorActionPreference = 'Stop'; Start-Process -FilePath " +
+      literal(plan.command) +
+      (plan.args.length ? ' -ArgumentList @(' + argumentsLiteral + ')' : '') +
+      ' -WindowStyle Hidden -ErrorAction Stop';
+    await new Promise<void>((resolve, reject) => {
+      const launcher = spawn(
+        path.join(
+          process.env.SystemRoot ?? 'C:\\Windows',
+          'System32/WindowsPowerShell/v1.0/powershell.exe',
+        ),
+        [
+          '-NoProfile',
+          '-NonInteractive',
+          '-ExecutionPolicy',
+          'Bypass',
+          '-EncodedCommand',
+          Buffer.from(script, 'utf16le').toString('base64'),
+        ],
+        { stdio: 'ignore', windowsHide: true, shell: false },
+      );
+      const timeout = setTimeout(() => {
+        launcher.kill();
+        reject(new DomainError('UPDATE_INSTALL', 'The native update launcher timed out.'));
+      }, 15000);
+      launcher.once('error', (error) => {
+        clearTimeout(timeout);
+        reject(error);
+      });
+      launcher.once('exit', (code) => {
+        clearTimeout(timeout);
+        if (code === 0) resolve();
+        else reject(new DomainError('UPDATE_INSTALL', 'The native update launcher failed.'));
+      });
+    });
+    return;
+  }
   await new Promise<void>((resolve, reject) => {
     const child = spawn(plan.command, plan.args, {
       detached: true,

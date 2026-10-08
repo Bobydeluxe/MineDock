@@ -777,7 +777,7 @@
   "console.errors": "Errors",
   "console.from": "From",
   "console.to": "Until",
-  "console.truncated": "Results limited to 500 lines / 16 MB / 40 plain log files.",
+  "console.truncated": "Results limited to 500 lines / 16 MB / 40 plain or gzip log files.",
   "console.announcement": "Announcement",
   "console.delay": "Delay (seconds)",
   "console.addStep": "Add step",
@@ -838,5 +838,13 @@
   "package.import": "Import MineDock package",
   "package.trust": "Import packages only from people you trust. Mods/plugins execute code. Import copies data, selects free ports and adjusts RAM; the original package stays unchanged. An Internet connection is required to install the engine/runtime.",
   "package.containsSensitive": "This package explicitly includes configurations that may contain secrets. Keep it private.",
-  "package.accept": "I reviewed this package and accept the Minecraft EULA where applicable (minecraft.net/eula)."
+  "package.accept": "I reviewed this package and accept the Minecraft EULA where applicable (minecraft.net/eula).",
+  "health.runtime": "Runtime missing or unavailable",
+  "health.port": "Game port is already in use",
+  "health.minecraftUpdate": "A newer Minecraft release is available",
+  "notice.minecraftUpdate": "New Minecraft release",
+  "notice.content": "Content needs attention",
+  "notice.runtime": "Runtime needs attention",
+  "pack.updateHelp": "Check compatible Modrinth releases on demand. Offline or local packs keep an unknown compatibility status. Required dependencies are reviewed before any update.",
+  "modArchived": "This project is archived on Modrinth. Review its maintenance status before installing."
 }

@@ -10,6 +10,7 @@ import {
   type Notice,
   type HealthReport,
   type CrashReport,
+  type HealthIssue,
 } from '../domain/health';
 import { containedPath } from '../security/paths';
 import { redact } from '../security/secrets';
@@ -18,6 +19,8 @@ export class HealthService {
   private off: () => void;
   private sustained = new Map<string, number>();
   private statuses = new Map<string, string>();
+  private checks?: (id: string) => Promise<HealthIssue[]>;
+  private releases = new Map<string, string>();
   constructor(
     private repo: Repository,
     private bus: EventBus,
@@ -61,6 +64,13 @@ export class HealthService {
   close() {
     this.off();
   }
+  setChecks(checks: (id: string) => Promise<HealthIssue[]>) {
+    this.checks = checks;
+  }
+  minecraftRelease(id: string, version: string) {
+    this.releases.set(id, version);
+    this.push(id, 'minecraftUpdate', version);
+  }
   settings(): HealthSettings {
     const value = this.repo.db
       .prepare("SELECT value FROM settings WHERE key='survival-health'")
@@ -90,6 +100,7 @@ export class HealthService {
   }
   push(serverId: string | undefined, code: NoticeCode, detail?: string) {
     const settings = this.settings();
+    if (code === 'minecraftUpdate' && !settings.update) return;
     if (code in settings && settings[code as keyof HealthSettings] === false) return;
     const row = this.repo.db
       .prepare(
@@ -183,6 +194,29 @@ export class HealthService {
       report.issues.push({ code: 'highMemory', severity: 'warning' });
     if (server.cpu > settings.cpuPercent)
       report.issues.push({ code: 'highCpu', severity: 'warning' });
+    if (report.hostFreeBytes < 512 * 1024 ** 2)
+      report.issues.push({ code: 'highMemory', severity: 'warning', detail: 'Low host memory' });
+    if (this.releases.get(id) === server.version) this.releases.delete(id);
+    if (this.releases.has(id))
+      report.issues.push({
+        code: 'minecraftUpdate',
+        severity: 'warning',
+        detail: this.releases.get(id),
+      });
+    if (this.checks) report.issues.push(...(await this.checks(id)));
+    // Host and process memory can trigger the same advice; keep one coherent row per issue.
+    const issues = new Map<HealthIssue['code'], HealthIssue>();
+    for (const issue of report.issues) {
+      const previous = issues.get(issue.code);
+      issues.set(issue.code, {
+        ...issue,
+        severity:
+          previous?.severity === 'problem' || issue.severity === 'problem' ? 'problem' : 'warning',
+        detail:
+          [...new Set([previous?.detail, issue.detail].filter(Boolean))].join('; ') || undefined,
+      });
+    }
+    report.issues = [...issues.values()];
     report.state = report.issues.some((i) => i.severity === 'problem')
       ? 'problem'
       : report.issues.length

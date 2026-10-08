@@ -4,6 +4,7 @@ import { Button, Field, Toggle, Dialog, ErrorBox, useData, bytes } from './ui';
 import type { Server } from '../../../../packages/domain/types';
 import type { Key } from './i18n';
 import { localizeMessage } from '../../../../packages/domain/localization';
+import { Confirm } from './management';
 export function HealthView({ server }: { server: Server }) {
   const { api, t, run, busy, snapshot } = useApp(),
     data = useData(() => api.health(server.id), [server.id, server.status]);
@@ -12,6 +13,7 @@ export function HealthView({ server }: { server: Server }) {
       () => (crash ? api.crashReport(server.id) : Promise.resolve(null)),
       [crash, server.id],
     );
+  const [disable, setDisable] = useState<string>();
   return (
     <section className="panel">
       <div className="section-heading">
@@ -27,7 +29,10 @@ export function HealthView({ server }: { server: Server }) {
             {t(('health.' + data.data.state) as Key)}
           </span>
           {data.data.issues.map((i) => (
-            <p key={i.code}>{t(('health.' + i.code) as Key)}</p>
+            <p key={i.code}>
+              {t(('health.' + i.code) as Key)}
+              {i.detail ? ' · ' + localizeMessage(i.detail, snapshot.settings.language) : ''}
+            </p>
           ))}
           <small>
             {t('health.memoryHelp')} · {t('health.freeDisk')}:{' '}
@@ -46,33 +51,69 @@ export function HealthView({ server }: { server: Server }) {
           closeLabel={t('close')}
           onClose={() => setCrash(false)}
         >
-          {report.error && <ErrorBox error={report.error} />}{' '}
-          {report.data && (
-            <>
-              <p>{localizeMessage(report.data.diagnosis, snapshot.settings.language)}</p>
-              <p>{t('health.evidenceHelp')}</p>
-              {report.data.candidates.map((c) => (
-                <p key={c.filename}>
-                  {c.title} · {c.filename} · {t('health.possible')}
-                </p>
-              ))}
-              <Button
-                disabled={!report.data.path}
-                onClick={() => {
-                  void run(() => api.revealCrash(server.id));
-                }}
-              >
-                {t('openFolder')}
-              </Button>
-              <pre
-                className="console-output"
-                style={{ maxHeight: 420, overflow: 'auto', whiteSpace: 'pre-wrap' }}
-              >
-                {report.data.text || t('noResults')}
-              </pre>
-            </>
-          )}
+          <div className="dialog-body">
+            {report.error && <ErrorBox error={report.error} />}{' '}
+            {report.data && (
+              <>
+                <p>{localizeMessage(report.data.diagnosis, snapshot.settings.language)}</p>
+                <p>{t('health.evidenceHelp')}</p>
+                {report.data.candidates.map((c) => (
+                  <p key={c.filename}>
+                    {c.title} · {c.filename} · {t('health.possible')}
+                    {c.id && (
+                      <>
+                        <Button onClick={() => void run(() => api.modReveal(server.id, c.id!))}>
+                          {t('openFolder')}
+                        </Button>
+                        <Button
+                          disabled={busy || !!server.pid || server.status === 'installing'}
+                          onClick={() => {
+                            setCrash(false);
+                            setDisable(c.id);
+                          }}
+                        >
+                          {t('disable')}
+                        </Button>
+                      </>
+                    )}
+                  </p>
+                ))}
+                <Button
+                  disabled={!report.data.path}
+                  onClick={() => {
+                    void run(() => api.revealCrash(server.id));
+                  }}
+                >
+                  {t('openFolder')}
+                </Button>
+                <pre
+                  className="console-output"
+                  style={{ maxHeight: 420, overflow: 'auto', whiteSpace: 'pre-wrap' }}
+                >
+                  {report.data.text || t('noResults')}
+                </pre>
+              </>
+            )}
+          </div>
         </Dialog>
+      )}
+      {disable && (
+        <Confirm
+          name={server.name}
+          help={t('health.evidenceHelp')}
+          onClose={() => setDisable(undefined)}
+          onConfirm={() =>
+            void run(() =>
+              api.modBulk(server.id, {
+                ids: [disable],
+                action: 'disable',
+                confirmation: server.name,
+              }),
+            ).then((r) => {
+              if (r.ok) setDisable(undefined);
+            })
+          }
+        />
       )}
     </section>
   );

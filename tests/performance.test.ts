@@ -58,3 +58,25 @@ it('stores actual samples, keeps unsupported tick values null and records lag co
     await f.cleanup();
   }
 });
+it('records CPU and working-set pressure without inventing TPS or JVM heap', async () => {
+  const f = await fixture();
+  f.repo.close();
+  const core = await AppCore.open(f.root, f.secrets);
+  try {
+    core.repo.saveServer({ ...f.server, engine: 'fabric', status: 'running' });
+    core.bus.emit({
+      type: 'metric',
+      serverId: f.server.id,
+      metric: { at: new Date().toISOString(), cpu: 99, memory: 1024 ** 3, players: 1 },
+    });
+    await vi.waitFor(() => expect(core.performance.report(f.server.id, 1).lags).toHaveLength(1));
+    expect(core.performance.report(f.server.id, 1).lags[0]).toMatchObject({
+      cpu: 99,
+      memory: 1024 ** 3,
+    });
+    expect(core.performance.report(f.server.id, 1).samples[0]?.tps).toBeUndefined();
+  } finally {
+    await core.close();
+    await f.cleanup();
+  }
+});

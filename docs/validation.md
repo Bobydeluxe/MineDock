@@ -1,5 +1,44 @@
 # MineDock validation
 
+## Friends survival 0.4.0 candidate — 8 October 2026
+
+Current source is 0.4.0, under review in [draft PR #7](https://github.com/Bobydeluxe/MineDock/pull/7), stacked on pending PR #6/#5. Public downloads remain 0.3.0. Local host: Windows 11 x64, Node 24.19, pnpm 11.25, Electron 44.5.1. Historical results below belong to their stated earlier revisions.
+
+| Final check                            | Actual result                                                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| ESLint / strict TypeScript             | Passed                                                                                                                                |
+| Full Vitest regression                 | **213 passed, 4 platform-specific skips; 217 total in 37 files**                                                                      |
+| Production main/preload/renderer build | Passed; nonblocking Rollup annotation/chunk-size warnings                                                                             |
+| Full source UI suite                   | **26 passed, 4.7 minutes**                                                                                                            |
+| Final Windows x64 packaged suite       | **10 passed, 4.4 minutes**, sequentially after all installer work                                                                     |
+| Windows NSIS + portable compilation    | Passed; unsigned                                                                                                                      |
+| Six language catalogs                  | **848 UI keys each**, matching keys/placeholders; existing shared diagnostics retained                                                |
+| Existing migration SQL                 | **1–6 unchanged** against the actual base Git reference; published **1–5 unchanged** against v0.3.0                                   |
+| Current native gallery                 | **38 PNGs + one nine-frame labeled GIF**; real Electron with isolated records                                                         |
+| Static website local QA                | Desktop 1440 px / mobile 390 px: no overflow, broken images/anchors, page errors or failed requests; FAQ and download navigation pass |
+
+After the final restore/console dialog padding correction, production compilation and the affected native survival journey pass again in both source and packaged Windows (one case each). The full-suite counts above describe the immediately preceding build. The automatic upgrade replay uses the final portable hash below. NSIS lifecycle and public legacy manual recovery use the preceding build, recorded by hash in the evidence; installer/updater logic is unchanged by the final dialog styling.
+
+The new native survival journey runs production main/preload/core/SQLite/files: commented YAML edit/history restoration, native local datapack import, persisted player note, hash-verified incremental world-only restore preserving unrelated configuration with a safety ZIP, native `.minedock` export/preview and read-all notices. Existing creation/dialogs/six-language preferences, content plans/updates/rollback, files/worlds/imports/recovery/retention and updater rejection stay covered. External API/CDN fixtures are explicitly controlled; no Minecraft process/client is started by these UI tests.
+
+### Actual Windows lifecycle and upgrade
+
+[Machine-readable evidence](validation-records/0.4.0-windows-native.json) records three distinct native paths:
+
+1. **NSIS install / installed launch / uninstall:** native silent installer and uninstaller both exit 0 in an owned isolated installation. The installed app opens and saves a preference. Desktop and Start-menu shortcuts are created then removed, the app and registry entry disappear, and isolated settings/server/world/full-backup bytes remain identical. The pre-existing default user database was read-only fingerprinted and also remains identical. No other installation was uninstalled.
+2. **Automatic packaged 0.4.0 → private 0.4.1 QA candidate:** old packaged code verifies the pinned publisher signature and actual portable bytes, starts the production helper, closes, replaces its executable, genuinely relaunches 0.4.1 and records `app.update.installed`. SQLite quick-check is `ok`; settings, server, world/properties, backup record/bytes and runtime reference remain. A real isolated copy of OpenJDK 21.0.12.1 retains its executable hash and successfully runs `-version` afterward. The newer version is only a private test binary; release-feed/metadata/artifact **transport** is controlled, while production updater/signature/hash/native replacement logic runs. Neither new version is publicly released.
+3. **Genuine public 0.3.0 → 0.4.0 with manual recovery:** unchanged packaged files extracted from the verified public portable load schema 5 and perform production signed download verification. Its detached-PowerShell launcher fails before its helper runs on this host. The test explicitly executes that prepared native helper, then observes real 0.4.0 startup, schema **5→11**, quick-check `ok`, installation audit and preserved data/actual Java. **This is not a successful automatic legacy upgrade.** A first manual verified-package upgrade is required for users encountering the old launcher failure here.
+
+The Windows fix uses a short hidden bootstrap and native `Start-Process -WindowStyle Hidden` for independent helper/installer lifetime. Native regression tests now use the production launcher, paths with spaces/apostrophes/literal `$`, failed launcher reporting and failed-relaunch rollback. The [replay script/instructions](development.md) reproduce the full application journey with isolated data.
+
+### Candidate hashes and limits
+
+Local final Windows x64 portable SHA-256: `6b84d9c40066ce9a10a6bf147a281ba8b9e7e4e4e3e660d8a2e0f32d240ce71b`.
+Local final Windows x64 NSIS SHA-256: `54386ece49d5d1d6104be73f0f54521cfa714d615ae496051d297a42bdddfaf5`.
+These candidate files are not uploaded as a release. [Current GitHub checks](https://github.com/Bobydeluxe/MineDock/pull/7/checks) identify their own exact source head; a configured six-platform matrix is not a new executed 0.4.0 matrix.
+
+No live multiplayer, actual map rendering, other OS install/upgrade, ARM64 lifecycle, OS signing/notarization, JVM heap/swap or Windows ACL/firewall inspection is claimed. Incremental deletion/GC and legacy ZIP partial restore are unavailable. Pack release changes remain an explicit migration prerequisite. New graphical options cover bounded existing YAML/JSON primitives; complex structures remain textual. The GIF is a labeled slideshow of actual captures, not a continuous recording or game video. The security document is an internal developer review, not an independent audit. See [the ledger](survival-evolution.md) and [roadmap](roadmap.md).
+
 ## Charcoal dark-theme refinement, 8 October 2026
 
 Owner feedback refined the dark surfaces, text, borders and overlays to neutral charcoal grays. A before/after computed-style comparison confirms **all 76 light-theme tokens unchanged**, including the console. All ten relevant identity/polish cases pass across the targeted run and isolated rerun; two initial cases had a concurrent test-server port collision and pass when run separately. The visual case checks 23 contrast/focus combinations per theme, eight server states, mod badges, four desktop sizes, focus return and reduced motion. Lint, strict TypeScript, production compilation and unsigned Windows x64 NSIS/portable packaging pass. Backend, layout, languages and public release version are unchanged.
