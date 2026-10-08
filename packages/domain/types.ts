@@ -308,6 +308,10 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  playerDetails(id: string, name: string): Promise<import('./players').PlayerDetails>;
+  playerNote(id: string, name: string, note: string): Promise<void>;
+  playerSkin(id: string, name: string): Promise<string | null>;
+  setWhitelist(id: string, enabled: boolean): Promise<void>;
   health(id: string): Promise<import('./health').HealthReport>;
   healthSettings(): Promise<import('./health').HealthSettings>;
   configureHealth(

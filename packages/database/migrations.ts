@@ -65,4 +65,10 @@ export const migrations = [
     CREATE INDEX survival_notices_by_server ON survival_notices(server_id,code);
   `,
   },
+  {
+    version: 8,
+    sql: `CREATE TABLE player_sessions (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, started_at TEXT NOT NULL, last_at TEXT NOT NULL, ended_at TEXT, interrupted INTEGER NOT NULL DEFAULT 0);
+    CREATE INDEX player_sessions_by_player ON player_sessions(server_id,name,started_at);
+    CREATE TABLE player_notes (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, note TEXT NOT NULL, PRIMARY KEY(server_id,name));`,
+  },
 ];

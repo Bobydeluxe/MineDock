@@ -159,6 +159,18 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    playerDetails: async () => ({
+      note: '',
+      sessions: [],
+      observedMs: { today: 0, week: 0, month: 0 },
+    }),
+    playerNote: async () => {},
+    playerSkin: async () => null,
+    setWhitelist: async (id, enabled) => {
+      const s = data.servers.find((s) => s.id === id)!;
+      s.whitelist = enabled;
+      emit({ type: 'server', server: s });
+    },
     health: async () => ({
       state: 'healthy',
       issues: [],

@@ -10,6 +10,10 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  playerDetails: (id, name) => call('playerDetails', id, name),
+  playerNote: (id, name, note) => call('playerNote', id, name, note),
+  playerSkin: (id, name) => call('playerSkin', id, name),
+  setWhitelist: (id, enabled) => call('setWhitelist', id, enabled),
   health: (id) => call('health', id),
   healthSettings: () => call('healthSettings'),
   configureHealth: (input) => call('configureHealth', input),

@@ -54,6 +54,7 @@ import { copyRegularFile } from '../security/copy';
 import { sha256 } from '../backups/archive';
 import { PackService } from '../marketplace/packs';
 import { HealthService } from './health';
+import { PlayerSkins } from './skins';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -86,6 +87,7 @@ export class AppCore {
   readonly players: PlayerService;
   readonly packs: PackService;
   readonly health: HealthService;
+  readonly skins: PlayerSkins;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -183,6 +185,7 @@ export class AppCore {
     );
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
+    this.skins = new PlayerSkins(this.icons);
     this.crossplay = new CrossplayService(this.repo, this.marketplace.manager);
     this.imports = new ServerImportService(
       this.repo,

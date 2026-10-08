@@ -214,6 +214,44 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('playerDetails', (value, name) =>
+    core.players.details(id(value), z.string().max(32).parse(name)),
+  );
+  handle('playerNote', (value, name, note) =>
+    core.exclusive(id(value), async () =>
+      core.players.note(
+        id(value),
+        z.string().max(32).parse(name),
+        z.string().max(4000).parse(note),
+      ),
+    ),
+  );
+  handle('playerSkin', async (value, name) => {
+    const report = await core.players.report(id(value)),
+      player = report.players.find((p) => p.name === z.string().max(32).parse(name));
+    return player?.uuid && player.identityMode === 'online' && !player.identityConflict
+      ? core.skins.get(player.uuid)
+      : null;
+  });
+  handle('setWhitelist', (value, enabled) =>
+    core.exclusive(id(value), async () => {
+      const server = core.repo.server(id(value)),
+        on = z.boolean().parse(enabled);
+      if (!['vanilla', 'paper', 'purpur', 'fabric', 'forge', 'neoforge'].includes(server.engine))
+        throw new DomainError('CAPABILITY', 'Whitelist switching requires a Java server.');
+      if (!core.supervisor.isRunning(server.id))
+        throw new DomainError('RUNNING', 'Start the server before sending moderation commands.');
+      const response = await core.supervisor.command(server.id, 'whitelist ' + (on ? 'on' : 'off'));
+      if (/unknown|error|failed|incorrect/i.test(response))
+        throw new DomainError('COMMAND', response);
+      core.repo.saveServer({ ...server, whitelist: on });
+      core.repo.audit(
+        'player.whitelist.configured',
+        on ? 'Whitelist enabled.' : 'Whitelist disabled.',
+        server.id,
+      );
+    }),
+  );
   handle('health', (value) => core.health.report(id(value)));
   handle('healthSettings', () => core.health.settings());
   handle('configureHealth', (value) => core.health.configure(healthSettingsSchema.parse(value)));

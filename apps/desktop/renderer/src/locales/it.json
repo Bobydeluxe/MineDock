@@ -716,5 +716,16 @@
   "notice.update": "Aggiornamento disponibile",
   "notice.playerJoin": "Giocatore connesso",
   "notice.playerLeave": "Giocatore disconnesso",
-  "notice.lag": "Picco di latenza"
+  "notice.lag": "Picco di latenza",
+  "player.details": "Dettagli del giocatore",
+  "player.defaultIcon": "Icona predefinita",
+  "player.today": "Oggi",
+  "player.week": "Ultimi 7 giorni",
+  "player.month": "Ultimi 30 giorni",
+  "player.notes": "Note private",
+  "player.notesHelp": "Le note rimangono in questo profilo locale di MineDock.",
+  "player.sessions": "Cronologia connessioni",
+  "player.sessionsHelp": "Solo sessioni osservate; sono mostrate le ultime 200. Conservazione fino a 180 giorni, limite di 20.000 per server.",
+  "player.interrupted": "Osservazione interrotta",
+  "player.whitelistHelp": "Avvia il server per modificare la whitelist o moderare i giocatori."
 }

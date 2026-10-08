@@ -716,5 +716,16 @@
   "notice.update": "Update verfügbar",
   "notice.playerJoin": "Spieler verbunden",
   "notice.playerLeave": "Spieler getrennt",
-  "notice.lag": "Lag-Spitze"
+  "notice.lag": "Lag-Spitze",
+  "player.details": "Spielerdetails",
+  "player.defaultIcon": "Standard-Spielersymbol",
+  "player.today": "Heute",
+  "player.week": "Letzte 7 Tage",
+  "player.month": "Letzte 30 Tage",
+  "player.notes": "Private Notizen",
+  "player.notesHelp": "Notizen bleiben in diesem lokalen MineDock-Profil.",
+  "player.sessions": "Verbindungsverlauf",
+  "player.sessionsHelp": "Nur beobachtete Sitzungen; angezeigt werden die letzten 200. Aufbewahrung bis zu 180 Tage, maximal 20.000 pro Server.",
+  "player.interrupted": "Beobachtung unterbrochen",
+  "player.whitelistHelp": "Starte den Server, um die Whitelist zu ändern oder Spieler zu moderieren."
 }

@@ -1,5 +1,7 @@
 import { readFile, lstat } from 'node:fs/promises';
 import path from 'node:path';
+import { randomUUID } from 'node:crypto';
+import { z } from 'zod';
 import { Repository } from '../database/database';
 import { containedPath } from '../security/paths';
 import { engineDefinition } from '../domain/engines';
@@ -12,6 +14,7 @@ import {
   type PlayerObservation,
   type KnownPlayer,
   type PlayerReport,
+  type PlayerDetails,
 } from '../domain/players';
 const validUuid = (value: unknown): value is string =>
   typeof value === 'string' &&
@@ -51,6 +54,18 @@ export class PlayerService {
         'INSERT INTO player_observations VALUES(?,?,?) ON CONFLICT(server_id,name) DO UPDATE SET metadata=excluded.metadata',
       )
       .run(id, player.name.toLowerCase(), JSON.stringify(player));
+    if (player.sessionStartedAt && player.lastObservedAt && player.sessionId)
+      this.repo.db
+        .prepare(
+          'INSERT INTO player_sessions VALUES(?,?,?,?,?,NULL,0) ON CONFLICT(id) DO UPDATE SET last_at=excluded.last_at',
+        )
+        .run(
+          player.sessionId,
+          id,
+          player.name.toLowerCase(),
+          player.sessionStartedAt,
+          player.lastObservedAt,
+        );
   }
   private get(id: string, name: string): PlayerObservation {
     const row = this.repo.db
@@ -87,6 +102,7 @@ export class PlayerService {
       if (!player.sessionStartedAt) {
         player.joins++;
         player.sessionStartedAt = at;
+        player.sessionId = randomUUID();
         player.firstSeen ??= at;
         player.lastObservedAt = at;
       }
@@ -99,10 +115,19 @@ export class PlayerService {
     const player = this.get(id, name);
     if (!player.sessionStartedAt) return;
     this.advance(player, at);
+    if (player.sessionId)
+      this.repo.db
+        .prepare('UPDATE player_sessions SET last_at=?,ended_at=? WHERE id=?')
+        .run(at, at, player.sessionId);
     player.sessionStartedAt = undefined;
+    player.sessionId = undefined;
     this.save(id, player);
   }
   endSessions(id: string, interrupted = false): void {
+    if (interrupted)
+      this.repo.db
+        .prepare('UPDATE player_sessions SET interrupted=1 WHERE server_id=? AND ended_at IS NULL')
+        .run(id);
     for (const player of this.observations(id))
       if (player.sessionStartedAt)
         this.leave(
@@ -112,6 +137,73 @@ export class PlayerService {
             ? (player.lastObservedAt ?? player.sessionStartedAt)
             : new Date().toISOString(),
         );
+  }
+  details(id: string, rawName: string): PlayerDetails {
+    this.repo.server(id);
+    const name = z
+      .string()
+      .regex(/^[A-Za-z\d_. -]{1,32}$/)
+      .parse(rawName)
+      .toLowerCase();
+    const since = new Date(Date.now() - 180 * 86400000).toISOString();
+    this.repo.db
+      .prepare(
+        'DELETE FROM player_sessions WHERE server_id=? AND ended_at IS NOT NULL AND ended_at<?',
+      )
+      .run(id, since);
+    this.repo.db
+      .prepare(
+        'DELETE FROM player_sessions WHERE id IN (SELECT id FROM player_sessions WHERE server_id=? AND ended_at IS NOT NULL ORDER BY started_at DESC LIMIT -1 OFFSET 20000)',
+      )
+      .run(id);
+    const rows = this.repo.db
+      .prepare(
+        'SELECT * FROM player_sessions WHERE server_id=? AND name=? ORDER BY started_at DESC LIMIT 200',
+      )
+      .all(id, name);
+    const midnight = new Date();
+    midnight.setHours(0, 0, 0, 0);
+    const sum = (from: number) =>
+      Number(
+        this.repo.db
+          .prepare(
+            'SELECT COALESCE(SUM(MAX(0,unixepoch(last_at)*1000-MAX(unixepoch(started_at)*1000,?))),0) total FROM player_sessions WHERE server_id=? AND name=? AND last_at>=?',
+          )
+          .get(from, id, name, new Date(from).toISOString())?.total ?? 0,
+      );
+    return {
+      note: String(
+        this.repo.db
+          .prepare('SELECT note FROM player_notes WHERE server_id=? AND name=?')
+          .get(id, name)?.note ?? '',
+      ),
+      sessions: rows.map((r) => ({
+        id: String(r.id),
+        startedAt: String(r.started_at),
+        lastAt: String(r.last_at),
+        endedAt: r.ended_at ? String(r.ended_at) : undefined,
+        interrupted: !!r.interrupted,
+      })),
+      observedMs: {
+        today: sum(midnight.getTime()),
+        week: sum(Date.now() - 7 * 86400000),
+        month: sum(Date.now() - 30 * 86400000),
+      },
+    };
+  }
+  note(id: string, rawName: string, rawNote: string) {
+    this.repo.server(id);
+    const name = z
+        .string()
+        .regex(/^[A-Za-z\d_. -]{1,32}$/)
+        .parse(rawName)
+        .toLowerCase(),
+      note = z.string().max(4000).parse(rawNote);
+    this.repo.db
+      .prepare(
+        'INSERT INTO player_notes VALUES(?,?,?) ON CONFLICT(server_id,name) DO UPDATE SET note=excluded.note',
+      )
+      .run(id, name, note);
   }
   observeLog(id: string, line: string): void {
     const identity = /UUID of player ([A-Za-z\d_.]{1,32}) is ([a-f\d-]{36})/i.exec(line);

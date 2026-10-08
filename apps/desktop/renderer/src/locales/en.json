@@ -716,5 +716,16 @@
   "notice.update": "Update available",
   "notice.playerJoin": "Player connected",
   "notice.playerLeave": "Player disconnected",
-  "notice.lag": "Lag spike"
+  "notice.lag": "Lag spike",
+  "player.details": "Player details",
+  "player.defaultIcon": "Default player icon",
+  "player.today": "Today",
+  "player.week": "Last 7 days",
+  "player.month": "Last 30 days",
+  "player.notes": "Private notes",
+  "player.notesHelp": "Notes stay in this local MineDock profile.",
+  "player.sessions": "Connection history",
+  "player.sessionsHelp": "Observed sessions only; the latest 200 are shown. Closed sessions are kept for up to 180 days, capped at 20,000 per server.",
+  "player.interrupted": "Interrupted observation",
+  "player.whitelistHelp": "Start the server to change the whitelist or moderate players."
 }
