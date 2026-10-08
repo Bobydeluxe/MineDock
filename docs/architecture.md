@@ -21,6 +21,8 @@ MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQL
 
 The renderer shares one native dialog wrapper, portaled to `document.body` and opened before paint in the browser top layer. It manages nested body scroll locks, focus, bounded internal scrolling and explicit dismissal. Eight bundled original SVG symbols identify engines across creation, server lists, details and imports. These interface components preserve the same preload/service contracts; see [UI design](ui.md).
 
+The proposed visual identity centralizes material/color/radius/focus/motion tokens in `apps/desktop/renderer/src/tokens.css`. Existing layout rules and responsive breakpoints remain in `style.css`. Presentation-only classes expose existing mod states; editor token categories use theme colors. No new IPC, business service, database migration or runtime UI dependency is introduced by the visual PR. Native QA captures and labeled before/after evidence are described in [visual review](design/visual-review.md).
+
 ## Persistence and transactions
 
 Native Node SQLite uses WAL, foreign keys, busy timeouts and integrity checks. Published migration 1 is unchanged. Versions 2–5 append long operations/checkpoints, partial downloads, content history, players, retention, runtimes, imports, marketplace settings, storage/world history, modpack approvals, authorized exports and retention-batch journals. A WAL checkpoint and database copy precede a schema upgrade; migrations run in transactions. Database snapshots also run at startup and hourly. Migration 6 appends catalogue caches, favorites, collections and mod operation history; it removes the retired credential and preserves retired catalogue records as local content. Published migrations 1–5 are unchanged.

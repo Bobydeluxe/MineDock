@@ -163,7 +163,9 @@ function PluginContentView({ server }: { server: Server }) {
                   </small>
                   {update && <small title={update.error}>{t(update.status)}</small>}
                 </div>
-                <span className="badge">{t(item.enabled ? 'enabled' : 'disabled')}</span>
+                <span className={`badge ${item.enabled ? 'enabled' : 'disabled'}`}>
+                  {t(item.enabled ? 'enabled' : 'disabled')}
+                </span>
                 <Button
                   disabled={locked}
                   onClick={() => {
@@ -230,7 +232,9 @@ function PluginContentView({ server }: { server: Server }) {
                   {bytes(item.size)} · {t('manual')}
                 </small>
               </div>
-              <span className="badge">{t(item.enabled ? 'enabled' : 'disabled')}</span>
+              <span className={`badge ${item.enabled ? 'enabled' : 'disabled'}`}>
+                {t(item.enabled ? 'enabled' : 'disabled')}
+              </span>
             </div>
           ))
         )}
@@ -374,7 +378,9 @@ function ContentVersions({
               value && (
                 <>
                   <p>
-                    <span className="badge">{t(compatible ? 'compatible' : 'incompatible')}</span>{' '}
+                    <span className={`badge ${compatible ? 'compatible' : 'incompatible'}`}>
+                      {t(compatible ? 'compatible' : 'incompatible')}
+                    </span>{' '}
                     Minecraft {value.gameVersions.join(', ')} · {value.loaders.join(', ')}
                   </p>
                   <p className="muted">

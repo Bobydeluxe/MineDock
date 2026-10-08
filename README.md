@@ -8,11 +8,11 @@
 
 [**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/latest) · [Features](MineDock-Features.txt) · [Validation](docs/validation.md) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
-![MineDock dashboard with clearly labeled sample data](docs/screenshots/dashboard.png)
+![MineDock native desktop dashboard — visual review](docs/screenshots/dashboard.png)
 
 ## Project status
 
-MineDock is a **beta** for Windows, Linux and macOS. The latest published version is **0.3.0**. Current development source is **0.3.1**, with centered dialogs, a simpler creation wizard, original engine symbols and the complete Modrinth mod manager. It has not been published as a new release. The screenshots show the development interface; published 0.3.0 packages predate these changes.
+MineDock is a **beta** for Windows, Linux and macOS. The latest published version is **0.3.0**. Current development source is **0.3.1**, with centered dialogs, a simpler creation wizard, original engine symbols and the complete Modrinth mod manager. A separate visual-review branch adds the mineral teal/copper design in the screenshots while preserving the existing layout and journeys. These changes have not been published as a new release; public 0.3.0 packages predate them. See the [before/after review](docs/design/visual-review.md).
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 
@@ -62,13 +62,13 @@ Capabilities control the available actions. A native engine does not show Java m
 
 ## Interface
 
-These are real captures of the running renderer in **explicitly labeled demo mode**. Sample servers, players and console output are simulated; the images do not establish Minecraft gameplay. A fresh desktop installation starts empty. The real Electron backend is tested separately.
+These are actual native Electron captures of the proposed visual-review source, using isolated local profiles and the real preload/core/SQLite services. The mod files are actual verified Modrinth downloads; world/player/administration records are QA fixtures. Active process and console views use an inert external Node child, which is never shipped. They are interface evidence, not Minecraft gameplay. A fresh installation starts empty. See [capture provenance and every current screen](docs/screenshots/README.md).
 
 | Create a server                                                                             | Manage a server                                                          |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
 | ![Centered creation wizard and six Java engine choices](docs/screenshots/create-server.png) | ![Server overview and main actions](docs/screenshots/server.png)         |
-| **Console**                                                                                 | **Plugins and mods**                                                     |
-| ![Console with labeled sample output](docs/screenshots/console.png)                         | ![Plugin search and version selection](docs/screenshots/plugins.png)     |
+| **Console**                                                                                 | **Plugins**                                                              |
+| ![Native console with isolated process output](docs/screenshots/console-active.png)         | ![Plugin search and version selection](docs/screenshots/plugins.png)     |
 | **Backups**                                                                                 | **Worlds**                                                               |
 | ![Backup list and restore actions](docs/screenshots/backups.png)                            | ![World metadata and guarded world actions](docs/screenshots/worlds.png) |
 
@@ -84,15 +84,17 @@ These are real captures of the running renderer in **explicitly labeled demo mod
 <details>
 <summary>Actual Electron first start and empty dashboard</summary>
 
-These captures use the real desktop/preload/SQLite services with isolated test storage. The first-start dialog fits a small native window; the fresh dashboard contains no sample servers. No Minecraft process is running.
+These captures use the real desktop/preload/SQLite services with isolated storage and the same 1440 × 960 native content viewport as the gallery. The fresh dashboard contains no servers. No Minecraft process is running.
 
-![First-start language dialog in a small native Electron window](docs/screenshots/onboarding-desktop.png)
+![First-start language dialog in the current native Electron interface](docs/screenshots/onboarding-desktop.png)
 
 ![Fresh real desktop with no servers or demonstration banner](docs/screenshots/desktop-empty.png)
 
 </details>
 
 ## Development
+
+The [complete gallery](docs/screenshots/README.md) also includes players, files, scheduler, runtimes, settings, import, active server states, menus and both themes. The [visual review](docs/design/visual-review.md) compares Dashboard, Create server, Server overview and Mods before/after, with measured layout and accessibility results.
 
 Requires **Node 24+ and pnpm 11+**. Build distribution packages on their native OS and architecture.
 
@@ -114,7 +116,7 @@ pnpm test:packaged
 pnpm screenshots
 ```
 
-Browser tests and screenshots need Playwright Chromium (`pnpm exec playwright install --with-deps chromium`), or Microsoft Edge on Windows. Linux GUI tests need a display/Xvfb and the stock Electron sandbox helper. Native packaging/GUI results and their exact source revisions are recorded in [validation](docs/validation.md).
+Browser tests need Playwright Chromium (`pnpm exec playwright install --with-deps chromium`), or Microsoft Edge on Windows. Screenshots use the compiled native Electron app; first use downloads three compatible Modrinth mods into private review storage. Linux GUI tests/captures need a display/Xvfb and the stock Electron sandbox helper. Native packaging/GUI results and their exact source revisions are recorded in [validation](docs/validation.md).
 
 Official-service probes are opt-in: `pnpm test:official --catalogs`, `pnpm test:official --runtimes --content` and `pnpm test:live`. The Paper live check stops at `eula=false`; it never accepts the real EULA for you.
 

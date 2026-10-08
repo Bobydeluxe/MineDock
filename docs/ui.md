@@ -1,6 +1,12 @@
 # Interface design and validation
 
-The 0.3.1 source revision refines the existing interface and uses the same real preload/core services. It does not introduce a second backend.
+The 0.3.1 visual-review source gives the existing interface a mineral teal/copper identity and uses the same real preload/core services. Sidebar placement, page/tab order, card geometry, wizard steps and user journeys stay unchanged. See the [before/after review](design/visual-review.md) for the palette, native comparisons and measured geometry.
+
+## Shared appearance
+
+`apps/desktop/renderer/src/tokens.css` centralizes dark/light surfaces, text levels, semantic states, control borders, focus, selection, console/editor colors, radii and short transitions. The sidebar uses an inset selection rail; server cards, metrics and administration panels have distinct surfaces. Copper identifies secondary world/archive context. Eight server states and mod/plugin badges use readable semantic colors. Console output retains its own dark surface in both themes. Keyboard focus remains visible and reduced-motion preferences disable transient indicators.
+
+These presentation changes do not alter persistence, security boundaries, downloads, process supervision or update rules. English remains the default with the existing six offline languages.
 
 ## Dialogs
 
@@ -26,10 +32,10 @@ The mod manager has Discover, Installed and Updates views with exact Minecraft/l
 
 `docs/screenshots/mods.png` and `mods-installed.png` are actual Electron captures from an isolated Fabric 1.21.1 profile. They use live official Modrinth catalogue metadata and three downloaded, SHA-512-verified JARs: Lithium, FerriteCore and Krypton. There is no demo catalogue or simulated installation in these captures. No Minecraft executable is launched. The automated mod journey separately substitutes only external API/CDN responses with readable ZIP JAR fixtures; real IPC, SQLite, hashing, backups, file transactions and rollback run unchanged.
 
-Eight original SVG engine symbols are authored for MineDock under MIT, with no copied official logos or remote image dependency. See [asset provenance](../apps/desktop/renderer/src/assets/engines/README.md).
+Eight original SVG engine symbols are authored for MineDock under MIT, with no copied official logos or remote image dependency. Each retains its individual drawing and color; the common enclosing background tile is removed. See [asset provenance](../apps/desktop/renderer/src/assets/engines/README.md).
 
-`pnpm screenshots` captures the running Vite renderer in explicit demo mode at 1440 × 960. The visible banner and README captions disclose simulated server/player/console data. It captures dashboard, creation, summary, server overview, console, plugins, backups, worlds and light appearance. These are UI captures, not gameplay evidence. Native Electron tests separately use isolated filesystem/SQLite fixtures.
+`pnpm build` followed by `pnpm screenshots` captures the production Electron application at a 1440 × 960 native content viewport, using isolated filesystem/SQLite storage under ignored `data/visual-review`. The 28 current images cover onboarding, empty/populated dashboards, creation/review, server states, console, players, worlds, files, backups, mods/plugins, scheduler, runtimes, settings and import. Dark/light variants use the same layout. Settings captures include the full scrollable page. All former current gallery images are replaced; eight explicitly historical comparisons remain under `docs/design/before`.
 
-The README also includes native first-start and empty-dashboard captures from `tests/ui/desktop.spec.ts`, using actual Electron/preload/SQLite services and isolated test storage. They are copied from `test-results` after the source desktop suite; the nine renderer demo captures remain a separate reproducible command.
+Mod metadata/files are actual verified Modrinth downloads. Administration/world/player records are private QA fixtures. Active console and lifecycle captures use a real external Node child and RCON fixture, which is never shipped and is not Minecraft. First-start/empty views use a separate fresh native profile. See the [complete gallery and provenance](screenshots/README.md). Browser demonstration data remains confined to explicitly selected development and automated test paths; it is not used for the current screenshot gallery.
 
-Targeted UI tests measure dialog centers relative to the actual viewport, repeat after resizing and internal scrolling, check visible footers/focus/backdrop/Escape/nesting, render all eight symbols, exercise Forge/NeoForge submissions and verify the new text in all six languages. Native Electron also checks first display and window resizing. See [validation](validation.md) for exact outcomes.
+Targeted UI tests measure dialog centers relative to the actual viewport, repeat after resizing and internal scrolling, check visible footers/focus/backdrop/Escape/nesting, render all eight symbols, exercise Forge/NeoForge submissions and verify text in all six languages. The visual case checks 23 contrast/focus combinations per theme, all eight server states, mod badges, console levels, reduced motion and geometry across four desktop sizes. Native Electron also checks first display and window resizing. See [validation](validation.md) for exact outcomes.

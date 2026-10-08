@@ -20,6 +20,10 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Translated MineDock dialogs, errors, crash explanations and task descriptions.
 - Original Minecraft console output, file contents and external content retained.
 - Light, dark and system themes; server status and recent activity.
+- Proposed mineral teal/copper visual identity, with layered slate/warm surfaces,
+  shared tokens, semantic states, restrained radii and keyboard-visible focus.
+- Existing sidebar, pages, card positions and user journeys retained.
+- Current native Electron gallery and historical before/after comparison.
 - Centered native dialogs with body scroll lock, internal scrolling, keyboard
   focus containment/restoration, accessible names and guarded backdrop/Escape.
 - Four-step engine/resource/settings/review wizard with original offline engine
@@ -311,11 +315,13 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Tests cover migration preservation, paths/archives, resumable HTTP, dependency
   conflicts, imports, worlds, file operations, players/storage, schedules,
   runtimes, retention/recovery and signed-update tampering/refusal.
-- Twenty-four UI cases include actual Electron/main/preload/SQLite journeys and
+- Twenty-five UI cases include actual Electron/main/preload/SQLite journeys and
   explicit isolated demo scenarios; fixtures never become production data.
 - Packaged suite includes actual Electron journeys and native dialog resizing.
 - Six-language preference/reload/restart tested.
 - Unsaved language/theme edits survive unrelated background snapshot refreshes.
+- Both-theme contrast/state/focus and four desktop sizes checked; reduced-motion
+  preference honored. Visual review is separate from release publication.
 - Opt-in official catalogs, actual Java/PHP probes and content transactions.
 - Opt-in real Paper bootstrap uses eula=false; no playable world created.
 - Real Minecraft clients/gameplay/crossplay/historical-engine compatibility
