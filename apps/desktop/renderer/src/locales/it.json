@@ -780,5 +780,22 @@
   "console.truncated": "Massimo 500 righe / 16 MB / 40 log non compressi.",
   "console.announcement": "Annuncio",
   "console.delay": "Attesa (secondi)",
-  "console.addStep": "Aggiungi passaggio"
+  "console.addStep": "Aggiungi passaggio",
+  "performance.title": "Prestazioni tick misurate",
+  "performance.history": "Periodo",
+  "performance.days": "giorni",
+  "performance.hours": "ore",
+  "performance.tickHelp": "TPS/MSPT provengono da risposte riconosciute Paper/Purpur. Valori sconosciuti restano non disponibili; le lacune non sono zeri.",
+  "performance.lags": "TPS bassi / tick lenti",
+  "performance.ram": "Profili RAM",
+  "performance.ramHelp": "I suggerimenti riservano memoria al sistema e alle altre app. Controlla prima di salvare. Valori in MiB.",
+  "performance.small": "Server piccolo",
+  "performance.friends": "Sopravvivenza tra amici",
+  "performance.modded": "Server con mod",
+  "performance.jvmHelp": "Standard mantiene i valori Java. G1 mira a pause minori con Java 17+. Parametri personalizzati limitati; nessun agente, shell o override di memoria. Nessuna garanzia di miglioramento.",
+  "performance.jvmPreset": "Profilo JVM",
+  "performance.standard": "Standard",
+  "performance.optimized": "Obiettivo G1 (100 ms)",
+  "performance.custom": "Personalizzato",
+  "performance.flags": "Parametri JVM"
 }

@@ -76,4 +76,10 @@ export const migrations = [
     sql: `CREATE TABLE incremental_snapshots (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, metadata TEXT NOT NULL, path TEXT NOT NULL);
   CREATE INDEX incremental_snapshots_by_server ON incremental_snapshots(server_id);`,
   },
+  {
+    version: 10,
+    sql: `CREATE TABLE performance_samples (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, cpu REAL NOT NULL, memory REAL NOT NULL, players INTEGER NOT NULL, tps REAL, mspt REAL, max_mspt REAL, PRIMARY KEY(server_id,at));
+    CREATE TABLE lag_events (id INTEGER PRIMARY KEY AUTOINCREMENT, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, metadata TEXT NOT NULL);
+    CREATE INDEX lag_events_by_server ON lag_events(server_id,at);`,
+  },
 ];

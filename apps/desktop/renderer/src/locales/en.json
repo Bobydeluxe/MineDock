@@ -780,5 +780,22 @@
   "console.truncated": "Results limited to 500 lines / 16 MB / 40 plain log files.",
   "console.announcement": "Announcement",
   "console.delay": "Delay (seconds)",
-  "console.addStep": "Add step"
+  "console.addStep": "Add step",
+  "performance.title": "Measured tick performance",
+  "performance.history": "History period",
+  "performance.days": "days",
+  "performance.hours": "hours",
+  "performance.tickHelp": "TPS/MSPT are sampled from recognized Paper/Purpur command replies. Unsupported values stay unavailable; gaps are not zero.",
+  "performance.lags": "Low TPS / slow tick observations",
+  "performance.ram": "RAM profiles",
+  "performance.ramHelp": "Suggestions keep memory for the operating system and other apps. Confirm allocations before saving. Values below are in MiB.",
+  "performance.small": "Small server",
+  "performance.friends": "Friends survival",
+  "performance.modded": "Modded server",
+  "performance.jvmHelp": "Standard keeps Java defaults. G1 aims for shorter pauses on Java 17+. Custom flags use a limited allowlist; no agents, shell arguments or memory overrides. No preset guarantees better performance.",
+  "performance.jvmPreset": "JVM preset",
+  "performance.standard": "Standard",
+  "performance.optimized": "G1 pause target (100 ms)",
+  "performance.custom": "Custom",
+  "performance.flags": "JVM flags"
 }

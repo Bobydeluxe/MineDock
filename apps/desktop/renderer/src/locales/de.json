@@ -780,5 +780,22 @@
   "console.truncated": "Maximal 500 Zeilen / 16 MB / 40 unkomprimierte Logdateien.",
   "console.announcement": "Ankündigung",
   "console.delay": "Wartezeit (Sekunden)",
-  "console.addStep": "Schritt hinzufügen"
+  "console.addStep": "Schritt hinzufügen",
+  "performance.title": "Gemessene Tick-Leistung",
+  "performance.history": "Zeitraum",
+  "performance.days": "Tage",
+  "performance.hours": "Stunden",
+  "performance.tickHelp": "TPS/MSPT stammen aus erkannten Paper/Purpur-Antworten. Unbekannte Werte bleiben nicht verfügbar; Lücken sind keine Nullwerte.",
+  "performance.lags": "Niedrige TPS / langsame Ticks",
+  "performance.ram": "RAM-Profile",
+  "performance.ramHelp": "Vorschläge lassen Speicher für das Betriebssystem und andere Apps frei. Prüfe die Werte vor dem Speichern. Angaben in MiB.",
+  "performance.small": "Kleiner Server",
+  "performance.friends": "Survival mit Freunden",
+  "performance.modded": "Mod-Server",
+  "performance.jvmHelp": "Standard behält Java-Defaults. G1 zielt unter Java 17+ auf kürzere Pausen. Eigene Flags sind begrenzt; keine Agents, Shell-Argumente oder Speicherüberschreibungen. Keine Leistungsgarantie.",
+  "performance.jvmPreset": "JVM-Profil",
+  "performance.standard": "Standard",
+  "performance.optimized": "G1-Pausenziel (100 ms)",
+  "performance.custom": "Eigene",
+  "performance.flags": "JVM-Flags"
 }

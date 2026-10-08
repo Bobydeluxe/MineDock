@@ -42,6 +42,7 @@ import { MigrationControls } from './migration';
 import { ConsoleToolsView } from './console-tools';
 import { commandCatalog, logCategory } from '../../../../packages/domain/console';
 import type { Key } from './i18n';
+import { PerformanceView, MemoryJvmControls } from './performance';
 import {
   Button,
   Field,
@@ -300,10 +301,16 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       {tab === 'files' && <FilesView server={server} />}
       {tab === 'backups' && <BackupsView serverId={server.id} />}
       {tab === 'schedules' && <SchedulesView serverId={server.id} />}
-      {tab === 'analytics' && <AnalyticsView serverId={server.id} />}
+      {tab === 'analytics' && (
+        <>
+          <AnalyticsView serverId={server.id} />
+          <PerformanceView server={server} />
+        </>
+      )}
       {tab === 'settings' && (
         <>
           <PropertiesView server={server} />
+          <MemoryJvmControls server={server} />
           <section className="panel danger-panel">
             <h2>
               {t(server.externalFolder ? 'detachServer' : 'delete')} · {server.name}

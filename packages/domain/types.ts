@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { jvmSchema } from './performance';
 import { languageCodes } from './languages';
 import { engineIds } from './engines';
 import type { Operation, RecoveryAction, RecoveryReview } from './operations';
@@ -71,6 +72,7 @@ export const createServerSchema = z
 export type CreateServerInput = z.infer<typeof createServerSchema>;
 export const serverOptionsSchema = z
   .object({
+    jvm: jvmSchema.optional(),
     memoryMin: z.number().int().min(256).max(131072),
     memoryMax: z.number().int().min(512).max(131072),
     autoStart: z.boolean(),
@@ -80,6 +82,7 @@ export const serverOptionsSchema = z
   .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Invalid minimum memory.' });
 export type ServerOptions = z.infer<typeof serverOptionsSchema>;
 export interface Server extends Omit<CreateServerInput, 'eula'> {
+  jvm?: import('./performance').JvmOptions;
   macros?: import('./console').MacroInput[];
   packs?: import('./packs').PackFile[];
   activeResourcePack?: string;
@@ -309,6 +312,7 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  performance(id: string, hours: number): Promise<import('./performance').PerformanceReport>;
   searchHistoricalLogs(
     id: string,
     input: import('./console').LogSearch,

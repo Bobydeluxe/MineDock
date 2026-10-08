@@ -217,6 +217,9 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('performance', (value, hours) =>
+    core.performance.report(id(value), z.number().int().min(1).max(168).parse(hours)),
+  );
   handle('searchHistoricalLogs', (value, input) =>
     core.consoleTools.search(id(value), logSearchSchema.parse(input)),
   );

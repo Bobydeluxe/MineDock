@@ -18,6 +18,7 @@ import { modpackProfileSchema } from '../domain/modpacks';
 import { containedPath } from '../security/paths';
 import { findAvailablePort } from '../networking/network';
 import { packFileSchema } from '../domain/packs';
+import { jvmSchema } from '../domain/performance';
 const maximumBackupSize = 64 * 1024 ** 3;
 export interface BackupStorageProvider {
   root(): string;
@@ -90,6 +91,7 @@ export class BackupService {
         format: 1,
         profile: {
           packs: server.packs,
+          jvm: server.jvm,
           activeResourcePack: server.activeResourcePack,
           engine: server.engine,
           modpack: server.modpack,
@@ -226,6 +228,7 @@ export class BackupService {
         format: z.literal(1),
         profile: z.object({
           packs: z.array(packFileSchema).max(1000).optional(),
+          jvm: jvmSchema.optional(),
           activeResourcePack: z.string().uuid().optional(),
           engine: engineSchema,
           modpack: modpackProfileSchema.optional(),
@@ -272,6 +275,7 @@ export class BackupService {
       );
       Object.assign(server, manifest.profile);
       server.packs = manifest.profile.packs;
+      server.jvm = manifest.profile.jvm;
       server.activeResourcePack = manifest.profile.activeResourcePack;
       server.minecraftVersion = manifest.profile.minecraftVersion;
       server.entrypoint = manifest.profile.entrypoint;

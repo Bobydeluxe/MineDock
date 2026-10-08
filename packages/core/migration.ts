@@ -231,7 +231,10 @@ export class MigrationService {
         engine: server.engine,
         version: server.version,
         loaderVersion: server.loaderVersion,
-        entrypoint: server.entrypoint ?? preview.entrypoint ?? (engineDefinition(server.engine).runtimeType === 'java' ? 'server.jar' : undefined),
+        entrypoint:
+          server.entrypoint ??
+          preview.entrypoint ??
+          (engineDefinition(server.engine).runtimeType === 'java' ? 'server.jar' : undefined),
         launchArgsFile: server.launchArgsFile,
         copy: true,
         acceptEula: false,
@@ -245,6 +248,8 @@ export class MigrationService {
       const profile: Server = {
         ...result,
         modpack: server.modpack,
+        jvm: server.jvm,
+        macros: server.macros,
         autoRestart: server.autoRestart,
         packs: server.packs?.map((p) => ({ ...p, id: randomUUID() })),
         activeResourcePack: undefined,

@@ -780,5 +780,22 @@
   "console.truncated": "Résultats limités à 500 lignes / 16 Mo / 40 fichiers de logs non compressés.",
   "console.announcement": "Annonce",
   "console.delay": "Délai (secondes)",
-  "console.addStep": "Ajouter une étape"
+  "console.addStep": "Ajouter une étape",
+  "performance.title": "Performance des ticks mesurée",
+  "performance.history": "Période historique",
+  "performance.days": "jours",
+  "performance.hours": "heures",
+  "performance.tickHelp": "TPS/MSPT viennent de réponses reconnues de Paper/Purpur. Les valeurs indisponibles restent inconnues ; les absences ne valent pas zéro.",
+  "performance.lags": "Observations de TPS bas / ticks lents",
+  "performance.ram": "Profils RAM",
+  "performance.ramHelp": "Les suggestions réservent de la mémoire au système et aux autres applications. Vérifiez les valeurs avant d’enregistrer. Valeurs en Mio.",
+  "performance.small": "Petit serveur",
+  "performance.friends": "Survie entre amis",
+  "performance.modded": "Serveur moddé",
+  "performance.jvmHelp": "Standard garde les valeurs Java. G1 vise des pauses plus courtes avec Java 17+. Les paramètres personnalisés sont limités ; aucun agent, argument shell ou remplacement mémoire. Aucun preset ne garantit un gain.",
+  "performance.jvmPreset": "Preset JVM",
+  "performance.standard": "Standard",
+  "performance.optimized": "Objectif G1 (100 ms)",
+  "performance.custom": "Personnalisé",
+  "performance.flags": "Paramètres JVM"
 }

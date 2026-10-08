@@ -58,6 +58,8 @@ import { PlayerSkins } from './skins';
 import { IncrementalBackups } from '../backups/incremental';
 import { MigrationService } from './migration';
 import { ConsoleTools } from './console-tools';
+import { PerformanceService } from './performance';
+import { jvmArguments } from '../domain/performance';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -94,6 +96,7 @@ export class AppCore {
   readonly incremental: IncrementalBackups;
   readonly migration: MigrationService;
   readonly consoleTools: ConsoleTools;
+  readonly performance: PerformanceService;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -198,6 +201,7 @@ export class AppCore {
     );
     this.migration = new MigrationService(this);
     this.consoleTools = new ConsoleTools(this);
+    this.performance = new PerformanceService(this);
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.skins = new PlayerSkins(this.icons);
@@ -591,6 +595,7 @@ export class AppCore {
     return this.exclusive(id, async () => {
       const options = serverOptionsSchema.parse(raw);
       const server = this.assertStopped(id);
+      jvmArguments(options.jvm ?? server.jvm, server.javaMajor);
       if (!engineDefinition(server.engine).capabilities.javaMemory) {
         Object.assign(server, { autoStart: options.autoStart, autoRestart: options.autoRestart });
         this.repo.saveServer(server);
@@ -727,6 +732,7 @@ export class AppCore {
   async close(): Promise<void> {
     this.closing = true;
     this.health.close();
+    await this.performance.close();
     clearInterval(this.maintenance);
     const updateShutdown = this.updates.close();
     this.downloads.cancelAll();

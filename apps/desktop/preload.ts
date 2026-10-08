@@ -10,6 +10,7 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  performance: (id, hours) => call('performance', id, hours),
   searchHistoricalLogs: (id, input) => call('searchHistoricalLogs', id, input),
   runMacro: (id, input) => call('runMacro', id, input),
   saveMacro: (id, input) => call('saveMacro', id, input),

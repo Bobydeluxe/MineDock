@@ -780,5 +780,22 @@
   "console.truncated": "Máximo de 500 linhas / 16 MB / 40 registos não comprimidos.",
   "console.announcement": "Anúncio",
   "console.delay": "Espera (segundos)",
-  "console.addStep": "Adicionar passo"
+  "console.addStep": "Adicionar passo",
+  "performance.title": "Desempenho de ticks medido",
+  "performance.history": "Período",
+  "performance.days": "dias",
+  "performance.hours": "horas",
+  "performance.tickHelp": "TPS/MSPT vêm de respostas reconhecidas do Paper/Purpur. Valores desconhecidos ficam indisponíveis; lacunas não são zeros.",
+  "performance.lags": "TPS baixo / ticks lentos",
+  "performance.ram": "Perfis RAM",
+  "performance.ramHelp": "As sugestões reservam memória para o sistema e outras aplicações. Reveja antes de guardar. Valores em MiB.",
+  "performance.small": "Servidor pequeno",
+  "performance.friends": "Sobrevivência entre amigos",
+  "performance.modded": "Servidor com mods",
+  "performance.jvmHelp": "Padrão mantém os valores Java. G1 procura pausas menores com Java 17+. Parâmetros personalizados limitados; sem agentes, shell ou substituições de memória. Nenhum perfil garante melhorias.",
+  "performance.jvmPreset": "Perfil JVM",
+  "performance.standard": "Padrão",
+  "performance.optimized": "Objetivo G1 (100 ms)",
+  "performance.custom": "Personalizado",
+  "performance.flags": "Parâmetros JVM"
 }

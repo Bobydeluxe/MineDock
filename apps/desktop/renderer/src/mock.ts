@@ -159,6 +159,7 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    performance: async () => ({ samples: [], lags: [] }),
     searchHistoricalLogs: async () => ({ lines: [], files: 0, truncated: false }),
     saveMacro: async () => {},
     runMacro: async () => {
