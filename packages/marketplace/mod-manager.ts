@@ -418,14 +418,28 @@ export class ModManager {
     stage: string,
     context?: OperationContext,
   ): Promise<InstalledContent[]> {
-    const selections = this.repo
-      .content(server.id)
-      .filter((item) => item.provider !== 'local')
-      .map((item) => ({ projectId: item.projectId, versionId: item.versionId }));
+    const selections = [];
+    for (const item of this.repo.content(server.id).filter((item) => item.provider !== 'local')) {
+      if (item.provider && item.provider !== 'modrinth') continue;
+      const current = await this.catalog.version(item.versionId, context?.signal);
+      const next = compatibleContent(server, current)
+        ? current
+        : (await this.catalog.versions(server, item.projectId, context?.signal)).find(
+            (v) => compatibleContent(server, v) && v.releaseType === 'release',
+          );
+      if (!next || (item.pinned && next.id !== item.versionId))
+        fail('MOD_MIGRATION', 'A locked or incompatible project needs review before migration.');
+      selections.push({ projectId: item.projectId, versionId: next.id });
+    }
     if (!selections.length) return this.repo.content(server.id);
     const plan = await this.plan(server, { selections, collection: true }, context?.signal);
     this.plans.delete(plan.token);
-    const items = await this.stage(server, plan, path.join(stage, 'mods'), context);
+    const items = await this.stage(
+      server,
+      plan,
+      path.join(stage, engineDefinition(server.engine).contentFolder!),
+      context,
+    );
     // Versions which already support the destination retain their binaries and metadata provenance.
     for (const item of items)
       if (item.provider !== 'local') {

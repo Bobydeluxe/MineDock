@@ -747,5 +747,18 @@
   "snapshot.nasHelp": "Wähle in den Einstellungen einen eingebundenen NAS-, Netzwerk- oder USB-Ordner. Der Speicher muss während des Vorgangs verbunden bleiben.",
   "snapshot.testStorage": "Sicherungsspeicher testen",
   "snapshot.restoreHelp": "Diese Pfade werden vollständig ersetzt. Zuerst wird eine vollständige Sicherung erstellt. Die ersten 1.000 Pfade werden angezeigt.",
-  "snapshot.replaced": "Ersetzte Pfade"
+  "snapshot.replaced": "Ersetzte Pfade",
+  "migration.title": "Serverentwicklung",
+  "migration.help": "Prüfe ein Minecraft-Update oder wechsle zwischen Paper und Purpur. Stoppe den Server vor der Prüfung.",
+  "migration.analyze": "Upgrade prüfen",
+  "migration.latest": "Neueste Minecraft-Version prüfen",
+  "migration.clone": "Server duplizieren",
+  "migration.worldHelp": "Welt-Upgrades sind nicht im Voraus garantiert. Downgrades sind gesperrt. Unbekannte/inkompatible Inhalte müssen geklärt werden; die konfigurierte Sicherung erfolgt vor der Installation.",
+  "migration.blocked": "Unbekannte oder inkompatible Inhalte prüfen",
+  "migration.ready": "Bereit zur Bestätigung",
+  "migration.apply": "Geprüfte Änderung anwenden",
+  "migration.cloneMode": "Kopieroptionen",
+  "migration.complete": "Vollständige Kopie mit Welten",
+  "migration.newWorld": "Neue Survival-Welt mit denselben Inhalten",
+  "migration.cloneHelp": "Ein neues Profil mit getrennten Ports wird erstellt. Das Original bleibt erhalten. Neue Survival kopiert Datenpakete und Konfiguration ohne Weltdaten."
 }

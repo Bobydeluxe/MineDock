@@ -10,6 +10,12 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  searchHistoricalLogs: (id,input) => call('searchHistoricalLogs',id,input),
+  runMacro: (id,input) => call('runMacro',id,input),
+  latestMinecraft: (id) => call('latestMinecraft', id),
+  migrationReview: (id, target) => call('migrationReview', id, target),
+  applyMigration: (id, token, confirmation) => call('applyMigration', id, token, confirmation),
+  cloneServer: (id, input) => call('cloneServer', id, input),
   incrementalSnapshots: (id) => call('incrementalSnapshots', id),
   createIncremental: (id) => call('createIncremental', id),
   previewPartial: (id, snapshot, scope) => call('previewPartial', id, snapshot, scope),

@@ -38,6 +38,7 @@ import { StorageView } from './storage';
 import { PlayersView } from './players';
 import { PacksView } from './packs';
 import { HealthView } from './health';
+import { MigrationControls } from './migration';
 import {
   Button,
   Field,
@@ -157,6 +158,10 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       {tab === 'overview' && (
         <>
           <HealthView server={server} />
+          <details className="panel">
+            <summary>{t('migration.title')}</summary>
+            <MigrationControls server={server} />
+          </details>
           <div className="metric-grid">
             <div className="metric-card">
               <div className="metric-label">

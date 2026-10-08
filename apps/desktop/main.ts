@@ -42,6 +42,8 @@ import { DomainError } from '../../packages/domain/errors';
 import { packKindSchema, packRequestSchema, packActionSchema } from '../../packages/domain/packs';
 import { healthSettingsSchema } from '../../packages/domain/health';
 import { backupSafetySchema, restoreScopeSchema } from '../../packages/domain/snapshots';
+import { migrationTargetSchema, cloneSchema } from '../../packages/domain/migration';
+import { logSearchSchema, macroSchema } from '../../packages/domain/console';
 import { translator } from './renderer/src/i18n';
 
 let core: AppCore | undefined;
@@ -215,6 +217,20 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('searchHistoricalLogs', (value,input) => core.consoleTools.search(id(value),logSearchSchema.parse(input)));
+  handle('runMacro', (value,input) => core.consoleTools.macro(id(value),macroSchema.parse(input)));
+  handle('latestMinecraft', (value) => core.migration.latest(id(value)));
+  handle('migrationReview', (value, target) =>
+    core.migration.review(id(value), migrationTargetSchema.parse(target)),
+  );
+  handle('applyMigration', (value, token, confirmation) =>
+    core.migration.apply(id(value), id(token), text.parse(confirmation)),
+  );
+  handle('cloneServer', (value, input) =>
+    core.exclusive('create', () =>
+      core.exclusive(id(value), () => core.migration.clone(id(value), cloneSchema.parse(input))),
+    ),
+  );
   handle('incrementalSnapshots', (value) => core.incremental.list(id(value)));
   handle('createIncremental', (value) =>
     core.exclusive(id(value), () => core.incremental.create(id(value))),

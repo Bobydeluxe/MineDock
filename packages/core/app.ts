@@ -56,6 +56,8 @@ import { PackService } from '../marketplace/packs';
 import { HealthService } from './health';
 import { PlayerSkins } from './skins';
 import { IncrementalBackups } from '../backups/incremental';
+import { MigrationService } from './migration';
+import { ConsoleTools } from './console-tools';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -90,6 +92,8 @@ export class AppCore {
   readonly health: HealthService;
   readonly skins: PlayerSkins;
   readonly incremental: IncrementalBackups;
+  readonly migration: MigrationService;
+  readonly consoleTools: ConsoleTools;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -192,6 +196,8 @@ export class AppCore {
       (id) => this.assertStopped(id),
       (id, reason) => this.backups.create(id, reason),
     );
+    this.migration = new MigrationService(this);
+    this.consoleTools = new ConsoleTools(this);
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.skins = new PlayerSkins(this.icons);

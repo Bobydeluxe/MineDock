@@ -747,5 +747,18 @@
   "snapshot.nasHelp": "Choose a mounted NAS, network share or USB folder in Settings. Storage must remain connected during backup and restore.",
   "snapshot.testStorage": "Test backup storage",
   "snapshot.restoreHelp": "The paths below will be replaced exactly. A full safety backup is created first. The first 1,000 snapshot paths are shown.",
-  "snapshot.replaced": "Paths replaced"
+  "snapshot.replaced": "Paths replaced",
+  "migration.title": "Server evolution",
+  "migration.help": "Analyze a Minecraft update or switch between Paper and Purpur. Stop the server before reviewing a change.",
+  "migration.analyze": "Analyze upgrade",
+  "migration.latest": "Check latest Minecraft",
+  "migration.clone": "Duplicate server",
+  "migration.worldHelp": "World upgrades cannot be guaranteed in advance. Downgrades are blocked. Unknown/incompatible content must be resolved; the configured safety backup runs before installation.",
+  "migration.blocked": "Review incompatible or unknown content",
+  "migration.ready": "Ready for confirmation",
+  "migration.apply": "Apply reviewed change",
+  "migration.cloneMode": "Copy options",
+  "migration.complete": "Complete copy with worlds",
+  "migration.newWorld": "New survival with the same content",
+  "migration.cloneHelp": "A new profile and separate ports are created. The original server is preserved. New survival copies datapacks and configuration while removing world data."
 }

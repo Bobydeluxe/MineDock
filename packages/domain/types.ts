@@ -308,6 +308,15 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  searchHistoricalLogs(id:string,input:import('./console').LogSearch):Promise<import('./console').LogSearchResult>;
+  runMacro(id:string,input:import('./console').MacroInput):Promise<string>;
+  latestMinecraft(id: string): Promise<string | null>;
+  migrationReview(
+    id: string,
+    target: import('./migration').MigrationTarget,
+  ): Promise<import('./migration').MigrationReview>;
+  applyMigration(id: string, token: string, confirmation: string): Promise<void>;
+  cloneServer(id: string, input: import('./migration').CloneInput): Promise<Server>;
   incrementalSnapshots(id: string): Promise<import('./snapshots').IncrementalSnapshot[]>;
   createIncremental(id: string): Promise<import('./snapshots').IncrementalSnapshot>;
   previewPartial(

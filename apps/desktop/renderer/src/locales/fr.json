@@ -747,5 +747,18 @@
   "snapshot.nasHelp": "Choisissez un NAS monté, un partage réseau ou un dossier USB dans les paramètres. Le stockage doit rester connecté pendant l’opération.",
   "snapshot.testStorage": "Tester le stockage",
   "snapshot.restoreHelp": "Les chemins ci-dessous seront remplacés exactement. Une sauvegarde complète de sécurité est créée avant. Les 1 000 premiers chemins sont affichés.",
-  "snapshot.replaced": "Chemins remplacés"
+  "snapshot.replaced": "Chemins remplacés",
+  "migration.title": "Évolution du serveur",
+  "migration.help": "Analysez une mise à jour Minecraft ou basculez entre Paper et Purpur. Arrêtez le serveur avant l’analyse.",
+  "migration.analyze": "Analyser la mise à niveau",
+  "migration.latest": "Vérifier la dernière version Minecraft",
+  "migration.clone": "Dupliquer le serveur",
+  "migration.worldHelp": "Les changements de monde ne peuvent être garantis à l’avance. Les retours de version sont bloqués. Résolvez le contenu inconnu ou incompatible ; la sauvegarde configurée précède l’installation.",
+  "migration.blocked": "Vérifiez le contenu incompatible ou inconnu",
+  "migration.ready": "Prêt pour confirmation",
+  "migration.apply": "Appliquer le changement vérifié",
+  "migration.cloneMode": "Options de copie",
+  "migration.complete": "Copie complète avec les mondes",
+  "migration.newWorld": "Nouvelle survie avec le même contenu",
+  "migration.cloneHelp": "Un nouveau profil et des ports séparés sont créés. Le serveur original est conservé. La nouvelle survie copie les datapacks et la configuration sans les données du monde."
 }
