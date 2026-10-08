@@ -10,6 +10,16 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  testReachability: (id, input) => call('testReachability', id, input),
+  mapPlan: (id, kind) => call('mapPlan', id, kind),
+  mapApply: (id, input) => call('mapApply', id, input),
+  mapStatus: (id) => call('mapStatus', id),
+  openMap: (id, kind) => call('openMap', id, kind),
+  configDocuments: (id) => call('configDocuments', id),
+  editConfig: (id, input) => call('editConfig', id, input),
+  configHistory: (id) => call('configHistory', id),
+  restoreConfig: (id, version, confirmation) => call('restoreConfig', id, version, confirmation),
+  configAudit: (id) => call('configAudit', id),
   performance: (id, hours) => call('performance', id, hours),
   searchHistoricalLogs: (id, input) => call('searchHistoricalLogs', id, input),
   runMacro: (id, input) => call('runMacro', id, input),

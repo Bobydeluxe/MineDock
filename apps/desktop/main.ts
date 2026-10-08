@@ -13,6 +13,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { AppCore } from '../../packages/core/app';
+import { testReachability } from '../../packages/networking/reachability';
 import { readableError, structuredError } from '../../packages/domain/errors';
 import { localizeMessage } from '../../packages/domain/localization';
 import { engineSchema } from '../../packages/domain/types';
@@ -220,6 +221,24 @@ function register(core: AppCore): void {
   handle('performance', (value, hours) =>
     core.performance.report(id(value), z.number().int().min(1).max(168).parse(hours)),
   );
+  handle('configDocuments', (value) => core.configuration.documents(id(value)));
+  handle('testReachability', (value, input) =>
+    testReachability(core.repo.server(id(value)), input),
+  );
+  handle('mapPlan', (value, kind) => core.maps.plan(id(value), kind));
+  handle('mapApply', (value, input) => core.maps.apply(id(value), input));
+  handle('mapStatus', (value) => core.maps.status(id(value)));
+  handle('openMap', async (value, kind) => {
+    const status = (await core.maps.status(id(value))).find((item) => item.kind === kind);
+    if (!status?.url) throw new DomainError('MAP', 'Configure a local map before opening it.');
+    await shell.openExternal(status.url);
+  });
+  handle('configHistory', (value) => core.configuration.history(id(value)));
+  handle('configAudit', (value) => core.configuration.audit(id(value)));
+  handle('editConfig', (value, input) => core.configuration.edit(id(value), input));
+  handle('restoreConfig', (value, version, confirmation) =>
+    core.configuration.restore(id(value), id(version), text.parse(confirmation)),
+  );
   handle('searchHistoricalLogs', (value, input) =>
     core.consoleTools.search(id(value), logSearchSchema.parse(input)),
   );
@@ -370,19 +389,14 @@ function register(core: AppCore): void {
     ),
   );
   handle('writeFile', (value, file, content) =>
-    core.exclusive(id(value), async () => {
-      const server = core.assertStopped(id(value));
-      core.fileOperations.protect(server, relative.parse(file));
-      await core.files.write(
-        server.path,
-        relative.parse(file),
-        z
-          .string()
-          .max(2 * 1024 * 1024)
-          .parse(content),
-      );
-      core.repo.audit('file.saved', relative.parse(file), server.id);
-    }),
+    core.configuration.write(
+      id(value),
+      relative.parse(file),
+      z
+        .string()
+        .max(2 * 1024 * 1024)
+        .parse(content),
+    ),
   );
   handle('mkdir', (value, file) =>
     core.exclusive(id(value), () =>

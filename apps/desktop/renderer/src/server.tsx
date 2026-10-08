@@ -43,6 +43,9 @@ import { ConsoleToolsView } from './console-tools';
 import { commandCatalog, logCategory } from '../../../../packages/domain/console';
 import type { Key } from './i18n';
 import { PerformanceView, MemoryJvmControls } from './performance';
+import { ConfigurationControls } from './configuration';
+import { MapControls } from './maps';
+import { ReachabilityControls } from './reachability';
 import {
   Button,
   Field,
@@ -311,6 +314,9 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
         <>
           <PropertiesView server={server} />
           <MemoryJvmControls server={server} />
+          <ConfigurationControls server={server} />
+          <MapControls server={server} />
+          <ReachabilityControls server={server} />
           <section className="panel danger-panel">
             <h2>
               {t(server.externalFolder ? 'detachServer' : 'delete')} · {server.name}

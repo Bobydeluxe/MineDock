@@ -160,6 +160,26 @@ export function createMockApi(): Api {
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
     performance: async () => ({ samples: [], lags: [] }),
+    configDocuments: async () => [],
+    testReachability: async () => ({
+      local: 'unknown',
+      external: 'unknown',
+      at: new Date().toISOString(),
+      port: 25565,
+      firewall: 'unknown',
+    }),
+    mapPlan: async () => {
+      throw new Error('Use the desktop application to install maps.');
+    },
+    mapApply: async () => {
+      throw new Error('Use the desktop application to install maps.');
+    },
+    mapStatus: async () => [],
+    openMap: async () => {},
+    editConfig: async () => {},
+    configHistory: async () => [],
+    restoreConfig: async () => {},
+    configAudit: async () => ({ findings: ['permissionsUnknown'], port: 25565, bind: '' }),
     searchHistoricalLogs: async () => ({ lines: [], files: 0, truncated: false }),
     saveMacro: async () => {},
     runMacro: async () => {

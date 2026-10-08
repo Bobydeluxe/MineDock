@@ -82,4 +82,9 @@ export const migrations = [
     CREATE TABLE lag_events (id INTEGER PRIMARY KEY AUTOINCREMENT, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, metadata TEXT NOT NULL);
     CREATE INDEX lag_events_by_server ON lag_events(server_id,at);`,
   },
+  {
+    version: 11,
+    sql: `CREATE TABLE config_versions (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, file TEXT NOT NULL, at TEXT NOT NULL, sha256 TEXT NOT NULL, content TEXT NOT NULL, bytes INTEGER NOT NULL);
+    CREATE INDEX config_versions_by_file ON config_versions(server_id,file,at);`,
+  },
 ];

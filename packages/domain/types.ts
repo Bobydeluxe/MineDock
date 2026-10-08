@@ -312,6 +312,19 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  testReachability(
+    id: string,
+    input: z.input<typeof import('../networking/reachability').reachabilitySchema>,
+  ): Promise<import('../networking/reachability').Reachability>;
+  mapPlan(id: string, kind: import('./maps').MapKind): Promise<import('./mods').ModPlan>;
+  mapApply(id: string, input: z.infer<typeof import('./maps').mapApplySchema>): Promise<void>;
+  mapStatus(id: string): Promise<import('./maps').MapStatus[]>;
+  openMap(id: string, kind: import('./maps').MapKind): Promise<void>;
+  configDocuments(id: string): Promise<import('./configuration').ConfigDocument[]>;
+  editConfig(id: string, input: import('./configuration').ConfigEdit): Promise<void>;
+  configHistory(id: string): Promise<import('./configuration').ConfigVersion[]>;
+  restoreConfig(id: string, version: string, confirmation: string): Promise<void>;
+  configAudit(id: string): Promise<import('./configuration').ConfigAudit>;
   performance(id: string, hours: number): Promise<import('./performance').PerformanceReport>;
   searchHistoricalLogs(
     id: string,

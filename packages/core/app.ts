@@ -60,6 +60,8 @@ import { MigrationService } from './migration';
 import { ConsoleTools } from './console-tools';
 import { PerformanceService } from './performance';
 import { jvmArguments } from '../domain/performance';
+import { ConfigurationService } from './configuration';
+import { MapAssistant } from './maps';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -97,6 +99,8 @@ export class AppCore {
   readonly migration: MigrationService;
   readonly consoleTools: ConsoleTools;
   readonly performance: PerformanceService;
+  readonly configuration: ConfigurationService;
+  readonly maps: MapAssistant;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -202,6 +206,8 @@ export class AppCore {
     this.migration = new MigrationService(this);
     this.consoleTools = new ConsoleTools(this);
     this.performance = new PerformanceService(this);
+    this.configuration = new ConfigurationService(this, secrets);
+    this.maps = new MapAssistant(this);
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.skins = new PlayerSkins(this.icons);
@@ -520,6 +526,7 @@ export class AppCore {
           (await this.reservedPorts(id)).has(ipv6Port))
       )
         throw new DomainError('PORT', 'The IPv6 UDP port is already in use.');
+      await this.configuration.remember(id, 'server.properties');
       await atomicWrite(path.join(server.path, 'server.properties'), serializeProperties(props));
       Object.assign(server, {
         port,
@@ -665,7 +672,7 @@ export class AppCore {
       this.repo.audit('server.trashed', server.name);
     });
   }
-  private async reservedPorts(excludeGameServerId?: string): Promise<Set<number>> {
+  async reservedPorts(excludeGameServerId?: string): Promise<Set<number>> {
     const used = new Set<number>();
     for (const server of this.repo.servers()) {
       if (server.id !== excludeGameServerId) used.add(server.port);
