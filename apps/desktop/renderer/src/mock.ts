@@ -159,6 +159,21 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    incrementalSnapshots: async () => [],
+    createIncremental: async () => {
+      throw new Error('Incremental backups require the desktop app.');
+    },
+    previewPartial: async () => {
+      throw new Error('Restoring snapshots requires the desktop app.');
+    },
+    restorePartial: async () => {
+      throw new Error('Restoring snapshots requires the desktop app.');
+    },
+    backupSafety: async () => ({ beforeContent: true, beforeMinecraft: true }),
+    configureBackupSafety: async (input) => input,
+    testBackupStorage: async () => {
+      throw new Error('Storage checks require the desktop app.');
+    },
     playerDetails: async () => ({
       note: '',
       sessions: [],

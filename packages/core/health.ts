@@ -158,7 +158,16 @@ export class HealthService {
       .backups()
       .filter((b) => b.serverId === id)
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))[0];
-    if (!last || Date.now() - Date.parse(last.createdAt) > settings.backupAgeHours * 3600000)
+    const incremental = this.repo.db
+      .prepare(
+        "SELECT MAX(json_extract(metadata,'$.at')) AS at FROM incremental_snapshots WHERE server_id=?",
+      )
+      .get(id)?.at;
+    const latestAt = [last?.createdAt, incremental ? String(incremental) : undefined]
+      .filter((at): at is string => !!at)
+      .sort()
+      .at(-1);
+    if (!latestAt || Date.now() - Date.parse(latestAt) > settings.backupAgeHours * 3600000)
       report.issues.push({ code: 'backupOld', severity: 'warning' });
     try {
       const disk = await statfs(server.path);

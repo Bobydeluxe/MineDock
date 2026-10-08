@@ -54,3 +54,20 @@ export const packActionSchema = z
   })
   .strict();
 export type PackAction = z.infer<typeof packActionSchema>;
+export const packFileSchema = z.object({
+  id: z.string().uuid(),
+  kind: packKindSchema,
+  world: z.string().max(120).optional(),
+  projectId: z.string().optional(),
+  versionId: z.string().optional(),
+  title: z.string().max(300),
+  version: z.string().optional(),
+  filename: z.string().max(255),
+  enabled: z.boolean(),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/),
+  sha1: z.string().regex(/^[a-f0-9]{40}$/),
+  size: z.number().nonnegative(),
+  url: z.string().url().optional(),
+  installedAt: z.string(),
+  dependencies: z.array(z.string()).max(1000),
+});

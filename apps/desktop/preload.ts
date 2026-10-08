@@ -10,6 +10,13 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  incrementalSnapshots: (id) => call('incrementalSnapshots', id),
+  createIncremental: (id) => call('createIncremental', id),
+  previewPartial: (id, snapshot, scope) => call('previewPartial', id, snapshot, scope),
+  restorePartial: (id, token, confirmation) => call('restorePartial', id, token, confirmation),
+  backupSafety: () => call('backupSafety'),
+  configureBackupSafety: (input) => call('configureBackupSafety', input),
+  testBackupStorage: () => call('testBackupStorage'),
   playerDetails: (id, name) => call('playerDetails', id, name),
   playerNote: (id, name, note) => call('playerNote', id, name, note),
   playerSkin: (id, name) => call('playerSkin', id, name),

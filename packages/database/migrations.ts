@@ -71,4 +71,9 @@ export const migrations = [
     CREATE INDEX player_sessions_by_player ON player_sessions(server_id,name,started_at);
     CREATE TABLE player_notes (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, note TEXT NOT NULL, PRIMARY KEY(server_id,name));`,
   },
+  {
+    version: 9,
+    sql: `CREATE TABLE incremental_snapshots (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, metadata TEXT NOT NULL, path TEXT NOT NULL);
+  CREATE INDEX incremental_snapshots_by_server ON incremental_snapshots(server_id);`,
+  },
 ];

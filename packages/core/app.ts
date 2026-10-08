@@ -55,6 +55,7 @@ import { sha256 } from '../backups/archive';
 import { PackService } from '../marketplace/packs';
 import { HealthService } from './health';
 import { PlayerSkins } from './skins';
+import { IncrementalBackups } from '../backups/incremental';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -88,6 +89,7 @@ export class AppCore {
   readonly packs: PackService;
   readonly health: HealthService;
   readonly skins: PlayerSkins;
+  readonly incremental: IncrementalBackups;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -183,6 +185,13 @@ export class AppCore {
       this.downloads,
       this.marketplace.manager,
     );
+    this.incremental = new IncrementalBackups(
+      this.repo,
+      this.jobs,
+      this.marketplace.manager,
+      (id) => this.assertStopped(id),
+      (id, reason) => this.backups.create(id, reason),
+    );
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.skins = new PlayerSkins(this.icons);
@@ -271,6 +280,11 @@ export class AppCore {
       mock: false,
       operations: this.repo.operations(),
     };
+  }
+  async safetyBackup(id: string, reason: string, minecraft = false) {
+    const settings = this.incremental.settings();
+    if (minecraft ? settings.beforeMinecraft : settings.beforeContent)
+      return this.backups.create(id, reason);
   }
   async exclusive<T>(id: string, operation: () => Promise<T>): Promise<T> {
     if (this.closing) throw new DomainError('CLOSING', 'The application is shutting down.');
@@ -559,7 +573,7 @@ export class AppCore {
         installerVersion: artifact.installerVersion,
         javaMajor: artifact.java,
       };
-      await this.backups.create(id, 'before_mod_migration');
+      await this.safetyBackup(id, 'before_mod_migration', true);
       await this.installer.install(id, {
         kind: 'mods.migrate',
         replacement: future,

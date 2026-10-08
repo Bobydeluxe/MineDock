@@ -308,6 +308,19 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  incrementalSnapshots(id: string): Promise<import('./snapshots').IncrementalSnapshot[]>;
+  createIncremental(id: string): Promise<import('./snapshots').IncrementalSnapshot>;
+  previewPartial(
+    id: string,
+    snapshotId: string,
+    scope: import('./snapshots').RestoreScope,
+  ): Promise<import('./snapshots').PartialPreview>;
+  restorePartial(id: string, token: string, confirmation: string): Promise<void>;
+  backupSafety(): Promise<import('./snapshots').BackupSafety>;
+  configureBackupSafety(
+    input: import('./snapshots').BackupSafety,
+  ): Promise<import('./snapshots').BackupSafety>;
+  testBackupStorage(): Promise<{ freeBytes: number; writable: boolean }>;
   playerDetails(id: string, name: string): Promise<import('./players').PlayerDetails>;
   playerNote(id: string, name: string, note: string): Promise<void>;
   playerSkin(id: string, name: string): Promise<string | null>;

@@ -41,6 +41,7 @@ import { prepareUpdateLaunch, launchUpdate } from '../../packages/updates/instal
 import { DomainError } from '../../packages/domain/errors';
 import { packKindSchema, packRequestSchema, packActionSchema } from '../../packages/domain/packs';
 import { healthSettingsSchema } from '../../packages/domain/health';
+import { backupSafetySchema, restoreScopeSchema } from '../../packages/domain/snapshots';
 import { translator } from './renderer/src/i18n';
 
 let core: AppCore | undefined;
@@ -214,6 +215,23 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('incrementalSnapshots', (value) => core.incremental.list(id(value)));
+  handle('createIncremental', (value) =>
+    core.exclusive(id(value), () => core.incremental.create(id(value))),
+  );
+  handle('previewPartial', (value, snapshot, scope) =>
+    core.incremental.preview(id(value), id(snapshot), restoreScopeSchema.parse(scope)),
+  );
+  handle('restorePartial', (value, token, confirmation) =>
+    core.exclusive(id(value), () =>
+      core.incremental.restore(id(value), id(token), text.parse(confirmation)),
+    ),
+  );
+  handle('backupSafety', () => core.incremental.settings());
+  handle('configureBackupSafety', (value) =>
+    core.incremental.configure(backupSafetySchema.parse(value)),
+  );
+  handle('testBackupStorage', () => core.incremental.testStorage());
   handle('playerDetails', (value, name) =>
     core.players.details(id(value), z.string().max(32).parse(name)),
   );
@@ -290,7 +308,7 @@ function register(core: AppCore): void {
   handle('packApply', (value, token) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_packs');
+      await core.safetyBackup(server.id, 'before_packs');
       await core.packs.apply(server, id(token));
     }),
   );
@@ -298,7 +316,7 @@ function register(core: AppCore): void {
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
       const action = packActionSchema.parse(input);
-      await core.backups.create(server.id, 'before_packs');
+      await core.safetyBackup(server.id, 'before_packs');
       await core.packs.action(server, action);
     }),
   );
@@ -314,7 +332,7 @@ function register(core: AppCore): void {
     if (result.canceled || !result.filePaths[0]) return;
     await core.exclusive(serverId, async () => {
       const server = core.assertStopped(serverId);
-      await core.backups.create(serverId, 'before_packs');
+      await core.safetyBackup(serverId, 'before_packs');
       await core.packs.import(server, packKind, result.filePaths[0]!, packWorld);
     });
   });
@@ -608,7 +626,7 @@ function register(core: AppCore): void {
   handle('modApply', (value, token) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_mods');
+      await core.safetyBackup(server.id, 'before_mods');
       return core.mods.apply(server, id(token));
     }),
   );
@@ -634,7 +652,7 @@ function register(core: AppCore): void {
         input = modBulkSchema.parse(raw);
       if (input.confirmation !== server.name)
         throw new DomainError('CONFIRM', 'Incorrect confirmation.');
-      await core.backups.create(server.id, 'before_mods');
+      await core.safetyBackup(server.id, 'before_mods');
       return core.mods.bulk(server, input);
     }),
   );
@@ -740,7 +758,7 @@ function register(core: AppCore): void {
       const server = core.assertStopped(id(value));
       const item = core.repo.content(server.id).find((item) => item.id === id(content));
       if (!item || item.title !== text.parse(confirm)) throw new Error('Incorrect confirmation.');
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       return core.marketplace.manager.install(
         server,
         catalog(item.provider ?? 'modrinth'),
@@ -753,14 +771,14 @@ function register(core: AppCore): void {
   handle('uninstallContent', (value, content, confirm) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       return core.marketplace.manager.uninstall(server, id(content), text.parse(confirm));
     }),
   );
   handle('rollbackContent', (value, content, history, confirm) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       const item = core.repo.content(server.id).find((item) => item.id === id(content));
       await core.marketplace.manager.rollback(
         server,
@@ -779,7 +797,7 @@ function register(core: AppCore): void {
   handle('installContent', (value, project, provider, version) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       return core.marketplace.manager.install(
         server,
         catalog(provider),

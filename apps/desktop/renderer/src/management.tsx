@@ -27,6 +27,7 @@ import { RuntimeControls } from './runtime-controls';
 import { RecoveryDialog } from './recovery';
 import { RetentionControls } from './retention';
 import { UpdateControls } from './updates';
+import { SnapshotControls } from './snapshots';
 const scheduleDate = (at: string, language: string, timeZone: string) => {
   try {
     return new Date(at).toLocaleString(language, { timeZone });
@@ -196,6 +197,9 @@ export function BackupsView({ serverId }: { serverId?: string }) {
           </div>
         )}
       </section>
+      {snapshot.servers.find((s) => s.id === selected) && (
+        <SnapshotControls server={snapshot.servers.find((s) => s.id === selected)!} />
+      )}
       {selected && <RetentionControls key={selected} serverId={selected} />}
       {confirmation && (
         <Confirm
