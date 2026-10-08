@@ -39,6 +39,9 @@ import { PlayersView } from './players';
 import { PacksView } from './packs';
 import { HealthView } from './health';
 import { MigrationControls } from './migration';
+import { ConsoleToolsView } from './console-tools';
+import { commandCatalog, logCategory } from '../../../../packages/domain/console';
+import type { Key } from './i18n';
 import {
   Button,
   Field,
@@ -340,6 +343,7 @@ function ConsoleView({ server }: { server: Server }) {
   const [lines, setLines] = useState<LogLine[]>([]);
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState('all');
+  const [category, setCategory] = useState('all');
   const [auto, setAuto] = useState(true);
   const [command, setCommand] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -363,7 +367,9 @@ function ConsoleView({ server }: { server: Server }) {
   );
   const filtered = lines.filter(
     (l) =>
-      (level === 'all' || level === l.level) && l.text.toLowerCase().includes(query.toLowerCase()),
+      (level === 'all' || level === l.level) &&
+      (category === 'all' || logCategory(l.text) === category) &&
+      l.text.toLowerCase().includes(query.toLowerCase()),
   );
   const parent = useRef<HTMLDivElement>(null);
   const virtual = useVirtualizer({
@@ -416,6 +422,25 @@ function ConsoleView({ server }: { server: Server }) {
         <ErrorBox error={initial.error} retry={initial.reload} retryLabel={t('retry')} />
       )}
       <div className="console-toolbar">
+        <select
+          aria-label={t('console.category')}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          {(['all', 'chat', 'warnings', 'errors'] as const).map((c) => (
+            <option key={c} value={c}>
+              {t(
+                c === 'all'
+                  ? 'allLevels'
+                  : c === 'chat'
+                    ? 'console.chat'
+                    : c === 'warnings'
+                      ? 'console.warnings'
+                      : 'console.errors',
+              )}
+            </option>
+          ))}
+        </select>
         <div className="search-input">
           <Search size={15} />
           <input
@@ -485,6 +510,11 @@ function ConsoleView({ server }: { server: Server }) {
         <Terminal size={18} />
         <input
           aria-label={t('command')}
+          list={
+            engineDefinition(server.engine).edition === 'java'
+              ? 'server-command-suggestions'
+              : undefined
+          }
           placeholder={t('command')}
           value={command}
           onChange={(e) => setCommand(e.target.value)}
@@ -512,6 +542,12 @@ function ConsoleView({ server }: { server: Server }) {
           {t('send')}
         </Button>
       </form>
+      <datalist id="server-command-suggestions">
+        {commandCatalog.map((c) => (
+          <option key={c.command} value={c.command} label={t(c.description as Key)} />
+        ))}
+      </datalist>
+      <ConsoleToolsView server={server} />
       <p className="muted small-text">{t('commandHelp')}</p>
     </section>
   );

@@ -80,6 +80,7 @@ export const serverOptionsSchema = z
   .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Invalid minimum memory.' });
 export type ServerOptions = z.infer<typeof serverOptionsSchema>;
 export interface Server extends Omit<CreateServerInput, 'eula'> {
+  macros?: import('./console').MacroInput[];
   packs?: import('./packs').PackFile[];
   activeResourcePack?: string;
   modpack?: ModpackProfile;
@@ -308,8 +309,12 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
-  searchHistoricalLogs(id:string,input:import('./console').LogSearch):Promise<import('./console').LogSearchResult>;
-  runMacro(id:string,input:import('./console').MacroInput):Promise<string>;
+  searchHistoricalLogs(
+    id: string,
+    input: import('./console').LogSearch,
+  ): Promise<import('./console').LogSearchResult>;
+  runMacro(id: string, input: import('./console').MacroInput): Promise<string>;
+  saveMacro(id: string, input: import('./console').MacroInput): Promise<void>;
   latestMinecraft(id: string): Promise<string | null>;
   migrationReview(
     id: string,

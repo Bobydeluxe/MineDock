@@ -217,8 +217,17 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
-  handle('searchHistoricalLogs', (value,input) => core.consoleTools.search(id(value),logSearchSchema.parse(input)));
-  handle('runMacro', (value,input) => core.consoleTools.macro(id(value),macroSchema.parse(input)));
+  handle('searchHistoricalLogs', (value, input) =>
+    core.consoleTools.search(id(value), logSearchSchema.parse(input)),
+  );
+  handle('runMacro', (value, input) =>
+    core.consoleTools.macro(id(value), macroSchema.parse(input)),
+  );
+  handle('saveMacro', (value, input) =>
+    core.exclusive(id(value), async () =>
+      core.consoleTools.save(id(value), macroSchema.parse(input)),
+    ),
+  );
   handle('latestMinecraft', (value) => core.migration.latest(id(value)));
   handle('migrationReview', (value, target) =>
     core.migration.review(id(value), migrationTargetSchema.parse(target)),

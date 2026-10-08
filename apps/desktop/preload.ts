@@ -10,8 +10,9 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
-  searchHistoricalLogs: (id,input) => call('searchHistoricalLogs',id,input),
-  runMacro: (id,input) => call('runMacro',id,input),
+  searchHistoricalLogs: (id, input) => call('searchHistoricalLogs', id, input),
+  runMacro: (id, input) => call('runMacro', id, input),
+  saveMacro: (id, input) => call('saveMacro', id, input),
   latestMinecraft: (id) => call('latestMinecraft', id),
   migrationReview: (id, target) => call('migrationReview', id, target),
   applyMigration: (id, token, confirmation) => call('applyMigration', id, token, confirmation),

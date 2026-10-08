@@ -159,8 +159,11 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
-    searchHistoricalLogs: async () => ({lines:[],files:0,truncated:false}),
-    runMacro: async () => {throw new Error('Macros require the desktop app.');},
+    searchHistoricalLogs: async () => ({ lines: [], files: 0, truncated: false }),
+    saveMacro: async () => {},
+    runMacro: async () => {
+      throw new Error('Macros require the desktop app.');
+    },
     latestMinecraft: async () => null,
     migrationReview: async () => {
       throw new Error('Migration checks require the desktop app.');
