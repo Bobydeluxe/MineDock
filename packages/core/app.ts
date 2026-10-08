@@ -52,6 +52,7 @@ import { RuntimeMaintenance } from '../runtime-manager/maintenance';
 import { recoveryActionSchema, type RecoveryAction } from '../domain/operations';
 import { copyRegularFile } from '../security/copy';
 import { sha256 } from '../backups/archive';
+import { PackService } from '../marketplace/packs';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -82,6 +83,7 @@ export class AppCore {
   readonly modpacks: ModpackService;
   readonly storage: StorageService;
   readonly players: PlayerService;
+  readonly packs: PackService;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -169,6 +171,12 @@ export class AppCore {
       this.marketplace.catalog,
       this.marketplace.manager,
       this.downloads,
+    );
+    this.packs = new PackService(
+      this.repo,
+      this.marketplace.catalog,
+      this.downloads,
+      this.marketplace.manager,
     );
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));

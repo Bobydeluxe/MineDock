@@ -668,5 +668,17 @@
   "typeToConfirm": "Type to confirm:",
   "modConfirm": "Confirm changes",
   "modCollectionName": "Collection name",
-  "modNotIdentified": "No exact compatible Modrinth match; this file remains local."
+  "modNotIdentified": "No exact compatible Modrinth match; this file remains local.",
+  "datapacks": "Datapacks",
+  "resourcepacks": "Resource packs",
+  "pack.worldHelp": "Packs apply to the selected world. Stop the server before changing files.",
+  "pack.urlHelp": "Clients download the selected pack from its HTTP(S) URL. A local ZIP needs a public download URL.",
+  "pack.activeWorld": "Active world",
+  "pack.selected": "Selected for players",
+  "pack.select": "Use for players",
+  "pack.manualHelp": "Manual packs are visible here. Manage their files in Files; automatic updates never replace them.",
+  "pack.review": "Review installation",
+  "pack.backupHelp": "MineDock creates a safety backup before changing packs.",
+  "pack.optional": "Optional dependencies (not installed automatically)",
+  "pack.url": "Download URL"
 }

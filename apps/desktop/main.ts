@@ -38,6 +38,7 @@ import { containedPath } from '../../packages/security/paths';
 import { LocalSecretStore, redact, type SecretStore } from '../../packages/security/secrets';
 import { prepareUpdateLaunch, launchUpdate } from '../../packages/updates/install';
 import { DomainError } from '../../packages/domain/errors';
+import { packKindSchema, packRequestSchema, packActionSchema } from '../../packages/domain/packs';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -210,6 +211,61 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('packSearch', (value, kind, query) =>
+    core.packs.search(
+      core.repo.server(id(value)),
+      packKindSchema.parse(kind),
+      z.string().max(120).parse(query),
+    ),
+  );
+  handle('packInventory', (value, kind, world) =>
+    core.packs.inventory(
+      core.repo.server(id(value)),
+      packKindSchema.parse(kind),
+      z.string().max(120).optional().parse(world),
+    ),
+  );
+  handle('packVersions', (value, kind, project) =>
+    core.packs.versions(
+      core.repo.server(id(value)),
+      packKindSchema.parse(kind),
+      modId.parse(project),
+    ),
+  );
+  handle('packPlan', (value, input) =>
+    core.packs.plan(core.repo.server(id(value)), packRequestSchema.parse(input)),
+  );
+  handle('packApply', (value, token) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      await core.backups.create(server.id, 'before_packs');
+      await core.packs.apply(server, id(token));
+    }),
+  );
+  handle('packAction', (value, input) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      const action = packActionSchema.parse(input);
+      await core.backups.create(server.id, 'before_packs');
+      await core.packs.action(server, action);
+    }),
+  );
+  handle('packImport', async (value, kind, world) => {
+    const serverId = id(value);
+    core.assertStopped(serverId);
+    const packKind = packKindSchema.parse(kind),
+      packWorld = z.string().max(120).optional().parse(world);
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Minecraft pack', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return;
+    await core.exclusive(serverId, async () => {
+      const server = core.assertStopped(serverId);
+      await core.backups.create(serverId, 'before_packs');
+      await core.packs.import(server, packKind, result.filePaths[0]!, packWorld);
+    });
+  });
   handle('moderatePlayer', (value, input) =>
     core.exclusive(id(value), () =>
       core.players.moderate(id(value), input as Parameters<typeof core.players.moderate>[1]),

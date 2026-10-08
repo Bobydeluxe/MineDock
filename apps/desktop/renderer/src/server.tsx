@@ -36,6 +36,7 @@ import { WorldsView } from './worlds';
 import { FileTools, ArchiveTools } from './file-tools';
 import { StorageView } from './storage';
 import { PlayersView } from './players';
+import { PacksView } from './packs';
 import {
   Button,
   Field,
@@ -59,6 +60,8 @@ const tabs = [
   'players',
   'world',
   'plugins',
+  'datapacks',
+  'resourcepacks',
   'files',
   'backups',
   'schedules',
@@ -71,6 +74,8 @@ const tabIcons = {
   players: Users,
   world: Globe2,
   plugins: Puzzle,
+  datapacks: Puzzle,
+  resourcepacks: Puzzle,
   files: Folder,
   backups: Archive,
   schedules: CalendarClock,
@@ -116,11 +121,12 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       {server.engine === 'pocketmine' && <p className="hint">{t('pocketmineSupport')}</p>}
       <nav className="tabs" aria-label={t('serverDetails')}>
         {tabs
-          .filter(
-            (value) =>
-              value !== 'plugins' ||
-              engineDefinition(server.engine).capabilities.plugins ||
-              engineDefinition(server.engine).capabilities.mods,
+          .filter((value) =>
+            value === 'datapacks' || value === 'resourcepacks'
+              ? engineDefinition(server.engine).edition === 'java'
+              : value !== 'plugins' ||
+                engineDefinition(server.engine).capabilities.plugins ||
+                engineDefinition(server.engine).capabilities.mods,
           )
           .map((value) => (
             <button
@@ -143,6 +149,10 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
             </button>
           ))}
       </nav>
+      {tab === 'datapacks' && <PacksView key="datapacks" server={server} kind="datapack" />}
+      {tab === 'resourcepacks' && (
+        <PacksView key="resourcepacks" server={server} kind="resourcepack" />
+      )}
       {tab === 'overview' && (
         <>
           <div className="metric-grid">

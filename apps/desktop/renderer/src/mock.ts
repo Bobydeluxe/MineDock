@@ -159,6 +159,21 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    packSearch: async () => [],
+    packInventory: async () => ({ installed: [], manual: [], problems: [] }),
+    packVersions: async () => [],
+    packPlan: async () => {
+      throw new Error('Use the desktop app to review real packs.');
+    },
+    packApply: async () => {
+      throw new Error('Use the desktop app to install packs.');
+    },
+    packAction: async () => {
+      throw new Error('Use the desktop app to change packs.');
+    },
+    packImport: async () => {
+      throw new Error('Use the desktop app to import packs.');
+    },
     worlds: async (id) => structuredClone(worlds(id)),
     worldAction: async (id, input) => {
       const entries = worlds(id),

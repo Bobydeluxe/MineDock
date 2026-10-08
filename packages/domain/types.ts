@@ -80,6 +80,8 @@ export const serverOptionsSchema = z
   .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Invalid minimum memory.' });
 export type ServerOptions = z.infer<typeof serverOptionsSchema>;
 export interface Server extends Omit<CreateServerInput, 'eula'> {
+  packs?: import('./packs').PackFile[];
+  activeResourcePack?: string;
   modpack?: ModpackProfile;
   id: string;
   path: string;
@@ -305,6 +307,21 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  packSearch(id: string, kind: import('./packs').PackKind, query: string): Promise<Project[]>;
+  packInventory(
+    id: string,
+    kind: import('./packs').PackKind,
+    world?: string,
+  ): Promise<import('./packs').PackInventory>;
+  packVersions(
+    id: string,
+    kind: import('./packs').PackKind,
+    projectId: string,
+  ): Promise<ContentVersion[]>;
+  packPlan(id: string, input: import('./packs').PackRequest): Promise<import('./packs').PackPlan>;
+  packApply(id: string, token: string): Promise<void>;
+  packAction(id: string, input: import('./packs').PackAction): Promise<void>;
+  packImport(id: string, kind: import('./packs').PackKind, world?: string): Promise<void>;
   modSearch(
     id: string,
     input: import('./mods').ModSearch,

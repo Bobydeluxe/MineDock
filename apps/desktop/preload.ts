@@ -10,6 +10,13 @@ const call = async <T>(method: string, ...args: unknown[]): Promise<T> => {
   });
 };
 const api: Api = {
+  packSearch: (id, kind, query) => call('packSearch', id, kind, query),
+  packInventory: (id, kind, world) => call('packInventory', id, kind, world),
+  packVersions: (id, kind, project) => call('packVersions', id, kind, project),
+  packPlan: (id, input) => call('packPlan', id, input),
+  packApply: (id, token) => call('packApply', id, token),
+  packAction: (id, input) => call('packAction', id, input),
+  packImport: (id, kind, world) => call('packImport', id, kind, world),
   modSearch: (id, input) => call('modSearch', id, input),
   modInventory: (id, force) => call('modInventory', id, force),
   modDetail: (id, project) => call('modDetail', id, project),

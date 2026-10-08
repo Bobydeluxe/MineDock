@@ -7,6 +7,7 @@ import { engineDefinition } from '../domain/engines';
 import { ManagedContentService, type ContentCatalog } from './content';
 import { DomainError } from '../domain/errors';
 import { modSearchSchema, type ModSearch, type ModSearchResult } from '../domain/mods';
+import type { PackKind } from '../domain/packs';
 import type { OperationService } from '../core/operations';
 const versionSchema = z.object({
   id: z.string(),
@@ -174,22 +175,32 @@ export class ModrinthCatalog implements ContentCatalog {
     server: Server,
     raw: ModSearch,
     signal?: AbortSignal,
-    plugins = false,
+    plugins: boolean | PackKind = false,
   ): Promise<ModSearchResult> {
     const input = modSearchSchema.parse(raw),
       facets: string[][] = [];
-    if (!plugins) facets.push(['project_type:mod']);
+    const pack = typeof plugins === 'string';
+    facets.push(
+      pack
+        ? ['project_type:' + plugins]
+        : plugins
+          ? ['project_type:plugin', 'project_type:mod']
+          : ['project_type:mod'],
+    );
     if (input.compatibleOnly)
       facets.push(
         ['versions:' + server.version],
-        engineDefinition(server.engine).contentLoaders.map((loader) => 'categories:' + loader),
+        (pack
+          ? [plugins === 'datapack' ? 'datapack' : 'minecraft']
+          : engineDefinition(server.engine).contentLoaders
+        ).map((loader) => 'categories:' + loader),
       );
     else {
       if (input.gameVersion) facets.push(['versions:' + input.gameVersion]);
       if (input.loader) facets.push(['categories:' + input.loader]);
     }
     if (input.category) facets.push(['categories:' + input.category]);
-    if (input.side === 'server' || input.compatibleOnly)
+    if (!pack && (input.side === 'server' || input.compatibleOnly))
       facets.push(['server_side:required', 'server_side:optional']);
     if (input.side === 'client') facets.push(['client_side:required', 'client_side:optional']);
     if (input.recent)
@@ -229,7 +240,7 @@ export class ModrinthCatalog implements ContentCatalog {
         iconUrl: hit.icon_url ?? undefined,
         categories: hit.categories,
         provider: this.id,
-        kind: plugins ? 'plugin' : 'mod',
+        kind: pack ? (plugins as PackKind) : plugins ? 'plugin' : 'mod',
         compatible:
           input.compatibleOnly ||
           !!(hit.versions?.includes(server.version) && hit.categories.includes(server.engine)),
@@ -321,7 +332,17 @@ export class ModrinthCatalog implements ContentCatalog {
       environment: Array.isArray(item.environment) ? item.environment.join(', ') : item.environment,
       slug: item.slug,
       author: item.team ? await this.teamAuthor(item.team, signal) : undefined,
-      kind: item.project_type === 'plugin' ? 'plugin' : 'mod',
+      kind:
+        item.project_type === 'resourcepack'
+          ? 'resourcepack'
+          : item.project_type === 'datapack' || item.loaders?.includes('datapack')
+            ? 'datapack'
+            : item.project_type === 'plugin' ||
+                item.loaders?.some((loader) =>
+                  ['paper', 'purpur', 'spigot', 'bukkit'].includes(loader),
+                )
+              ? 'plugin'
+              : 'mod',
     };
   }
   private async teamAuthor(id: string, signal?: AbortSignal): Promise<string> {
@@ -360,6 +381,20 @@ export class ModrinthCatalog implements ContentCatalog {
         signal,
       ),
     );
+  }
+  async packVersions(server: Server, kind: PackKind, id: string): Promise<ContentVersion[]> {
+    const params = new URLSearchParams({
+      game_versions: JSON.stringify([server.version]),
+      loaders: JSON.stringify([kind === 'datapack' ? 'datapack' : 'minecraft']),
+    });
+    return z
+      .array(versionSchema)
+      .parse(
+        await this.request(
+          `https://api.modrinth.com/v2/project/${encodeURIComponent(id)}/version?${params}`,
+        ),
+      )
+      .map(version);
   }
   async allVersions(
     projectId: string,

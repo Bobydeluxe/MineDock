@@ -668,5 +668,17 @@
   "typeToConfirm": "Escribe para confirmar:",
   "modConfirm": "Confirmar cambios",
   "modCollectionName": "Nombre de la colección",
-  "modNotIdentified": "Sin coincidencia exacta compatible en Modrinth; este archivo sigue siendo local."
+  "modNotIdentified": "Sin coincidencia exacta compatible en Modrinth; este archivo sigue siendo local.",
+  "datapacks": "Paquetes de datos",
+  "resourcepacks": "Paquetes de recursos",
+  "pack.worldHelp": "Los paquetes se aplican al mundo elegido. Detén el servidor antes de cambiar archivos.",
+  "pack.urlHelp": "Los jugadores descargan el paquete mediante su URL HTTP(S). Un ZIP local necesita una URL pública de descarga.",
+  "pack.activeWorld": "Mundo activo",
+  "pack.selected": "Seleccionado para jugadores",
+  "pack.select": "Usar para jugadores",
+  "pack.manualHelp": "Los paquetes manuales permanecen visibles. Gestiona sus archivos en Archivos; las actualizaciones automáticas no los reemplazan.",
+  "pack.review": "Revisar instalación",
+  "pack.backupHelp": "MineDock crea una copia de seguridad antes de cambiar los paquetes.",
+  "pack.optional": "Dependencias opcionales (no instaladas automáticamente)",
+  "pack.url": "URL de descarga"
 }

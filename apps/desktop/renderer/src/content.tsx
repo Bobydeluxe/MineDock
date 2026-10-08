@@ -10,7 +10,8 @@ import { Confirm } from './management';
 import { CrossplayView } from './crossplay';
 import { EngineIcon } from './engine-icon';
 export function ContentView({ server }: { server: Server }) {
-  return engineDefinition(server.engine).capabilities.mods ? (
+  return engineDefinition(server.engine).capabilities.mods ||
+    ['paper', 'purpur'].includes(server.engine) ? (
     <ModsView server={server} />
   ) : (
     <PluginContentView server={server} />
@@ -287,7 +288,7 @@ function PluginContentView({ server }: { server: Server }) {
     </>
   );
 }
-function ContentIcon({ project }: { project: Project }) {
+export function ContentIcon({ project }: { project: Project }) {
   const { api } = useApp();
   const icon = useData(
     () => (project.iconUrl ? api.contentIcon(project.iconUrl) : Promise.resolve(null)),
