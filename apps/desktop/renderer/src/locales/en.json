@@ -766,6 +766,7 @@
   "console.tools": "Console tools",
   "console.history": "Search historical logs",
   "console.customMacro": "Custom macro",
+  "console.macroName": "Macro name",
   "console.macroHelp": "Macros run in Operations and can be cancelled there. Custom macros support at most 20 steps and ten minutes of waiting.",
   "console.restart5": "Restart in 5 minutes",
   "console.saveStop": "Save and stop",

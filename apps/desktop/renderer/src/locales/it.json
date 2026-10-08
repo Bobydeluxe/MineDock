@@ -766,6 +766,7 @@
   "console.tools": "Strumenti console",
   "console.history": "Cerca log storici",
   "console.customMacro": "Macro personalizzata",
+  "console.macroName": "Nome della macro",
   "console.macroHelp": "Le macro compaiono in Operazioni e possono essere annullate lì. Limite: 20 passaggi e dieci minuti di attesa.",
   "console.restart5": "Riavvia tra 5 minuti",
   "console.saveStop": "Salva mondo e arresta",

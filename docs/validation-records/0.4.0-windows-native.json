@@ -4,11 +4,11 @@
   "automaticPackagedUpgrade": {
     "baseline": "0.4.0",
     "candidate": "0.4.1",
-    "baselinePortableSha256": "6b84d9c40066ce9a10a6bf147a281ba8b9e7e4e4e3e660d8a2e0f32d240ce71b",
+    "baselinePortableSha256": "7b516e03e6ff9278abe306eccbf0a8604cad532ebd046368bdeecbd00def9417",
     "initialSchema": 11,
     "legacyManual": false,
     "feed": "controlled transport only; production metadata signature and actual installer bytes",
-    "at": "2026-10-08T21:39:31.248Z",
+    "at": "2026-10-08T21:45:32.466Z",
     "oldVersion": "0.4.0",
     "signatureAndDownload": "verified by old production application",
     "helperRelaunch": "completed; actual 0.4.1 startup log observed",
@@ -78,6 +78,6 @@
     "InstalledLaunch": true,
     "SettingsSaved": true,
     "testedCandidateSha256": "539e7b8878419f77a7a1523760d8824ccbd29bffb5aa5e1f2d77e34f3b4b23ad",
-    "revisionNote": "Lifecycle tested before final restore/console dialog styling; installer/updater logic unchanged. Final candidate hashes are in validation.md."
+    "revisionNote": "Lifecycle tested before final restore/console dialog styling and macro label; installer/updater logic unchanged. Final candidate hashes are in validation.md."
   }
 }

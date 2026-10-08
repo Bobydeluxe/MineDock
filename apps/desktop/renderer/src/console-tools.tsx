@@ -134,7 +134,7 @@ export function ConsoleToolsView({ server }: { server: Server }) {
           onClose={() => setBuilder(false)}
         >
           <div className="dialog-body">
-            <Field label={t('name')}>
+            <Field label={t('console.macroName')}>
               <input value={name} onChange={(e) => setName(e.target.value)} maxLength={80} />
             </Field>
             {steps.map((step, index) => (

@@ -766,6 +766,7 @@
   "console.tools": "Herramientas de consola",
   "console.history": "Buscar registros históricos",
   "console.customMacro": "Macro personalizada",
+  "console.macroName": "Nombre de la macro",
   "console.macroHelp": "Las macros aparecen en Operaciones y pueden cancelarse allí. Límite: 20 pasos y diez minutos de espera.",
   "console.restart5": "Reiniciar en 5 minutos",
   "console.saveStop": "Guardar mundo y detener",

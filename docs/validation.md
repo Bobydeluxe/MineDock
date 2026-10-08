@@ -12,14 +12,16 @@ Current source is 0.4.0, under review in [draft PR #7](https://github.com/Bobyde
 | Full source UI suite                   | **26 passed, 4.7 minutes**                                                                                                            |
 | Final Windows x64 packaged suite       | **10 passed, 4.4 minutes**, sequentially after all installer work                                                                     |
 | Windows NSIS + portable compilation    | Passed; unsigned                                                                                                                      |
-| Six language catalogs                  | **848 UI keys each**, matching keys/placeholders; existing shared diagnostics retained                                                |
+| Six language catalogs                  | **849 UI keys each**, matching keys/placeholders; existing shared diagnostics retained                                                |
 | Existing migration SQL                 | **1–6 unchanged** against the actual base Git reference; published **1–5 unchanged** against v0.3.0                                   |
 | Current native gallery                 | **38 PNGs + one nine-frame labeled GIF**; real Electron with isolated records                                                         |
 | Static website local QA                | Desktop 1440 px / mobile 390 px: no overflow, broken images/anchors, page errors or failed requests; FAQ and download navigation pass |
 
-After the final restore/console dialog padding correction, production compilation and the affected native survival journey pass again in both source and packaged Windows (one case each). The full-suite counts above describe the immediately preceding build. The automatic upgrade replay uses the final portable hash below. NSIS lifecycle and public legacy manual recovery use the preceding build, recorded by hash in the evidence; installer/updater logic is unchanged by the final dialog styling.
+After the final restore/console dialog padding correction, production compilation and the affected native survival journey pass again in both source and packaged Windows (one case each). A final macro-name label correction then passes the 14 localization checks and actual source/packaged dialog assertions. The full-suite counts above describe the build before these final interface refinements. The automatic upgrade replay uses the final portable hash below. NSIS lifecycle and public legacy manual recovery use an earlier build, recorded by hash in the evidence; installer/updater logic is unchanged by the final dialog styling/label correction.
 
 The new native survival journey runs production main/preload/core/SQLite/files: commented YAML edit/history restoration, native local datapack import, persisted player note, hash-verified incremental world-only restore preserving unrelated configuration with a safety ZIP, native `.minedock` export/preview and read-all notices. Existing creation/dialogs/six-language preferences, content plans/updates/rollback, files/worlds/imports/recovery/retention and updater rejection stay covered. External API/CDN fixtures are explicitly controlled; no Minecraft process/client is started by these UI tests.
+
+The [public website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) is deployed from saved Sites version 1, source `d0f39cfd373e663c8022d638b5a0a56105097bc9`. The actual production URL also passes the same 1440/390-pixel image/anchor/overflow/error and FAQ/download checks.
 
 ### Actual Windows lifecycle and upgrade
 
@@ -33,8 +35,8 @@ The Windows fix uses a short hidden bootstrap and native `Start-Process -WindowS
 
 ### Candidate hashes and limits
 
-Local final Windows x64 portable SHA-256: `6b84d9c40066ce9a10a6bf147a281ba8b9e7e4e4e3e660d8a2e0f32d240ce71b`.
-Local final Windows x64 NSIS SHA-256: `54386ece49d5d1d6104be73f0f54521cfa714d615ae496051d297a42bdddfaf5`.
+Local final Windows x64 portable SHA-256: `7b516e03e6ff9278abe306eccbf0a8604cad532ebd046368bdeecbd00def9417`.
+Local final Windows x64 NSIS SHA-256: `961ce45101780474e8e45c85336b5833cbe9259e793a011c5a18878090e60f3a`.
 These candidate files are not uploaded as a release. [Current GitHub checks](https://github.com/Bobydeluxe/MineDock/pull/7/checks) identify their own exact source head; a configured six-platform matrix is not a new executed 0.4.0 matrix.
 
 No live multiplayer, actual map rendering, other OS install/upgrade, ARM64 lifecycle, OS signing/notarization, JVM heap/swap or Windows ACL/firewall inspection is claimed. Incremental deletion/GC and legacy ZIP partial restore are unavailable. Pack release changes remain an explicit migration prerequisite. New graphical options cover bounded existing YAML/JSON primitives; complex structures remain textual. The GIF is a labeled slideshow of actual captures, not a continuous recording or game video. The security document is an internal developer review, not an independent audit. See [the ledger](survival-evolution.md) and [roadmap](roadmap.md).

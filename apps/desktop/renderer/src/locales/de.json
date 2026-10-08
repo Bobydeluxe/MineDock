@@ -766,6 +766,7 @@
   "console.tools": "Konsolenwerkzeuge",
   "console.history": "Historische Logs durchsuchen",
   "console.customMacro": "Eigene Makro",
+  "console.macroName": "Makroname",
   "console.macroHelp": "Makros laufen unter Vorgänge und können dort abgebrochen werden. Maximal 20 Schritte und zehn Minuten Wartezeit.",
   "console.restart5": "In 5 Minuten neu starten",
   "console.saveStop": "Welt speichern und stoppen",

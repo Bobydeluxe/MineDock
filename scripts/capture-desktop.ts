@@ -419,6 +419,9 @@ if (!process.argv.includes('--first-start')) {
     await capture('console-history');
     await page.keyboard.press('Escape');
     await page.getByRole('button', { name: 'Custom macro', exact: true }).click();
+    await page.getByLabel('Macro name', { exact: true }).fill('Evening routine');
+    await page.getByRole('button', { name: 'Add step', exact: true }).click();
+    await page.getByRole('dialog').getByRole('combobox').last().selectOption('backup');
     await capture('console-macro');
     await page.keyboard.press('Escape');
     await page.getByText('Console tools', { exact: true }).click();
