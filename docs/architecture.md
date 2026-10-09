@@ -2,6 +2,8 @@
 
 MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQLite application. There is one main-process application core and one typed preload contract, with no companion web service or parallel backend. The renderer does not own process, filesystem or download APIs.
 
+The 0.5.0 development branch adds typed administration DTOs/Zod schemas and shared version-aware command builders. `AdministrationService` reuses the existing supervisor, player reports, exclusive server locks, operations and backups. `PlayerInventoryService` uses a bounded lossless NBT/SNBT parser, verified stopped-only transactions and startup journal reconciliation. Migration 12 adds local administration events, player safety copies and transaction journals without rewriting existing server/settings/player/task data. Native help discovery is non-destructive and cached; unrecognized responses never establish success or fabricate current values. [Detailed boundaries](player-world-administration.md).
+
 ## Boundaries
 
 `BrowserWindow` retains `sandbox: true`, `contextIsolation: true` and `nodeIntegration: false`. Main validates the sender, main frame, exact URL and Zod input for every named IPC. Preload unwraps structured results into readable typed errors. Native file/folder choices authorize specific imports/exports; they do not grant the renderer arbitrary filesystem access. Production requires this bridge; demo data is selected only by explicit Vite mock mode.

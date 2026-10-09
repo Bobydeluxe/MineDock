@@ -9,6 +9,26 @@ It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
 Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retained.
 
+DEVELOPMENT PREVIEW — 0.5.0 (UNRELEASED; NOT IN THE 0.4.1 DOWNLOAD)
+- Large player profile: Inventory / Actions / History / Notes; real UUID/skin fallback.
+- Actual 36-slot inventory, armor, offhand and 27-slot Ender Chest; known stats only.
+- Strict live / dated saved / unavailable sources; no simulated live player inventory.
+- Bounded lossless Java NBT, stopped-only edits, full verified backup, player safety
+  copy, journal, conflict checks, staged atomic replacement and safe rollback.
+- Exact slot/quantity changes and restoration previews from real retained copies.
+- Typed native give, filtered clear, replace, message, teleport, game mode,
+  moderation, effects, XP, spawn and title forms with engine/version gates.
+- Advanced kill and explicit IP bans; private payloads excluded from local audit.
+- Up to 50 exact selected names, per-player results and cancel-remaining batches.
+- Partial saved-item search and namespace filter; explicit validated IDs as fallback.
+- Native time/weather/difficulty, version-aware gamerules, verified save, player
+  list/seed/border/spawn/locate and collapsed structured advanced world commands.
+- No required plugin/mod/agent. Future/custom formats are read-only; Bedrock and
+  PocketMine storage is not Java NBT. Native sent/unverifiable replies stay honest.
+- Real isolated Paper 1.21.11 / Java 21 world commands and live backup validated;
+  no real connected-client inventory edits or Bedrock/PocketMine gameplay claimed.
+See docs/player-world-administration.md and docs/validation.md for exact limits.
+
 ======================================================================
 1. DESKTOP APPLICATION — IMPLEMENTED
 ======================================================================

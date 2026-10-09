@@ -16,6 +16,10 @@ The current public version is **MineDock 0.4.1** for Windows, Linux and macOS. T
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 
+**Development preview: 0.5.0** adds a large player profile, real saved/live inventory sources, guarded stopped-server inventory editing/restoration, exact selected-player actions and native world controls. It is not in the public 0.4.1 download. Read the [capabilities and safety guide](docs/player-world-administration.md), [validation](docs/validation.md) and [new native screenshots](docs/screenshots/player-world-050/README.md) before testing the branch.
+
+![Unreleased MineDock 0.5.0 player profile — actual Electron with explicitly identified saved QA data](docs/screenshots/player-world-050/player-profile.png)
+
 **New in 0.4.1:** the approved cube icon, full engine build lists, independently pinned Fabric choices, reviewed engine-specific properties and local profile images. The cleaned interface uses neutral black surfaces and direct Dashboard/Backups/Servers/Settings navigation. Notification preferences/history and recovery tools live inside Settings; the global breadcrumb/search strip and decorative ribbons are removed. [UI cleanup](docs/design/cleanup-041/README.md) and [validation](docs/validation.md) document the released interface and exact test coverage.
 
 ## Start using MineDock
@@ -71,7 +75,7 @@ Capabilities control the available actions. A native engine does not show Java m
 
 ## Interface
 
-These are actual MineDock 0.4.1 native Electron captures, refreshed on 9 October 2026 using isolated local profiles and the real preload/core/SQLite services. The mod files are actual verified Modrinth downloads; world/player/administration records are QA fixtures. Active process and console views use an inert external Node child, which is never shipped. They are interface evidence, not Minecraft gameplay. A fresh installation starts empty. See [capture provenance and every current screen](docs/screenshots/README.md).
+These are actual native Electron captures from isolated profiles and the real preload/core/SQLite services. Players, the player profile and Worlds have been refreshed for the **unreleased 0.5.0 preview**; other views show the public 0.4.1 interface. Player inventories use explicitly identified saved QA files; the new world controls use actual RCON values from an authorized isolated Paper 1.21.11 world, without connected clients. Existing active process/console views use an inert external Node child. They are interface evidence, not multiplayer gameplay. See [capture provenance](docs/screenshots/README.md).
 
 | Create a server                                                                             | Manage a server                                                          |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |

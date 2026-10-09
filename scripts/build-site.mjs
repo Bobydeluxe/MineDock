@@ -17,6 +17,12 @@ for (const file of [
   'mods-light.png',
 ])
   await cp(path.join('docs/screenshots', file), path.join(root, 'dist/assets', file));
+await mkdir(path.join(root, 'dist/assets/player-world-050'), { recursive: true });
+for (const file of ['player-profile.png', 'group-actions.png', 'world-controls.png'])
+  await cp(
+    path.join('docs/screenshots/player-world-050', file),
+    path.join(root, 'dist/assets/player-world-050', file),
+  );
 await cp('apps/desktop/renderer/src/assets/engines', path.join(root, 'dist/assets/engines'), {
   recursive: true,
 });

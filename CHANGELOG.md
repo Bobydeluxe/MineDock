@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.5.0 — Unreleased development preview
+
+The public download remains 0.4.1. No existing release executable is replaced.
+
+### Added
+
+- A large player profile with Inventory, Actions, History and Notes, official skin fallback, actual saved stats, 36 inventory slots, armor, offhand and 27 Ender Chest slots.
+- Stopped-server inventory quantity removal, exact-slot empty/replace and previewed restoration from real pre-edit copies, with full verified backup, conflict checks, transaction journal and rollback.
+- Validated native player action forms, partial saved-item search, filtered item removal and advanced confirmations for kill and explicit IP bans.
+- Exact selected-player group actions, per-player results and cancellation of remaining targets.
+- World controls in the existing Worlds page: time, weather, difficulty, categorized gamerules, verified save, announcements, player list, seed, border, spawn and structured advanced commands.
+
+### Improved
+
+- Honest live/saved/unavailable inventory sources, dates and command states; uncertain transport remains not verifiable.
+- Java/Bedrock/PocketMine capability gates, native help checks and Java 1.21.11 rule names; English plus all five existing translations.
+- Local administration history excludes private messages, reasons, IPs, raw commands and replies. SQLite migration 12 preserves existing records.
+
+### Fixed
+
+- Native Minecraft RCON interoperability when adjacent request packets coalesce, while retaining fragmented and bounded response collection.
+- Live backup confirmation accepts the actual concatenated native save reply and verifies save-off/save-on; uncertain resume triggers a reported safety stop.
+- An unrecognized player-list reply no longer invents an empty online list. Group cancellation preserves actual partial results.
+
+### Known issues
+
+- Item search is a partial list from saved player files, not a complete registry. Explicit IDs may still be rejected by the actual server.
+- New/future Java data versions and unknown custom layouts are read-only; Bedrock/PocketMine native inventory storage is unavailable.
+- No real connected-client inventory manipulation or multiplayer session is claimed. The real Paper world test has zero connected players; Bedrock/PocketMine gameplay and exhaustive mod/version combinations remain unvalidated.
+- Stdio replies remain sent, localized/intercepted replies can remain not verifiable, and current weather cannot be read reliably. Safety copies have no automatic garbage collection.
+- Publisher OS signatures/notarization remain unavailable. Publication requires a separate reviewed release, exact native packages/checksums and signed updater metadata.
+
 ## 0.4.1
 
 ### Added

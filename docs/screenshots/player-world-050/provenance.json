@@ -1,0 +1,88 @@
+{
+  "at": "2026-10-09T20:10:14.845Z",
+  "version": "0.5.0",
+  "publicRelease": false,
+  "captures": [
+    {
+      "file": "players.png",
+      "sha256": "d3d859fd551a1c90ae3849f703c9bcf0be3e14b0c3a6a143ccc2566215d695c0",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "player-profile.png",
+      "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "inventory-slot.png",
+      "sha256": "9da79177059c62cb87e5a5bab800a6b11ea3fa77b70a7432325f4da0113bfbe1",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "ender-chest.png",
+      "sha256": "7d5540e0fc6828ef572a6c377d3917c35c9d2c9cf946787e4bc288244f115a93",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "group-actions.png",
+      "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "player-profile-light.png",
+      "sha256": "0159db868d752a6bfc60878df74a3d3db703f0bf5e310217ffc79b4b54029050",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "player-profile-compact.png",
+      "sha256": "a4bf711f991bc9976b8a32c1898c3947a3b359e2305c910f02f64a2b7fb3eb5a",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 900,
+        "height": 760
+      }
+    },
+    {
+      "file": "world-controls.png",
+      "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255",
+      "provenance": "Actual Electron and real isolated Paper 1.21.11 build 132, Java 21, personally accepted EULA; native RCON reads, no connected players, no added plugins. Weather cannot be read natively and remains unavailable.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "gamerules.png",
+      "sha256": "a398658094b9d5ece0b8d4cce983a5eb2d3c18526be317b0945e5341026fcdaa",
+      "provenance": "Actual native Minecraft 1.21.11 gamerule responses from the isolated Paper server; current values read through RCON, not fixtures.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    }
+  ]
+}

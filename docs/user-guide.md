@@ -2,6 +2,8 @@
 
 This guide describes the public **MineDock 0.4.1** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
 
+For the **unreleased 0.5.0 branch**, see [player and world administration](player-world-administration.md): click Player details for actual inventory sources and tabs; stop the server for backed-up file edits/restoration; review exact targets for native actions and groups; use the existing Worlds page for native world controls. These additions are not in the public 0.4.1 download.
+
 ## Create your first survival
 
 1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.

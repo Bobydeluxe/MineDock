@@ -1,0 +1,855 @@
+{
+  "version": "0.5.0",
+  "state": "Unreleased review candidate; not merged, tagged or released",
+  "publicRelease": "0.4.1",
+  "at": "2026-10-09T20:28:08.373Z",
+  "appSource": "815f4a7c6c713df92fa3158f3c3285e841576b09",
+  "local": {
+    "platform": "Windows 11 x64",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unit": {
+      "passed": 249,
+      "skipped": 5,
+      "total": 254,
+      "files": 43
+    },
+    "sourceUI": {
+      "passed": 30,
+      "duration": "6.7m"
+    },
+    "packaged": {
+      "passed": 14,
+      "duration": "6.4m"
+    },
+    "candidatePortable": {
+      "sha256": "44b55a44b1824c70cdf4162a693187d6f90dcc50091189e65f66d7abdad11ffd",
+      "size": 113605428,
+      "osPublisherSignature": "NotSigned"
+    },
+    "candidateSetup": {
+      "sha256": "a19a1c54c28e4fe55a3f62c003a90aa6cb641f3a918c73ce38669db62571ffdf",
+      "size": 113894839
+    }
+  },
+  "ci": {
+    "sourceUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/37985146021",
+    "sourceUnit": {
+      "passed": 249,
+      "skipped": 5,
+      "total": 254
+    },
+    "sourceUI": {
+      "passed": 30,
+      "duration": "7.7m"
+    },
+    "nativeUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/37985219748",
+    "nativeTests": [
+      {
+        "jobId": 114005421346,
+        "platform": "package (ubuntu-24.04, x64, build:linux)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 249,
+          "skipped": 5,
+          "total": 254
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 0,
+          "duration": "6.8m"
+        }
+      },
+      {
+        "jobId": 114005421560,
+        "platform": "package (macos-15-intel, x64, build:mac)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 250,
+          "skipped": 4,
+          "total": 254
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 1,
+          "duration": "1.4m"
+        }
+      },
+      {
+        "jobId": 114005421680,
+        "platform": "package (macos-15, arm64, build:mac)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 250,
+          "skipped": 4,
+          "total": 254
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 1,
+          "duration": "1.1m"
+        }
+      },
+      {
+        "jobId": 114005421698,
+        "platform": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 249,
+          "skipped": 5,
+          "total": 254
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 0,
+          "duration": "6.6m"
+        }
+      },
+      {
+        "jobId": 114005421726,
+        "platform": "package (windows-11-arm, arm64, build:windows)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 249,
+          "skipped": 5,
+          "total": 254
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 0,
+          "duration": "7.1m"
+        }
+      },
+      {
+        "jobId": 114005421754,
+        "platform": "package (windows-2025, x64, build:windows)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 249,
+          "skipped": 5,
+          "total": 254
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 0,
+          "duration": "7.5m"
+        }
+      }
+    ],
+    "integrity": {
+      "runId": 37985219748,
+      "head": "815f4a7c6c713df92fa3158f3c3285e841576b09",
+      "version": "0.5.0",
+      "platforms": 6,
+      "installers": 12,
+      "signaturesVerified": 6
+    },
+    "artifacts": [
+      {
+        "platform": "win32",
+        "arch": "x64",
+        "target": "nsis",
+        "filename": "MineDock-0.5.0-Setup-x64.exe",
+        "size": 113894517,
+        "sha256": "0369accbbec99670d32f3240f956b76167294f7f9c11785855a27c33757e1b03"
+      },
+      {
+        "platform": "win32",
+        "arch": "x64",
+        "target": "portable",
+        "filename": "MineDock-0.5.0-Portable-x64.exe",
+        "size": 113605029,
+        "sha256": "3ee562bf984fa17ef00aa7f3ceb91c89bea37a80327acdc942cbdb26676a62ee"
+      },
+      {
+        "platform": "win32",
+        "arch": "arm64",
+        "target": "nsis",
+        "filename": "MineDock-0.5.0-Setup-arm64.exe",
+        "size": 107787061,
+        "sha256": "1543760b338fb1029c6e2bbdce57605cc9412b239d88a2bf7d60ce83269fffaf"
+      },
+      {
+        "platform": "win32",
+        "arch": "arm64",
+        "target": "portable",
+        "filename": "MineDock-0.5.0-Portable-arm64.exe",
+        "size": 107498124,
+        "sha256": "0dd08efec0891abf5a6c4a94f984ff5b00f75ec087be5b9b8012fee6868e17bf"
+      },
+      {
+        "platform": "linux",
+        "arch": "x64",
+        "target": "appimage",
+        "filename": "MineDock-0.5.0-x86_64.AppImage",
+        "size": 128536416,
+        "sha256": "023a63efb902a02f86ac765301baa81b750b64c44426258f1a10e085bd3fcdda"
+      },
+      {
+        "platform": "linux",
+        "arch": "x64",
+        "target": "deb",
+        "filename": "MineDock-0.5.0-amd64.deb",
+        "size": 102127056,
+        "sha256": "056182f6952d59504595bb217268ee2e50e4c4ed950d0b7f18edddac0c39bddb"
+      },
+      {
+        "platform": "linux",
+        "arch": "arm64",
+        "target": "appimage",
+        "filename": "MineDock-0.5.0-arm64.AppImage",
+        "size": 129778942,
+        "sha256": "ef0762cb7c9ca83c50f04b1b21626c9b51eb11980035a9bf1c836f9c7f59e2a1"
+      },
+      {
+        "platform": "linux",
+        "arch": "arm64",
+        "target": "deb",
+        "filename": "MineDock-0.5.0-arm64.deb",
+        "size": 97275664,
+        "sha256": "c5c57d4ff80fc2c41120924e3a058c1280fc5f674ad23110507c87046953345d"
+      },
+      {
+        "platform": "darwin",
+        "arch": "x64",
+        "target": "maczip",
+        "filename": "MineDock-0.5.0-x64.zip",
+        "size": 135517880,
+        "sha256": "5414deaf974c4f9da939a42438ca03fd00d76584585201c6df63aa2fae4f08b4"
+      },
+      {
+        "platform": "darwin",
+        "arch": "x64",
+        "target": "dmg",
+        "filename": "MineDock-0.5.0-x64.dmg",
+        "size": 136368361,
+        "sha256": "17b05c2075880e335e65e8e63e5dcaaa032f9b12b64c8d9b2405ffa8ab6dc32e"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "target": "maczip",
+        "filename": "MineDock-0.5.0-arm64.zip",
+        "size": 131616614,
+        "sha256": "bccf8b679c7757a30c844a9696342bd3627aa61632f501ab4a014e194e6b19e9"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "target": "dmg",
+        "filename": "MineDock-0.5.0-arm64.dmg",
+        "size": 132520731,
+        "sha256": "6eaa84d05141e6666f0578f3d349152ccd398ff99d3c4344c711c34140c768e9"
+      }
+    ],
+    "metadata": [
+      {
+        "filename": "update-win32-x64.json",
+        "sha256": "a8e585d2c39f9a12de8848ec0391e5a6977d9b498e6d40438c9202606b0d5664",
+        "size": 1298,
+        "keyId": "9c97b399cb170ae718721d4346d0ed38c5e765259669138026cc1b1c9eb4e14d",
+        "signatureVerified": true
+      },
+      {
+        "filename": "update-win32-arm64.json",
+        "sha256": "f97b4ad16fdd7cf8f725e6a1e46d4e0837797cc87a78e6b5c5b7905a98f9d96f",
+        "size": 1314,
+        "keyId": "9c97b399cb170ae718721d4346d0ed38c5e765259669138026cc1b1c9eb4e14d",
+        "signatureVerified": true
+      },
+      {
+        "filename": "update-linux-x64.json",
+        "sha256": "99d4f33c368ec996d4301518270be66a9359d79986cf38a05742bbea179a8be2",
+        "size": 1282,
+        "keyId": "9c97b399cb170ae718721d4346d0ed38c5e765259669138026cc1b1c9eb4e14d",
+        "signatureVerified": true
+      },
+      {
+        "filename": "update-linux-arm64.json",
+        "sha256": "3b4d2b5840b66e80edd857087a1fcdd50ea3a6b6dea2e749884a5eb2b2689d11",
+        "size": 1282,
+        "keyId": "9c97b399cb170ae718721d4346d0ed38c5e765259669138026cc1b1c9eb4e14d",
+        "signatureVerified": true
+      },
+      {
+        "filename": "update-darwin-x64.json",
+        "sha256": "edac53a87c8ac722a448f4621d6703736f8ecd25998e3753f85d151868b76157",
+        "size": 1254,
+        "keyId": "9c97b399cb170ae718721d4346d0ed38c5e765259669138026cc1b1c9eb4e14d",
+        "signatureVerified": true
+      },
+      {
+        "filename": "update-darwin-arm64.json",
+        "sha256": "3d3d62ff18f973f44008e8f70998578fda35b1f7824a32ab2b84e3952a90f5fb",
+        "size": 1270,
+        "keyId": "9c97b399cb170ae718721d4346d0ed38c5e765259669138026cc1b1c9eb4e14d",
+        "signatureVerified": true
+      }
+    ],
+    "availability": "GitHub Actions review artifacts only; no public 0.5.0 release URLs are claimed"
+  },
+  "actualMinecraft": {
+    "at": "2026-10-09T20:04:58.139Z",
+    "application": "0.5.0",
+    "engine": "paper",
+    "minecraft": "1.21.11",
+    "paperBuild": "132",
+    "jarSha256": "5ffef465eeeb5f2a3c23a24419d97c51afd7dbb4923ff42df9a3f58bba1ccfba",
+    "java": 21,
+    "eulaPersonallyAccepted": true,
+    "isolated": true,
+    "pluginsAdded": false,
+    "nativeWorldCommands": [
+      {
+        "input": {
+          "action": "time",
+          "value": "noon"
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Set the time to 6000",
+            "at": "2026-10-09T20:04:49.789Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "weather",
+          "value": "clear",
+          "seconds": 60
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Set the weather to clear",
+            "at": "2026-10-09T20:04:49.797Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "difficulty",
+          "value": "hard"
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "The difficulty has been set to Hard",
+            "at": "2026-10-09T20:04:49.802Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "gamerule",
+          "id": "minecraft:keep_inventory",
+          "value": true
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Gamerule keep_inventory is now set to: true",
+            "at": "2026-10-09T20:04:49.809Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "worldborder",
+          "diameter": 1000,
+          "center": {
+            "x": 0,
+            "z": 0
+          }
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Set the center of the world border to 0.50, 0.50",
+            "at": "2026-10-09T20:04:49.815Z"
+          },
+          {
+            "state": "confirmed",
+            "response": "Set the world border to 1000.0 block(s) wide",
+            "at": "2026-10-09T20:04:49.820Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "worldspawn",
+          "coordinates": {
+            "x": 0,
+            "y": 90,
+            "z": 0
+          }
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Set the world spawn point to 0, 90, 0 [0.0, 0.0] in minecraft:overworld",
+            "at": "2026-10-09T20:04:49.826Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "list"
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "There are 0 of a max of 2 players online:",
+            "at": "2026-10-09T20:04:49.834Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "seed"
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Seed: [123456789]",
+            "at": "2026-10-09T20:04:49.838Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "tick",
+          "mode": "rate",
+          "rate": 20
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "Set the target tick rate to 20.0 per second",
+            "at": "2026-10-09T20:04:49.845Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "save"
+        },
+        "results": [
+          {
+            "state": "confirmed",
+            "response": "World saved and a verified backup created: 00d06b47-daf0-4a4e-83ae-0a48785f5baa",
+            "at": "2026-10-09T20:04:54.741Z"
+          }
+        ]
+      },
+      {
+        "input": {
+          "action": "reload"
+        },
+        "results": [
+          {
+            "state": "sent",
+            "response": "Reloading!",
+            "at": "2026-10-09T20:04:55.224Z"
+          }
+        ]
+      }
+    ],
+    "queriedWorldState": {
+      "actions": [
+        "time",
+        "difficulty",
+        "announce",
+        "list",
+        "weather",
+        "gamerule",
+        "worldspawn",
+        "summon",
+        "setblock",
+        "save",
+        "seed",
+        "worldborder",
+        "reload",
+        "team",
+        "scoreboard",
+        "locate",
+        "tick"
+      ],
+      "rules": [
+        {
+          "id": "minecraft:keep_inventory",
+          "key": "keepInventory",
+          "category": "players",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:advance_time",
+          "key": "doDaylightCycle",
+          "category": "world",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:advance_weather",
+          "key": "doWeatherCycle",
+          "category": "world",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:mob_griefing",
+          "key": "mobGriefing",
+          "category": "mobs",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:spawn_mobs",
+          "key": "doMobSpawning",
+          "category": "mobs",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:mob_drops",
+          "key": "doMobLoot",
+          "category": "mobs",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:show_death_messages",
+          "key": "showDeathMessages",
+          "category": "messages",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:natural_health_regeneration",
+          "key": "naturalRegeneration",
+          "category": "players",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:players_sleeping_percentage",
+          "key": "playersSleepingPercentage",
+          "category": "players",
+          "type": "integer",
+          "min": 0,
+          "max": 1000000,
+          "value": 100
+        },
+        {
+          "id": "minecraft:spawn_phantoms",
+          "key": "doInsomnia",
+          "category": "mobs",
+          "type": "boolean",
+          "value": true
+        },
+        {
+          "id": "minecraft:fire_spread_radius_around_player",
+          "key": "fireSpread",
+          "category": "world",
+          "type": "integer",
+          "min": -1,
+          "max": 1000000,
+          "value": 128
+        }
+      ],
+      "source": "live",
+      "warnings": [],
+      "time": 6146,
+      "difficulty": "hard",
+      "at": "2026-10-09T20:04:57.256Z"
+    },
+    "backupVerified": true,
+    "stoppedGracefully": true,
+    "onlinePlayers": 0,
+    "gameplayPlayerActionsTested": false,
+    "livePlayerInventoryTested": false
+  },
+  "actualNativeUpgrade": {
+    "baseline": "0.4.1",
+    "candidate": "0.5.0",
+    "baselinePortableSha256": "b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87",
+    "initialSchema": 11,
+    "legacyManual": false,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-09T20:11:52.059Z",
+    "oldVersion": "0.4.1",
+    "signatureAndDownload": "verified by old production application",
+    "helperRelaunch": "completed; actual 0.5.0 startup log observed",
+    "replacedBinarySha256": "44b55a44b1824c70cdf4162a693187d6f90dcc50091189e65f66d7abdad11ffd",
+    "finalSchema": 12,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "preMigrationDatabaseBackup": {
+      "schema": 11,
+      "quickCheck": "ok",
+      "playersNotesAndTasksPreserved": true
+    },
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "sqliteDatabase": true,
+      "playerHistory": true,
+      "playerObservations": true,
+      "playerFiles": true,
+      "playerInventoryBytes": true,
+      "privatePlayerNotes": true,
+      "scheduledTasks": true,
+      "encryptedRconSecret": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    }
+  },
+  "currentPackagedPublicFeed": {
+    "at": "2026-10-09T20:27:12.840Z",
+    "packaged": true,
+    "currentVersion": "0.5.0",
+    "feed": "real public GitHub feed; no interception",
+    "upToDate": true
+  },
+  "captures": {
+    "at": "2026-10-09T20:10:14.845Z",
+    "version": "0.5.0",
+    "publicRelease": false,
+    "captures": [
+      {
+        "file": "players.png",
+        "sha256": "d3d859fd551a1c90ae3849f703c9bcf0be3e14b0c3a6a143ccc2566215d695c0",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile.png",
+        "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "inventory-slot.png",
+        "sha256": "9da79177059c62cb87e5a5bab800a6b11ea3fa77b70a7432325f4da0113bfbe1",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "ender-chest.png",
+        "sha256": "7d5540e0fc6828ef572a6c377d3917c35c9d2c9cf946787e4bc288244f115a93",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "group-actions.png",
+        "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile-light.png",
+        "sha256": "0159db868d752a6bfc60878df74a3d3db703f0bf5e310217ffc79b4b54029050",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile-compact.png",
+        "sha256": "a4bf711f991bc9976b8a32c1898c3947a3b359e2305c910f02f64a2b7fb3eb5a",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 900,
+          "height": 760
+        }
+      },
+      {
+        "file": "world-controls.png",
+        "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255",
+        "provenance": "Actual Electron and real isolated Paper 1.21.11 build 132, Java 21, personally accepted EULA; native RCON reads, no connected players, no added plugins. Weather cannot be read natively and remains unavailable.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "gamerules.png",
+        "sha256": "a398658094b9d5ece0b8d4cce983a5eb2d3c18526be317b0945e5341026fcdaa",
+        "provenance": "Actual native Minecraft 1.21.11 gamerule responses from the isolated Paper server; current values read through RCON, not fixtures.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      }
+    ]
+  },
+  "website": {
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "version": 7,
+    "source": "83c3310e04c563eb2accc3b3a90b339136d10dfb",
+    "status": "succeeded",
+    "audience": "public; unchanged",
+    "preview": "Unreleased 0.5.0; public download remains 0.4.1",
+    "widths": [
+      {
+        "width": 390,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": [],
+        "previewImageHashes": [
+          {
+            "name": "player-profile.png",
+            "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771"
+          },
+          {
+            "name": "group-actions.png",
+            "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807"
+          },
+          {
+            "name": "world-controls.png",
+            "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255"
+          }
+        ],
+        "distinctPublicDownloadUrls": 13
+      },
+      {
+        "width": 768,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": [],
+        "previewImageHashes": [
+          {
+            "name": "player-profile.png",
+            "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771"
+          },
+          {
+            "name": "group-actions.png",
+            "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807"
+          },
+          {
+            "name": "world-controls.png",
+            "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255"
+          }
+        ],
+        "distinctPublicDownloadUrls": 13
+      },
+      {
+        "width": 1280,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": [],
+        "previewImageHashes": [
+          {
+            "name": "player-profile.png",
+            "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771"
+          },
+          {
+            "name": "group-actions.png",
+            "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807"
+          },
+          {
+            "name": "world-controls.png",
+            "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255"
+          }
+        ],
+        "distinctPublicDownloadUrls": 13
+      },
+      {
+        "width": 1440,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": [],
+        "previewImageHashes": [
+          {
+            "name": "player-profile.png",
+            "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771"
+          },
+          {
+            "name": "group-actions.png",
+            "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807"
+          },
+          {
+            "name": "world-controls.png",
+            "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255"
+          }
+        ],
+        "distinctPublicDownloadUrls": 13
+      },
+      {
+        "width": 1920,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": [],
+        "previewImageHashes": [
+          {
+            "name": "player-profile.png",
+            "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771"
+          },
+          {
+            "name": "group-actions.png",
+            "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807"
+          },
+          {
+            "name": "world-controls.png",
+            "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255"
+          }
+        ],
+        "distinctPublicDownloadUrls": 13
+      }
+    ],
+    "packaging": "Sites shared static-build preparation and Windows native tar; standard wrapper requires unavailable WSL"
+  },
+  "remainingLimits": [
+    "No real connected-client player/inventory gameplay test",
+    "No Bedrock/PocketMine gameplay or exhaustive historical/mod combinations",
+    "Partial saved-item IDs; no complete vanilla or mod registry; generic item symbols",
+    "Future Java NBT/custom layouts read-only; Bedrock/PocketMine inventory storage unavailable",
+    "Localized/intercepted replies can be unverifiable; stdio remains sent; weather cannot be read reliably",
+    "Player safety copies have no automatic garbage collection",
+    "No Windows/Apple OS publisher certificates or notarization; metadata signatures are separate",
+    "Linux/macOS/ARM64 installer and native updater lifecycles not validated",
+    "Candidate update transport controlled; public 0.5.0 feed/download checks require approved publication"
+  ]
+}

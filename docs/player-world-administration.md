@@ -1,0 +1,55 @@
+# Player and world administration — 0.5.0 development preview
+
+This work is on the development branch. **The public download remains 0.4.1.** No server extension is installed for administration. Actual native command replies and actual player files determine what MineDock can display or change. See [validation](validation.md) and [native capture provenance](screenshots/player-world-050/provenance.json).
+
+## Player profile and inventory
+
+Open **Players → Player details** for a large, internally scrolling profile. Inventory, Actions, History and Notes retain the existing UUID/XUID, official Mojang skin cache/fallback, whitelist/operator/ban records, observed sessions and private notes. Health, hunger, saturation, experience, level and game mode are shown only when read from a compatible source. Observed time covers periods when MineDock supervised the server; gaps remain explicit.
+
+The inventory contains 36 slots (the first nine are the hotbar), four armor slots, one offhand and 27 Ender Chest slots. IDs, quantities, damage, enchantments and readable components come from actual data. Generic item symbols and ID tooltips avoid redistributing Minecraft textures or inventing an item image. Click a slot to inspect its full ID and metadata.
+
+**Live inventory** requires a connected Java player, an owned running server, a readable native `data get entity` response and a matching UUID. Bounded SNBT parsing rejects ambiguous, oversized, malformed or mismatched replies. Missing, localized or intercepted responses fall back to **Last saved inventory**, with the file timestamp and an explicit stale-data warning. Reading a `.dat` file while the server runs never makes it live. Bedrock and PocketMine storage is not treated as Java NBT.
+
+## Safe saved-file changes and restoration
+
+Stop the server completely before editing any player file, including a disconnected player's data. An owned process, orphan, PID or transition prevents writing. Java DataVersions 1519–4671 are editable only when the recognized inventory layout is unambiguous. Future data versions, custom equipment/slots and unsupported formats are read-only. The reader supports legacy `Inventory` armor/offhand, modern `equipment`, item `Count`/`count` and components. The 26.x `players/data` path is recognized, but those newer data versions are read-only until validated.
+
+Remove a precise quantity, empty one exact slot or replace it after reviewing the full player name. A replacement intentionally changes that item and its metadata; untouched items, modded IDs, unknown fields and exact long values are preserved. An optimistic SHA-256 conflict check, full verified backup, separately verified and synced player copy, persistent journal and verified temporary file precede atomic replacement. A failed verification rolls back only when no concurrent change occurred. An uncertain recovery blocks server launch and further writes; restore the preserved full backup and restart MineDock to reconcile it.
+
+Restoration uses a real pre-edit copy. Its preview lists changed slots and counts, expires after five minutes and pins both source and current hashes. Restoration changes inventory/Ender Chest/equipment only; it preserves the current health, position and other player fields. Cross-DataVersion restore is refused. Safety copies are retained; automatic garbage collection is not implemented.
+
+## Native player actions
+
+On a ready server, forms build validated native commands for give, filtered clear, exact slot replacement, private message, teleport, game mode, kick, ban/pardon, OP/DeOP, whitelist/allowlist, effects, XP, individual spawn and title/subtitle/actionbar. Most actions require a known online player. Explicit, typed offline moderation names can be submitted for native account resolution; supplied UUIDs must still match a known identity. OP actions warn about privileges. Kill and explicitly entered IP bans are collapsed under Advanced and require exact confirmation. IPs are never inferred from a name.
+
+The item picker searches IDs actually observed in saved player files from this Java server. It is a **partial saved-item list**, not a complete version registry or proof that a mod is still installed. Namespace filtering and explicit validated IDs are available. Unknown IDs are resolved or refused by the actual native server. Quantities are bounded. Filtered clear always includes an item ID and amount; it is never presented as removal from one slot. Exact live slot replacement uses the version-specific `item replace`/`replaceitem` command, never an on-disk write.
+
+Results distinguish **Confirmed**, **Command sent**, **Not verifiable** and **Failed**. A transport failure may occur after execution and remains not verifiable; inspect the console before repeating it. A reload acknowledgement is sent, not proof that reloading has completed. Audit records retain date, player/UUID, action, safe parameters and actual result state; they omit private messages, reasons, IPs, raw commands and replies. Native server logs can independently retain their own command output.
+
+Select up to 50 exact names for group messages, teleport, game mode, give, effects, whitelist and advanced kick. Review every name and type the exact comma-separated list. Commands run one player at a time, report partial failures and can cancel remaining targets. Completed commands cannot be undone by cancellation. MineDock never substitutes `@a` for the selection.
+
+## World controls and game rules
+
+The existing server **Worlds** page contains day/noon/night/midnight, optional custom time, clear/rain/thunder and difficulty controls. Presets generate version-correct native arguments, and only explicitly selected changes are applied. Current time, difficulty and rule values are displayed only when actual replies can be parsed; current weather is unavailable. A query does not fabricate a selected toggle.
+
+Searchable, categorized rules cover inventory retention, daylight/weather cycles, mob griefing/spawning/drops, death messages, regeneration, sleep, phantoms and fire where that version supports them. Java 1.21.11 uses namespaced renamed rules; fire uses a distance value rather than the removed boolean. These are Minecraft gamerules, not `server.properties` or Paper settings.
+
+More controls provide announcement, verified world backup, the existing current-player-list service, seed, border, world spawn and locate. Advanced contains structured summon/setblock/team/scoreboard/tick/reload forms with server-name confirmation. Resource fields accept validated explicit IDs; MineDock does not claim a complete structure/biome/entity registry. Block and spawn coordinates must be integers; world bounds and tick rates are limited. Reload warns about datapacks and possible plugin/mod effects.
+
+World save delegates to the existing backup service. Native confirmations of `save-off`, `save-all flush` and `save-on` are required. An unverifiable save aborts the archive; saving is always resumed in `finally`. If resume cannot be verified, MineDock stops the server for safety and reports the failure.
+
+## Engine and version boundaries
+
+| Engine                                          | Native controls                                                                                                                                | Saved inventory                              | Evidence and limits                                                                                                                                                                                                     |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Vanilla, Paper, Purpur, Fabric, Forge, NeoForge | Version-gated Java forms; modern extended actions from 1.13; `item` from 1.17, locate variants from 1.19, tick from 1.20.3                     | Recognized Java layouts only; stopped writes | Paper/Purpur use `minecraft:` roots. Non-destructive native help removes explicitly missing commands when readable. Mods/plugins can alter behavior; every reply is still classified.                                   |
+| Bedrock Dedicated Server                        | Validated Bedrock give/clear/replaceitem, messaging, teleport, game mode, effects, XP, spawn, titleraw and allowlist; supported world commands | Unavailable                                  | Stdio commands are sent, not falsely confirmed. Java slot/storage parsing, worldborder, native persistent bans and Java advanced commands are not exposed. Selective effect removal and negative XP points are refused. |
+| PocketMine                                      | Limited messaging/teleport/game mode/give/moderation plus time/difficulty/announcement/list                                                    | Unavailable                                  | No guessed Java storage, effects/XP/slot editor or advanced Java world commands. Replies through stdio remain sent.                                                                                                     |
+
+All eight existing engines remain selectable. Unknown versions and unsupported variants are conservative. Runtime help proves command availability, not universal mod/plugin semantics.
+
+## Validation and primary format sources
+
+Automated tests exercise actual local files, transactions, fault rollback, conflicts, bounded parsing, exact commands, partial batches, IPC and native Electron UI. A personally authorized isolated Paper 1.21.11 build 132 / Java 21 world tests actual native world commands and a verified live backup, with zero connected players and no added plugins. No real client inventory manipulation, multiplayer client session, Bedrock/PocketMine gameplay or exhaustive historical/mod combinations are claimed.
+
+Version mappings follow Mojang's [1.21.5 equipment/component changes](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-5), [1.21.11 rule registry changes](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-21-11), [26.1 player paths](https://www.minecraft.net/en-us/article/minecraft-java-edition-26-1) and [1.19.4 weather duration syntax](https://www.minecraft.net/en-us/article/minecraft-java-edition-1-19-4). Bedrock adaptations use Microsoft's [replaceitem reference](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/commandsreference/examples/commands/replaceitem?view=minecraft-bedrock-stable) and related official command references. These sources establish syntax/format; the validation record identifies what was actually executed.
