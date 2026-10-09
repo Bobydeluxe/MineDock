@@ -2,7 +2,7 @@
   "version": "0.5.0",
   "state": "Unreleased review candidate; not merged, tagged or released",
   "publicRelease": "0.4.1",
-  "at": "2026-10-09T20:28:08.373Z",
+  "at": "2026-10-09T20:30:13.992Z",
   "appSource": "815f4a7c6c713df92fa3158f3c3285e841576b09",
   "local": {
     "platform": "Windows 11 x64",
@@ -573,6 +573,50 @@
     "livePlayerInventoryTested": false
   },
   "actualNativeUpgrade": {
+    "baseline": "0.4.1",
+    "candidate": "0.5.0",
+    "baselinePortableSha256": "b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87",
+    "initialSchema": 11,
+    "legacyManual": false,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-09T20:29:07.020Z",
+    "oldVersion": "0.4.1",
+    "signatureAndDownload": "verified by old production application",
+    "helperRelaunch": "completed; actual 0.5.0 startup log observed",
+    "replacedBinarySha256": "3ee562bf984fa17ef00aa7f3ceb91c89bea37a80327acdc942cbdb26676a62ee",
+    "finalSchema": 12,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "preMigrationDatabaseBackup": {
+      "schema": 11,
+      "quickCheck": "ok",
+      "playersNotesAndTasksPreserved": true
+    },
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "sqliteDatabase": true,
+      "playerHistory": true,
+      "playerObservations": true,
+      "playerFiles": true,
+      "playerInventoryBytes": true,
+      "privatePlayerNotes": true,
+      "scheduledTasks": true,
+      "encryptedRconSecret": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    },
+    "candidateSource": "Exact verified GitHub Actions Windows x64 Portable artifact"
+  },
+  "actualNativeUpgradeLocal": {
     "baseline": "0.4.1",
     "candidate": "0.5.0",
     "baselinePortableSha256": "b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87",
