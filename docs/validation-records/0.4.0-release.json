@@ -1,0 +1,988 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-09",
+  "sourceHead": "2b977c2472b71559c9e8f8c78f5c4c7b79293a33",
+  "local": {
+    "platform": "Windows 11 x64",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unit": {
+      "passed": 214,
+      "skipped": 4,
+      "total": 218,
+      "files": 37
+    },
+    "sourceUI": {
+      "passed": 26,
+      "duration": "4.8m"
+    },
+    "packaged": {
+      "passed": 10,
+      "duration": "4.4m"
+    },
+    "screenshots": {
+      "png": 38,
+      "gifFrames": 9,
+      "refreshed": "2026-10-09"
+    },
+    "documentationLinks": "checked separately"
+  },
+  "native": {
+    "workflowRun": 37917545004,
+    "sourceHead": "2b977c2472b71559c9e8f8c78f5c4c7b79293a33",
+    "matrix": [
+      {
+        "os": "macos-15-intel",
+        "architecture": "x64",
+        "jobId": 113777304334,
+        "conclusion": "success",
+        "unit": {
+          "passed": 214,
+          "skipped": 4,
+          "total": 218,
+          "files": 37
+        },
+        "packaged": {
+          "passed": 9,
+          "skipped": 1,
+          "duration": "58.4s"
+        },
+        "official": {
+          "at": "2026-10-09T10:27:43.957Z",
+          "platform": "darwin",
+          "architecture": "x64",
+          "eulaAccepted": false,
+          "minecraftExecuted": false,
+          "catalogs": [
+            {
+              "engine": "vanilla",
+              "catalog": "validated",
+              "versions": 103,
+              "version": "1.21.11",
+              "build": "1.21.11",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "paper",
+              "catalog": "validated",
+              "versions": 55,
+              "version": "1.21.11",
+              "build": "132",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "purpur",
+              "catalog": "validated",
+              "versions": 41,
+              "version": "1.21.11",
+              "build": "2568",
+              "java": 21,
+              "officialHash": "md5"
+            },
+            {
+              "engine": "fabric",
+              "catalog": "validated",
+              "versions": 48,
+              "version": "1.21.11",
+              "build": "0.19.5@1.1.2",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "forge",
+              "catalog": "validated",
+              "versions": 78,
+              "version": "1.21.11",
+              "build": "1.21.11-61.2.1",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "neoforge",
+              "catalog": "validated",
+              "versions": 13,
+              "version": "1.21.11",
+              "build": "21.11.45",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "bedrock",
+              "catalog": "unavailable",
+              "reason": "The official Bedrock server is available for Windows/Linux x64."
+            },
+            {
+              "engine": "pocketmine",
+              "catalog": "validated",
+              "versions": 99,
+              "version": "5.44.3",
+              "build": "5.44.3",
+              "java": 0,
+              "officialHash": "sha256",
+              "minecraftVersion": "1.26.30"
+            }
+          ],
+          "java": {
+            "version": "21.0.12.1",
+            "architecture": "x64",
+            "probe": "validated"
+          },
+          "php": {
+            "version": "8.2.30",
+            "zts": true,
+            "architecture": "x64",
+            "probe": "validated",
+            "pocketmine": "5.44.3"
+          },
+          "content": {
+            "hangarProjects": 20,
+            "hangarVersions": 200,
+            "icon": true,
+            "crossplay": {
+              "supported": true,
+              "geyserInstalled": true,
+              "floodgateInstalled": true,
+              "configured": true,
+              "configPath": "plugins/Geyser-Spigot/config.yml",
+              "port": 30333,
+              "authType": "floodgate"
+            },
+            "managed": [
+              {
+                "title": "Geyser",
+                "provider": "modrinth",
+                "version": "2.11.3-b1249"
+              },
+              {
+                "title": "Floodgate",
+                "provider": "geyser",
+                "version": "2.2.5 build 141"
+              },
+              {
+                "title": "ViaVersion",
+                "provider": "modrinth",
+                "version": "5.12.1"
+              }
+            ]
+          }
+        },
+        "live": {
+          "at": "2026-10-09T10:28:38.614Z",
+          "paperBuild": "132",
+          "java": 21,
+          "paperVersions": 55,
+          "vanillaVersions": 103,
+          "eulaAccepted": false,
+          "bootReachedEula": true,
+          "modrinthResults": 24
+        }
+      },
+      {
+        "os": "windows-2025",
+        "architecture": "x64",
+        "jobId": 113777304571,
+        "conclusion": "success",
+        "unit": {
+          "passed": 214,
+          "skipped": 4,
+          "total": 218,
+          "files": 37
+        },
+        "packaged": {
+          "passed": 10,
+          "skipped": 0,
+          "duration": "5.2m"
+        },
+        "official": {
+          "at": "2026-10-09T10:29:09.306Z",
+          "platform": "win32",
+          "architecture": "x64",
+          "eulaAccepted": false,
+          "minecraftExecuted": false,
+          "catalogs": [
+            {
+              "engine": "vanilla",
+              "catalog": "validated",
+              "versions": 103,
+              "version": "1.21.11",
+              "build": "1.21.11",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "paper",
+              "catalog": "validated",
+              "versions": 55,
+              "version": "1.21.11",
+              "build": "132",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "purpur",
+              "catalog": "validated",
+              "versions": 41,
+              "version": "1.21.11",
+              "build": "2568",
+              "java": 21,
+              "officialHash": "md5"
+            },
+            {
+              "engine": "fabric",
+              "catalog": "validated",
+              "versions": 48,
+              "version": "1.21.11",
+              "build": "0.19.5@1.1.2",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "forge",
+              "catalog": "validated",
+              "versions": 78,
+              "version": "1.21.11",
+              "build": "1.21.11-61.2.1",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "neoforge",
+              "catalog": "validated",
+              "versions": 13,
+              "version": "1.21.11",
+              "build": "21.11.45",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "bedrock",
+              "catalog": "validated",
+              "versions": 1,
+              "version": "1.26.52.3",
+              "build": "1.26.52.3",
+              "java": 0,
+              "officialHash": "not supplied"
+            },
+            {
+              "engine": "pocketmine",
+              "catalog": "validated",
+              "versions": 99,
+              "version": "5.44.3",
+              "build": "5.44.3",
+              "java": 0,
+              "officialHash": "sha256",
+              "minecraftVersion": "1.26.30"
+            }
+          ],
+          "java": {
+            "version": "21.0.12.1",
+            "architecture": "x64",
+            "probe": "validated"
+          },
+          "php": {
+            "version": "8.2.30",
+            "zts": true,
+            "architecture": "x64",
+            "probe": "validated",
+            "pocketmine": "5.44.3"
+          },
+          "content": {
+            "hangarProjects": 20,
+            "hangarVersions": 200,
+            "icon": true,
+            "crossplay": {
+              "supported": true,
+              "geyserInstalled": true,
+              "floodgateInstalled": true,
+              "configured": true,
+              "configPath": "plugins/Geyser-Spigot/config.yml",
+              "port": 30333,
+              "authType": "floodgate"
+            },
+            "managed": [
+              {
+                "title": "Geyser",
+                "provider": "modrinth",
+                "version": "2.11.3-b1249"
+              },
+              {
+                "title": "Floodgate",
+                "provider": "geyser",
+                "version": "2.2.5 build 141"
+              },
+              {
+                "title": "ViaVersion",
+                "provider": "modrinth",
+                "version": "5.12.1"
+              }
+            ]
+          }
+        },
+        "live": {
+          "at": "2026-10-09T10:29:51.168Z",
+          "paperBuild": "132",
+          "java": 21,
+          "paperVersions": 55,
+          "vanillaVersions": 103,
+          "eulaAccepted": false,
+          "bootReachedEula": true,
+          "modrinthResults": 24
+        }
+      },
+      {
+        "os": "windows-11-arm",
+        "architecture": "arm64",
+        "jobId": 113777304573,
+        "conclusion": "success",
+        "unit": {
+          "passed": 214,
+          "skipped": 4,
+          "total": 218,
+          "files": 37
+        },
+        "packaged": {
+          "passed": 10,
+          "skipped": 0,
+          "duration": "5.0m"
+        },
+        "official": {
+          "at": "2026-10-09T10:30:10.931Z",
+          "platform": "win32",
+          "architecture": "arm64",
+          "eulaAccepted": false,
+          "minecraftExecuted": false,
+          "catalogs": [
+            {
+              "engine": "vanilla",
+              "catalog": "validated",
+              "versions": 103,
+              "version": "1.21.11",
+              "build": "1.21.11",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "paper",
+              "catalog": "validated",
+              "versions": 55,
+              "version": "1.21.11",
+              "build": "132",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "purpur",
+              "catalog": "validated",
+              "versions": 41,
+              "version": "1.21.11",
+              "build": "2568",
+              "java": 21,
+              "officialHash": "md5"
+            },
+            {
+              "engine": "fabric",
+              "catalog": "validated",
+              "versions": 48,
+              "version": "1.21.11",
+              "build": "0.19.5@1.1.2",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "forge",
+              "catalog": "validated",
+              "versions": 78,
+              "version": "1.21.11",
+              "build": "1.21.11-61.2.1",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "neoforge",
+              "catalog": "validated",
+              "versions": 13,
+              "version": "1.21.11",
+              "build": "21.11.45",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "bedrock",
+              "catalog": "unavailable",
+              "reason": "The official Bedrock server is available for Windows/Linux x64."
+            },
+            {
+              "engine": "pocketmine",
+              "catalog": "validated",
+              "versions": 99,
+              "version": "5.44.3",
+              "build": "5.44.3",
+              "java": 0,
+              "officialHash": "sha256",
+              "minecraftVersion": "1.26.30"
+            }
+          ],
+          "java": {
+            "version": "21.0.12.1",
+            "architecture": "arm64",
+            "probe": "validated"
+          },
+          "php": {
+            "probe": "unavailable",
+            "reason": "The required PocketMine PHP runtime is unavailable for this architecture.",
+            "pocketmine": "5.44.3"
+          },
+          "content": {
+            "hangarProjects": 20,
+            "hangarVersions": 200,
+            "icon": true,
+            "crossplay": {
+              "supported": true,
+              "geyserInstalled": true,
+              "floodgateInstalled": true,
+              "configured": true,
+              "configPath": "plugins/Geyser-Spigot/config.yml",
+              "port": 30333,
+              "authType": "floodgate"
+            },
+            "managed": [
+              {
+                "title": "Geyser",
+                "provider": "modrinth",
+                "version": "2.11.3-b1249"
+              },
+              {
+                "title": "Floodgate",
+                "provider": "geyser",
+                "version": "2.2.5 build 141"
+              },
+              {
+                "title": "ViaVersion",
+                "provider": "modrinth",
+                "version": "5.12.1"
+              }
+            ]
+          }
+        },
+        "live": {
+          "at": "2026-10-09T10:31:06.671Z",
+          "paperBuild": "132",
+          "java": 21,
+          "paperVersions": 55,
+          "vanillaVersions": 103,
+          "eulaAccepted": false,
+          "bootReachedEula": true,
+          "modrinthResults": 24
+        }
+      },
+      {
+        "os": "macos-15",
+        "architecture": "arm64",
+        "jobId": 113777304588,
+        "conclusion": "success",
+        "unit": {
+          "passed": 214,
+          "skipped": 4,
+          "total": 218,
+          "files": 37
+        },
+        "packaged": {
+          "passed": 9,
+          "skipped": 1,
+          "duration": "44.1s"
+        },
+        "official": {
+          "at": "2026-10-09T10:27:13.000Z",
+          "platform": "darwin",
+          "architecture": "arm64",
+          "eulaAccepted": false,
+          "minecraftExecuted": false,
+          "catalogs": [
+            {
+              "engine": "vanilla",
+              "catalog": "validated",
+              "versions": 103,
+              "version": "1.21.11",
+              "build": "1.21.11",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "paper",
+              "catalog": "validated",
+              "versions": 55,
+              "version": "1.21.11",
+              "build": "132",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "purpur",
+              "catalog": "validated",
+              "versions": 41,
+              "version": "1.21.11",
+              "build": "2568",
+              "java": 21,
+              "officialHash": "md5"
+            },
+            {
+              "engine": "fabric",
+              "catalog": "validated",
+              "versions": 48,
+              "version": "1.21.11",
+              "build": "0.19.5@1.1.2",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "forge",
+              "catalog": "validated",
+              "versions": 78,
+              "version": "1.21.11",
+              "build": "1.21.11-61.2.1",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "neoforge",
+              "catalog": "validated",
+              "versions": 13,
+              "version": "1.21.11",
+              "build": "21.11.45",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "bedrock",
+              "catalog": "unavailable",
+              "reason": "The official Bedrock server is available for Windows/Linux x64."
+            },
+            {
+              "engine": "pocketmine",
+              "catalog": "validated",
+              "versions": 99,
+              "version": "5.44.3",
+              "build": "5.44.3",
+              "java": 0,
+              "officialHash": "sha256",
+              "minecraftVersion": "1.26.30"
+            }
+          ],
+          "java": {
+            "version": "21.0.12.1",
+            "architecture": "arm64",
+            "probe": "validated"
+          },
+          "php": {
+            "version": "8.2.30",
+            "zts": true,
+            "architecture": "arm64",
+            "probe": "validated",
+            "pocketmine": "5.44.3"
+          },
+          "content": {
+            "hangarProjects": 20,
+            "hangarVersions": 200,
+            "icon": true,
+            "crossplay": {
+              "supported": true,
+              "geyserInstalled": true,
+              "floodgateInstalled": true,
+              "configured": true,
+              "configPath": "plugins/Geyser-Spigot/config.yml",
+              "port": 30333,
+              "authType": "floodgate"
+            },
+            "managed": [
+              {
+                "title": "Geyser",
+                "provider": "modrinth",
+                "version": "2.11.3-b1249"
+              },
+              {
+                "title": "Floodgate",
+                "provider": "geyser",
+                "version": "2.2.5 build 141"
+              },
+              {
+                "title": "ViaVersion",
+                "provider": "modrinth",
+                "version": "5.12.1"
+              }
+            ]
+          }
+        },
+        "live": {
+          "at": "2026-10-09T10:27:50.382Z",
+          "paperBuild": "132",
+          "java": 21,
+          "paperVersions": 55,
+          "vanillaVersions": 103,
+          "eulaAccepted": false,
+          "bootReachedEula": true,
+          "modrinthResults": 24
+        }
+      },
+      {
+        "os": "ubuntu-24.04",
+        "architecture": "x64",
+        "jobId": 113777304689,
+        "conclusion": "success",
+        "unit": {
+          "passed": 213,
+          "skipped": 5,
+          "total": 218,
+          "files": 37
+        },
+        "packaged": {
+          "passed": 10,
+          "skipped": 0,
+          "duration": "4.6m"
+        },
+        "official": {
+          "at": "2026-10-09T10:26:48.813Z",
+          "platform": "linux",
+          "architecture": "x64",
+          "eulaAccepted": false,
+          "minecraftExecuted": false,
+          "catalogs": [
+            {
+              "engine": "vanilla",
+              "catalog": "validated",
+              "versions": 103,
+              "version": "1.21.11",
+              "build": "1.21.11",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "paper",
+              "catalog": "validated",
+              "versions": 55,
+              "version": "1.21.11",
+              "build": "132",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "purpur",
+              "catalog": "validated",
+              "versions": 41,
+              "version": "1.21.11",
+              "build": "2568",
+              "java": 21,
+              "officialHash": "md5"
+            },
+            {
+              "engine": "fabric",
+              "catalog": "validated",
+              "versions": 48,
+              "version": "1.21.11",
+              "build": "0.19.5@1.1.2",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "forge",
+              "catalog": "validated",
+              "versions": 78,
+              "version": "1.21.11",
+              "build": "1.21.11-61.2.1",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "neoforge",
+              "catalog": "validated",
+              "versions": 13,
+              "version": "1.21.11",
+              "build": "21.11.45",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "bedrock",
+              "catalog": "validated",
+              "versions": 1,
+              "version": "1.26.52.3",
+              "build": "1.26.52.3",
+              "java": 0,
+              "officialHash": "not supplied"
+            },
+            {
+              "engine": "pocketmine",
+              "catalog": "validated",
+              "versions": 99,
+              "version": "5.44.3",
+              "build": "5.44.3",
+              "java": 0,
+              "officialHash": "sha256",
+              "minecraftVersion": "1.26.30"
+            }
+          ],
+          "java": {
+            "version": "21.0.12.1",
+            "architecture": "x64",
+            "probe": "validated"
+          },
+          "php": {
+            "version": "8.2.30",
+            "zts": true,
+            "architecture": "x64",
+            "probe": "validated",
+            "pocketmine": "5.44.3"
+          },
+          "content": {
+            "hangarProjects": 20,
+            "hangarVersions": 200,
+            "icon": true,
+            "crossplay": {
+              "supported": true,
+              "geyserInstalled": true,
+              "floodgateInstalled": true,
+              "configured": true,
+              "configPath": "plugins/Geyser-Spigot/config.yml",
+              "port": 30333,
+              "authType": "floodgate"
+            },
+            "managed": [
+              {
+                "title": "Geyser",
+                "provider": "modrinth",
+                "version": "2.11.3-b1249"
+              },
+              {
+                "title": "Floodgate",
+                "provider": "geyser",
+                "version": "2.2.5 build 141"
+              },
+              {
+                "title": "ViaVersion",
+                "provider": "modrinth",
+                "version": "5.12.1"
+              }
+            ]
+          }
+        },
+        "live": {
+          "at": "2026-10-09T10:27:25.912Z",
+          "paperBuild": "132",
+          "java": 21,
+          "paperVersions": 55,
+          "vanillaVersions": 103,
+          "eulaAccepted": false,
+          "bootReachedEula": true,
+          "modrinthResults": 24
+        }
+      },
+      {
+        "os": "ubuntu-24.04-arm",
+        "architecture": "arm64",
+        "jobId": 113777304698,
+        "conclusion": "success",
+        "unit": {
+          "passed": 213,
+          "skipped": 5,
+          "total": 218,
+          "files": 37
+        },
+        "packaged": {
+          "passed": 10,
+          "skipped": 0,
+          "duration": "4.7m"
+        },
+        "official": {
+          "at": "2026-10-09T10:26:50.933Z",
+          "platform": "linux",
+          "architecture": "arm64",
+          "eulaAccepted": false,
+          "minecraftExecuted": false,
+          "catalogs": [
+            {
+              "engine": "vanilla",
+              "catalog": "validated",
+              "versions": 103,
+              "version": "1.21.11",
+              "build": "1.21.11",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "paper",
+              "catalog": "validated",
+              "versions": 55,
+              "version": "1.21.11",
+              "build": "132",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "purpur",
+              "catalog": "validated",
+              "versions": 41,
+              "version": "1.21.11",
+              "build": "2568",
+              "java": 21,
+              "officialHash": "md5"
+            },
+            {
+              "engine": "fabric",
+              "catalog": "validated",
+              "versions": 48,
+              "version": "1.21.11",
+              "build": "0.19.5@1.1.2",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "forge",
+              "catalog": "validated",
+              "versions": 78,
+              "version": "1.21.11",
+              "build": "1.21.11-61.2.1",
+              "java": 21,
+              "officialHash": "sha1"
+            },
+            {
+              "engine": "neoforge",
+              "catalog": "validated",
+              "versions": 13,
+              "version": "1.21.11",
+              "build": "21.11.45",
+              "java": 21,
+              "officialHash": "sha256"
+            },
+            {
+              "engine": "bedrock",
+              "catalog": "unavailable",
+              "reason": "The official Bedrock server is available for Windows/Linux x64."
+            },
+            {
+              "engine": "pocketmine",
+              "catalog": "validated",
+              "versions": 99,
+              "version": "5.44.3",
+              "build": "5.44.3",
+              "java": 0,
+              "officialHash": "sha256",
+              "minecraftVersion": "1.26.30"
+            }
+          ],
+          "java": {
+            "version": "21.0.12.1",
+            "architecture": "arm64",
+            "probe": "validated"
+          },
+          "php": {
+            "probe": "unavailable",
+            "reason": "The required PocketMine PHP runtime is unavailable for this architecture.",
+            "pocketmine": "5.44.3"
+          },
+          "content": {
+            "hangarProjects": 20,
+            "hangarVersions": 200,
+            "icon": true,
+            "crossplay": {
+              "supported": true,
+              "geyserInstalled": true,
+              "floodgateInstalled": true,
+              "configured": true,
+              "configPath": "plugins/Geyser-Spigot/config.yml",
+              "port": 30333,
+              "authType": "floodgate"
+            },
+            "managed": [
+              {
+                "title": "Geyser",
+                "provider": "modrinth",
+                "version": "2.11.3-b1249"
+              },
+              {
+                "title": "Floodgate",
+                "provider": "geyser",
+                "version": "2.2.5 build 141"
+              },
+              {
+                "title": "ViaVersion",
+                "provider": "modrinth",
+                "version": "5.12.1"
+              }
+            ]
+          }
+        },
+        "live": {
+          "at": "2026-10-09T10:27:30.523Z",
+          "paperBuild": "132",
+          "java": 21,
+          "paperVersions": 55,
+          "vanillaVersions": 103,
+          "eulaAccepted": false,
+          "bootReachedEula": true,
+          "modrinthResults": 24
+        }
+      }
+    ]
+  },
+  "artifacts": {
+    "installers": 12,
+    "publisherSignaturesVerified": 6,
+    "windowsPortableSha256": "25843511682a0b13b2857bd9d2b18198f44d176e7ed966ff69355307836376c1",
+    "workflowRun": 37917545004
+  },
+  "prePublicationUpgrade": {
+    "baseline": "0.3.0",
+    "candidate": "0.4.0",
+    "baselinePortableSha256": "9773b9cfb53811c94fbfb88f2c305698de64096df7900a1495856b27986e84dd",
+    "initialSchema": 5,
+    "legacyManual": true,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-09T10:41:49.007Z",
+    "oldVersion": "0.3.0",
+    "signatureAndDownload": "verified by old production application",
+    "manualIntervention": "Explicit native helper execution after legacy launcher failed; not an automatic 0.3.0 upgrade",
+    "helperRelaunch": "completed; actual 0.4.0 startup log observed",
+    "replacedBinarySha256": "25843511682a0b13b2857bd9d2b18198f44d176e7ed966ff69355307836376c1",
+    "finalSchema": 11,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "preMigrationDatabaseBackup": {
+      "schema": 5,
+      "quickCheck": "ok",
+      "playersAndTasksPreserved": true
+    },
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "sqliteDatabase": true,
+      "playerHistory": true,
+      "playerObservations": true,
+      "playerFiles": true,
+      "scheduledTasks": true,
+      "encryptedRconSecret": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    },
+    "isolatedData": true
+  },
+  "publicVerification": {
+    "status": "recorded after publication in 0.4.0-public.json"
+  },
+  "limits": [
+    "Legacy 0.3.0 Windows launcher requires manual first upgrade on tested host",
+    "No Windows/Apple OS certificate or macOS notarization",
+    "No multiplayer or live map rendering validation",
+    "No Linux/macOS/ARM64 OS installation or upgrade lifecycle claim",
+    "No incremental snapshot deletion/GC or legacy ZIP partial restore"
+  ]
+}

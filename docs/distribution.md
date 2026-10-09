@@ -24,7 +24,7 @@ Configure credentials only in CI secrets or a private local environment. Never c
 
 ## CI and actual execution
 
-The distribution workflow selects six native hosted runners: Windows 2025 x64, Windows 11 ARM, Ubuntu 24.04 x64/ARM, macOS 15 Intel/ARM. It installs dependencies, checks architecture, runs lint/types/unit tests, builds packages and executes ten current Electron journeys using the unpacked packaged app. Linux uses Xvfb with the stock Electron sandbox helper; renderer sandbox/context isolation remain enabled. The historical 0.3.0 matrix ran seven cases. Check the validation record for the revision actually executed on each OS.
+The distribution workflow selects six native hosted runners: Windows 2025 x64, Windows 11 ARM, Ubuntu 24.04 x64/ARM, macOS 15 Intel/ARM. It installs dependencies, checks architecture, runs lint/types/unit tests, builds packages and executes the current Electron journeys using the unpacked packaged app: ten pass on Windows/Linux; nine pass and one unsupported case is skipped on macOS. Linux uses Xvfb with the stock Electron sandbox helper; renderer sandbox/context isolation remain enabled. The historical 0.3.0 matrix ran seven cases. Check the validation record for the revision actually executed on each OS.
 
 The workflow offers opt-in official catalog/runtime/content checks and real Paper bootstrap with `eula=false`. These downloads are not part of ordinary validation. It uploads native packages, signed metadata when the publisher secret is configured, opt-in result records and failure screenshots. It does not automatically publish a GitHub Release.
 

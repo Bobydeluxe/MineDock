@@ -1,5 +1,37 @@
 # MineDock validation
 
+## Release validation — 9 October 2026
+
+MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `2b977c2472b71559c9e8f8c78f5c4c7b79293a33`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.
+
+| Required check                              | Actual result                                                                                                                                     |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed on local Windows and all six native runners                                                                                                |
+| `pnpm test`                                 | Local: **214 passed, 4 OS skips, 218 total / 37 files**; Windows/macOS same; Linux **213 passed, 5 OS skips**                                     |
+| `pnpm test:ui`                              | Fresh full run after compatibility fix: **26 passed**, 4.8 minutes; source CI also passes                                                         |
+| Local `pnpm test:packaged`                  | **10 passed**, 4.4 minutes                                                                                                                        |
+| Native packaged Windows x64 / ARM64         | **10 passed each**                                                                                                                                |
+| Native packaged Linux x64 / ARM64           | **10 passed each**                                                                                                                                |
+| Native packaged macOS Intel / Apple Silicon | **9 passed + 1 unsupported skip each**                                                                                                            |
+| Official downloads on six native hosts      | Real engine catalogs, Java 21 executable probes, available official PHP runtimes and hash-verified Geyser/Floodgate/ViaVersion configuration pass |
+| Paper bootstrap on six native hosts         | Reaches the `eula=false` gate; no playable world or multiplayer claim                                                                             |
+| Release integrity                           | **12 native packages**, six pinned-key Ed25519 metadata signatures and matching SHA-256/size verified                                             |
+| Current screenshots/site                    | **38 real Electron PNGs + nine-frame labeled GIF**, refreshed 9 October; site desktop/mobile local QA passes                                      |
+
+The [six-platform workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37917545004) completed successfully. Its exact downloaded artifacts are the release inputs. The initial official-content run found a real Geyser compatibility bug: Modrinth's version environment `unknown` was treated as client-only. The corrected fallback requires known project/loader support, still blocks explicit client-only versions, passes its regression and succeeds against the real upstream downloads on all six hosts.
+
+### Upgrade with the exact release portable
+
+The unchanged public **0.3.0** binary loads schema 5, verifies the new publisher signature and downloads the actual release candidate portable, SHA-256 `25843511682a0b13b2857bd9d2b18198f44d176e7ed966ff69355307836376c1`. On this host its legacy detached launcher fails; explicit execution of its prepared native helper then replaces the executable and genuinely relaunches **0.4.0**. **This is a validated upgrade with a manual recovery step, not a seamless automatic 0.3.0 upgrade.** Normal users should close the old app and open the verified new package under the same OS account, keeping their storage folders/profile.
+
+Schema **5→11** and SQLite quick-check `ok` are verified, including the schema-5 pre-migration database copy. Existing settings, server, world/properties, full-backup record/bytes, runtime reference and executable, SQLite data, player history/observations/files, two scheduled tasks and encrypted RCON secret all survive. Real OpenJDK **21.0.12.1** successfully probes before and after. Published migrations 1–5 and the existing migration 6 remain unchanged. Testing uses owned isolated data; no user server is started or replaced.
+
+### Public follow-up and limits
+
+After upload, release assets, public checksums/downloads, all twelve update targets, genuine legacy public-feed replay, packaged 0.4.0 current-version check and the production website are verified separately; their record is added here after execution. Historical private 0.4.0→0.4.1 QA and isolated NSIS lifecycle evidence are retained below with their own hashes, not represented as the release artifact's OS installation result.
+
+Packages are unsigned by Windows/Apple OS certificates; update metadata signatures are separate. No multiplayer/map-rendering, Linux/macOS/ARM64 OS installation or upgrade lifecycle, JVM heap/swap, Windows ACL/firewall or local UDP/IPv6 inspection is claimed. Incremental deletion/GC and legacy ZIP partial restore remain unavailable; complex configuration structures remain textual; changed pack releases need explicit review before Minecraft migration. See [the complete ledger](survival-evolution.md), [security](security.md) and [roadmap](roadmap.md).
+
 ## Historical pre-release candidate — 8 October 2026
 
 At this pre-release checkpoint, source 0.4.0 was under review in [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7), stacked on PR #6/#5. Public downloads were then 0.3.0. Local host: Windows 11 x64, Node 24.19, pnpm 11.25, Electron 44.5.1. Historical results below belong to their stated earlier revisions.
@@ -59,9 +91,9 @@ Native before/after captures measure 181 rectangles across 26 views/states, agre
 
 All 28 then-current native images were visually reviewed; eight historical comparison images are retained separately. All 119 checked local documentation links resolve. At that historical checkpoint the public release was v0.3.0; all twelve public package links return HTTP 200 with their expected content length. The original unsigned preview at `863c6fc` had portable x64 SHA-256 `c23975c97bbb06702c3fd1c5ef0b92e34f09ac0ac06fb27cb70620b5161c46e0` and NSIS x64 SHA-256 `31918b66ccad65a8db9882c96049a7fccc55c7bff8f85ed43b6ca62d1a1d1d0c`. Those local packages are superseded by the charcoal rebuild above; neither revision is uploaded as a release.
 
-## Development mod manager, 4–8 October 2026
+## Historical development mod manager, 4–8 October 2026
 
-The source remains 0.3.1 while review is pending. Windows 11 x64 / Node 24 / pnpm 11.19: lint and strict TypeScript pass; the full unit run passes **183 cases with four OS-specific skips (187 total in 24 files)**. The full source UI suite passes **24 cases**. Windows NSIS and portable x64 compile unsigned; the packaged suite includes **nine actual Electron cases**, including the mod management journey. No new public release or new six-platform packaging matrix is claimed.
+At this historical checkpoint, source was 0.3.1 while review was pending. Windows 11 x64 / Node 24 / pnpm 11.19: lint and strict TypeScript passed; the full unit run passed **183 cases with four OS-specific skips (187 total in 24 files)**. The full source UI suite passed **24 cases**. Windows NSIS and portable x64 compiled unsigned; the packaged suite included **nine actual Electron cases**, including the mod management journey. This checkpoint did not include a new public release or a new six-platform packaging matrix.
 
 The 37 mod-manager cases cover Fabric/Forge/NeoForge JAR transactions; named required and optional dependencies; constraints, conflicts, pins and shared dependency removal; updates and archived rollback; cancellation and failed-batch preservation; manual metadata/hash identification; favorites and destination collections; offline local administration; bounded caches and 300-mod updates in three requests; appended schema-6 upgrade with preserved encrypted RCON secrets and old binaries; rejected retired download hosts; local startup blocking; and whole-server migration preserving world/configuration/property bytes, including comments and line endings, or restoring the old profile/files on failure.
 

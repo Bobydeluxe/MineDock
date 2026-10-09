@@ -21,7 +21,7 @@ MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQL
 
 The renderer shares one native dialog wrapper, portaled to `document.body` and opened before paint in the browser top layer. It manages nested body scroll locks, focus, bounded internal scrolling and explicit dismissal. Eight bundled original SVG symbols identify engines across creation, server lists, details and imports. These interface components preserve the same preload/service contracts; see [UI design](ui.md).
 
-The proposed visual identity centralizes material/color/radius/focus/motion tokens in `apps/desktop/renderer/src/tokens.css`. Existing layout rules and responsive breakpoints remain in `style.css`. Presentation-only classes expose existing mod states; editor token categories use theme colors. No new IPC, business service, database migration or runtime UI dependency is introduced by the visual PR. Native QA captures and labeled before/after evidence are described in [visual review](design/visual-review.md).
+The visual identity centralizes material/color/radius/focus/motion tokens in `apps/desktop/renderer/src/tokens.css`. Existing layout rules and responsive breakpoints remain in `style.css`. Presentation-only classes expose existing mod states; editor token categories use theme colors. The historical visual change introduced no new IPC, business service, database migration or runtime UI dependency. Native QA captures and labeled before/after evidence are described in [visual review](design/visual-review.md).
 
 ## Persistence and transactions
 
