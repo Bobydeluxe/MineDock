@@ -1,6 +1,6 @@
 # Native desktop gallery
 
-Current MineDock 0.4.1 review-build captures from the actual compiled Electron application, refreshed on 9 October 2026 for review; public downloads remain 0.4.0. There are **48 current PNGs and a labeled nine-frame GIF**. Storage is isolated, mods are real hash-verified downloads, and other administration records are QA fixtures. Active process/console data comes from an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [provenance and before/after comparisons](../design/reference-041/README.md).
+Current MineDock 0.4.1 cleanup-build captures from the actual compiled Electron application, refreshed on 9 October 2026; public downloads remain 0.4.0. There are **48 current PNGs and a labeled nine-frame GIF**. The header and noisy sidebar/decorative elements are removed, dark base surfaces are neutral black, and notifications are inside Settings. Storage is isolated, mods are real hash-verified downloads, and administration records are QA fixtures. Active measurements use an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [the cleanup review](../design/cleanup-041/README.md).
 
 | View            | Dark                                               | Light / other state                                                                      |
 | --------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -23,15 +23,15 @@ Current MineDock 0.4.1 review-build captures from the actual compiled Electron a
 | Migration       | [Assistant](migration.png)                         |                                                                                          |
 | Performance     | [Actual unavailable state](performance.png)        |                                                                                          |
 | Configuration   | [Graphical options and history](configuration.png) |                                                                                          |
-| Notifications   | [Grouped local notices](notifications.png)         |                                                                                          |
+| Notifications   | [History inside Settings](notifications.png)       | Preferences and category toggles remain in Settings                                      |
 | Scheduler       | [Paused daily task](scheduler.png)                 |                                                                                          |
 | Settings        | [Dark](settings.png)                               | [Light](settings-light.png)                                                              |
 | Runtimes        | [Runtime administration](runtimes.png)             |                                                                                          |
 | Import          | [Actual private-folder preview](import.png)        |                                                                                          |
 
-Normal captures share a 1440 × 960 native content viewport. Settings may use a full-page image to include the existing lower sections. Comparison images under `docs/design/before` are historical evidence and are not presented as the current interface. No secrets are displayed.
+Normal captures share a 1440 × 960 native content viewport. Settings may use a full-page image to include the existing lower sections. Older comparison images are retired from the current tree and remain available in immutable Git history. No secrets are displayed.
 
-Additional real candidate views: [Fabric lists](fabric-versions.png), [Paper](paper-builds.png), [Purpur](purpur-builds.png), [Forge](forge-builds.png), [NeoForge](neoforge-builds.png), [general properties](server-settings.png), [light properties](server-settings-light.png), [gameplay](properties-gameplay.png), [network](properties-network.png), [world](properties-world.png). [Named before/after comparison](../design/reference-041/README.md).
+Additional real candidate views: [Fabric lists](fabric-versions.png), [Paper](paper-builds.png), [Purpur](purpur-builds.png), [Forge](forge-builds.png), [NeoForge](neoforge-builds.png), [general properties](server-settings.png), [light properties](server-settings-light.png), [gameplay](properties-gameplay.png), [network](properties-network.png), [world](properties-world.png). [Reference and current UI review](../design/reference-041/README.md).
 
 ## Reproduce the assets
 

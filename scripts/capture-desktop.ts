@@ -534,6 +534,7 @@ if (!process.argv.includes('--first-start')) {
       .locator('.page-heading')
       .getByRole('button', { name: 'Create server', exact: true })
       .click();
+    await page.getByLabel('Server name', { exact: true }).fill('Weekend survival');
     await expect(page.getByRole('button', { name: 'Continue', exact: true })).toBeEnabled();
     await capture('create-server-light');
     await page.keyboard.press('Escape');

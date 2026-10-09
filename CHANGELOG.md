@@ -12,6 +12,7 @@
 ### Improved
 
 - Compact server rows, informative creation tiles, console category tabs and backup type filters follow the owner’s design reference.
+- A focused cleanup removes the top breadcrumb/search strip, workspace promotion, sidebar Activity/Operations/Notifications entries, repeated page ribbons, beta/local badges and redundant metric captions. Dark surfaces are neutral black/charcoal; notification preferences/history and recovery/history access are inside Settings.
 - Important controls remain readable in dark/light appearances; six offline app languages include all new labels and warnings.
 - The shared create/migration selector preserves explicit versions and shows unsupported choices for review.
 - Unsaved changes are guarded when navigating or closing the window; inherited properties stay unset unless edited.
@@ -23,6 +24,7 @@
 - Properties save patches only edited effective values, preserving comments, CRLF, ordering and unknown keys; stale files refuse changes.
 - Removed Java properties are gated by game version, RCON secrets stay hidden, and manual pack URL changes clear stale active-pack metadata.
 - The creation review includes the exact chosen build and Fabric installer.
+- Notification switches update immediately, persist their actual settings and restore their previous state if saving fails.
 
 ### Known issues
 

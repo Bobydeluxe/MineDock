@@ -14,7 +14,7 @@ views = [
     ("backups", "Verified backups and incremental snapshots"),
     ("partial-restore", "Review exactly what a partial restore replaces"),
     ("configuration", "Edit configuration and retain history"),
-    ("notifications", "Grouped local notifications"),
+    ("notifications", "Notification preferences and history inside Settings"),
 ]
 font_path = Path("C:/Windows/Fonts/segoeui.ttf")
 font = ImageFont.truetype(str(font_path), 16) if font_path.exists() else ImageFont.load_default()
@@ -23,7 +23,7 @@ for name, caption in views:
     with Image.open(gallery / (name + ".png")) as image:
         image = image.convert("RGB")
         image.thumbnail((1080, 720), Image.Resampling.LANCZOS)
-        frame = Image.new("RGB", (1080, 776), "#151515")
+        frame = Image.new("RGB", (1080, 776), "#0b0b0b")
         frame.paste(image, ((1080 - image.width) // 2, (720 - image.height) // 2))
         draw = ImageDraw.Draw(frame)
         draw.text((16, 724), caption, font=font, fill="#80cabe")

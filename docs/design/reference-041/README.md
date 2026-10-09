@@ -1,20 +1,18 @@
-# Reference design — 0.4.1 review build
+# Reference assets — current 0.4.1 cleanup build
 
-The owner's [actual reference collage](reference.png) is art direction. Every current app image is captured from compiled Electron/React controls backed by preload, core services and SQLite. No reference panel is embedded as a working screen. **The candidate is 0.4.1; the public download remains 0.4.0.**
+The owner's [original collage](reference.png) remains art direction. The subsequent annotated cleanup request removes its noisy shell elements and tinted base surfaces. The [focused cleanup review](../cleanup-041/README.md) documents the current implementation. Every current image is captured from actual compiled Electron controls and core/SQLite services; no reference panel is embedded in the app. **0.4.1 remains a review build; the public download is 0.4.0.**
 
-| View       | Before — actual 0.4.0                    | After — actual 0.4.1 candidate                  | Result                                                                                             |
-| ---------- | ---------------------------------------- | ----------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Website    | ![Previous public site](before/site.png) | ![New desktop site](site-1440.png)              | Approved mark, original survival sunset, useful sections and six actual platform download groups.  |
-| Dashboard  | ![Before](before/dashboard.png)          | ![After](../../screenshots/dashboard.png)       | Compact aligned rows with available process data and clear start/backup/open actions.              |
-| Create     | ![Before](before/create-server.png)      | ![After](../../screenshots/create-server.png)   | Compact engine tiles, a real engine-information panel and numbered steps.                          |
-| Fabric     | ![Before](before/fabric-versions.png)    | ![After](../../screenshots/fabric-versions.png) | Independently selectable complete loader/installer lists, search and upstream badges.              |
-| Properties | ![Before](before/server-settings.png)    | ![After](../../screenshots/server-settings.png) | Profile identity is separate; typed actual properties have categories, search and reviewed saving. |
-| Console    | ![Before](before/console.png)            | ![After](../../screenshots/console.png)         | Real All/Chat/Warnings/Errors filters, existing command tools and readable logs.                   |
-| Backups    | ![Before](before/backups.png)            | ![After](../../screenshots/backups.png)         | Manual/automatic and full/incremental filters use actual backup metadata.                          |
+| View       | Current actual capture                                   | Behavior                                                                          |
+| ---------- | -------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Website    | [Live desktop site](site-1440.png)                       | Approved mark, original dusk hero, current app gallery and real public downloads. |
+| Dashboard  | [Black dashboard](../../screenshots/dashboard.png)       | Direct navigation, compact rows, no global header or promotion.                   |
+| Create     | [Creation flow](../../screenshots/create-server.png)     | Real engine information and numbered steps retained.                              |
+| Fabric     | [Version lists](../../screenshots/fabric-versions.png)   | Independent complete searchable loader/installer lists.                           |
+| Properties | [Server settings](../../screenshots/server-settings.png) | Actual typed/category controls and reviewed safe saving.                          |
+| Console    | [Console](../../screenshots/console.png)                 | Real category filters and command tools.                                          |
+| Backups    | [Backups](../../screenshots/backups.png)                 | Filters/actions use actual archive metadata.                                      |
 
-The before dashboard/create/console/backups files are the original main-branch 0.4.0 captures. Fabric/properties before captures additionally launch the unchanged executable extracted from the actual public 0.4.0 portable in an owned QA profile. The site before image is the previous production verification capture. Historical images are explicitly labeled and never used as the current product gallery.
-
-Compared with the reference: layered blue-black/charcoal surfaces, restrained teal selection, copper accents, visible card boundaries, compact navigation and square rounded controls carry through the real pages. The light appearance retains its approved palette. Native dialogs, supported navigation and advanced tools are retained. Unknown CPU/player/TPS data stays unavailable. Shared styles also cover mods/plugins/packs, players, worlds, files, performance, notices, settings, imports, migration and recovery.
+Earlier before/after captures are retired from the current tree. The [immutable previous review](https://github.com/Bobydeluxe/MineDock/blob/944caa8726dd26f2851230fabfcf39149e5c38c1/docs/design/reference-041/README.md) preserves that historical evidence. Current base surfaces are neutral black/gray; accents, status indicators and the approved light palette remain. See the current gallery for notification preferences/history inside Settings and the other affected pages.
 
 ## Screenshot provenance
 

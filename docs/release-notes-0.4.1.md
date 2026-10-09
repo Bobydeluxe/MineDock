@@ -12,10 +12,11 @@ These notes describe the implemented candidate. **0.4.0 remains the public relea
 
 ## Improved
 
-The interface follows the owner's reference: compact server rows, numbered creation steps, engine information, clearer controls and readable charcoal surfaces. Console categories and backup filters use real logs and backup metadata. All six languages remain available; the primary language is English. The public website now uses original dusk scenery and real candidate screenshots, with downloads still pointing to the actual public release.
+The interface keeps compact server rows, numbered creation steps, engine information and clear controls, with a focused cleanup to neutral black/charcoal surfaces. Dashboard, Backups, servers and Settings form the main navigation. The breadcrumb/global-search strip, workspace promotion and repeated decorative labels are removed. Notifications, their preferences/history, recovery tools and searchable audit history live in Settings. Console categories and backup filters use real logs and backup metadata. All six languages remain available; English is primary. The website uses original dusk scenery and actual cleaned candidate screenshots, with downloads still pointing to the public release.
 
 ## Fixed
 
+- Notification switches retain their new state while saving and restore the previous value if saving fails.
 - Historical Fabric installers are no longer reduced to one stable entry; explicit loader/installer selections reach installation and migration plans unchanged.
 - Beginner engine recommendations require an available build. Experimental and unsupported choices have explicit states.
 - Properties saves preserve unrelated comments, formatting, unknown keys and inherited values, reject stale files and removed/version-incompatible settings, protect secrets and take safety backups.

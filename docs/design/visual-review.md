@@ -1,6 +1,6 @@
 # MineDock visual identity review
 
-This document retains the **historical 0.3.1 style review**, based on [PR #5](https://github.com/Bobydeluxe/MineDock/pull/5). The current gallery now documents the [0.4.1 reference-design candidate](reference-041/README.md); the public release remains **0.4.0**. All palette descriptions, before/after statements and geometry measurements below describe the earlier style-only revision and remain historical evidence.
+This document retains the **historical 0.3.1 style review**, based on [PR #5](https://github.com/Bobydeluxe/MineDock/pull/5). The current gallery now documents the [0.4.1 cleaned UI candidate](cleanup-041/README.md); the public release remains **0.4.0**. All palette descriptions, before/after statements and geometry measurements below describe the earlier style-only revision and remain historical evidence.
 
 The style-only revision retained the existing sidebar, page order, cards, tabs, creation/import steps, dialogs and user journeys. Its changes were confined to CSS tokens/styles, presentation classes, editor highlights and eight original symbols. The subsequent survival revision adds real services and secondary panels, documented in [the evolution ledger](../survival-evolution.md).
 
@@ -27,26 +27,9 @@ Sidebar selections have an inset rail. Server cards use state rails and semantic
 
 The console remains a darker infrastructure surface in both themes, with readable timestamps, INFO/WARN/ERROR/CHAT colors and selection. The editor retains syntax categories using theme tokens. Transient server operations have a quiet indicator animation; reduced-motion preferences disable it. Existing action labels and keyboard paths remain intact.
 
-## Before and after
+## Historical visual evidence
 
-The left images are explicitly historical comparisons. The right images represent the proposed current design. Every image is a real native Electron capture with isolated review storage at a 1440 × 960 content viewport and scale factor one.
-
-| Screen          | Before                                                            | After                                                                    |
-| --------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------ |
-| Dashboard       | ![Previous dashboard](before/dashboard.png)                       | ![Current dashboard](../screenshots/dashboard.png)                       |
-| Create server   | ![Previous creation wizard](before/create-server.png)             | ![Current creation wizard](../screenshots/create-server.png)             |
-| Server overview | ![Previous server overview](before/server.png)                    | ![Current server overview](../screenshots/server.png)                    |
-| Installed mods  | ![Previous installed mods](before/mods.png)                       | ![Current installed mods](../screenshots/mods.png)                       |
-| Light dashboard | ![Previous light dashboard](before/dashboard-light.png)           | ![Current light dashboard](../screenshots/dashboard-light.png)           |
-| Light creation  | ![Previous light creation wizard](before/create-server-light.png) | ![Current light creation wizard](../screenshots/create-server-light.png) |
-| Light server    | ![Previous light server overview](before/server-light.png)        | ![Current light server overview](../screenshots/server-light.png)        |
-| Light mods      | ![Previous light installed mods](before/mods-light.png)           | ![Current light installed mods](../screenshots/mods-light.png)           |
-
-The first teal/copper proposal was too blue in dark appearance. This additional comparison shows that proposal at its immutable source revision beside the neutral charcoal refinement. The approved light design stays unchanged.
-
-| First dark proposal (historical)                                                                                                                                  | Current charcoal dark appearance                                    |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| ![First blue-tinted dark proposal](https://raw.githubusercontent.com/Bobydeluxe/MineDock/863c6fce35cc6a1810919b76f02e6a937233bb6e/docs/screenshots/dashboard.png) | ![Refined neutral charcoal dashboard](../screenshots/dashboard.png) |
+The obsolete image files were retired from the current tree during the owner's 0.4.1 cleanup. The [immutable earlier review](https://github.com/Bobydeluxe/MineDock/blob/944caa8726dd26f2851230fabfcf39149e5c38c1/docs/design/visual-review.md) preserves its before/after images. Use the [cleanup review](cleanup-041/README.md) and [current gallery](../screenshots/README.md) for the actual interface. Measurements below are historical and do not describe the removed top header.
 
 The native comparison measures **181 rectangles across 26 views/states**: sidebar, header, page actions, metric/server grids and cards, dialogs, wizard steps/options/footer, tabs, mod panels and installed rows. Positions, sizes, display/position modes, grid columns, gaps and padding agree within **0.5 CSS pixels**. This is evidence for the sampled native capture profile; responsive behavior is checked separately at 760 × 520, 1360 × 900, 1920 × 1080 and 2560 × 1440, in both themes. Existing small-dialog tests also cover 480 × 500.
 
@@ -56,7 +39,7 @@ The [native measurement record](layout-review.json) includes every sampled befor
 
 The production Electron/main/preload/SQLite application is used, with private review profiles. Mod data comes from actual Modrinth metadata and downloaded SHA-512-verified Lithium, FerriteCore and Krypton JARs. Server files, world metadata, player observations, a verified archive and a paused daily task are isolated QA records. The active-server/console views use a purpose-built external Node child with real process/log/RCON lifecycle; **that child is not Minecraft** and is never shipped. No owner production server, game client, real Minecraft EULA acceptance or gameplay is involved.
 
-Current captures cover onboarding, empty dashboard, dashboard stopped/active/light, creation/review/light, server stopped/active/light, console stopped/active/light, mods/light/actions menu, plugins, players, worlds, files, backups, scheduler, settings/light and runtimes. Import preview uses an actual native-selected private source folder and the production preview service. All former current gallery images are replaced; historical comparison images are labeled and kept under `docs/design/before`.
+The earlier captures covered onboarding, empty dashboard, dashboard stopped/active/light, creation/review/light, server stopped/active/light, console stopped/active/light, mods/light/actions menu, plugins, players, worlds, files, backups, scheduler, settings/light and runtimes. Import preview used an actual native-selected private source folder and the production preview service. Historical comparison images now remain only in the immutable Git revision linked above.
 
 Reproduce with `pnpm build` followed by `pnpm screenshots`. The command uses only `data/visual-review`, creates isolated profiles when needed and downloads three actual compatible Modrinth mods on first use. No real Minecraft process is started. `pnpm screenshots before` targets historical comparison output and should only be run against the previous style revision. User storage, keys and capture profiles stay ignored by Git.
 

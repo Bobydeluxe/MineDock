@@ -16,7 +16,7 @@ The current public version is **MineDock 0.4.0** for Windows, Linux and macOS. T
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 
-**0.4.1 is the review build on this branch, not a published download.** It adds the approved cube icon, the reference-based interface, full engine build lists, independently pinned Fabric choices, reviewed engine-specific properties and local profile images. [Design comparisons](docs/design/reference-041/README.md) and [validation](docs/validation.md) distinguish the candidate from public 0.4.0.
+**0.4.1 is the review build on this branch, not a published download.** It adds the approved cube icon, full engine build lists, independently pinned Fabric choices, reviewed engine-specific properties and local profile images. The cleaned interface uses neutral black surfaces and direct Dashboard/Backups/Servers/Settings navigation. Notification preferences/history and recovery tools live inside Settings; the global breadcrumb/search strip and decorative ribbons are removed. [UI cleanup](docs/design/cleanup-041/README.md) and [validation](docs/validation.md) distinguish the candidate from public 0.4.0.
 
 ## Start using MineDock
 

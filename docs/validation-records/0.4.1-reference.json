@@ -1,6 +1,7 @@
 {
   "version": "0.4.1",
-  "state": "review candidate; not tagged or released",
+  "state": "historical candidate before UI cleanup; not tagged or released",
+  "supersededBy": "0.4.1-cleanup.json",
   "at": "2026-10-09T13:48:01.798Z",
   "publicRelease": "0.4.0",
   "appSource": "0ebd29526cfd1e1a6d9304ec619b560226143e67",

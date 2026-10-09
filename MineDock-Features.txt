@@ -21,11 +21,13 @@ Download public 0.4.0 for its released features. Additions explicitly labeled 0.
 - Translated MineDock dialogs, errors, crash explanations and task descriptions.
 - Original Minecraft console output, file contents and external content retained.
 - Light, dark and system themes; server status and recent activity.
-- Implemented mineral teal/copper visual identity, with layered charcoal/warm surfaces,
-  shared tokens, semantic states, restrained radii and keyboard-visible focus.
-- Existing sidebar, route identity, capabilities and user journeys retained.
-  The 0.4.1 review build refines rows, wizard tiles and categorized settings.
-- Current native Electron gallery and historical before/after comparison.
+- Implemented teal/copper action accents, with neutral black/charcoal base surfaces
+  in the 0.4.1 review build, shared tokens, semantic states and keyboard-visible focus.
+- The 0.4.1 review build keeps Dashboard, Backups, Servers and Settings navigation,
+  server rows, wizard tiles and categorized settings. Activity/Operations pages,
+  the top breadcrumb/search strip and decorative workspace/page labels are removed.
+  Notification preferences/history and recovery/history access move into Settings.
+- Current native Electron gallery; earlier interface comparisons remain in Git history.
 - Centered native dialogs with body scroll lock, internal scrolling, keyboard
   focus containment/restoration, accessible names and guarded backdrop/Escape.
 - Four-step engine/resource/settings/review wizard with original offline engine

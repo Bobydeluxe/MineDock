@@ -76,6 +76,8 @@ On the other computer choose **Import MineDock package**, review the inventory a
 
 ## New controls in the 0.4.1 review build
 
+Navigation is Dashboard, Backups, your server entries and Settings. The upper breadcrumb/global-search bar and the dedicated Activity/Operations/Notifications navigation have been removed. Local page search still works. Open **Settings → Notifications** to choose desktop delivery and categories; expand **Notification history** to read or acknowledge alerts. **Recovery and background tasks** retains cancellation and reviewed recovery, while **History** retains searchable audit records. These Settings panels avoid permanently occupying the sidebar. Dark appearance uses neutral black/charcoal surfaces; light appearance remains available.
+
 Public downloads are still 0.4.0. In the reviewed candidate, creation preselects a working recommended build. Use **Show all available builds / loader versions** to search older available releases. Fabric has separate loader and installer lists; the review includes both exact selections. A warning does not claim an older version is necessarily beta: it records the upstream stable flag. Refresh contacts upstream; an offline cached catalog is explicitly labeled. Availability does not guarantee that every historical game/mod combination works.
 
 In **Server → Settings**, the **Server profile** name and chosen local image belong to MineDock. They do not rename the world or invent a Java server-name property. Choose a PNG/JPEG/WebP up to 5 MB and 4096 pixels per side; the native app saves a bounded local PNG. Reset restores the engine symbol.

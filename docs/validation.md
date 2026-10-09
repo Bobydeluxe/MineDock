@@ -1,8 +1,35 @@
 # MineDock validation
 
-## Reference-design candidate — 9 October 2026
+## UI cleanup candidate — 9 October 2026
 
-**0.4.1 is a review candidate; the current public app remains 0.4.0.** App/build inputs are at source `0ebd29526cfd1e1a6d9304ec619b560226143e67`. Follow-up commits contain documentation, captures and site/capture helper updates. They do not change the packaged application inputs. [Machine-readable candidate evidence](validation-records/0.4.1-reference.json) keeps the candidate separate from the release history below.
+**0.4.1 remains an unpublished review build in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8); public downloads remain 0.4.0.** The cleaned application/build inputs are at `5492f9757477f87be1fd7d0bb90423e38ba95349`. Later documentation, image, website and capture-helper changes do not change these packaged inputs. [Machine-readable cleanup evidence](validation-records/0.4.1-cleanup.json) records the exact source, CI jobs, artifact integrity, public image hashes and update result. Earlier candidate evidence below is historical.
+
+| Check                                       | Actual result                                                                                                                                                         |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed locally and in source CI                                                                                                                                       |
+| `pnpm test`                                 | Windows: **222 passed, 4 OS skips, 226 total / 38 files**; Linux CI: 221 passed, 5 OS skips                                                                           |
+| `pnpm test:ui`                              | **29 passed** locally (6.2m) and in Linux source CI (6.6m)                                                                                                            |
+| Local `pnpm test:packaged`                  | **13 passed** (5.6m) on the newly built Windows x64 unpacked application                                                                                              |
+| Native Windows and Linux x64 / ARM64        | **13 packaged passes each**, all four jobs successful                                                                                                                 |
+| Native macOS Intel / Apple Silicon          | **12 passes + 1 existing directory-import skip each**, both jobs successful                                                                                           |
+| Artifacts                                   | **12 packages**, SHA-256 and sizes verified; **six updater metadata signatures** verified against the pinned publisher key                                            |
+| Cleanup regression                          | Removed routes/header/labels absent; Settings preferences and acknowledged real notification persist after restart; original server/world/properties remain unchanged |
+| Appearance and navigation                   | Neutral dark base RGB channels, both-theme contrast/focus, responsive geometry, dialogs, all six languages, important server pages and creation pass                  |
+| Current assets                              | **48 fresh actual Electron PNGs**, a nine-frame labeled slideshow; **17 obsolete comparison PNGs** retired from the current tree                                      |
+| Live website                                | Production **Sites version 5**, source `1987aa590bd640f23edf9f69aad9dec82a365b07`; five widths pass; all nine public gallery files match current local SHA-256        |
+| Public downloads and keyboard               | **13 distinct 0.4.0 URLs** return HTTP 200/nonzero size; skip link first; 12 visible keyboard focus targets                                                           |
+| Actual Windows update                       | Public **0.4.0 → exact new CI portable 0.4.1**: signature/download, native replacement and automatic relaunch pass; schema 11 and SQLite quick-check ok               |
+| Current candidate feed                      | Packaged 0.4.1 checks the real public GitHub feed and displays **Up to date**                                                                                         |
+
+[Source CI](https://github.com/Bobydeluxe/MineDock/actions/runs/37949981714) and [all six native jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/37950007485) pass at the recorded application source. Native packages/checksums remain review artifacts; no existing public binary was replaced. The local portable output was initially locked by the owner's open application, so packaging completed with the same distribution configuration in an isolated output directory.
+
+The newest update test uses **controlled transport because 0.4.1 is unpublished**. Production signature verification, exact CI bytes (Windows portable SHA-256 `b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87`), replacement/helper/relaunch and data checks are real. Settings, server, world/properties bytes, backup record/archive bytes, runtime reference, players/notes and scheduled task survive. This is not a public 0.4.1 download/update test. Existing 0.3.0 → 0.4.0 migration evidence remains below, including its manual first-upgrade caveat. Backend services and schema migrations were not changed by this cleanup.
+
+The [cleanup review](design/cleanup-041/README.md) explains the relocated notifications/recovery/history controls. [Current native captures](screenshots/README.md) use isolated QA records, actual verified content and an inert process fixture, not Minecraft multiplayer. Windows/Apple publisher certificates, Linux/macOS/ARM64 OS installer/update lifecycles, existing pinned taskbar appearance and live map/gameplay remain unvalidated. Earlier exact NSIS/icon lifecycle evidence below applies to its explicitly recorded earlier candidate bytes.
+
+## Historical reference-design candidate — 9 October 2026
+
+**These results describe the earlier candidate, before the owner's UI cleanup.** App/build inputs were at source `0ebd29526cfd1e1a6d9304ec619b560226143e67`; its following documentation commit did not change those inputs. The newer cleanup changes application code and requires its own evidence. [Machine-readable historical evidence](validation-records/0.4.1-reference.json) records that exact earlier input. The current public app remains 0.4.0.
 
 | Check                                       | Actual result                                                                                                                                                                          |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
