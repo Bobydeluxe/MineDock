@@ -1,5 +1,5 @@
 {
-  "at": "2026-10-09T20:10:14.845Z",
+  "at": "2026-10-09T20:40:58.865Z",
   "version": "0.5.0",
   "publicRelease": false,
   "captures": [
@@ -50,12 +50,13 @@
     },
     {
       "file": "player-profile-light.png",
-      "sha256": "0159db868d752a6bfc60878df74a3d3db703f0bf5e310217ffc79b4b54029050",
+      "sha256": "8fdb86739e1a02e458c1ec78e808291869a9459d43fc1431ece57d9aad61a5b6",
       "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
-      }
+      },
+      "capturedAt": "2026-10-09T20:40:58.865Z"
     },
     {
       "file": "player-profile-compact.png",

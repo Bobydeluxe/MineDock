@@ -7,7 +7,15 @@ import { playerData, playerUuid } from '../tests/fixtures/player-data';
 import { AppCore } from '../packages/core/app';
 import { PRODUCT, type Api } from '../packages/domain/types';
 
-const output = path.resolve('docs/screenshots/player-world-050');
+const outputIndex = process.argv.indexOf('--output');
+const output = path.resolve(
+  outputIndex < 0 ? 'docs/screenshots/player-world-050' : process.argv[outputIndex + 1]!,
+);
+if (
+  output !== path.resolve('docs/screenshots/player-world-050') &&
+  !output.startsWith(path.resolve('data') + path.sep)
+)
+  throw new Error('Capture output must be the native gallery or ignored workspace data.');
 await mkdir(output, { recursive: true });
 const env = Object.fromEntries(
   Object.entries(process.env).filter(
@@ -98,6 +106,19 @@ try {
   });
   await page.getByRole('button', { name: 'Player details', exact: true }).click();
   await expect(page.locator('.inventory-grid.ender button')).toHaveCount(27);
+  await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
+  await page.evaluate(async () => {
+    await Promise.all(
+      document
+        .getAnimations()
+        .filter((animation) => Number.isFinite(animation.effect?.getTiming().iterations))
+        .map((animation) => animation.finished.catch(() => undefined)),
+    );
+  });
+  await expect(page.locator('.inventory-slot').first()).toHaveCSS(
+    'background-color',
+    'rgb(255, 255, 255)',
+  );
   await capture(page, 'player-profile-light', qa);
   await desktop.evaluate(({ BrowserWindow }) =>
     BrowserWindow.getAllWindows()[0]!.setContentSize(900, 760),
@@ -200,4 +221,5 @@ for (const [source, target] of [
   ['player-profile', 'player-details'],
   ['world-controls', 'worlds'],
 ] as const)
-  await cp(path.join(output, source + '.png'), path.resolve('docs/screenshots', target + '.png'));
+  if (outputIndex < 0)
+    await cp(path.join(output, source + '.png'), path.resolve('docs/screenshots', target + '.png'));
