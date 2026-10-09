@@ -70,7 +70,7 @@
   "The downloaded file is corrupted. It was not installed.": "Il file scaricato è danneggiato. Non è stato installato.",
   "Failed": "Non riuscito",
   "Installation of this server is already complete.": "L’installazione di questo server è già completata.",
-  "No stable Paper build for this version. Choose another version.": "Nessuna build stabile di Paper per questa versione. Scegli un’altra versione.",
+  "No stable Paper build for this version. Choose another version.": "Non esiste una build Paper stabile per questa versione. Scegli un’altra versione.",
   "RCON is not responding. Wait for startup to finish.": "RCON non risponde. Attendi il completamento dell’avvio.",
   "Unable to connect to RCON. Check that the server is running.": "Impossibile connettersi a RCON. Verifica che il server sia attivo.",
   "The RCON connection was closed.": "La connessione RCON è stata chiusa.",
@@ -435,5 +435,17 @@
   "This mod file is too large.": "Questo file mod è troppo grande.",
   "This mod is already managed.": "Questo mod è già gestito.",
   "Resolve incompatible or manual mods before changing Minecraft or the loader.": "Risolvi i mod incompatibili o manuali prima di cambiare Minecraft o loader.",
-  "This Modrinth project or version is no longer available.": "Questo progetto o versione Modrinth non è più disponibile."
+  "This Modrinth project or version is no longer available.": "Questo progetto o versione Modrinth non è più disponibile.",
+  "Choose an image smaller than 5 MB.": "Scegli un’immagine inferiore a 5 MB.",
+  "Choose a PNG, JPEG or WebP image up to 4096 pixels per side.": "Scegli un’immagine PNG, JPEG o WebP fino a 4096 pixel per lato.",
+  "Choose an image up to 4096 pixels per side.": "Scegli un’immagine fino a 4096 pixel per lato.",
+  "Invalid profile thumbnail.": "Miniatura del profilo non valida.",
+  "This property is not supported by the selected engine/version.": "Questa proprietà non è supportata dal motore e dalla versione selezionati.",
+  "Secrets must use the dedicated secure workflow.": "I segreti devono usare il flusso sicuro dedicato.",
+  "Expected a boolean property.": "È richiesta una proprietà booleana.",
+  "The property value is out of range.": "Il valore della proprietà è fuori intervallo.",
+  "Resource-pack SHA-1 must contain 40 hexadecimal characters.": "Lo SHA-1 del pacchetto risorse deve contenere 40 caratteri esadecimali.",
+  "Invalid resource-pack URL.": "URL del pacchetto risorse non valido.",
+  "Resource-pack prompt must be JSON text.": "Il messaggio del pacchetto risorse deve essere testo JSON.",
+  "Invalid Minecraft version.": "Versione Minecraft non valida."
 }

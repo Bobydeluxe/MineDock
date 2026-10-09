@@ -1,4 +1,8 @@
 import { z } from 'zod';
+import { readFile, mkdir } from 'node:fs/promises';
+import path from 'node:path';
+import { atomicWrite } from '../security/paths';
+import type { CatalogOption, EngineCatalogData } from '../domain/catalogs';
 import { fetchJson } from './downloads';
 import type { Engine } from '../domain/types';
 import { DomainError } from '../domain/errors';
@@ -49,6 +53,147 @@ export function javaForPaper(version: string): number {
 }
 export class MinecraftVersionService {
   private cache = new Map<Engine, { at: number; values: string[] }>();
+  private detailed = new Map<string, EngineCatalogData>();
+  private cacheRoot?: string;
+  configureCache(root: string) {
+    this.cacheRoot = root;
+  }
+  async catalog(
+    engine: Engine,
+    version?: string,
+    refresh = false,
+    snapshots = false,
+  ): Promise<EngineCatalogData> {
+    if (version && !/^[a-zA-Z0-9._+-]{1,80}$/.test(version))
+      throw new DomainError('VERSION', 'Invalid Minecraft version.');
+    const key = `${engine}-${version ?? 'games'}-${snapshots ? 'all' : 'release'}`;
+    let previous = this.detailed.get(key);
+    const file = this.cacheRoot && path.join(this.cacheRoot, key + '.json');
+    if (!previous && file) {
+      try {
+        const option = z.object({
+          version: z.string().max(80),
+          stable: z.boolean(),
+          recommended: z.boolean().optional(),
+        });
+        const data = z
+          .object({
+            engine: z.literal(engine),
+            minecraftVersion: z.string().optional(),
+            versions: z.array(option),
+            builds: z.array(option),
+            installers: z.array(option),
+            fetchedAt: z.string().datetime(),
+            cached: z.boolean(),
+            offline: z.boolean(),
+          })
+          .parse(JSON.parse(await readFile(file, 'utf8')));
+        if (data.minecraftVersion === version) previous = data;
+      } catch {
+        /* Missing/damaged cache never replaces the official catalog. */
+      }
+    }
+    if (previous && !refresh && Date.now() - Date.parse(previous.fetchedAt) < 3600000)
+      return { ...previous, cached: true, offline: false };
+    const options = (
+      values: string[],
+      stable = (v: string) => !/-alpha|-beta|snapshot/i.test(v),
+    ): CatalogOption[] => {
+      const first = values.find(stable);
+      return values.map((v) => ({ version: v, stable: stable(v), recommended: v === first }));
+    };
+    try {
+      if (refresh) this.cache.delete(engine);
+      let versions: CatalogOption[],
+        builds: CatalogOption[] = [],
+        installers: CatalogOption[] = [];
+      if (engine === 'fabric') {
+        const catalog = additionalCatalogs.fabric as FabricCatalog;
+        const [games, loaderEntries, installerEntries] = await Promise.all([
+          catalog.games(),
+          version ? catalog.loaders(version) : Promise.resolve([]),
+          catalog.installers(),
+        ]);
+        versions = options(
+          games.filter((v) => snapshots || v.stable).map((v) => v.version),
+          (v) => games.some((e) => e.version === v && e.stable),
+        );
+        builds = options(
+          loaderEntries.map((v) => v.version),
+          (v) => loaderEntries.some((e) => e.version === v && e.stable),
+        );
+        installers = options(
+          installerEntries.map((v) => v.version),
+          (v) => installerEntries.some((e) => e.version === v && e.stable),
+        );
+      } else if (engine === 'vanilla') {
+        const manifest = manifestSchema.parse(
+          await fetchJson('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'),
+        );
+        const entries = manifest.versions.filter(
+          (v) => v.type === 'release' || (snapshots && v.type === 'snapshot'),
+        );
+        versions = options(
+          entries.map((v) => v.id),
+          (v) => entries.some((e) => e.id === v && e.type === 'release'),
+        );
+        builds = version
+          ? options([version], (v) => versions.some((e) => e.version === v && e.stable))
+          : [];
+      } else {
+        versions = options(await this.versions(engine));
+        if (version && ['paper', 'forge', 'neoforge'].includes(engine))
+          versions = (await this.catalog(engine, undefined, refresh, snapshots)).versions;
+        if (!version && ['paper', 'forge', 'neoforge'].includes(engine)) {
+          let recommended: string | undefined;
+          for (const candidate of versions) {
+            try {
+              await this.artifact(engine, candidate.version);
+              recommended = candidate.version;
+              break;
+            } catch (error) {
+              if (!(error instanceof DomainError) || error.code !== 'VERSION') throw error;
+            }
+          }
+          versions = versions.map((v) => ({ ...v, recommended: v.version === recommended }));
+        }
+        if (version) {
+          if (engine === 'paper') {
+            const entries = paperSchema
+              .parse(
+                await fetchJson(
+                  `https://fill.papermc.io/v3/projects/paper/versions/${encodeURIComponent(version)}/builds`,
+                ),
+              )
+              .sort((a, b) => b.id - a.id);
+            builds = options(
+              entries.map((v) => String(v.id)),
+              (v) => entries.some((e) => String(e.id) === v && e.channel === 'STABLE'),
+            );
+          } else builds = options(await this.builds(engine, version));
+        }
+      }
+      const result: EngineCatalogData = {
+        engine,
+        minecraftVersion: version,
+        versions,
+        builds,
+        installers,
+        fetchedAt: new Date().toISOString(),
+        cached: false,
+        offline: false,
+      };
+      if (file) {
+        await mkdir(path.dirname(file), { recursive: true });
+        await atomicWrite(file, JSON.stringify(result));
+      }
+      this.detailed.set(key, result);
+      return result;
+    } catch (error) {
+      if (previous) return { ...previous, cached: true, offline: true };
+      throw error;
+    }
+  }
   async versions(engine: Engine): Promise<string[]> {
     const cached = this.cache.get(engine);
     if (cached && Date.now() - cached.at < 3600000) return cached.values;
@@ -83,7 +228,11 @@ export class MinecraftVersionService {
     const manifest = manifestSchema.parse(
       await fetchJson<unknown>('https://piston-meta.mojang.com/mc/game/version_manifest_v2.json'),
     );
-    const entry = manifest.versions.find((v) => v.id === version && v.type === 'release');
+    const entry = manifest.versions.find(
+      (v) =>
+        v.id === version &&
+        (v.type === 'release' || (engine === 'vanilla' && v.type === 'snapshot')),
+    );
     if (!entry) throw new DomainError('VERSION', 'Minecraft version is unavailable.');
     const meta = metadataSchema.parse(await fetchJson<unknown>(entry.url));
     const java = meta.javaVersion?.majorVersion ?? javaForVersion(version);
@@ -105,7 +254,7 @@ export class MinecraftVersionService {
       ),
     );
     const build = builds
-      .filter((b) => b.channel === 'STABLE' && (!pinnedBuild || String(b.id) === pinnedBuild))
+      .filter((b) => (pinnedBuild ? String(b.id) === pinnedBuild : b.channel === 'STABLE'))
       .sort((a, b) => b.id - a.id)[0];
     const file = build?.downloads['server:default'];
     if (!file || !build)
@@ -132,7 +281,6 @@ export class MinecraftVersionService {
           `https://fill.papermc.io/v3/projects/paper/versions/${encodeURIComponent(version)}/builds`,
         ),
       )
-      .filter((build) => build.channel === 'STABLE')
       .sort((a, b) => b.id - a.id)
       .map((build) => String(build.id));
   }

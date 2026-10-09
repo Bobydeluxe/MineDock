@@ -1,4 +1,4 @@
-# MineDock
+# <img src="assets/brand/icon-128.png" width="44" alt="MineDock cube icon"> MineDock
 
 **Run your Minecraft servers from one desktop app.** Create or import a server, open its console, manage worlds and keep verified backups on your computer.
 
@@ -8,13 +8,15 @@
 
 [**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
-![MineDock native desktop dashboard — visual review](docs/screenshots/dashboard.png)
+![MineDock 0.4.1 review build — actual Electron dashboard](docs/screenshots/dashboard.png)
 
 ## Project status
 
 The current public version is **MineDock 0.4.0** for Windows, Linux and macOS. This release focuses on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes warm light and neutral charcoal dark themes. See the [release notes](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0), [complete features and limits](docs/survival-evolution.md) and [validation record](docs/validation.md).
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
+
+**0.4.1 is the review build on this branch, not a published download.** It adds the approved cube icon, the reference-based interface, full engine build lists, independently pinned Fabric choices, reviewed engine-specific properties and local profile images. [Design comparisons](docs/design/reference-041/README.md) and [validation](docs/validation.md) distinguish the candidate from public 0.4.0.
 
 ## Start using MineDock
 
@@ -69,7 +71,7 @@ Capabilities control the available actions. A native engine does not show Java m
 
 ## Interface
 
-These are actual MineDock 0.4.0 native Electron captures, refreshed on 9 October 2026 using isolated local profiles and the real preload/core/SQLite services. The mod files are actual verified Modrinth downloads; world/player/administration records are QA fixtures. Active process and console views use an inert external Node child, which is never shipped. They are interface evidence, not Minecraft gameplay. A fresh installation starts empty. See [capture provenance and every current screen](docs/screenshots/README.md).
+These are actual MineDock 0.4.1 review-build native Electron captures, refreshed on 9 October 2026 using isolated local profiles and the real preload/core/SQLite services. The mod files are actual verified Modrinth downloads; world/player/administration records are QA fixtures. Active process and console views use an inert external Node child, which is never shipped. They are interface evidence, not Minecraft gameplay. A fresh installation starts empty. See [capture provenance and every current screen](docs/screenshots/README.md).
 
 | Create a server                                                                             | Manage a server                                                          |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
@@ -78,6 +80,10 @@ These are actual MineDock 0.4.0 native Electron captures, refreshed on 9 October
 | ![Native console with isolated process output](docs/screenshots/console-active.png)         | ![Plugin search and version selection](docs/screenshots/plugins.png)     |
 | **Backups**                                                                                 | **Worlds**                                                               |
 | ![Backup list and restore actions](docs/screenshots/backups.png)                            | ![World metadata and guarded world actions](docs/screenshots/worlds.png) |
+
+| **Full Fabric versions**                                                                        | **Reviewed server settings**                                                  |
+| ----------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| ![Independent official Fabric loader and installer lists](docs/screenshots/fabric-versions.png) | ![Categorized actual server properties](docs/screenshots/server-settings.png) |
 
 <details>
 <summary>Creation summary and light appearance</summary>

@@ -30,6 +30,8 @@ function Setting({
             <input
               disabled={!stopped}
               type={typeof field.value === 'number' ? 'number' : 'text'}
+              min={field.min}
+              max={field.max}
               value={String(value)}
               onChange={(e) =>
                 setValue(typeof field.value === 'number' ? Number(e.target.value) : e.target.value)
@@ -64,6 +66,7 @@ export function ConfigurationControls({ server }: { server: Server }) {
     history = useData(() => api.configHistory(server.id), [server.id]),
     audit = useData(() => api.configAudit(server.id), [server.id]),
     [search, setSearch] = useState(''),
+    [all, setAll] = useState(false),
     [restore, setRestore] = useState<string>();
   const reload = () => {
     data.reload();
@@ -74,6 +77,12 @@ export function ConfigurationControls({ server }: { server: Server }) {
     <details className="panel">
       <summary>{t('config.title')}</summary>
       <p className="muted">{t('config.help')}</p>
+      {['paper', 'purpur'].includes(server.engine) && (
+        <>
+          <p className="hint">{t('config.curatedHelp')}</p>
+          <Toggle label={t('config.showAll')} checked={all} onChange={setAll} />
+        </>
+      )}
       <Field label={t('search')}>
         <input value={search} onChange={(e) => setSearch(e.target.value)} />
       </Field>
@@ -95,6 +104,10 @@ export function ConfigurationControls({ server }: { server: Server }) {
                     .filter(
                       (f) =>
                         f.category === category &&
+                        (all ||
+                          !!search ||
+                          !['paper', 'purpur'].includes(server.engine) ||
+                          f.curated) &&
                         f.key.join('.').toLowerCase().includes(search.toLowerCase()),
                     )
                     .map((field) => (

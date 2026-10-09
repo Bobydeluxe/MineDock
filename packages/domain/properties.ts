@@ -50,3 +50,38 @@ export function serializeProperties(values: Record<string, string>): string {
     '\n'
   );
 }
+/** Change only the last effective occurrence of edited keys. Retain all unrelated bytes. */
+export function patchProperties(text: string, changes: Record<string, string>): string {
+  const eol = text.includes('\r\n') ? '\r\n' : '\n';
+  const physical = text.match(/[^\r\n]*(?:\r\n|\r|\n|$)/g)?.filter(Boolean) ?? [];
+  const blocks: string[] = [];
+  for (let index = 0; index < physical.length; index++) {
+    let block = physical[index]!;
+    while (
+      (block.replace(/[\r\n]+$/, '').match(/\\+$/)?.[0].length ?? 0) % 2 === 1 &&
+      index + 1 < physical.length
+    )
+      block += physical[++index]!;
+    blocks.push(block);
+  }
+  const last = new Map<string, number>();
+  blocks.forEach((block, index) =>
+    Object.keys(parseProperties(block)).forEach((key) => last.set(key, index)),
+  );
+  const current = parseProperties(text);
+  for (const [key, value] of Object.entries(changes)) {
+    if (current[key] === value) continue;
+    const index = last.get(key);
+    const serialized = serializeProperties({ [key]: value }).split('\n')[1]!;
+    if (index === undefined) {
+      if (blocks.length && !/[\r\n]$/.test(blocks.at(-1)!)) blocks.push(eol);
+      blocks.push(serialized + eol);
+    } else {
+      const block = blocks[index]!;
+      const prefix = /^(\s*(?:\\.|[^=:\s\\])+(?:[ \t]*[=:][ \t]*|[ \t]+))/.exec(block)?.[1];
+      const encoded = escape(value).replace(/^ +/, (spaces) => spaces.replace(/ /g, '\\ '));
+      blocks[index] = (prefix ? prefix + encoded : serialized) + (/[\r\n]$/.test(block) ? eol : '');
+    }
+  }
+  return blocks.join('');
+}

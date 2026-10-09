@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Box,
   LayoutDashboard,
@@ -34,7 +34,8 @@ import { engineDefinition } from '../../../../packages/domain/engines';
 import { AppContext, useApp, type Run } from './context';
 import { Button, Empty, Loading, ErrorBox, bytes, duration, Dialog, Field } from './ui';
 import { CreateServer, Onboarding } from './wizard';
-import { EngineIcon } from './engine-icon';
+import brandIcon from '../../../../assets/brand/icon-128.png';
+import { ServerAvatar } from './profile';
 import { ImportServerDialog } from './imports';
 import type { ImportServerPreview } from '../../../../packages/domain/imports';
 import type { ModpackPreview } from '../../../../packages/domain/modpacks';
@@ -124,6 +125,21 @@ export function App() {
   const [progress, setProgress] = useState<Progress[]>([]);
   const [palette, setPalette] = useState(false);
   const [paletteSearch, setPaletteSearch] = useState('');
+  const unsaved = useRef(new Set<string>());
+  const [pendingNavigation, setPendingNavigation] = useState<{ action: () => void }>();
+  const registerUnsaved = useCallback((key: string, dirty: boolean) => {
+    if (dirty) unsaved.current.add(key);
+    else unsaved.current.delete(key);
+    void api?.setUnsavedChanges(unsaved.current.size > 0);
+    return () => {
+      unsaved.current.delete(key);
+      void api?.setUnsavedChanges(unsaved.current.size > 0);
+    };
+  }, []);
+  const requestNavigation = useCallback((action: () => void) => {
+    if (unsaved.current.size) setPendingNavigation({ action });
+    else action();
+  }, []);
   const refresh = useCallback(async () => {
     if (api) {
       const state = await api.snapshot();
@@ -196,8 +212,10 @@ export function App() {
       }
       if (e.key === ',') {
         e.preventDefault();
-        setSelected(undefined);
-        setPage('settings');
+        requestNavigation(() => {
+          setSelected(undefined);
+          setPage('settings');
+        });
       }
       if (e.shiftKey && e.key.toLowerCase() === 'n') {
         e.preventDefault();
@@ -243,8 +261,10 @@ export function App() {
   if (!snapshot) return <Loading label={t('loading')} />;
   const selectedServer = snapshot.servers.find((s) => s.id === selected);
   const navigate = (value: Page) => {
-    setSelected(undefined);
-    setPage(value);
+    requestNavigation(() => {
+      setSelected(undefined);
+      setPage(value);
+    });
   };
   return (
     <AppContext
@@ -257,9 +277,36 @@ export function App() {
         refresh,
         error: toast?.error ? toast.text : undefined,
         dismissError: () => setToast(undefined),
+        registerUnsaved,
+        requestNavigation,
       }}
     >
       <div className="app-shell">
+        {pendingNavigation && (
+          <Dialog
+            title={t('property.unsaved')}
+            closeLabel={t('close')}
+            onClose={() => setPendingNavigation(undefined)}
+          >
+            <div className="dialog-body">
+              <p>{t('property.leaveHelp')}</p>
+            </div>
+            <footer className="dialog-footer">
+              <Button onClick={() => setPendingNavigation(undefined)}>{t('cancel')}</Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  const action = pendingNavigation.action;
+                  unsaved.current.clear();
+                  setPendingNavigation(undefined);
+                  action();
+                }}
+              >
+                {t('property.discard')}
+              </Button>
+            </footer>
+          </Dialog>
+        )}
         <aside className="sidebar">
           <a
             className="brand"
@@ -270,7 +317,7 @@ export function App() {
             }}
           >
             <span className="brand-mark">
-              <Box size={24} strokeWidth={1.7} />
+              <img src={brandIcon} width={36} height={36} alt="" />
             </span>
             {PRODUCT.name}
             <span className="brand-version">BETA</span>
@@ -353,10 +400,12 @@ export function App() {
                 key={s.id}
                 variant="ghost"
                 className={`nav server-link ${selected === s.id ? 'active' : ''}`}
-                onClick={() => setSelected(s.id)}
+                onClick={() => {
+                  if (s.id !== selected) requestNavigation(() => setSelected(s.id));
+                }}
               >
                 <span className="sidebar-engine">
-                  <EngineIcon engine={s.engine} size={24} />
+                  <ServerAvatar server={s} size={24} />
                   <i className={`server-dot ${s.status}`} aria-hidden="true" />
                 </span>
                 <span>{s.name}</span>
@@ -435,7 +484,7 @@ export function App() {
                     if (result.ok && result.value) setPackPreview(result.value);
                   });
                 }}
-                onOpen={setSelected}
+                onOpen={(id) => requestNavigation(() => setSelected(id))}
                 onActivity={() => navigate('activity')}
               />
             ) : page === 'notifications' ? (
@@ -458,7 +507,7 @@ export function App() {
             }}
             onCreated={(s) => {
               setCreate(false);
-              setSelected(s.id);
+              requestNavigation(() => setSelected(s.id));
             }}
           />
         )}
@@ -471,7 +520,7 @@ export function App() {
             }}
             onCreated={(server) => {
               setPackPreview(undefined);
-              setSelected(server.id);
+              requestNavigation(() => setSelected(server.id));
             }}
           />
         )}
@@ -483,7 +532,7 @@ export function App() {
             }}
             onCreated={(server) => {
               setImportPreview(undefined);
-              setSelected(server.id);
+              requestNavigation(() => setSelected(server.id));
             }}
           />
         )}
@@ -552,8 +601,8 @@ export function App() {
                     key={s.id}
                     className="palette-item"
                     onClick={() => {
-                      setSelected(s.id);
                       setPalette(false);
+                      if (s.id !== selected) requestNavigation(() => setSelected(s.id));
                     }}
                   >
                     <ServerIcon size={16} />
@@ -744,7 +793,7 @@ function Dashboard({
             {servers.map((server) => (
               <article className="server-card" key={server.id}>
                 <div className="server-card-header">
-                  <EngineIcon engine={server.engine} size={44} />
+                  <ServerAvatar server={server} size={44} />
                   <span>{engineDefinition(server.engine).displayName}</span>
                   <Status server={server} />
                 </div>
@@ -762,7 +811,7 @@ function Dashboard({
                     <div>
                       <Users size={14} />
                       <strong>
-                        {server.players.length}
+                        {server.status === 'running' ? server.players.length : '—'}
                         <span> / {server.maxPlayers}</span>
                       </strong>
                     </div>
@@ -773,8 +822,8 @@ function Dashboard({
                     <div>
                       <Cpu size={14} />
                       <strong>
-                        {server.cpu.toFixed(1)}
-                        <span>%</span>
+                        {server.pid ? server.cpu.toFixed(1) : '—'}
+                        {server.pid && <span>%</span>}
                       </strong>
                     </div>
                   </div>

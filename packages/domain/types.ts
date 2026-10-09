@@ -23,7 +23,7 @@ import type {
   ManualContent,
 } from './content';
 
-export const PRODUCT = { name: 'MineDock', version: '0.4.0' } as const;
+export const PRODUCT = { name: 'MineDock', version: '0.4.1' } as const;
 export const engineSchema = z.enum(engineIds);
 export type Engine = z.infer<typeof engineSchema>;
 export type ServerStatus =
@@ -63,6 +63,10 @@ export const createServerSchema = z
       .string()
       .regex(/^[a-zA-Z0-9._+-]{1,80}$/)
       .optional(),
+    build: z
+      .string()
+      .regex(/^[a-zA-Z0-9._+@-]{1,80}$/)
+      .optional(),
     ipv6Port: z.number().int().min(1024).max(65535).optional(),
     eula: z.literal(true),
   })
@@ -82,6 +86,7 @@ export const serverOptionsSchema = z
   .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Invalid minimum memory.' });
 export type ServerOptions = z.infer<typeof serverOptionsSchema>;
 export interface Server extends Omit<CreateServerInput, 'eula'> {
+  thumbnail?: string;
   jvm?: import('./performance').JvmOptions;
   macros?: import('./console').MacroInput[];
   packs?: import('./packs').PackFile[];
@@ -418,6 +423,12 @@ export interface Api {
   versions(engine: Engine): Promise<string[]>;
   builds(engine: Engine, version: string): Promise<string[]>;
   installers(engine: Engine): Promise<string[]>;
+  engineCatalog(
+    engine: Engine,
+    version?: string,
+    refresh?: boolean,
+    snapshots?: boolean,
+  ): Promise<import('./catalogs').EngineCatalogData>;
   create(input: CreateServerInput): Promise<Server>;
   previewServerImport(): Promise<ImportServerPreview | null>;
   importServer(input: ImportServerInput): Promise<Server>;
@@ -445,7 +456,11 @@ export interface Api {
   playerReport(id: string): Promise<PlayerReport>;
   moderatePlayer(id: string, input: ModeratePlayerInput): Promise<string>;
   properties(id: string): Promise<Record<string, string>>;
-  saveProperties(id: string, properties: Record<string, string>): Promise<void>;
+  propertiesDocument(id: string): Promise<{ values: Record<string, string>; sha256: string }>;
+  updateProfile(id: string, input: { name: string; thumbnail?: string | null }): Promise<void>;
+  selectProfileIcon(): Promise<string | undefined>;
+  setUnsavedChanges(dirty: boolean): Promise<void>;
+  saveProperties(id: string, properties: Record<string, string>, sha256?: string): Promise<void>;
   configureServer(id: string, options: ServerOptions): Promise<Server>;
   files(id: string, path: string): Promise<FileEntry[]>;
   readFile(id: string, path: string): Promise<string>;

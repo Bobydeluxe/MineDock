@@ -241,7 +241,12 @@ for (const engine of ['Forge', 'NeoForge']) {
         .getByRole('button', { name: engine, exact: true })
         .click();
       await page.getByLabel('Server name', { exact: true }).fill(`${engine} visual test`);
-      await expect(page.getByLabel('Loader version', { exact: true })).toHaveValue('demo');
+      await page.getByLabel('Show all available builds / loader versions', { exact: true }).check();
+      await expect(
+        page
+          .getByRole('region', { name: 'Loader version', exact: true })
+          .getByRole('button', { name: 'demo Recommended', exact: true }),
+      ).toHaveAttribute('aria-pressed', 'true');
       for (let index = 0; index < 3; index++)
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
       await expect(page.locator('.installation-summary')).toContainText('demo');

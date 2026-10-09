@@ -158,7 +158,7 @@ export function createMockApi(): Api {
     }
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
-  return {
+  const mock: Api = {
     performance: async () => ({ samples: [], lags: [] }),
     configDocuments: async () => [],
     exportPackage: async () => {},
@@ -392,6 +392,29 @@ export function createMockApi(): Api {
     versions: async () => ['1.21.11', '1.21.10', '1.21.8', '1.21.4', '1.20.6'],
     builds: async () => ['demo'],
     installers: async () => ['demo'],
+    engineCatalog: async (engine, version) => ({
+      engine,
+      minecraftVersion: version,
+      versions: ['1.21.11', '1.21.1', '1.20.1'].map((version, i) => ({
+        version,
+        stable: true,
+        recommended: i === 0,
+      })),
+      builds: [
+        { version: 'demo', stable: true, recommended: true },
+        { version: '0.16.9', stable: false },
+      ],
+      installers:
+        engine === 'fabric'
+          ? [
+              { version: 'demo', stable: true, recommended: true },
+              { version: 'demo-previous', stable: false },
+            ]
+          : [],
+      fetchedAt: new Date().toISOString(),
+      cached: false,
+      offline: false,
+    }),
     create: async (input) => {
       const s = { ...server(input.name, input.engine, 'stopped', input.port), ...input };
       data.servers.push(s);
@@ -546,10 +569,24 @@ export function createMockApi(): Api {
       const saved = texts.get(id + ':props');
       return saved ? (JSON.parse(saved) as Record<string, string>) : values;
     },
+    propertiesDocument: async (id) => ({
+      values: await mock.properties(id),
+      sha256: '0'.repeat(64),
+    }),
+    selectProfileIcon: async () => undefined,
+    setUnsavedChanges: async () => {},
+    updateProfile: async (id, input) => {
+      Object.assign(
+        data.servers.find((s) => s.id === id)!,
+        input,
+      );
+      emit({ type: 'changed' });
+    },
     saveProperties: async (id, props) => {
-      texts.set(id + ':props', JSON.stringify(props));
+      const values = { ...(await mock.properties(id)), ...props };
+      texts.set(id + ':props', JSON.stringify(values));
       const s = get(id);
-      s.port = Number(props['server-port']);
+      s.port = Number(values['server-port']);
       s.motd = props.motd ?? s.motd;
       audit('server.configured', s.name, id);
       emit({ type: 'changed' });
@@ -829,4 +866,5 @@ export function createMockApi(): Api {
       throw new Error('Rollback is unavailable in this demo.');
     },
   };
+  return mock;
 }

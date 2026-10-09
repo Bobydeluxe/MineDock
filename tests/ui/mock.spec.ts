@@ -58,7 +58,8 @@ test('explicit demo UI: create, start, command, stop, backup, settings, restore'
     await page.getByRole('button', { name: 'Back up', exact: true }).click();
     await page.getByRole('button', { name: 'Settings', exact: true }).last().click();
     await page.getByLabel('Server message', { exact: true }).fill('Updated');
-    await page.getByRole('button', { name: 'Save', exact: true }).click();
+    await page.getByRole('button', { name: 'Review and save', exact: true }).click();
+    await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
     await page.getByRole('button', { name: 'Backups', exact: true }).last().click();
     await page.getByRole('button', { name: 'Restore', exact: true }).first().click();
     await page.getByRole('dialog').getByLabel('Server name', { exact: true }).fill('UI test');
@@ -92,8 +93,19 @@ test('explicit demo journey: create Fabric with selected loader and installer', 
     await page.getByRole('button', { name: 'Create server', exact: true }).first().click();
     await page.getByRole('button', { name: 'Fabric', exact: false }).click();
     await page.getByLabel('Server name', { exact: true }).fill('Fabric UI');
-    await expect(page.getByLabel('Loader version', { exact: true })).toHaveValue('demo');
-    await expect(page.getByLabel('Installer version', { exact: true })).toHaveValue('demo');
+    await page
+      .getByRole('checkbox', { name: 'Show all available builds / loader versions', exact: true })
+      .check();
+    await expect(
+      page
+        .getByRole('region', { name: 'Loader version' })
+        .getByRole('button', { name: 'demo Recommended' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    await expect(
+      page
+        .getByRole('region', { name: 'Installer version' })
+        .getByRole('button', { name: 'demo Recommended' }),
+    ).toHaveAttribute('aria-pressed', 'true');
     for (let i = 0; i < 3; i++)
       await page.getByRole('button', { name: 'Continue', exact: true }).click();
     await page.getByLabel('I have read and accept the Minecraft EULA.').check();
@@ -207,7 +219,12 @@ test('explicit demo journey: inspect a modpack, confirm its manifest and create 
     await page.getByLabel('Modpack name', { exact: true }).fill('Explicit demo modpack');
     await page.getByRole('dialog').getByRole('button', { name: 'Continue', exact: true }).click();
     await expect(page.getByLabel('Minecraft version', { exact: true })).toBeDisabled();
-    await expect(page.getByLabel('Loader version', { exact: true })).toBeDisabled();
+    await page.getByLabel('Show all available builds / loader versions', { exact: true }).check();
+    await expect(
+      page
+        .getByRole('region', { name: 'Loader version', exact: true })
+        .getByRole('button', { name: 'demo Recommended', exact: true }),
+    ).toBeDisabled();
     await page.getByLabel('Server name', { exact: true }).fill('Pack UI');
     for (let i = 0; i < 3; i++)
       await page.getByRole('dialog').getByRole('button', { name: 'Continue', exact: true }).click();

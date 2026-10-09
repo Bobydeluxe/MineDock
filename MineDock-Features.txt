@@ -1,13 +1,14 @@
 MINEDOCK — COMPLETE FEATURE LIST
 Public version: 0.4.0 (friends survival evolution)
-Updated: 8 October 2026
+Updated: 9 October 2026
+Branch implementation: 0.4.1 review build — not yet published
 Repository: https://github.com/Bobydeluxe/MineDock
 
 English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Download the 0.4.0 package to use the features listed here.
+Download public 0.4.0 for its released features. Additions explicitly labeled 0.4.1 require the reviewed branch/build until that version is approved and published.
 
 ======================================================================
 1. DESKTOP APPLICATION — IMPLEMENTED
@@ -20,9 +21,10 @@ Download the 0.4.0 package to use the features listed here.
 - Translated MineDock dialogs, errors, crash explanations and task descriptions.
 - Original Minecraft console output, file contents and external content retained.
 - Light, dark and system themes; server status and recent activity.
-- Proposed mineral teal/copper visual identity, with layered charcoal/warm surfaces,
+- Implemented mineral teal/copper visual identity, with layered charcoal/warm surfaces,
   shared tokens, semantic states, restrained radii and keyboard-visible focus.
-- Existing sidebar, pages, card positions and user journeys retained.
+- Existing sidebar, route identity, capabilities and user journeys retained.
+  The 0.4.1 review build refines rows, wizard tiles and categorized settings.
 - Current native Electron gallery and historical before/after comparison.
 - Centered native dialogs with body scroll lock, internal scrolling, keyboard
   focus containment/restoration, accessible names and guarded backdrop/Escape.
@@ -334,17 +336,7 @@ Download the 0.4.0 package to use the features listed here.
 - Exact current build/test outcomes: docs/validation.md.
 
 ======================================================================
-19. FUTURE OPTIONS — NOT IMPLEMENTED
-======================================================================
-- Docker runner/isolation; cloud synchronization/hosting.
-- Remote multi-user roles/accounts and hosted server management.
-- General alert integrations and AI administration.
-- Universal Java/Bedrock world conversion.
-
-These are future scope, not buttons that pretend to work.
-
-======================================================================
-20. DATAPACKS AND RESOURCE PACKS — IMPLEMENTED
+19. DATAPACKS AND RESOURCE PACKS — IMPLEMENTED
 ======================================================================
 - Contextual Modrinth ZIP search, versions, required/optional dependency preview.
 - Managed and manual local inventory, world selection, updates, local ZIP import.
@@ -354,7 +346,7 @@ These are future scope, not buttons that pretend to work.
 - Selected pack removal clears resource-pack properties; manual files stay local.
 
 ======================================================================
-21. HEALTH, NOTICES AND PLAYERS — IMPLEMENTED WITH MEASURED DATA
+20. HEALTH, NOTICES AND PLAYERS — IMPLEMENTED WITH MEASURED DATA
 ======================================================================
 - Healthy/attention/problem reports: crash, backup age, disk, CPU/process RAM,
   runtime, stopped game-port availability and known content problems.
@@ -368,7 +360,7 @@ These are future scope, not buttons that pretend to work.
 - Real whitelist and confirmed moderation; missing identities remain unavailable.
 
 ======================================================================
-22. INCREMENTAL/PARTIAL/EXTERNAL BACKUPS — IMPLEMENTED WITH LIMITS
+21. INCREMENTAL/PARTIAL/EXTERNAL BACKUPS — IMPLEMENTED WITH LIMITS
 ======================================================================
 - Stopped-server manifests and immutable SHA-256 file-object deduplication.
 - Full ZIP backups remain; full safety ZIP before every partial restoration.
@@ -378,7 +370,7 @@ These are future scope, not buttons that pretend to work.
 - No snapshot deletion/garbage collector; legacy ZIP partial restore unavailable.
 
 ======================================================================
-23. MIGRATION AND CLONES — IMPLEMENTED WITH GUARDED UNKNOWN CONTENT
+22. MIGRATION AND CLONES — IMPLEMENTED WITH GUARDED UNKNOWN CONTENT
 ======================================================================
 - Official Minecraft/engine/runtime checks and classified compatibility review.
 - Recoverable Minecraft and Paper/Purpur migration; downgrade/unknown refusal.
@@ -388,7 +380,7 @@ These are future scope, not buttons that pretend to work.
 - Independent profiles, available ports, no copied temporary/session locks.
 
 ======================================================================
-24. CONSOLE AND PERFORMANCE — IMPLEMENTED WITH MEASUREMENT LIMITS
+23. CONSOLE AND PERFORMANCE — IMPLEMENTED WITH MEASUREMENT LIMITS
 ======================================================================
 - Contextual command suggestions, chat/warning/error categories.
 - Actual plain/gzip historical logs: text/date/level/player search with bounds.
@@ -399,7 +391,7 @@ These are future scope, not buttons that pretend to work.
 - JVM heap/swap are unavailable; process working set is labeled correctly.
 
 ======================================================================
-25. CONFIGURATION, MAPS AND INTERNET CHECK — IMPLEMENTED WITH LIMITS
+24. CONFIGURATION, MAPS AND INTERNET CHECK — IMPLEMENTED WITH LIMITS
 ======================================================================
 - Searchable server properties and existing YAML/JSON scalar graphical options.
 - Text editor retained for complex structures/HOCON/TOML, comments preserved.
@@ -412,7 +404,7 @@ These are future scope, not buttons that pretend to work.
 - Local success never proves Internet reachability; unsupported UDP/IPv6 unknown.
 
 ======================================================================
-26. PORTABLE MINEDOCK PACKAGE — IMPLEMENTED WITH PRIVACY POLICY
+25. PORTABLE MINEDOCK PACKAGE — IMPLEMENTED WITH PRIVACY POLICY
 ======================================================================
 - Documented format-1 .minedock ZIP: validated profile/inventory/file SHA-256.
 - Native export/import, preview, fresh local paths/ports/RCON/host-adjusted RAM.
@@ -422,10 +414,42 @@ These are future scope, not buttons that pretend to work.
 - No offline runtime bundle or universal plugin path/cross-edition conversion.
 
 ======================================================================
-27. WEBSITE, DOCS AND REVIEW
+26. WEBSITE, DOCS AND REVIEW
 ======================================================================
 - Static public product site, original engine icons and real native app captures.
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
 - Release documentation includes appended schemas, validation and known limits.
 - Public packages and checksum links target v0.4.0.
+
+======================================================================
+27. REFERENCE DESIGN AND CUSTOMIZATION — IMPLEMENTED IN 0.4.1 REVIEW BUILD
+======================================================================
+- Exact approved teal/copper icon with reproducible PNG/ICO/ICNS/favicon sizes.
+- Compact server rows, informative engine tiles, console category tabs and
+  full/incremental plus manual/automatic backup filters.
+- Complete cached/refreshable official engine build lists; explicit advanced
+  opt-in; separate Fabric loader/installer selections and installation history.
+- Vanilla official snapshots opt-in; BDS shows only current published binaries.
+- Shared create/migration picker; incompatible or unavailable selections need
+  review, and an explicit older choice is never silently replaced.
+- Categorized/searchable typed server properties; real engine/version gates.
+- Diff review, world/network/identity warnings, stopped-only save, encrypted
+  configuration history, full safety backup, stale-write guard and atomic patch.
+- Preserve comments, ordering, unknown keys and CRLF; no Java server-name key.
+- Local profile display name and bounded PNG/JPEG/WebP image; native conversion
+  to a local 128px PNG stored with the profile, no remote image fetches.
+- Inherited settings stay unset unless edited; unsaved navigation/close guards.
+- Curated existing Paper scalar paths, advanced discovered scalars and raw YAML.
+- Original dusk website scene, English public release text and real screenshots.
+- Website downloads continue to public 0.4.0 until a newer release is published.
+
+======================================================================
+28. FUTURE OPTIONS — NOT IMPLEMENTED
+======================================================================
+- Docker runner/isolation; cloud synchronization/hosting.
+- Remote multi-user roles/accounts and hosted server management.
+- General alert integrations and AI administration.
+- Universal Java/Bedrock world conversion.
+
+These are future scope, not buttons that pretend to work.

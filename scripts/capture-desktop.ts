@@ -1,5 +1,5 @@
 import { _electron as electron, expect } from '@playwright/test';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { AppCore } from '../packages/core/app';
@@ -190,6 +190,11 @@ try {
   await core.configuration.remember(paper.id, 'config/paper-global.yml');
   if (!core.incremental.list(paper.id).length) await core.incremental.create(paper.id);
   core.health.push(paper.id, 'backupFailed', 'Private QA notification');
+  await core.updateProfile(fabric.id, {
+    name: fabric.name,
+    thumbnail:
+      'data:image/png;base64,' + (await readFile('assets/brand/icon-128.png')).toString('base64'),
+  });
   core.repo.saveSettings({
     ...core.repo.settings(),
     serverRoot: path.join(root, 'servers'),
@@ -318,6 +323,29 @@ if (!process.argv.includes('--first-start')) {
       await page.getByLabel('Server name', { exact: true }).fill('Weekend survival');
       await page.getByLabel('Minecraft version', { exact: true }).waitFor();
       await capture('create-server');
+      await page.getByRole('button', { name: 'Fabric', exact: true }).click();
+      await page.getByLabel('Minecraft version', { exact: true }).waitFor();
+      await page.getByLabel('Minecraft version', { exact: true }).selectOption('1.21.1');
+      await page
+        .getByRole('checkbox', { name: 'Show all available builds / loader versions', exact: true })
+        .click();
+      await page.locator('.catalog-list').last().waitFor();
+      await page.locator('.engine-version-picker').scrollIntoViewIfNeeded();
+      await capture('fabric-versions');
+      for (const [engine, name] of [
+        ['Paper', 'paper-builds'],
+        ['Purpur', 'purpur-builds'],
+        ['Forge', 'forge-builds'],
+        ['NeoForge', 'neoforge-builds'],
+      ] as const) {
+        await page.getByRole('button', { name: engine, exact: true }).click();
+        await page.getByLabel('Minecraft version', { exact: true }).selectOption('1.21.11');
+        await page.locator('.catalog-list').first().waitFor();
+        await page.locator('.engine-version-picker').scrollIntoViewIfNeeded();
+        await capture(name);
+      }
+      await page.getByRole('button', { name: 'Paper', exact: true }).click();
+      await page.getByLabel('Minecraft version', { exact: true }).selectOption('1.21.11');
       for (let i = 0; i < 3; i++)
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
       await capture('create-summary');
@@ -345,6 +373,18 @@ if (!process.argv.includes('--first-start')) {
         await capture(name);
       }
       await tabs.getByRole('button', { name: 'Settings', exact: true }).click();
+      await capture('server-settings');
+      for (const [category, name] of [
+        ['Gameplay', 'properties-gameplay'],
+        ['Network', 'properties-network'],
+        ['World', 'properties-world'],
+      ] as const) {
+        await page
+          .locator('.properties-categories')
+          .getByRole('button', { name: new RegExp('^' + category) })
+          .click();
+        await capture(name);
+      }
       await page.getByText('Advanced configuration', { exact: true }).click();
       const configuration = page
         .locator('details.panel')
@@ -498,6 +538,9 @@ if (!process.argv.includes('--first-start')) {
       .getByRole('button', { name: 'Settings', exact: true })
       .click();
     await capture('settings-light', true);
+    await openPaper();
+    await tabs.getByRole('button', { name: 'Settings', exact: true }).click();
+    await capture('server-settings-light');
     await writeFile(
       path.resolve('data/visual-review/layout-' + phase + '.json'),
       JSON.stringify(layouts, null, 2),

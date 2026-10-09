@@ -24,6 +24,7 @@ const child = spawn(
     'tests/ui/updates-desktop.spec.ts',
     'tests/ui/mods-desktop.spec.ts',
     'tests/ui/survival-desktop.spec.ts',
+    'tests/ui/reference-desktop.spec.ts',
   ],
   { stdio: 'inherit', env: { ...process.env, MINEDOCK_TEST_BINARY: binary }, windowsHide: true },
 );

@@ -22,12 +22,14 @@ import { describeCron } from '../../../../packages/domain/cron-description';
 import { engineDefinition } from '../../../../packages/domain/engines';
 import { useApp } from './context';
 import { activityLabel, type Key } from './i18n';
-import { Button, Field, Toggle, Dialog, Empty, ErrorBox, Loading, useData, bytes } from './ui';
+import { Button, Field, Toggle, Dialog, Empty, ErrorBox, useData, bytes } from './ui';
 import { RuntimeControls } from './runtime-controls';
 import { RecoveryDialog } from './recovery';
 import { RetentionControls } from './retention';
 import { UpdateControls } from './updates';
 import { SnapshotControls } from './snapshots';
+import { PropertiesEditor } from './properties-editor';
+import { ProfileControls } from './profile';
 import { PackageControls } from './packages';
 const scheduleDate = (at: string, language: string, timeZone: string) => {
   try {
@@ -82,7 +84,13 @@ export function BackupsView({ serverId }: { serverId?: string }) {
     item: Backup;
     action: 'restore' | 'delete';
   }>();
-  const backups = snapshot.backups.filter((b) => !serverId || b.serverId === serverId);
+  const [trigger, setTrigger] = useState('all'),
+    [format, setFormat] = useState('all');
+  const backups = snapshot.backups.filter(
+    (b) =>
+      (!serverId || b.serverId === serverId) &&
+      (trigger === 'all' || (trigger === 'manual' ? b.reason === 'manual' : b.reason !== 'manual')),
+  );
   const create = () => {
     if (selected) void run(() => api.backup(selected));
   };
@@ -118,89 +126,120 @@ export function BackupsView({ serverId }: { serverId?: string }) {
           </Button>
         </div>
       </div>
-      <section className="panel">
-        {!backups.length ? (
-          <Empty icon={<Archive size={32} />} title={t('noBackups')} />
-        ) : (
-          <div className="backup-list">
-            {backups.map((item) => {
-              const server = snapshot.servers.find((s) => s.id === item.serverId);
-              return (
-                <article className="backup-row" key={item.id}>
-                  <span className="backup-icon">
-                    <Archive size={21} />
-                  </span>
-                  <div className="backup-info">
-                    <strong>{item.name}</strong>
-                    <small>
-                      {new Date(item.createdAt).toLocaleString(snapshot.settings.language)}{' '}
-                      <span>·</span> Minecraft {item.version} <span>·</span> {bytes(item.size)}
-                    </small>
-                    <span className="badge">
-                      {t(
-                        (
-                          {
-                            manual: 'manual',
-                            scheduled: 'scheduled',
-                            before_restore: 'before_restore',
-                            before_settings: 'before_settings',
-                            before_content: 'before_content',
-                            before_file_delete: 'before_file_delete',
-                          } as Record<string, Key>
-                        )[item.reason] ?? 'manual',
-                      )}
+      <div className="backup-filters">
+        <div role="group" aria-label={t('backup')} className="console-category-tabs">
+          {(['all', 'manual', 'automatic'] as const).map((v) => (
+            <button
+              key={v}
+              aria-pressed={trigger === v}
+              className={trigger === v ? 'selected' : ''}
+              onClick={() => setTrigger(v)}
+            >
+              {t(v === 'all' ? 'allLevels' : v === 'manual' ? 'manual' : 'backup.automatic')}
+            </button>
+          ))}
+        </div>
+        <div role="group" aria-label={t('backup.format')} className="console-category-tabs">
+          {(['all', 'full', 'incremental'] as const).map((v) => (
+            <button
+              key={v}
+              aria-pressed={format === v}
+              className={format === v ? 'selected' : ''}
+              onClick={() => setFormat(v)}
+            >
+              {t(v === 'all' ? 'allLevels' : v === 'full' ? 'backup.full' : 'snapshot.title')}
+            </button>
+          ))}
+        </div>
+      </div>
+      {format !== 'incremental' && (
+        <section className="panel">
+          {!backups.length ? (
+            <Empty icon={<Archive size={32} />} title={t('noBackups')} />
+          ) : (
+            <div className="backup-list">
+              {backups.map((item) => {
+                const server = snapshot.servers.find((s) => s.id === item.serverId);
+                return (
+                  <article className="backup-row" key={item.id}>
+                    <span className="backup-icon">
+                      <Archive size={21} />
                     </span>
-                  </div>
-                  <div className="actions">
-                    <Button
-                      title={t('verify')}
-                      aria-label={t('verify')}
-                      disabled={busy}
-                      onClick={() => {
-                        void run(async () => {
-                          if (!(await api.verifyBackup(item.id)))
-                            throw new Error(t('integrityFailed'));
-                        }, t('integrityOk'));
-                      }}
-                    >
-                      <ShieldCheck size={15} />
-                    </Button>
-                    <Button
-                      title={t('export')}
-                      aria-label={t('export')}
-                      disabled={busy}
-                      onClick={() => {
-                        void run(() => api.exportBackup(item.id));
-                      }}
-                    >
-                      <Download size={15} />
-                    </Button>
-                    <Button
-                      disabled={busy || !!server?.pid || server?.status === 'installing'}
-                      onClick={() => setConfirmation({ item, action: 'restore' })}
-                    >
-                      <RotateCcw size={14} />
-                      {t('restore')}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      title={t('delete')}
-                      aria-label={t('delete')}
-                      disabled={busy}
-                      onClick={() => setConfirmation({ item, action: 'delete' })}
-                    >
-                      <Trash2 size={15} />
-                    </Button>
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
-      </section>
-      {snapshot.servers.find((s) => s.id === selected) && (
-        <SnapshotControls server={snapshot.servers.find((s) => s.id === selected)!} />
+                    <div className="backup-info">
+                      <strong>{item.name}</strong>
+                      <span className="badge">{t('backup.full')}</span>
+                      <small>
+                        {new Date(item.createdAt).toLocaleString(snapshot.settings.language)}{' '}
+                        <span>·</span> Minecraft {item.version} <span>·</span> {bytes(item.size)}
+                      </small>
+                      <span className="badge">
+                        {t(
+                          (
+                            {
+                              manual: 'manual',
+                              scheduled: 'scheduled',
+                              before_restore: 'before_restore',
+                              before_settings: 'before_settings',
+                              before_content: 'before_content',
+                              before_file_delete: 'before_file_delete',
+                            } as Record<string, Key>
+                          )[item.reason] ?? 'backup.automatic',
+                        )}
+                      </span>
+                    </div>
+                    <div className="actions">
+                      <Button
+                        title={t('verify')}
+                        aria-label={t('verify')}
+                        disabled={busy}
+                        onClick={() => {
+                          void run(async () => {
+                            if (!(await api.verifyBackup(item.id)))
+                              throw new Error(t('integrityFailed'));
+                          }, t('integrityOk'));
+                        }}
+                      >
+                        <ShieldCheck size={15} />
+                      </Button>
+                      <Button
+                        title={t('export')}
+                        aria-label={t('export')}
+                        disabled={busy}
+                        onClick={() => {
+                          void run(() => api.exportBackup(item.id));
+                        }}
+                      >
+                        <Download size={15} />
+                      </Button>
+                      <Button
+                        disabled={busy || !!server?.pid || server?.status === 'installing'}
+                        onClick={() => setConfirmation({ item, action: 'restore' })}
+                      >
+                        <RotateCcw size={14} />
+                        {t('restore')}
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        title={t('delete')}
+                        aria-label={t('delete')}
+                        disabled={busy}
+                        onClick={() => setConfirmation({ item, action: 'delete' })}
+                      >
+                        <Trash2 size={15} />
+                      </Button>
+                    </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+        </section>
       )}
+      {format !== 'full' &&
+        trigger !== 'automatic' &&
+        snapshot.servers.find((s) => s.id === selected) && (
+          <SnapshotControls server={snapshot.servers.find((s) => s.id === selected)!} />
+        )}
       {selected && <RetentionControls key={selected} serverId={selected} />}
       <PackageControls server={snapshot.servers.find((s) => s.id === selected)} />
       {confirmation && (
@@ -504,197 +543,12 @@ export function OperationsView() {
     </>
   );
 }
-const properties: {
-  key: string;
-  label: Key;
-  section: Key;
-  type: 'number' | 'text' | 'boolean' | 'mode' | 'difficulty';
-  min?: number;
-  max?: number;
-}[] = [
-  { key: 'gamemode', label: 'gamemode', section: 'gameplay', type: 'mode' },
-  { key: 'difficulty', label: 'difficulty', section: 'gameplay', type: 'difficulty' },
-  { key: 'pvp', label: 'pvp', section: 'gameplay', type: 'boolean' },
-  { key: 'hardcore', label: 'hardcore', section: 'gameplay', type: 'boolean' },
-  { key: 'enable-command-block', label: 'commandBlocks', section: 'gameplay', type: 'boolean' },
-  {
-    key: 'max-players',
-    label: 'maxPlayers',
-    section: 'players',
-    type: 'number',
-    min: 1,
-    max: 1000,
-  },
-  { key: 'white-list', label: 'whitelist', section: 'players', type: 'boolean' },
-  { key: 'level-name', label: 'levelName', section: 'world', type: 'text' },
-  { key: 'level-seed', label: 'seed', section: 'world', type: 'text' },
-  { key: 'generate-structures', label: 'generateStructures', section: 'world', type: 'boolean' },
-  {
-    key: 'view-distance',
-    label: 'viewDistance',
-    section: 'resources',
-    type: 'number',
-    min: 2,
-    max: 32,
-  },
-  {
-    key: 'simulation-distance',
-    label: 'simulationDistance',
-    section: 'resources',
-    type: 'number',
-    min: 2,
-    max: 32,
-  },
-  { key: 'server-port', label: 'port', section: 'network', type: 'number', min: 1024, max: 65535 },
-  { key: 'online-mode', label: 'onlineMode', section: 'network', type: 'boolean' },
-  { key: 'motd', label: 'motd', section: 'general', type: 'text' },
-  {
-    key: 'spawn-protection',
-    label: 'spawnProtection',
-    section: 'general',
-    type: 'number',
-    min: 0,
-    max: 1000,
-  },
-];
 export function PropertiesView({ server }: { server: Server }) {
-  const { api, t, run, busy } = useApp();
-  const data = useData(() => api.properties(server.id), [server.id]);
-  const [values, setValues] = useState<Record<string, string>>({});
-  const [search, setSearch] = useState('');
-  useEffect(() => {
-    if (data.data) setValues(data.data);
-  }, [data.data]);
-  const update = (key: string, value: string) => setValues((prev) => ({ ...prev, [key]: value }));
-  const stopped = !server.pid && server.status !== 'installing';
   return (
     <>
-      <div className="section-heading page-section-heading">
-        <div>
-          <h2>{t('serverSettings')}</h2>
-          <p>{t('propertiesHelp')}</p>
-        </div>
-        <Button
-          variant="primary"
-          disabled={busy || !stopped || data.loading || !!data.error}
-          onClick={() => {
-            void run(() => api.saveProperties(server.id, values)).then((r) => {
-              if (r.ok) data.reload();
-            });
-          }}
-        >
-          <Save size={15} />
-          {t('save')}
-        </Button>
-      </div>
+      <ProfileControls server={server} />
+      <PropertiesEditor server={server} />
       <ServerOptionsView server={server} />
-      <Field label={t('search')}>
-        <input value={search} onChange={(event) => setSearch(event.target.value)} />
-      </Field>
-      {data.error ? (
-        <ErrorBox error={data.error} retry={data.reload} retryLabel={t('retry')} />
-      ) : data.loading ? (
-        <Loading label={t('loading')} />
-      ) : (
-        <div className="properties-grid">
-          {(['general', 'gameplay', 'players', 'world', 'resources', 'network'] as Key[]).map(
-            (section) => (
-              <section className="panel" key={section}>
-                <h2>{t(section)}</h2>
-                {properties
-                  .filter(
-                    (p) =>
-                      p.section === section &&
-                      (p.key + ' ' + t(p.label)).toLowerCase().includes(search.toLowerCase()) &&
-                      (engineDefinition(server.engine).edition === 'java' ||
-                        ![
-                          'simulation-distance',
-                          'pvp',
-                          'hardcore',
-                          'enable-command-block',
-                          'white-list',
-                          'motd',
-                          'generate-structures',
-                          'spawn-protection',
-                        ].includes(p.key)),
-                  )
-                  .map((prop) =>
-                    prop.type === 'boolean' ? (
-                      <Toggle
-                        key={prop.key}
-                        label={t(prop.label)}
-                        disabled={!stopped}
-                        checked={values[prop.key] === 'true'}
-                        onChange={(v) => update(prop.key, String(v))}
-                      />
-                    ) : (
-                      <Field
-                        key={prop.key}
-                        label={t(prop.label)}
-                        hint={
-                          prop.key === 'simulation-distance'
-                            ? t('config.simulationHelp')
-                            : prop.type === 'text'
-                              ? prop.key
-                              : undefined
-                        }
-                      >
-                        {prop.type === 'mode' || prop.type === 'difficulty' ? (
-                          <select
-                            disabled={!stopped}
-                            value={values[prop.key] ?? ''}
-                            onChange={(e) => update(prop.key, e.target.value)}
-                          >
-                            {(prop.type === 'mode'
-                              ? ['survival', 'creative', 'adventure', 'spectator']
-                              : ['peaceful', 'easy', 'normal', 'hard']
-                            ).map((v) => (
-                              <option key={v} value={v}>
-                                {t(v as Key)}
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <input
-                            disabled={!stopped}
-                            type={prop.type}
-                            min={prop.min}
-                            max={prop.max}
-                            value={values[prop.key] ?? ''}
-                            onChange={(e) => update(prop.key, e.target.value)}
-                          />
-                        )}
-                      </Field>
-                    ),
-                  )}
-              </section>
-            ),
-          )}
-          <section className="panel full-row">
-            <details className="advanced">
-              <summary>{t('advanced')}</summary>
-              <div className="form-grid">
-                {Object.entries(values)
-                  .filter(
-                    ([key]) =>
-                      !properties.some((p) => p.key === key) &&
-                      !key.startsWith('rcon.') &&
-                      key !== 'enable-rcon',
-                  )
-                  .map(([key, value]) => (
-                    <Field key={key} label={key}>
-                      <input
-                        disabled={!stopped}
-                        value={value}
-                        onChange={(e) => update(key, e.target.value)}
-                      />
-                    </Field>
-                  ))}
-              </div>
-            </details>
-          </section>
-        </div>
-      )}
     </>
   );
 }

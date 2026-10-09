@@ -121,7 +121,8 @@ it('uses separate Forge and NeoForge catalogs, coordinate paths and version mapp
     java: 21,
     url: 'https://maven.neoforged.net/releases/net/neoforged/neoforge/21.1.219/neoforge-21.1.219-installer.jar',
   });
-  expect(await new ForgeCatalog('neoforge').versions()).not.toContain('1.21.4');
+  expect(await new ForgeCatalog('neoforge').versions()).toContain('1.21.4');
+  expect(await new ForgeCatalog('neoforge').builds('1.21.4')).toContain('21.4.111-beta');
   expect(neoforgeMinecraftVersion('20.2.93')).toBe('1.20.2');
   expect(neoforgeMinecraftVersion('26.1.0.5')).toBe('26.1');
 });
