@@ -20,6 +20,7 @@
 - Modrinth is the main mod/plugin/pack experience; Hangar remains secondary. Existing offline inventory, dependency plans, locks and rollback are retained.
 - Advanced tools remain secondary to ordinary creation/start/content/backup flows. All six app languages are bundled; English remains the source/default language.
 - Content and Minecraft safety-backup policies are separate and enabled by default.
+- Application update checks explicitly show “Up to date” after a successful check with no newer version; a failed verification never shows that status.
 
 ### Fixed
 

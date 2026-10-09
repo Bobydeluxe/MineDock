@@ -14,7 +14,7 @@ MineDock 0.4.0 helps you create and maintain a survival world with friends from 
 
 ## Improved
 
-Modrinth is the primary content experience. Advanced tools stay secondary to creation, start, content and backups. Warm light and neutral charcoal dark themes are retained. Content and Minecraft update backups have separate settings, enabled by default.
+Modrinth is the primary content experience. Advanced tools stay secondary to creation, start, content and backups. Warm light and neutral charcoal dark themes are retained. Content and Minecraft update backups have separate settings, enabled by default. Successful application update checks explicitly show “Up to date” when there is no newer version; failed verification never shows that status.
 
 ## Fixed
 
