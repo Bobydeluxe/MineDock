@@ -12,7 +12,7 @@
 
 ## Project status
 
-MineDock is a **beta** for Windows, Linux and macOS. The latest published version is **0.3.0**. Current source prepares **0.3.1**, with centered dialogs, a simpler creation wizard, original engine symbols and clearer navigation. The screenshots show this current interface; the published 0.3.0 packages predate that UI revision.
+MineDock is a **beta** for Windows, Linux and macOS. The latest published version is **0.3.0**. Current development source is **0.3.1**, with centered dialogs, a simpler creation wizard, original engine symbols and the complete Modrinth mod manager. It has not been published as a new release. The screenshots show the development interface; published 0.3.0 packages predate these changes.
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 
@@ -36,7 +36,7 @@ MineDock must stay open to supervise servers and run scheduled tasks. It stops s
 ## What you can do
 
 - **Manage servers:** separate profiles, official version catalogs, managed Java/PHP, start/stop/restart, live console, actual process metrics and crash explanations.
-- **Manage content:** Modrinth, Hangar and configurable CurseForge; loader-compatible mods/plugins, dependencies, version comparisons, history and verified rollback. Configure supported Geyser/Floodgate crossplay variants.
+- **Manage content:** Modrinth for mods and Modrinth/Hangar for plugins; loader-compatible mods/plugins, dependencies, version comparisons, history and verified rollback. Configure supported Geyser/Floodgate crossplay variants.
 - **Bring your existing work:** preview/copy an existing server, import worlds and Modrinth `.mrpack` files, keep originals and use safety backups before risky changes.
 - **Administer locally:** worlds, files/ZIPs, syntax-aware editing, player lists, storage reports, verified backups, retention previews and daily/cron tasks.
 - **Recover safely:** persistent operation history, cancellation, resumable downloads and reviewable recovery after interruption. Application updates verify signed metadata and downloaded bytes.
@@ -118,6 +118,18 @@ Browser tests and screenshots need Playwright Chromium (`pnpm exec playwright in
 
 Official-service probes are opt-in: `pnpm test:official --catalogs`, `pnpm test:official --runtimes --content` and `pnpm test:live`. The Paper live check stops at `eula=false`; it never accepts the real EULA for you.
 
+## MOD MANAGEMENT
+
+Modrinth is the mod catalogue for Fabric, Forge and NeoForge. Discover compatible server mods, review a recommended stable version and install required dependencies together. Optional dependencies are visible and never installed automatically.
+
+Installed mods retain verified file hashes and Minecraft/loader metadata. Check updates explicitly, update selected mods or all unlocked mods, choose beta/alpha versions explicitly, restore archived versions and lock versions. Local favorites and reusable collections require no account. Shared dependencies remain installed; unused automatic dependencies are offered for removal.
+
+Changes require a stopped server, use safety backups and stage all files before committing SQLite metadata. The mod health check runs before manual, automatic and scheduled starts. Manual JARs remain local until an explicit exact-hash identification. Offline inventory and local actions work without Modrinth.
+
+![Modrinth mod manager](docs/screenshots/mods.png)
+
+The screenshot shows an isolated desktop profile with real Modrinth metadata and downloaded, hash-verified mods. It is not a Minecraft gameplay test. See [mod management](docs/mods.md) for compatibility checks, collections and migration limits.
+
 ## Architecture and documentation
 
 React renders the interface. A narrow typed preload connects it to one Electron main-process application core. SQLite stores profiles, preferences and operation history. Filesystem, process, networking and download services stay outside the renderer; the Electron sandbox and context isolation stay enabled.
@@ -135,7 +147,6 @@ React renders the interface. A narrow typed preload connects it to one Electron 
 ## Known limits and next work
 
 - Real client gameplay, historical engine coverage and Bedrock crossplay connectivity still need live validation after personal consent.
-- CurseForge requires an owner-provided API key. CurseForge pack import is assessed but unavailable; `.mrpack` import is implemented.
 - BDS has no official macOS/ARM64 distribution. Some native PHP ARM64 packages are unavailable. PocketMine releases may not support current Bedrock clients.
 - Windows Authenticode and Apple signing/notarization need real certificates. Publisher update signatures do not imply OS signing.
 - Actual newer-version OS upgrades, interactive installer flows and extended disk-full/power-loss/load tests remain separate validation work.

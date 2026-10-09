@@ -96,6 +96,7 @@ export class ServerProcessSupervisor implements ServerRunner {
     private readonly launch: ProcessLauncher = (file, args, options) =>
       spawn(file, args, { ...options, stdio: 'pipe' }),
     private readonly requestStart?: (id: string) => Promise<void>,
+    private readonly preflight?: (server: Server) => Promise<void>,
   ) {
     this.playerData = new PlayerService(
       repo,
@@ -220,6 +221,7 @@ export class ServerProcessSupervisor implements ServerRunner {
     if (this.instances.has(id)) throw new DomainError('RUNNING', 'This server is already running.');
     const server = this.repo.server(id);
     const engine = engineDefinition(server.engine);
+    await this.preflight?.(server);
     const runtime = server.runtimePath ?? server.javaPath;
     if (
       runtime &&

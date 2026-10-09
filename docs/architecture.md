@@ -13,7 +13,7 @@ MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQL
 - `packages/minecraft`: official engine catalogs, artifact resolution, pinned installs and bounded installer processes. Forge and NeoForge resolve their own structures and argument files.
 - `packages/runtime-manager`: official native runtimes, real executable/version/architecture probes, repair and usage guards.
 - `packages/server-core` and `packages/rcon`: actual subprocess streams, engine readiness, lifecycle, metrics, player observations and authenticated RCON where supported.
-- `packages/marketplace`: Modrinth/CurseForge/Hangar catalog providers, Geyser metadata, raster icons and a shared transactional content service.
+- `packages/marketplace`: Modrinth/Hangar catalog providers, Geyser metadata, raster icons and a shared transactional content service.
 - `packages/backups`: verified archives, full-server staged restore and journaled retention batches.
 - `packages/security` and `packages/networking`: path containment, bounded copies/archives/NBT, secrets, allowed hosts, ports and native architecture checks.
 - `packages/updates`: pinned publisher signatures, update state, verified downloads and native installation helpers.
@@ -23,7 +23,9 @@ The renderer shares one native dialog wrapper, portaled to `document.body` and o
 
 ## Persistence and transactions
 
-Native Node SQLite uses WAL, foreign keys, busy timeouts and integrity checks. Published migration 1 is unchanged. Versions 2–5 append long operations/checkpoints, partial downloads, content history, players, retention, runtimes, imports, marketplace settings, storage/world history, modpack approvals, authorized exports and retention-batch journals. A WAL checkpoint and database copy precede a schema upgrade; migrations run in transactions. Database snapshots also run at startup and hourly.
+Native Node SQLite uses WAL, foreign keys, busy timeouts and integrity checks. Published migration 1 is unchanged. Versions 2–5 append long operations/checkpoints, partial downloads, content history, players, retention, runtimes, imports, marketplace settings, storage/world history, modpack approvals, authorized exports and retention-batch journals. A WAL checkpoint and database copy precede a schema upgrade; migrations run in transactions. Database snapshots also run at startup and hourly. Migration 6 appends catalogue caches, favorites, collections and mod operation history; it removes the retired credential and preserves retired catalogue records as local content. Published migrations 1–5 are unchanged.
+
+The deterministic mod planner resolves exact versions and required dependency constraints before issuing a short-lived, server-bound review token. Applying that token rechecks inventory identity, verifies existing files and uses the shared content transaction for the entire batch. Renderer plans cannot supply download URLs, paths or arbitrary metadata. Required dependency references, automatic provenance and version locks persist with the installed record. API metadata caches are bounded in SQLite; local metadata/hash scans are bounded and reused by file size/time. Updates use the official hash batch endpoint in groups of 100.
 
 Long work persists its kind, status, phase, progress and safe checkpoint paths. Preparation occurs beside the destination. The operation validates ownership, keeps the previous copy, swaps the prepared files and commits profile/content metadata before cleanup. Startup recovery distinguishes prepared from committed states; it rolls back safely or reports attention. Ambiguous copies are preserved for explicit review. Native exports persist their exact authorized destination. Retention journals a group of archive moves and the database commit.
 

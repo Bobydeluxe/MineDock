@@ -2605,3 +2605,233 @@ textarea {
   min-width: 0;
   overflow-wrap: anywhere;
 }
+.mods-manager {
+  display: grid;
+  gap: 18px;
+}
+.mods-manager > .panel {
+  margin-bottom: 0;
+}
+.mod-heading .tabs {
+  margin-bottom: 0;
+}
+.mod-heading .tabs {
+  overflow-y: hidden;
+}
+.mods-manager .badge.danger {
+  color: var(--danger);
+}
+.mods-manager .row-actions {
+  display: flex;
+  gap: 10px;
+}
+.mods-manager .mod-bulk {
+  background: var(--hover);
+}
+.mod-heading .tabs {
+  margin-top: 18px;
+}
+.mod-heading .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.mod-heading p {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.mod-search-bar {
+  display: grid;
+  grid-template-columns: minmax(180px, 1fr) 180px auto;
+  gap: 14px;
+  align-items: end;
+}
+.mod-categories {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 16px 0;
+}
+.mod-categories > span {
+  width: 100%;
+  color: var(--muted);
+  font-size: 12px;
+}
+.mod-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+.mod-card {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.mod-card-heading {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.mod-icon {
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--muted);
+  overflow: hidden;
+}
+.mod-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.mod-title {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  color: inherit;
+  flex: 1;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  min-width: 0;
+  padding: 0;
+  gap: 4px;
+}
+.mod-title strong {
+  font-size: 15px;
+}
+.mod-title small {
+  color: var(--muted);
+}
+.mod-description {
+  margin: 0;
+  line-height: 1.6;
+  color: var(--muted);
+  font-size: 13px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 62px;
+}
+.mod-meta,
+.mod-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+.mod-card-footer {
+  margin-top: auto;
+}
+.mod-meta {
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.mod-pagination,
+.mod-bulk {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px;
+}
+.mod-installed,
+.mod-collection {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+}
+.mod-installed-text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 6px;
+}
+.mod-installed small,
+.mod-collection small {
+  display: block;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.mod-installed strong {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.mod-installed .badge {
+  width: fit-content;
+}
+.mod-collection > div:first-child {
+  flex: 1;
+}
+.mod-menu {
+  position: relative;
+  flex-shrink: 0;
+}
+.mod-menu summary {
+  padding: 8px;
+  cursor: pointer;
+  list-style: none;
+}
+.mod-menu > div {
+  position: absolute;
+  right: 0;
+  top: 38px;
+  display: grid;
+  z-index: 8;
+  width: 220px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  border-radius: 12px;
+  box-shadow: 0 12px 35px #0005;
+}
+.mod-menu .button {
+  justify-content: flex-start;
+}
+.mod-markdown {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font: inherit;
+  line-height: 1.7;
+  max-height: 280px;
+  overflow: auto;
+}
+.mod-problems {
+  margin-bottom: 14px;
+}
+.mod-problems p {
+  font-size: 13px;
+}
+.mod-bulk {
+  justify-content: flex-start;
+  background: var(--surface);
+  border-radius: 10px;
+}
+@media (max-width: 850px) {
+  .mod-search-bar {
+    grid-template-columns: 1fr;
+  }
+  .mod-installed {
+    flex-wrap: wrap;
+  }
+  .mod-installed-text {
+    min-width: 180px;
+  }
+  .mod-menu > div {
+    max-width: 70vw;
+  }
+}

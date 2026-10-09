@@ -3,12 +3,7 @@ import { mkdir, readFile, writeFile, readdir, stat, rm, utimes } from 'node:fs/p
 import { approvedUrl, fetchApproved } from '../minecraft/downloads';
 import { containedPath } from '../security/paths';
 const maximum = 512 * 1024;
-const iconHosts = new Set([
-  'cdn.modrinth.com',
-  'media.forgecdn.net',
-  'mediafilez.forgecdn.net',
-  'hangarcdn.papermc.io',
-]);
+const iconHosts = new Set(['cdn.modrinth.com', 'hangarcdn.papermc.io']);
 function imageType(bytes: Buffer): string | undefined {
   const bounded = (width: number, height: number) =>
     width > 0 && height > 0 && width <= 2048 && height <= 2048;

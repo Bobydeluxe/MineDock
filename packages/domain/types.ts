@@ -213,6 +213,17 @@ export interface Project {
   kind?: ContentKind;
 }
 export interface InstalledContent {
+  pinned?: boolean;
+  automatic?: boolean;
+  source?: 'modrinth' | 'mrpack' | 'local';
+  iconUrl?: string;
+  author?: string;
+  categories?: string[];
+  releaseType?: 'release' | 'beta' | 'alpha' | 'snapshot';
+  publishedAt?: string;
+  fileHash?: { algorithm: 'sha512' | 'sha1'; value: string };
+  dependencyVersions?: { projectId: string; versionId?: string }[];
+  conflicts?: string[];
   id: string;
   serverId: string;
   projectId: string;
@@ -220,7 +231,7 @@ export interface InstalledContent {
   versionId: string;
   filename: string;
   enabled: boolean;
-  provider?: MarketplaceId;
+  provider?: MarketplaceId | 'local';
   kind?: ContentKind;
   folder?: 'plugins' | 'mods';
   sha256?: string;
@@ -231,6 +242,19 @@ export interface InstalledContent {
   installedAt?: string;
 }
 export const installedContentSchema = z.object({
+  pinned: z.boolean().optional(),
+  automatic: z.boolean().optional(),
+  source: z.enum(['modrinth', 'mrpack', 'local']).optional(),
+  iconUrl: z.string().optional(),
+  author: z.string().optional(),
+  categories: z.array(z.string()).optional(),
+  releaseType: z.enum(['release', 'beta', 'alpha', 'snapshot']).optional(),
+  publishedAt: z.string().optional(),
+  fileHash: z.object({ algorithm: z.enum(['sha512', 'sha1']), value: z.string() }).optional(),
+  dependencyVersions: z
+    .array(z.object({ projectId: z.string(), versionId: z.string().optional() }))
+    .optional(),
+  conflicts: z.array(z.string()).optional(),
   id: z.string().uuid(),
   serverId: z.string().uuid(),
   projectId: z.string(),
@@ -238,7 +262,7 @@ export const installedContentSchema = z.object({
   versionId: z.string(),
   filename: z.string(),
   enabled: z.boolean(),
-  provider: z.enum(['modrinth', 'curseforge', 'hangar', 'geyser']).optional(),
+  provider: z.enum(['modrinth', 'hangar', 'geyser', 'local']).optional(),
   kind: z.enum(['plugin', 'mod', 'datapack', 'resourcepack']).optional(),
   folder: z.enum(['plugins', 'mods']).optional(),
   sha256: z
@@ -281,6 +305,33 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  modSearch(
+    id: string,
+    input: import('./mods').ModSearch,
+  ): Promise<import('./mods').ModSearchResult>;
+  modInventory(id: string, force?: boolean): Promise<import('./mods').ModInventory>;
+  modDetail(id: string, projectId: string): Promise<import('./mods').ModDetail>;
+  modPlan(id: string, input: import('./mods').ModPlanInput): Promise<import('./mods').ModPlan>;
+  modApply(id: string, token: string): Promise<InstalledContent[]>;
+  modUpdates(id: string): Promise<import('./mods').ModUpdateResult>;
+  modPin(id: string, contentId: string, pinned: boolean): Promise<void>;
+  modRemoval(id: string, ids: string[]): Promise<import('./mods').ModRemoval>;
+  modBulk(id: string, input: z.input<typeof import('./mods').modBulkSchema>): Promise<void>;
+  modLibrary(): Promise<import('./mods').ModLibrary>;
+  modFavorite(id: string, projectId: string, favorite: boolean): Promise<void>;
+  modCollection(
+    input: z.input<typeof import('./mods').modCollectionSchema>,
+  ): Promise<import('./mods').ModCollection>;
+  modDeleteCollection(id: string): Promise<void>;
+  modHistory(id: string): Promise<import('./mods').ModEvent[]>;
+  modReveal(id: string, contentId: string): Promise<void>;
+  modManualToggle(id: string, filename: string): Promise<void>;
+  modIdentify(id: string, filename: string): Promise<boolean>;
+  modMigration(
+    id: string,
+    target: import('./mods').ModTarget,
+  ): Promise<import('./mods').ModMigration>;
+  modMigrate(id: string, target: import('./mods').ModTarget, confirmation: string): Promise<void>;
   snapshot(): Promise<Snapshot>;
   diagnostic(): Promise<Diagnostic>;
   settings(value: Settings): Promise<Settings>;
@@ -369,10 +420,7 @@ export interface Api {
   crossplayVersions(id: string): Promise<CrossplayVersions>;
   configureCrossplay(id: string, input: CrossplayInput): Promise<void>;
   clearIconCache(): Promise<void>;
-  configureMarketplace(input: {
-    curseforgeKey?: string;
-    historyLimit: number;
-  }): Promise<MarketplaceSettings>;
+  configureMarketplace(input: { historyLimit: number }): Promise<MarketplaceSettings>;
   content(id: string): Promise<InstalledContent[]>;
   toggleContent(id: string, contentId: string): Promise<void>;
   contentVersions(

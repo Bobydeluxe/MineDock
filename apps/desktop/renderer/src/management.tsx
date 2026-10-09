@@ -831,7 +831,6 @@ export function SettingsView() {
   const [settings, setSettings] = useState<Settings>(snapshot.settings);
   const persistedSettings = useRef(snapshot.settings);
   const marketplace = useData(() => api.marketplaceSettings(), []);
-  const [curseforgeKey, setCurseforgeKey] = useState('');
   const [historyLimit, setHistoryLimit] = useState(5);
   useEffect(() => {
     if (marketplace.data) setHistoryLimit(marketplace.data.historyLimit);
@@ -941,7 +940,6 @@ export function SettingsView() {
           </section>
           <details className="panel optional-panel">
             <summary>{t('marketplaceSettings')}</summary>
-            <p className="muted small-text">{t('curseforgeKeyHelp')}</p>
             {marketplace.error && (
               <ErrorBox
                 error={marketplace.error}
@@ -949,25 +947,10 @@ export function SettingsView() {
                 retryLabel={t('retry')}
               />
             )}
-            <p>
-              <span className="badge">
-                {t(marketplace.data?.curseforgeConfigured ? 'configured' : 'notConfigured')}
-              </span>{' '}
-              CurseForge
-            </p>
-            <Field label={t('apiKey')}>
-              <input
-                type="password"
-                autoComplete="new-password"
-                value={curseforgeKey}
-                onChange={(event) => setCurseforgeKey(event.target.value)}
-                maxLength={1000}
-              />
-            </Field>
             <Field label={t('contentHistoryLimit')}>
               <input
                 type="number"
-                min={0}
+                min={1}
                 max={20}
                 value={historyLimit}
                 onChange={(event) => setHistoryLimit(Number(event.target.value))}
@@ -989,11 +972,9 @@ export function SettingsView() {
                   void run(() =>
                     api.configureMarketplace({
                       historyLimit,
-                      curseforgeKey: curseforgeKey || undefined,
                     }),
                   ).then((result) => {
                     if (result.ok) {
-                      setCurseforgeKey('');
                       marketplace.reload();
                     }
                   });
@@ -1001,24 +982,6 @@ export function SettingsView() {
               >
                 {t('saveMarketplace')}
               </Button>
-              {marketplace.data?.curseforgeConfigured && (
-                <Button
-                  variant="danger"
-                  disabled={busy}
-                  onClick={() => {
-                    void run(() =>
-                      api.configureMarketplace({ historyLimit, curseforgeKey: '' }),
-                    ).then((result) => {
-                      if (result.ok) {
-                        setCurseforgeKey('');
-                        marketplace.reload();
-                      }
-                    });
-                  }}
-                >
-                  {t('removeApiKey')}
-                </Button>
-              )}
             </div>
           </details>
         </div>

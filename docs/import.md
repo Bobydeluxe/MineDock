@@ -20,4 +20,4 @@ The `.mrpack` preview validates format/version/Minecraft/loader, lists required 
 
 The summary and explicit Minecraft EULA approval precede server creation. Engine, pinned loader, hashed mod downloads and shared/server overrides are prepared together before commit. An approved private archive is retained for complete retry after interruption. Known Modrinth provenance is recorded; files without verified project metadata remain manual, with the manifest retained. Existing configurations/manual files are not arbitrarily removed.
 
-CurseForge pack import is assessed in [marketplaces](marketplaces.md) and is not currently available. Automated tests never install a playable Minecraft fixture or accept a real EULA.
+Automated imports use isolated fixtures and never accept a real EULA. Known Modrinth hashes are linked to project/version IDs and retain imported provenance in the mod manager.

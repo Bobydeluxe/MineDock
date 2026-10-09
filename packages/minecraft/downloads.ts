@@ -34,10 +34,6 @@ const hosts = [
   'www.minecraft.net',
   'minecraft.net',
   'bedrock.azureedge.net',
-  'api.curseforge.com',
-  'edge.forgecdn.net',
-  'media.forgecdn.net',
-  'mediafilez.forgecdn.net',
   'hangar.papermc.io',
   'hangarcdn.papermc.io',
   'download.geysermc.org',
@@ -66,6 +62,7 @@ export async function fetchApproved(
   extra: Record<string, string> = {},
   allowStatuses: number[] = [],
   policy?: (url: URL) => boolean,
+  request?: { method: 'POST'; body: string },
 ): Promise<Response> {
   let current = approvedUrl(url).href;
   const originalHost = new URL(current).hostname;
@@ -82,8 +79,13 @@ export async function fetchApproved(
       headers: { ...headers, ...safeExtra },
       signal,
       redirect: 'manual',
+      ...request,
     });
     if (response.status >= 300 && response.status < 400) {
+      if (request) {
+        await response.body?.cancel();
+        throw new DomainError('DOWNLOAD_URL', 'Download source is not allowed.');
+      }
       const location = response.headers.get('location');
       await response.body?.cancel();
       if (!location) throw new Error('Redirect has no destination.');
@@ -171,6 +173,7 @@ export class DownloadManager {
     hash: { algorithm: 'md5' | 'sha1' | 'sha256' | 'sha512'; value: string } | undefined,
     maximum = 1024 * 1024 * 1024,
     signal?: AbortSignal,
+    policy?: (url: URL) => boolean,
   ): Promise<void> {
     if (this.closing) throw new Error('The download manager is closed.');
     const id = randomUUID();
@@ -223,7 +226,7 @@ export class DownloadManager {
         requestHeaders.Range = `bytes=${offset}-`;
         requestHeaders['If-Range'] = metadataFile!.etag ?? metadataFile!.lastModified!;
       }
-      let response = await fetchApproved(url, operationSignal, requestHeaders, [416]);
+      let response = await fetchApproved(url, operationSignal, requestHeaders, [416], policy);
       if (offset && response.status === 206) {
         const range = /^bytes (\d+)-(\d+)\/(\d+)$/.exec(
           response.headers.get('content-range') ?? '',
@@ -241,12 +244,24 @@ export class DownloadManager {
         ) {
           await response.body?.cancel();
           offset = 0;
-          response = await fetchApproved(url, operationSignal, { 'Accept-Encoding': 'identity' });
+          response = await fetchApproved(
+            url,
+            operationSignal,
+            { 'Accept-Encoding': 'identity' },
+            [],
+            policy,
+          );
         } else progress.total = Number(range[3]);
       } else if (response.status === 416) {
         await response.body?.cancel();
         offset = 0;
-        response = await fetchApproved(url, operationSignal, { 'Accept-Encoding': 'identity' });
+        response = await fetchApproved(
+          url,
+          operationSignal,
+          { 'Accept-Encoding': 'identity' },
+          [],
+          policy,
+        );
       } else offset = 0;
       if (response.status === 206 && !offset) {
         await response.body?.cancel();

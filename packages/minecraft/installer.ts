@@ -16,6 +16,7 @@ import type { OperationService } from '../core/operations';
 import type { OperationContext } from '../domain/operations';
 import type { PhpRuntimeManager } from '../runtime-manager/php';
 import { extractZip } from '../backups/archive';
+import { copyDirectory } from '../security/copy';
 import { containedPath } from '../security/paths';
 import { installerProcess } from './process';
 export type EnginePreparation = (
@@ -26,6 +27,7 @@ export type EnginePreparation = (
 export interface InstallationOptions {
   prepare?: EnginePreparation;
   kind?: string;
+  replacement?: Server;
 }
 export class ServerInstaller {
   constructor(
@@ -41,16 +43,25 @@ export class ServerInstaller {
   async install(id: string, options: InstallationOptions = {}): Promise<Server> {
     return this.jobs
       ? this.jobs.run(options.kind ?? 'engine.install', 'Server installation', id, (context) =>
-          this.prepare(id, context, options.prepare),
+          this.prepare(id, context, options.prepare, options.replacement),
         )
-      : this.prepare(id, undefined, options.prepare);
+      : this.prepare(id, undefined, options.prepare, options.replacement);
   }
   private async prepare(
     id: string,
     context?: OperationContext,
     preparation?: EnginePreparation,
+    replacement?: Server,
   ): Promise<Server> {
-    const server = this.repo.server(id);
+    const before = this.repo.server(id);
+    const server = replacement
+      ? {
+          ...replacement,
+          installationComplete: false,
+          entrypoint: undefined,
+          launchArgsFile: undefined,
+        }
+      : before;
     if (server.installationComplete !== false)
       throw new Error('Installation of this server is already complete.');
     server.status = 'installing';
@@ -69,11 +80,12 @@ export class ServerInstaller {
         staging: stage,
         previous: server.path + '.install-previous',
         hadDestination: true,
-        beforeProfile: this.repo.server(id),
+        beforeProfile: before,
         beforeContent: this.repo.content(id),
       });
       await rm(stage, { force: true, recursive: true });
-      await mkdir(stage);
+      if (replacement) await copyDirectory(before.path, stage, { signal: context?.signal });
+      else await mkdir(stage);
       if (definition.edition === 'java')
         await atomicWrite(
           path.join(stage, 'eula.txt'),
@@ -162,7 +174,16 @@ export class ServerInstaller {
         }
         await rm(path.join(stage, filename));
       }
-      const rconPort = definition.capabilities.rcon ? await this.rconPort(server) : 0;
+      const oldPropertiesText = replacement
+        ? await readFile(path.join(stage, 'server.properties'), 'utf8')
+        : undefined;
+      const oldProperties =
+        oldPropertiesText === undefined ? undefined : parseProperties(oldPropertiesText);
+      const rconPort = oldProperties?.['rcon.port']
+        ? Number(oldProperties['rcon.port'])
+        : definition.capabilities.rcon
+          ? await this.rconPort(server)
+          : 0;
       const props: Record<string, string> = {
         'server-port': String(server.port),
         'server-ip': '',
@@ -216,6 +237,8 @@ export class ServerInstaller {
       if (definition.contentFolder)
         await mkdir(path.join(stage, definition.contentFolder), { recursive: true });
       if (server.entrypoint) await stat(await containedPath(stage, server.entrypoint));
+      if (oldPropertiesText !== undefined)
+        await atomicWrite(path.join(stage, 'server.properties'), oldPropertiesText);
       const content = preparation ? await preparation(stage, server, context) : [];
       context?.signal.throwIfAborted();
       server.diskBytes = 0;
@@ -228,7 +251,7 @@ export class ServerInstaller {
             destination: server.path,
             staging: stage,
             previous: server.path + '.install-previous',
-            beforeProfile: this.repo.server(id),
+            beforeProfile: before,
             beforeContent: this.repo.content(id),
           },
           () => {
@@ -250,6 +273,10 @@ export class ServerInstaller {
       );
       return server;
     } catch (e) {
+      if (replacement) {
+        this.repo.saveServer(before);
+        throw e;
+      }
       server.status = 'crashed';
       server.error = readableError(e);
       this.repo.saveServer(server);

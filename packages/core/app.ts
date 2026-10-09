@@ -19,6 +19,7 @@ import { SchedulerService } from './scheduler';
 import { FileService } from './files';
 import { FileOperations } from './file-operations';
 import { ModrinthProvider } from '../marketplace/modrinth';
+import { ModManager } from '../marketplace/mod-manager';
 import { MarketplaceRegistry } from '../marketplace/registry';
 import { IconCache } from '../marketplace/icons';
 import { atomicWrite } from '../security/paths';
@@ -72,6 +73,7 @@ export class AppCore {
   readonly files = new FileService();
   readonly fileOperations: FileOperations;
   readonly marketplace: ModrinthProvider;
+  readonly mods: ModManager;
   readonly catalogs: MarketplaceRegistry;
   readonly icons: IconCache;
   readonly crossplay: CrossplayService;
@@ -142,6 +144,7 @@ export class AppCore {
       this.logger,
       undefined,
       (id) => this.exclusive(id, () => this.supervisor.start(id)),
+      (server) => this.mods.preflight(server),
     );
     this.players = this.supervisor.playerData;
     this.runtimeMaintenance = new RuntimeMaintenance(
@@ -161,7 +164,13 @@ export class AppCore {
     );
     this.retention = new RetentionService(this.repo, this.jobs, this.logger);
     this.marketplace = new ModrinthProvider(this.repo, this.downloads, this.jobs);
-    this.catalogs = new MarketplaceRegistry(this.repo, secrets);
+    this.mods = new ModManager(
+      this.repo,
+      this.marketplace.catalog,
+      this.marketplace.manager,
+      this.downloads,
+    );
+    this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.crossplay = new CrossplayService(this.repo, this.marketplace.manager);
     this.imports = new ServerImportService(
@@ -509,6 +518,39 @@ export class AppCore {
       this.repo.saveSettings(settings);
       this.repo.audit('settings.updated', 'Preferences updated.');
       return settings;
+    });
+  }
+  async migrateMods(
+    id: string,
+    target: import('../domain/mods').ModTarget,
+    confirmation: string,
+  ): Promise<void> {
+    await this.exclusive(id, async () => {
+      const server = this.assertStopped(id);
+      if (confirmation !== server.name) throw new DomainError('CONFIRM', 'Incorrect confirmation.');
+      const review = await this.mods.migration(server, target);
+      if (review.incompatible.length || review.manual.length)
+        throw new DomainError(
+          'MOD_MIGRATION',
+          'Resolve incompatible or manual mods before changing Minecraft or the loader.',
+        );
+      const artifact = await this.versions.artifact(target.engine, target.version, target.build, {
+        loaderVersion: target.loaderVersion,
+      });
+      const future = {
+        ...server,
+        ...target,
+        build: artifact.build,
+        loaderVersion: artifact.loaderVersion,
+        installerVersion: artifact.installerVersion,
+        javaMajor: artifact.java,
+      };
+      await this.backups.create(id, 'before_mod_migration');
+      await this.installer.install(id, {
+        kind: 'mods.migrate',
+        replacement: future,
+        prepare: (stage, profile, context) => this.mods.prepareMigration(profile, stage, context),
+      });
     });
   }
   async configureServer(id: string, raw: ServerOptions): Promise<Server> {
