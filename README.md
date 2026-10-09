@@ -107,7 +107,7 @@ These captures use the real desktop/preload/SQLite services with isolated storag
 
 ## Development
 
-The [complete gallery](docs/screenshots/README.md) also includes players, files, scheduler, runtimes, settings, import, active server states, menus and both themes. The [visual review](docs/design/visual-review.md) compares Dashboard, Create server, Server overview and Mods before/after, with measured layout and accessibility results.
+The [complete gallery](docs/screenshots/README.md) also includes players, files, scheduler, runtimes, settings, import, active server states, menus and both themes. The [cleanup review](docs/design/cleanup-041/README.md) explains the direct navigation, neutral black theme and Settings notification/recovery controls. Earlier interface comparisons remain in immutable Git history.
 
 Requires **Node 24+ and pnpm 11+**. Build distribution packages on their native OS and architecture.
 
