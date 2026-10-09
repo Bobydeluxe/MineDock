@@ -190,6 +190,8 @@ try {
   await core.configuration.remember(paper.id, 'config/paper-global.yml');
   if (!core.incremental.list(paper.id).length) await core.incremental.create(paper.id);
   core.health.push(paper.id, 'backupFailed', 'Private QA notification');
+  // Refresh the owned review cache after changes to recommendation policy.
+  await core.versions.catalog('paper', undefined, true);
   await core.updateProfile(fabric.id, {
     name: fabric.name,
     thumbnail:
@@ -322,6 +324,7 @@ if (!process.argv.includes('--first-start')) {
         .click();
       await page.getByLabel('Server name', { exact: true }).fill('Weekend survival');
       await page.getByLabel('Minecraft version', { exact: true }).waitFor();
+      await expect(page.getByRole('button', { name: 'Continue', exact: true })).toBeEnabled();
       await capture('create-server');
       await page.getByRole('button', { name: 'Fabric', exact: true }).click();
       await page.getByLabel('Minecraft version', { exact: true }).waitFor();
@@ -522,6 +525,7 @@ if (!process.argv.includes('--first-start')) {
       .locator('.page-heading')
       .getByRole('button', { name: 'Create server', exact: true })
       .click();
+    await expect(page.getByRole('button', { name: 'Continue', exact: true })).toBeEnabled();
     await capture('create-server-light');
     await page.keyboard.press('Escape');
     await openPaper();

@@ -7,12 +7,14 @@ for (const file of ['index.html', 'styles.css'])
   await cp(path.join('site', file), path.join(root, 'dist', file));
 for (const file of [
   'dashboard.png',
+  'dashboard-light.png',
   'create-server.png',
   'fabric-versions.png',
   'server-settings.png',
   'console.png',
   'backups.png',
   'mods.png',
+  'mods-light.png',
 ])
   await cp(path.join('docs/screenshots', file), path.join(root, 'dist/assets', file));
 await cp('apps/desktop/renderer/src/assets/engines', path.join(root, 'dist/assets/engines'), {

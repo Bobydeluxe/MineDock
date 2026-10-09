@@ -1,6 +1,6 @@
 # Native desktop gallery
 
-Current MineDock 0.4.0 captures from the actual compiled Electron application, refreshed on 9 October 2026 for release. There are **38 PNGs and one labeled nine-frame GIF**. Storage is isolated, mods are real hash-verified downloads, and other administration records are QA fixtures. Active process/console data comes from an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [provenance and historical comparisons](../design/visual-review.md).
+Current MineDock 0.4.1 review-build captures from the actual compiled Electron application, refreshed on 9 October 2026 for review; public downloads remain 0.4.0. There are **48 current PNGs and a labeled nine-frame GIF**. Storage is isolated, mods are real hash-verified downloads, and other administration records are QA fixtures. Active process/console data comes from an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [provenance and before/after comparisons](../design/reference-041/README.md).
 
 | View            | Dark                                               | Light / other state                                                                      |
 | --------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -30,6 +30,8 @@ Current MineDock 0.4.0 captures from the actual compiled Electron application, r
 | Import          | [Actual private-folder preview](import.png)        |                                                                                          |
 
 Normal captures share a 1440 × 960 native content viewport. Settings may use a full-page image to include the existing lower sections. Comparison images under `docs/design/before` are historical evidence and are not presented as the current interface. No secrets are displayed.
+
+Additional real candidate views: [Fabric lists](fabric-versions.png), [Paper](paper-builds.png), [Purpur](purpur-builds.png), [Forge](forge-builds.png), [NeoForge](neoforge-builds.png), [general properties](server-settings.png), [light properties](server-settings-light.png), [gameplay](properties-gameplay.png), [network](properties-network.png), [world](properties-world.png). [Named before/after comparison](../design/reference-041/README.md).
 
 ## Reproduce the assets
 

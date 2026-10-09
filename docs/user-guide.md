@@ -73,3 +73,13 @@ For compatible Paper/Purpur versions, open the BlueMap/Dynmap assistant, review 
 Stop the server and export a `.minedock` package with the native file picker. Review what it includes; arbitrary plugin configurations require explicit opt-in, and worlds/player files can contain private information. Known secrets are excluded by default and managed RCON secrets are always regenerated.
 
 On the other computer choose **Import MineDock package**, review the inventory and confirm. MineDock verifies hashes and prepares new paths, ports, an official engine and an appropriate runtime. This needs Internet access and any required personal EULA acceptance. It does not rewrite every third-party plugin's absolute path. Read the [package format and privacy policy](package-format.md) before sharing an archive publicly.
+
+## New controls in the 0.4.1 review build
+
+Public downloads are still 0.4.0. In the reviewed candidate, creation preselects a working recommended build. Use **Show all available builds / loader versions** to search older available releases. Fabric has separate loader and installer lists; the review includes both exact selections. A warning does not claim an older version is necessarily beta: it records the upstream stable flag. Refresh contacts upstream; an offline cached catalog is explicitly labeled. Availability does not guarantee that every historical game/mod combination works.
+
+In **Server → Settings**, the **Server profile** name and chosen local image belong to MineDock. They do not rename the world or invent a Java server-name property. Choose a PNG/JPEG/WebP up to 5 MB and 4096 pixels per side; the native app saves a bounded local PNG. Reset restores the engine symbol.
+
+Stop the server before editing actual properties. Choose a category or search by label/key/description, edit only the intended values, then **Review and save**. Inspect the diff and acknowledge world/network/identity risks. A full safety backup and encrypted history are recorded; changes apply on the next start. Unset inherited settings remain unset until edited. Discard or cancel a navigation/close warning to keep working. If another program edited the file, refresh and review again rather than overwriting it. RCON credentials use the secure workflow and are never shown in this editor.
+
+Some Java properties were removed in later game releases; their controls are omitted rather than writing ignored values. Bedrock/PocketMine show fields supported by their actual files. Paper/Purpur advanced configuration first shows curated paths present in that version’s files; opt into other discovered scalars or use raw YAML for complex structures. Fabric has no invented universal mod-settings schema.

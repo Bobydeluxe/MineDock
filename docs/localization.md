@@ -11,3 +11,7 @@ Canonical application diagnostics are English. `packages/domain/locales/` contai
 Minecraft console output, free-form commands, player/server names, file contents, plugin titles/descriptions and other external data are not translated. These remain usable with the original protocols and files. File dialogs may use the operating system's own language.
 
 `tests/localization.test.ts` checks catalog completeness, nonempty values, placeholder consistency, translations of current/legacy messages and preference persistence across database restarts. The real Electron UI test checks onboarding choices, all six saved languages, renderer reloads and a full application restart. Extend these tests when adding languages or changing message formatting.
+
+## 0.4.1 labels
+
+Catalog refresh/cache/offline state, independent Fabric lists, property categories/review/risk/inherited/unsaved messages, local profile controls and curated Paper options ship in all six locale JSON files. English remains the default/source language. Actual upstream version strings, file keys and console output are retained. Existing language preferences are preserved.

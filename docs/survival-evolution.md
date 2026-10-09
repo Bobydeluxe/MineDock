@@ -1,5 +1,7 @@
 # Friends survival evolution — MineDock 0.4.0
 
+This ledger records the published 0.4.0 functionality. The current screenshot gallery and controls additionally show the [0.4.1 reference-design candidate](design/reference-041/README.md), which requires separate merge/release approval. Public downloads remain 0.4.0.
+
 MineDock 0.4.0 extends the existing core. It preserves eight engines, migrations 1–6, Electron sandbox/context isolation, strict TypeScript, warm light/neutral charcoal dark and bundled EN/FR/DE/ES/PT/IT. English remains the project/default language. The public release is [0.4.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records implementation and review.
 
 ## Implementation ledger

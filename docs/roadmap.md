@@ -23,3 +23,9 @@ The static product site, native capture/GIF workflow, user changelog and interna
 - Commission an independent security review and expand disk-full, network-disconnect, power-loss and long-duration/load fault injection.
 
 Docker, remote accounts/RBAC, tunnels, cloud synchronization/providers, optional AI and universal world conversion remain future scope. None appears as a working button. MineDock must remain open to supervise servers/tasks and does not configure routers/firewalls.
+
+## 0.4.1 review implementation
+
+The reference-based interface, approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are implemented on codex/reference-design-041. The new site uses current public 0.4.0 downloads and honestly labels candidate screenshots. Public release notes are English. [Design review](design/reference-041/README.md) and [validation](validation.md) record actual results.
+
+The application candidate is not merged/tagged/released until explicit owner approval. All six native jobs and artifact checks pass for the recorded app source; changed app inputs require repeating them. GitHub's social preview is installed and verified. Direct visual confirmation of an existing pinned Windows shortcut remains a manual check where the connected tools cannot observe it.

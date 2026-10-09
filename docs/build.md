@@ -1,5 +1,7 @@
 # Build commands
 
+The reference-design branch builds **0.4.1 for review**. The current public release remains **0.4.0** until explicit approval, native validation and publication. Rebuild the approved platform icons with `python scripts/build-brand-assets.py` before changing their packaging inputs.
+
 ```sh
 pnpm install --frozen-lockfile
 pnpm lint

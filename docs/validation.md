@@ -1,5 +1,46 @@
 # MineDock validation
 
+## Reference-design candidate — 9 October 2026
+
+**0.4.1 is a review candidate; the current public app remains 0.4.0.** App/build inputs are at source `0ebd29526cfd1e1a6d9304ec619b560226143e67`. Follow-up commits contain documentation, captures and site/capture helper updates. They do not change the packaged application inputs. [Machine-readable candidate evidence](validation-records/0.4.1-reference.json) keeps the candidate separate from the release history below.
+
+| Check                                       | Actual result                                                                                                                                                                          |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed; final Windows setup and portable built                                                                                                                                         |
+| `pnpm test`                                 | Windows: **222 passed, 4 OS skips, 226 total in 38 files**                                                                                                                             |
+| `pnpm test:ui`                              | **28 passed** locally; **28 passed** in source CI                                                                                                                                      |
+| Local `pnpm test:packaged`                  | **12 passed** against the final Windows x64 unpacked binary                                                                                                                            |
+| Native Windows x64 / ARM64                  | **12 packaged tests passed each**, 222 unit passes + 4 OS skips each                                                                                                                   |
+| Native Linux x64 / ARM64                    | **12 packaged tests passed each**, 221 unit passes + 5 OS skips each                                                                                                                   |
+| Native macOS Intel / Apple Silicon          | **11 packaged passes + 1 unsupported skip each**, 222 unit passes + 4 OS skips each                                                                                                    |
+| Candidate artifact integrity                | **12 native packages**, matching SHA-256/size, **six trusted Ed25519 metadata signatures**; collected locally, not released                                                            |
+| Official probes                             | All eight catalog services; native Java 21/PHP; verified Geyser/Floodgate/ViaVersion transactions                                                                                      |
+| Real historical Fabric installer            | Minecraft 1.21.1, loader **0.16.9**, installer **1.0.1**, actual official installer CLI and verified Minecraft download                                                                |
+| Windows installed app                       | Final NSIS setup installs, launches 0.4.1, saves French settings and preserves world/properties/backup bytes; owned uninstall removes its shortcuts and retains isolated profile files |
+| Windows branding                            | ICO resources extracted from setup, portable and installed executable; real native window icon obtained with `WM_GETICON`; Desktop/Start-menu targets and icon locations verified      |
+| Appearance/accessibility                    | Both themes; 760×520, laptop/1080p/1440p viewports; status/text contrast, focus contrast, keyboard/dialog return and reduced motion pass                                               |
+| Current gallery                             | **48 actual Electron PNGs** and a labeled nine-frame slideshow; seven named before/after comparisons                                                                                   |
+| Public website                              | Sites version **4**, source `5969d2b986fb0769bbe823a644ad0e1e70a8a833`, production deployment succeeds; 390/768/1280/1440/1920 widths pass                                             |
+| Live links/keyboard                         | 13 distinct public release downloads respond HTTP 200, first skip link and 12 visible keyboard focus targets verified                                                                  |
+| Existing 0.4.0 release                      | Description is English; **all 20 asset identities, sizes and digests remain unchanged**                                                                                                |
+| GitHub social preview                       | Uploaded through the supported web setting; visually verified after reload                                                                                                             |
+
+[The native distribution workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37936740596) and [source validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37936740381) both complete successfully at the recorded app source. Native packages are available as CI artifacts for review; no 0.4.1 tag or public release is created. The macOS unsupported skip is the existing native directory-import journey; it is recorded rather than treated as a pass.
+
+### Complete official catalog observations
+
+The dated Windows probe reports 103 Vanilla releases; 55 Paper game versions with 92 builds for 1.21.11; 41 Purpur game versions with 33 builds; 48 stable Fabric game versions, **253 loaders and 67 installers**; 78 Forge game versions with 31 builds; 23 NeoForge game versions with 45 builds; one current BDS 1.26.52.3 binary; and 349 stable PocketMine releases (selected 5.44.3, Bedrock compatibility 1.26.30). These are live observations, not fixed UI limits. Refreshing the final capture's owned Paper cache selects the actually available stable recommendation **26.2** rather than an unavailable default from the earlier QA cache.
+
+The older Fabric installer runs for real, with SHA-256 `62edf170bdcc41edea85d33acf3eb85474258699b3d41f9418d286c836cb088d`. Its generated launcher names loader 0.16.9 and its downloaded Minecraft server matches upstream SHA-1 `59353fb40c36d304f2035d51e7d6e6baa98dc05c`. Neither a Minecraft executable nor a playable world is started; the real EULA is not accepted.
+
+### Actual 0.4.0 → final candidate update
+
+The unchanged executable extracted from the real public 0.4.0 portable verifies the publisher's actual pinned signature and downloads the exact private CI candidate, SHA-256 `990fa2c3fc80a3b4629ae98f76b29c21987b1d1dde74614e52bfe87a4ee80ff6`. Its production native helper replaces the portable and automatically relaunches **0.4.1**, with no manual intervention. Schema remains **11**, SQLite quick-check is **ok** and the installation audit exists. Settings, server, world/properties bytes, backup record/archive bytes, runtime reference, player history/note and scheduled task survive. Existing migration SQL is unchanged; profile images use optional profile JSON fields.
+
+**This is private candidate validation with controlled transport, not a public 0.4.1 release or a public 0.4.1 download test.** Production signature/download/helper checks are real. Separately, the actual final packaged 0.4.1 candidate checks the real public GitHub feed without interception and visibly shows **Up to date**. Historical 0.3.0→0.4.0 public validation below remains applicable with its manual first-upgrade caveat.
+
+The visible state of an existing pinned Windows/taskbar shortcut is not claimed observed. Linux/macOS/ARM64 OS installer/update lifecycles and actual multiplayer/map behavior remain unvalidated. See [the current design comparison](design/reference-041/README.md), [candidate notes](release-notes-0.4.1.md), [security](security.md) and [roadmap](roadmap.md). Public download links still use 0.4.0.
+
 ## Release validation — 9 October 2026
 
 MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `ad876c2b52f2a0b55120a66495ba6f34e5ddb9bc`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.
