@@ -16,6 +16,7 @@ function option(name: string, fallback: string) {
 const baselineVersion = option('--baseline-version', '0.3.0'),
   candidateVersion = option('--candidate-version', '0.4.0');
 const legacyManual = process.argv.includes('--manual-legacy');
+const publicRelease = process.argv.includes('--public-release');
 const baselineBinary = path.resolve(
   option('--baseline-binary', 'data/upgrade-validation/public-0.3.0/MineDock.exe'),
 );
@@ -41,6 +42,63 @@ const output = path.resolve(
 await mkdir(output, { recursive: true });
 const f = await fixture();
 f.repo.saveSettings({ ...f.repo.settings(), onboarded: true, language: 'fr', theme: 'light' });
+const playerName = 'UpgradeFriend';
+f.repo.seenPlayer(f.server.id, playerName);
+const playerObservation = JSON.stringify({
+  name: playerName,
+  uuid: '12345678-1234-4234-8234-123456789abc',
+  firstSeen: '2026-01-01T12:00:00.000Z',
+  lastSeen: '2026-10-01T12:00:00.000Z',
+  joins: 12,
+  observedMs: 7200000,
+});
+f.repo.db
+  .prepare('INSERT INTO player_observations VALUES(?,?,?)')
+  .run(f.server.id, playerName.toLowerCase(), playerObservation);
+const playerHistory = f.repo.db
+  .prepare('SELECT * FROM player_history WHERE server_id=? AND name=?')
+  .get(f.server.id, playerName);
+const nextRun = new Date(Date.now() + 48 * 3600000).toISOString();
+for (const [id, enabled, mode] of [
+  ['d8f3d0a0-64c1-48de-96a0-397bb4c9318e', true, 'interval'],
+  ['d8f3d0a0-64c1-48de-96a0-397bb4c9318f', false, 'daily'],
+] as const)
+  f.repo.saveSchedule({
+    id,
+    serverId: f.server.id,
+    action: 'backup',
+    intervalMinutes: 1440,
+    command: '',
+    enabled,
+    mode,
+    time: '04:00',
+    timezone: 'Europe/Paris',
+    nextRun,
+  });
+const schedulesBefore = f.repo.schedules();
+const encryptedSecretBefore = f.repo.db
+  .prepare('SELECT secret FROM servers WHERE id=?')
+  .get(f.server.id)?.secret;
+const playerFiles = [
+  'usercache.json',
+  'whitelist.json',
+  'ops.json',
+  'world/stats/12345678-1234-4234-8234-123456789abc.json',
+];
+await mkdir(path.join(f.server.path, 'world/stats'), { recursive: true });
+await writeFile(
+  path.join(f.server.path, playerFiles[0]!),
+  JSON.stringify([{ name: playerName, uuid: '12345678-1234-4234-8234-123456789abc' }]),
+);
+await writeFile(
+  path.join(f.server.path, playerFiles[1]!),
+  JSON.stringify([{ name: playerName, uuid: '12345678-1234-4234-8234-123456789abc' }]),
+);
+await writeFile(path.join(f.server.path, playerFiles[2]!), '[]');
+await writeFile(
+  path.join(f.server.path, playerFiles[3]!),
+  '{"stats":{"minecraft:custom":{"minecraft:play_time":3600}},"DataVersion":4325}',
+);
 const runtimeSource = option('--runtime-dir', '');
 let runtimePath = process.execPath,
   runtimeVersion = 'QA runtime reference, never launched';
@@ -64,6 +122,7 @@ const preserved = [
   path.join(f.server.path, 'world/level.dat'),
   path.join(f.server.path, 'server.properties'),
   backup.path,
+  ...playerFiles.map((file) => path.join(f.server.path, file)),
 ];
 if (runtimeSource) preserved.push(runtimePath);
 const before = await Promise.all(preserved.map((file) => sha256(file)));
@@ -140,7 +199,9 @@ const evidence: Record<string, unknown> = {
   baselinePortableSha256: await sha256(baselinePortable),
   initialSchema,
   legacyManual,
-  feed: 'controlled transport only; production metadata signature and actual installer bytes',
+  feed: publicRelease
+    ? 'actual public GitHub feed, signed metadata and public installer download'
+    : 'controlled transport only; production metadata signature and actual installer bytes',
   at: new Date().toISOString(),
 };
 try {
@@ -158,23 +219,24 @@ try {
     throw Error('Not the genuine packaged old application');
   evidence.oldVersion = oldStatus.currentVersion;
   const expression = `(() => {const fs=process.getBuiltinModule('fs'); const original=globalThis.fetch; globalThis.fetch=async(url,options)=>{const address=String(url); if(address==='https://api.github.com/repos/Bobydeluxe/MineDock/releases/latest')return new Response(JSON.stringify({tag_name:'v${candidateVersion}',draft:false,prerelease:false,assets:[{name:'update-win32-x64.json',browser_download_url:'https://github.com/Bobydeluxe/MineDock/releases/download/v${candidateVersion}/update-win32-x64.json'}]}));if(address.endsWith('/v${candidateVersion}/update-win32-x64.json'))return new Response(${JSON.stringify(JSON.stringify(metadata))});if(address.endsWith('/v${candidateVersion}/MineDock-${candidateVersion}-Portable-x64.exe'))return new Response(fs.readFileSync(${JSON.stringify(candidate)}),{headers:{'Content-Length':String(fs.statSync(${JSON.stringify(candidate)}).size)}});return original(url,options)};return true})()`;
-  await new Promise<void>((resolve, reject) => {
-    main.addEventListener('message', (event) => {
-      const response = JSON.parse(String(event.data));
-      if (response.id === 1) {
-        if (response.result?.exceptionDetails)
-          reject(Error(JSON.stringify(response.result.exceptionDetails)));
-        else resolve();
-      }
+  if (!publicRelease)
+    await new Promise<void>((resolve, reject) => {
+      main.addEventListener('message', (event) => {
+        const response = JSON.parse(String(event.data));
+        if (response.id === 1) {
+          if (response.result?.exceptionDetails)
+            reject(Error(JSON.stringify(response.result.exceptionDetails)));
+          else resolve();
+        }
+      });
+      main.send(
+        JSON.stringify({
+          id: 1,
+          method: 'Runtime.evaluate',
+          params: { expression, returnByValue: true },
+        }),
+      );
     });
-    main.send(
-      JSON.stringify({
-        id: 1,
-        method: 'Runtime.evaluate',
-        params: { expression, returnByValue: true },
-      }),
-    );
-  });
   const checked = await page.evaluate(() =>
     (window as unknown as { minedock: Api }).minedock.checkUpdates(),
   );
@@ -262,18 +324,68 @@ try {
     String(verify.prepare("SELECT value FROM settings WHERE key='general'").get()?.value),
   );
   if (saved.language !== 'fr' || saved.theme !== 'light') throw Error('Settings lost');
+  for (const [key, value] of Object.entries(old.settings))
+    if (JSON.stringify(saved[key]) !== JSON.stringify(value))
+      throw Error('Existing preference lost: ' + key);
   if (!verify.prepare('SELECT id FROM servers WHERE id=?').get(f.server.id))
     throw Error('Server lost');
   if (!verify.prepare('SELECT id FROM backups WHERE id=?').get(backup.metadata.id))
     throw Error('Backup record lost');
   if (!verify.prepare('SELECT major FROM runtime_versions WHERE major=21').get())
     throw Error('Runtime reference lost');
+  if (
+    JSON.stringify(
+      verify
+        .prepare('SELECT * FROM player_history WHERE server_id=? AND name=?')
+        .get(f.server.id, playerName),
+    ) !== JSON.stringify(playerHistory)
+  )
+    throw Error('Player history lost');
+  if (
+    verify
+      .prepare('SELECT metadata FROM player_observations WHERE server_id=? AND name=?')
+      .get(f.server.id, playerName.toLowerCase())?.metadata !== playerObservation
+  )
+    throw Error('Player observation lost');
+  const schedulesAfter = verify
+    .prepare('SELECT metadata FROM schedules ORDER BY id')
+    .all()
+    .map((row) => JSON.parse(String(row.metadata)));
+  if (
+    JSON.stringify(schedulesAfter) !==
+    JSON.stringify([...schedulesBefore].sort((a, b) => a.id.localeCompare(b.id)))
+  )
+    throw Error('Scheduled tasks lost');
+  if (
+    verify.prepare('SELECT secret FROM servers WHERE id=?').get(f.server.id)?.secret !==
+    encryptedSecretBefore
+  )
+    throw Error('Encrypted RCON secret changed');
   if (evidence.finalSchema !== 11 || evidence.quickCheck !== 'ok')
     throw Error('Migration or database integrity failed');
   evidence.installAudit = !!verify
     .prepare("SELECT id FROM events WHERE action='app.update.installed'")
     .get();
   verify.close();
+  if (initialSchema === 5) {
+    const safety = new DatabaseSync(path.join(f.root, 'app.db.before-v6.bak'), { readOnly: true });
+    if (
+      safety.prepare('PRAGMA user_version').get()?.user_version !== 5 ||
+      safety.prepare('PRAGMA quick_check').get()?.quick_check !== 'ok'
+    )
+      throw Error('Pre-migration database backup invalid');
+    if (
+      safety.prepare('SELECT count(*) AS n FROM schedules').get()?.n !== 2 ||
+      !safety.prepare('SELECT name FROM player_history WHERE name=?').get(playerName)
+    )
+      throw Error('Pre-migration backup missing data');
+    safety.close();
+    evidence.preMigrationDatabaseBackup = {
+      schema: 5,
+      quickCheck: 'ok',
+      playersAndTasksPreserved: true,
+    };
+  }
   const after = await Promise.all(preserved.map((file) => sha256(file)));
   if (JSON.stringify(before) !== JSON.stringify(after))
     throw Error('Server or backup bytes changed');
@@ -285,6 +397,12 @@ try {
     backupRecord: true,
     backupBytes: true,
     runtimeReference: true,
+    sqliteDatabase: true,
+    playerHistory: true,
+    playerObservations: true,
+    playerFiles: true,
+    scheduledTasks: true,
+    encryptedRconSecret: true,
   };
   if (runtimeSource) {
     const probe = await promisify(execFile)(runtimePath, ['-version'], { windowsHide: true });

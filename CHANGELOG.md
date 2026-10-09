@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0 — Unreleased
+## 0.4.0
 
 ### Added
 
@@ -29,7 +29,7 @@
 
 ### Known issues
 
-- This version is under review and not publicly released. Public 0.3.0 does not include these additions.
+- Windows/macOS packages have no OS publisher certificate; verify the release checksums. Update metadata uses a separate publisher signature.
 - The public 0.3.0 Windows portable launcher exhibited the detached-PowerShell failure here; its first upgrade requires manually opening the verified new package. See [exact upgrade evidence](docs/validation.md).
 - Incremental objects have no garbage collector; legacy ZIP partial restoration is unavailable. Pack migration requiring new releases remains an explicit prerequisite.
 - Process memory is not JVM heap; swap and Windows firewall/ACL inspection are unavailable. Unknown compatibility/reachability remains unknown.

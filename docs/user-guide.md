@@ -1,16 +1,20 @@
 # A survival world with friends
 
-This guide describes development version 0.4.0. The public download is still 0.3.0; follow [the review](https://github.com/Bobydeluxe/MineDock/pull/7) for the new version. English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
+This guide describes the public **MineDock 0.4.0** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
 
 ## Create your first survival
 
-1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/latest). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.
+1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.
 2. Open MineDock, choose your language/appearance and keep the proposed folders unless you have a reason to change them.
 3. Choose **Create server**. Vanilla suits an unmodified world; Paper or Purpur supports plugins. Fabric, Forge and NeoForge support their corresponding mods. Your friends must use a matching Minecraft version and, for modded play, matching required client mods.
 4. Choose the version and a reasonable memory allowance. Keep survival and normal difficulty. Review every setting before creating the server.
 5. Personally read and accept the Minecraft EULA when asked. Choose **Start** and wait for the ready message. Copy the address from the server view.
 
 On the same computer, a Java client usually connects through `localhost:PORT`. Friends on your home network use your computer's local address and the displayed game port. Internet access is a separate step below. MineDock never opens a router or firewall automatically. Bedrock engines and clients have different compatibility requirements; consult [engine support](engines.md).
+
+## Upgrade an existing 0.3.x profile
+
+Close MineDock, keep your existing server/storage folders, then open the verified 0.4.0 package under the same OS account. Your profile and SQLite database are reused; a database copy is saved before migration. Servers, preferences, backups, runtimes, player history and scheduled tasks are retained. The old Windows portable launcher can fail before its update helper starts; manually open the new verified portable or Setup package in that case. Never delete your data to upgrade.
 
 ## Add a mod, plugin or pack
 

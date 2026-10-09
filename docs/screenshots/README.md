@@ -1,6 +1,6 @@
 # Native desktop gallery
 
-Current 0.4.0 survival-review captures from the actual development Electron application, taken on 8 October 2026. There are **38 PNGs and one labeled nine-frame GIF**. Storage is isolated, mods are real hash-verified downloads, and other administration records are QA fixtures. Active process/console data comes from an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [provenance and historical comparisons](../design/visual-review.md).
+Current MineDock 0.4.0 captures from the actual compiled Electron application, refreshed on 9 October 2026 for release. There are **38 PNGs and one labeled nine-frame GIF**. Storage is isolated, mods are real hash-verified downloads, and other administration records are QA fixtures. Active process/console data comes from an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [provenance and historical comparisons](../design/visual-review.md).
 
 | View            | Dark                                               | Light / other state                                                                      |
 | --------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------- |

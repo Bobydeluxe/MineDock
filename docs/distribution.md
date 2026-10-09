@@ -2,15 +2,15 @@
 
 Use Node 24+, pinned pnpm and the lockfile. `pnpm build` compiles main/preload/renderer and includes dependency notices. The packaging script uses the installed electron-builder **v26** schema and requires the requested OS to equal the host OS. It builds the actual `process.arch` (x64 or ARM64); it never silently packages x64 for an ARM64 host.
 
-| Native host                 | Targets         | Example names for 0.3.0                                             |
+| Native host                 | Targets         | Example names for 0.4.0                                             |
 | --------------------------- | --------------- | ------------------------------------------------------------------- |
-| Windows x64 / ARM64         | NSIS + portable | `MineDock-0.3.0-Setup-ARCH.exe`, `MineDock-0.3.0-Portable-ARCH.exe` |
-| Linux x64 / ARM64           | AppImage + deb  | `MineDock-0.3.0-ARCH.AppImage`, `MineDock-0.3.0-ARCH.deb`           |
-| macOS Intel / Apple Silicon | dmg + zip       | `MineDock-0.3.0-ARCH.dmg`, `MineDock-0.3.0-ARCH.zip`                |
+| Windows x64 / ARM64         | NSIS + portable | `MineDock-0.4.0-Setup-ARCH.exe`, `MineDock-0.4.0-Portable-ARCH.exe` |
+| Linux x64 / ARM64           | AppImage + deb  | `MineDock-0.4.0-ARCH.AppImage`, `MineDock-0.4.0-ARCH.deb`           |
+| macOS Intel / Apple Silicon | dmg + zip       | `MineDock-0.4.0-ARCH.dmg`, `MineDock-0.4.0-ARCH.zip`                |
 
-Windows NSIS is per-user with an installation-folder choice and explicitly retains user data on uninstall. Portable builds keep data in the user profile. Linux deb metadata uses the maintainer masked GitHub address; support is through repository issues. macOS universal packaging is not configured because native Intel/ARM artifacts are provided separately. Examples below describe the published 0.3.0 naming; the review source is 0.4.0.
+Windows NSIS is per-user with an installation-folder choice and explicitly retains user data on uninstall. Portable builds keep data in the user profile. Linux deb metadata uses the maintainer masked GitHub address; support is through repository issues. macOS universal packaging is not configured because native Intel/ARM artifacts are provided separately. Package names below describe the current 0.4.0 release.
 
-For Linux x64, electron-builder expands its architecture macro to `x86_64` for AppImage and `amd64` for deb: `MineDock-0.3.0-x86_64.AppImage` and `MineDock-0.3.0-amd64.deb`. Both carry signed metadata architecture `x64`. ARM64 uses `arm64` for both formats.
+For Linux x64, electron-builder expands its architecture macro to `x86_64` for AppImage and `amd64` for deb: `MineDock-0.4.0-x86_64.AppImage` and `MineDock-0.4.0-amd64.deb`. Both carry signed metadata architecture `x64`. ARM64 uses `arm64` for both formats.
 
 ## Optional certificates
 
@@ -24,7 +24,7 @@ Configure credentials only in CI secrets or a private local environment. Never c
 
 ## CI and actual execution
 
-The distribution workflow selects six native hosted runners: Windows 2025 x64, Windows 11 ARM, Ubuntu 24.04 x64/ARM, macOS 15 Intel/ARM. It installs dependencies, checks architecture, runs lint/types/unit tests, builds packages and executes ten current Electron journeys using the unpacked packaged app. Linux uses Xvfb with the stock Electron sandbox helper; renderer sandbox/context isolation remain enabled. The published 0.3.0 matrix ran seven cases. Check the validation record for the revision actually executed on each OS.
+The distribution workflow selects six native hosted runners: Windows 2025 x64, Windows 11 ARM, Ubuntu 24.04 x64/ARM, macOS 15 Intel/ARM. It installs dependencies, checks architecture, runs lint/types/unit tests, builds packages and executes ten current Electron journeys using the unpacked packaged app. Linux uses Xvfb with the stock Electron sandbox helper; renderer sandbox/context isolation remain enabled. The historical 0.3.0 matrix ran seven cases. Check the validation record for the revision actually executed on each OS.
 
 The workflow offers opt-in official catalog/runtime/content checks and real Paper bootstrap with `eula=false`. These downloads are not part of ordinary validation. It uploads native packages, signed metadata when the publisher secret is configured, opt-in result records and failure screenshots. It does not automatically publish a GitHub Release.
 

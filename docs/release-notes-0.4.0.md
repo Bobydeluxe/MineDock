@@ -1,29 +1,41 @@
-# MineDock 0.4.0 — release notes prepared for review
+# MineDock 0.4.0
 
-**Unreleased candidate.** Public downloads remain [0.3.0 beta](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.3.0). These notes describe [draft PR #7](https://github.com/Bobydeluxe/MineDock/pull/7), including its pending Modrinth/visual bases. Do not upload a partial platform set or imply that a private QA build is a public release.
+MineDock 0.4.0 helps you create and maintain a survival world with friends from one local desktop app. English is the default, with French, German, Spanish, Portuguese and Italian included.
 
-## A survival world with friends
+## Added
 
-Install compatible mods, plugins and world-scoped datapacks through Modrinth; choose a server resource pack, inspect dependencies and keep installed inventory offline. Local player notes/sessions, grouped health notices and crash evidence make a small server easier to maintain.
+- Modrinth datapacks and server resource packs, compatible version/dependency previews and local ZIP import.
+- Grouped health notifications, crash evidence, player sessions, private notes and reliable cached skins.
+- Incremental snapshots with file deduplication, exact partial-restore previews and a safety backup before restoration.
+- Minecraft/Paper/Purpur migration reviews and full or fresh-world server clones.
+- Historical log search, contextual commands, cancellable macros and safe JVM presets.
+- Performance history, configuration versions and graphical YAML/JSON options, map installation assistance and consented Internet reachability checks.
+- Verified `.minedock` packages for moving a server to another computer.
 
-Incremental snapshots reuse unchanged file objects. Partial restoration shows exactly what will be replaced and creates a full safety backup first. Reviewed Minecraft/Paper/Purpur migrations and full/fresh-world clones preserve the existing server while you prepare changes. Console suggestions/macros, actual performance observations, configuration history and verified `.minedock` transfer stay available as secondary tools.
+## Improved
 
-English is default, with French, German, Spanish, Portuguese and Italian bundled. Warm light and neutral charcoal dark remain. See [the beginner guide](user-guide.md), [changelog](../CHANGELOG.md) and [real screenshots](screenshots/README.md).
+Modrinth is the primary content experience. Advanced tools stay secondary to creation, start, content and backups. Warm light and neutral charcoal dark themes are retained. Content and Minecraft update backups have separate settings, enabled by default.
 
-## Fixes and safeguards
+## Fixed
 
-Windows updates now use a hidden native bootstrap that gives the helper/installer its own lifetime; PowerShell's detached-process failure is covered by native regressions. Selected pack removal clears its server URL/hash, migration refuses unknown compatibility, configuration writes reject stale state and preserve comments, and clone ports are independently checked.
+Windows update helpers now launch independently through a hidden native bootstrap. Configuration editing preserves comments and rejects stale writes. Resource-pack removal clears its server URL/hash. Clones choose independent available ports, and migrations block unknown compatibility.
 
-## Platforms, assets and release checklist
+## Download
 
-Retained native targets: Windows NSIS/portable, Linux AppImage/deb, macOS dmg/zip, x64/ARM64 where engine/runtime providers support them. Current 0.4.0 OS lifecycle evidence is Windows x64; the historical six-platform 0.3.0 matrix is not a new 0.4.0 result. Run the native distribution workflow and review all target results before releasing.
+Use [the public release](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0) and its `SHA256SUMS.txt`. Published packages are grouped by OS and architecture; choose x64 for ordinary Intel/AMD PCs or ARM64 for a matching ARM computer. Windows has Setup/portable, Linux AppImage/deb and macOS dmg/zip. Only actual produced and validated files are uploaded.
 
-Publish tested executables together with matching publisher-signed `update-PLATFORM-ARCH.json`, `SHA256SUMS.txt`, these accurate notes and the screenshot gallery. No Windows/Apple certificate is supplied: describe packages as unsigned. Update signatures are separate from OS code signing. Local Windows candidate hashes are in [validation](validation.md); regenerate the release checksum list from the exact uploaded assets.
+End users do not need Node or pnpm. Packages include Electron. Windows/macOS packages have no OS publisher certificate; publisher signatures on update metadata are a separate integrity check.
+
+## Upgrade from 0.3.x
+
+Close MineDock and keep your existing storage folders. Open the verified new package under the same OS account. The existing database is reused and copied before schema migration; servers, preferences, backups, runtimes, player history and scheduled tasks are retained. On this Windows host the old 0.3.0 automatic launcher exits before running its helper, so manually open the 0.4.0 portable or Setup package if the old automatic upgrade fails. Never delete your profile to upgrade.
 
 ## Known issues
 
-- Public 0.3.0 Windows portable auto-replacement failed on this host before its helper ran. A first manual upgrade to the verified new package is required here; the corrected automatic path was tested between real local 0.4.0 and private 0.4.1 QA binaries. Neither new version is publicly released.
-- Snapshots have no deletion/garbage collector, and legacy ZIP partial restoration is unavailable.
-- Changed datapack/resource-pack releases require explicit update/removal before migration. Unknown compatibility blocks changes rather than risking a broken server.
-- RAM is process working set, not JVM heap/swap. Windows firewall/ACL inspection and unsupported reachability remain unavailable.
-- Actual multiplayer, live map rendering, other OS installation/upgrades, long-duration faults and certificate signing remain unvalidated. See [exact evidence and limits](validation.md).
+- Incremental snapshots cannot yet be deleted through the app; their shared file objects are retained. Partial restore applies to incremental snapshots; older full ZIP backups support full restore.
+- A migration needing different datapack/resource-pack releases requires explicit pack update/removal first. Unknown compatibility blocks applying changes.
+- Supported existing YAML/JSON scalar options have a graphical editor; complex structures remain in the text editor.
+- RAM is process working set, not JVM heap/swap. Windows ACL/firewall inspection, local Bedrock UDP and IPv6 observer support are unavailable.
+- Multiplayer gameplay, live map rendering, OS installation/upgrades on Linux/macOS/ARM64 and certificate signing have their own validation limits. Native packaged execution is recorded separately in [validation](validation.md).
+
+See the [user guide](user-guide.md), [complete features](../MineDock-Features.txt), [changelog](../CHANGELOG.md) and [actual desktop captures](screenshots/README.md).

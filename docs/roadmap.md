@@ -1,10 +1,10 @@
 # Implemented scope and remaining validation
 
-## Implemented in the 0.4.0 review
+## Included in MineDock 0.4.0
 
 The existing eight engines, official runtimes, imports/worlds/files, Modrinth mod manager, backups, schedules and recovery remain. The friends survival evolution adds datapacks/resource packs, health/notices/crash evidence, player sessions/notes, incremental snapshots/partial restores, migration/clones, console search/macros, performance/JVM tools, configuration history/maps/reachability and `.minedock` transfer. English is primary; all six app languages remain bundled. See [the exact ledger](survival-evolution.md), [feature list](../MineDock-Features.txt), [user guide](user-guide.md) and [validation](validation.md).
 
-The static product site, native capture/GIF workflow, user changelog and internal security review are included. The source is 0.4.0 under review in [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7), based on pending PRs #5/#6. Public downloads remain 0.3.0. Review and app release publication are separate owner decisions.
+The static product site, native capture/GIF workflow, user changelog and internal security review are included in the public [MineDock 0.4.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records the implementation review.
 
 ## Functional limits and follow-up
 
@@ -16,7 +16,7 @@ The static product site, native capture/GIF workflow, user changelog and interna
 
 ## Remaining native validation and publication
 
-- Review the current real screenshots and draft PR before any merge/release. A fresh six-platform 0.4.0 distribution matrix is required before publishing all platforms.
+- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.4.0 evidence is recorded in validation.
 - Windows x64 lifecycle/updater results are recorded explicitly in validation. Linux/macOS OS installation/upgrades, ARM64 lifecycle, protected install paths and native keychain behavior need their own environments.
 - Actual Minecraft client gameplay, map rendering, historical loader coverage and Bedrock crossplay need real servers/clients and personal EULA acceptance. Capture fixtures are not gameplay.
 - Supply Windows/Apple certificates before claiming Authenticode/notarization; publisher metadata signing is separate.

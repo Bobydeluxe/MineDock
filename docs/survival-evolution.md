@@ -1,6 +1,6 @@
-# Friends survival evolution — 0.4.0 review
+# Friends survival evolution — MineDock 0.4.0
 
-This branch extends the pending Modrinth/visual branches without replacing the existing core. It preserves eight engines, migrations 1–6, Electron sandbox/context isolation, strict TypeScript, warm light/neutral charcoal dark and bundled EN/FR/DE/ES/PT/IT. English remains the project/default language. Public downloads remain 0.3.0; [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) is a draft based on PR #6. No app merge/release is automatic.
+MineDock 0.4.0 extends the existing core. It preserves eight engines, migrations 1–6, Electron sandbox/context isolation, strict TypeScript, warm light/neutral charcoal dark and bundled EN/FR/DE/ES/PT/IT. English remains the project/default language. The public release is [0.4.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records implementation and review.
 
 ## Implementation ledger
 
@@ -15,7 +15,7 @@ This branch extends the pending Modrinth/visual branches without replacing the e
 | 7 — Performance             | Host-aware RAM, Java-aware standard/G1/allowlisted custom flags, recognized Paper/Purpur TPS/MSPT, seven-day aggregation and lag/log context                                                             | Working set is not heap. Samples at most one/30 seconds, 200 lag events. Unsupported measurements remain unavailable                                                       |
 | 8 — Configuration           | Searchable properties, existing bounded YAML/JSON primitives/comments, encrypted history/stale-write refusal, read-only advice, loopback maps, consented external observer                               | History: 10/file, 200/server, 20 MB/server, 90 days. Complex lists/HOCON/TOML stay textual. Windows ACL/firewall, local UDP and live map render are unavailable/unverified |
 | 9 — Packages                | Native .minedock export/import/preview, format-1 profile/inventory/hashes, plugin-config consent, fresh paths/ports/RCON/RAM and official engine/runtime                                                 | 100,000 entries/64 GB/16 MB manifest; online preparation and EULA consent. No universal plugin path rewriting; world/player privacy requires review                        |
-| 10 — Docs/site/distribution | Beginner guide, changelog/features/security review, refreshed native gallery/GIF, static public site, native Windows validation and draft PR                                                             | Exact source/release/native test boundaries are recorded in validation; app release and other-platform publication remain separate                                         |
+| 10 — Docs/site/distribution | Beginner guide, changelog/features/security review, refreshed native gallery/GIF, static public site, native release validation and reviewed PR                                                          | Exact source/release/native test boundaries are recorded in validation; OS-installed validation remains distinct from native packaged execution                            |
 
 ## Persistence
 

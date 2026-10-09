@@ -2,23 +2,23 @@
 
 **Run your Minecraft servers from one desktop app.** Create or import a server, open its console, manage worlds and keep verified backups on your computer.
 
-[![Latest release](https://img.shields.io/github/v/release/Bobydeluxe/MineDock)](https://github.com/Bobydeluxe/MineDock/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/Bobydeluxe/MineDock)](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0)
 [![Validation](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-[**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/latest) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
+[**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
 ![MineDock native desktop dashboard — visual review](docs/screenshots/dashboard.png)
 
 ## Project status
 
-MineDock is a **beta** for Windows, Linux and macOS. The latest published download is **0.3.0**. This branch prepares **0.4.0**, focused on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes the approved warm light and neutral charcoal dark appearance. The [draft review](https://github.com/Bobydeluxe/MineDock/pull/7) depends on the pending mod-manager and visual branches; screenshots show development source, whose new features are not yet in the public download. See the [implementation and limits](docs/survival-evolution.md).
+The current public version is **MineDock 0.4.0** for Windows, Linux and macOS. This release focuses on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes warm light and neutral charcoal dark themes. See the [release notes](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0), [complete features and limits](docs/survival-evolution.md) and [validation record](docs/validation.md).
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 
 ## Start using MineDock
 
-1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/latest) for your OS and architecture.
+1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0) for your OS and architecture.
 2. Open MineDock and choose your language, appearance and storage folders.
 3. Create a server or import an existing folder. Choose an engine, version and resources, then review the settings.
 4. Personally accept the Minecraft EULA when required. Start the server and wait for its ready message before connecting your client.
@@ -32,6 +32,10 @@ English is the default. French, German, Spanish, Portuguese and Italian are bund
 Packages include Electron and its runtime; end users do not install Node or pnpm. Portable builds still store persistent data in your user profile. Current Windows/macOS packages are unsigned. Check the release notes and `SHA256SUMS.txt` for the package you download.
 
 MineDock must stay open to supervise servers and run scheduled tasks. It stops servers gracefully when you close it. Downloads need Internet access; installed local servers can be administered offline. MineDock does not open firewall or router ports.
+
+### Upgrade from 0.3.x
+
+Close MineDock first, keep your existing storage folders, and open the verified 0.4.0 package using the same OS account. Servers, settings, backups, Java/PHP runtimes, player records and scheduled tasks stay in your existing profile; SQLite is backed up before its schema changes. On Windows, the old 0.3.0 automatic launcher can fail before its helper runs: download and open the new portable or Setup package manually instead. Do not delete your old data. See [the migration evidence](docs/validation.md).
 
 ## What you can do
 

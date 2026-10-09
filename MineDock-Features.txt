@@ -1,5 +1,5 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Source version: 0.4.0 beta (friends survival evolution; under review, not published)
+Public version: 0.4.0 (friends survival evolution)
 Updated: 8 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
@@ -7,7 +7,7 @@ English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Older 0.2.0 release downloads do not include the 0.3.0 extensions.
+Download the 0.4.0 package to use the features listed here.
 
 ======================================================================
 1. DESKTOP APPLICATION — IMPLEMENTED
@@ -282,9 +282,9 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Writable macOS ZIP bundle replacement; dmg uses system installer.
 - Persistent installation request/result checked on next startup.
 - Publisher CI secret configured separately from OS-signing certificates.
-- Public v0.3.0 signed feed verified for all twelve native package targets.
+- Publisher-signed update metadata verifies each available native package.
 - Real public Windows portable download rechecked against signed size/hash.
-- Published 0.3.0 correctly reported no newer version in the feed validation.
+- The current release is 0.4.0; older 0.3.0 Windows users may need a manual first upgrade.
 - Native updater/install/uninstall evidence and public-0.3.0 launcher limit are
   recorded precisely in docs/validation.md; native OSes are not interchangeable.
 
@@ -427,5 +427,5 @@ These are future scope, not buttons that pretend to work.
 - Static public product site, original engine icons and real native app captures.
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
-- Draft PR #7 contains evolution, appended schemas, validation and known limits.
-- Public packages remain 0.3.0 until separate review/release approval.
+- Release documentation includes appended schemas, validation and known limits.
+- Public packages and checksum links target v0.4.0.
