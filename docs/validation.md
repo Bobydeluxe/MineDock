@@ -2,7 +2,7 @@
 
 ## Release validation — 9 October 2026
 
-MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `2b977c2472b71559c9e8f8c78f5c4c7b79293a33`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.
+MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `ad876c2b52f2a0b55120a66495ba6f34e5ddb9bc`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.
 
 | Required check                              | Actual result                                                                                                                                     |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -18,11 +18,11 @@ MineDock **0.4.0** is the current public version. Release app/build inputs were 
 | Release integrity                           | **12 native packages**, six pinned-key Ed25519 metadata signatures and matching SHA-256/size verified                                             |
 | Current screenshots/site                    | **38 real Electron PNGs + nine-frame labeled GIF**, refreshed 9 October; site desktop/mobile local QA passes                                      |
 
-The [six-platform workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37917545004) completed successfully. Its exact downloaded artifacts are the release inputs. The initial official-content run found a real Geyser compatibility bug: Modrinth's version environment `unknown` was treated as client-only. The corrected fallback requires known project/loader support, still blocks explicit client-only versions, passes its regression and succeeds against the real upstream downloads on all six hosts.
+The [six-platform workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37920061725) completed successfully. Its exact downloaded artifacts are the release inputs. The initial official-content run found a real Geyser compatibility bug: Modrinth's version environment `unknown` was treated as client-only. The corrected fallback requires known project/loader support, still blocks explicit client-only versions, passes its regression and succeeds against the real upstream downloads on all six hosts.
 
 ### Upgrade with the exact release portable
 
-The unchanged public **0.3.0** binary loads schema 5, verifies the new publisher signature and downloads the actual release candidate portable, SHA-256 `25843511682a0b13b2857bd9d2b18198f44d176e7ed966ff69355307836376c1`. On this host its legacy detached launcher fails; explicit execution of its prepared native helper then replaces the executable and genuinely relaunches **0.4.0**. **This is a validated upgrade with a manual recovery step, not a seamless automatic 0.3.0 upgrade.** Normal users should close the old app and open the verified new package under the same OS account, keeping their storage folders/profile.
+The unchanged public **0.3.0** binary loads schema 5, verifies the new publisher signature and downloads the actual release candidate portable, SHA-256 `312dfb650b543ce92b0fe8c86532d6a63fcffe3c5c5a2673b18ca29b10971d91`. On this host its legacy detached launcher fails; explicit execution of its prepared native helper then replaces the executable and genuinely relaunches **0.4.0**. **This is a validated upgrade with a manual recovery step, not a seamless automatic 0.3.0 upgrade.** Normal users should close the old app and open the verified new package under the same OS account, keeping their storage folders/profile.
 
 Schema **5→11** and SQLite quick-check `ok` are verified, including the schema-5 pre-migration database copy. Existing settings, server, world/properties, full-backup record/bytes, runtime reference and executable, SQLite data, player history/observations/files, two scheduled tasks and encrypted RCON secret all survive. Real OpenJDK **21.0.12.1** successfully probes before and after. Published migrations 1–5 and the existing migration 6 remain unchanged. Testing uses owned isolated data; no user server is started or replaced.
 
