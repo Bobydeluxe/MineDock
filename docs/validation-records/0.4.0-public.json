@@ -1,0 +1,336 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-09",
+  "release": {
+    "id": 407832331,
+    "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0",
+    "tag": "v0.4.0",
+    "assets": 20,
+    "source": "30bce39d42019a7b5c57c62b172207a1b7251d32",
+    "artifactSource": "ad876c2b52f2a0b55120a66495ba6f34e5ddb9bc",
+    "publishedAt": "2026-10-09T11:07:12Z"
+  },
+  "assets": {
+    "at": "2026-10-09T11:08:47.652Z",
+    "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0",
+    "latest": "v0.4.0",
+    "title": "MineDock 0.4.0",
+    "assets": [
+      {
+        "name": "MineDock-0.4.0-amd64.deb",
+        "size": 100731660,
+        "sha256": "a55eade27668627a32d7182351900c19f0a3c25d04702c5dfaf0a2afe8b0a1d3",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-arm64.AppImage",
+        "size": 128303300,
+        "sha256": "f3578f80e083ef3d24bd94e13da16900f2b1f376addd2f77bdf89aed3419cfb6",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-arm64.deb",
+        "size": 95875388,
+        "sha256": "c5413861304ef9fff78c9a5b8ccb6ee7615c8d67c07716e0f9d4c4875ee7d9b1",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-arm64.dmg",
+        "size": 129868801,
+        "sha256": "09b31810c14999ed241127590274b8eff1f8c6fdbd625300d795479cdba816cc",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-arm64.zip",
+        "size": 129979711,
+        "sha256": "6bf74e219cf872729d016c2b8747063aefaa15f9f517fe70562a13683f1a32ae",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-Portable-arm64.exe",
+        "size": 106531455,
+        "sha256": "0a306ebefd590a64882a121d1083206ed1c2f72ec8db75bf4fcf971fca9af229",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-Portable-x64.exe",
+        "size": 112639147,
+        "sha256": "312dfb650b543ce92b0fe8c86532d6a63fcffe3c5c5a2673b18ca29b10971d91",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-Setup-arm64.exe",
+        "size": 106750330,
+        "sha256": "59219256cf849116c44d939654140d3f4b7f359c537cf05129aa8a94cdf89cb6",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-Setup-x64.exe",
+        "size": 112858546,
+        "sha256": "88a74f003eeb4a299ce1bed0654655aabf87885abd8adc54b7ec1f7b85ccb667",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-x64.dmg",
+        "size": 133727129,
+        "sha256": "1314bcd40b76d3f6c09033def11f78a49cdf1d3dc51ce0119666b1c751da58d6",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-x64.zip",
+        "size": 133880977,
+        "sha256": "8882fa9b1416298f1a13bbd0b9afc1b6293c86eea75c1957b07fc65d9ef191c5",
+        "status": 200
+      },
+      {
+        "name": "MineDock-0.4.0-x86_64.AppImage",
+        "size": 127060768,
+        "sha256": "7cb72a0ad4e39faf0fc2127963ac38a07d4023a33d2243d71d750b579e31dc31",
+        "status": 200
+      },
+      {
+        "name": "MineDock-Features.txt",
+        "size": 28223,
+        "sha256": "8fa7ea712db0be99ff8530a4845d5d135ffe7e7393e6aa9c8c0113bcbc29d516",
+        "status": 200
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 1749,
+        "sha256": "3457321443d4676aaa8b59d2f54c7fd29de84ba60484362c757478f8d6226473",
+        "status": 200
+      },
+      {
+        "name": "update-darwin-arm64.json",
+        "size": 1270,
+        "sha256": "376e27b7b6d9a4b3884227f2a0f571519c6947988fc2d7c2f0a9836e9fda6746",
+        "status": 200
+      },
+      {
+        "name": "update-darwin-x64.json",
+        "size": 1254,
+        "sha256": "5f9b679104c625b6c765be1e234f9c8f4d5928089ce9240edbd79f1350dea842",
+        "status": 200
+      },
+      {
+        "name": "update-linux-arm64.json",
+        "size": 1282,
+        "sha256": "605b41f37131ed47aa5f2c0a43194275d7be60ade3e97ac1a682acd4a10d0ba3",
+        "status": 200
+      },
+      {
+        "name": "update-linux-x64.json",
+        "size": 1282,
+        "sha256": "7ebb2781a019c5e593708f11252fc6c1e8cca0b16a0f6349727cd8f3c7e88e0e",
+        "status": 200
+      },
+      {
+        "name": "update-win32-arm64.json",
+        "size": 1314,
+        "sha256": "0dc6381db17b010b710d89f81678c9aaa04815d6d614fab5eeb8640d52dcf9b2",
+        "status": 200
+      },
+      {
+        "name": "update-win32-x64.json",
+        "size": 1298,
+        "sha256": "e7108dea58816c968079f3fd29e63dc849b82b50aa6fad9a10566b048e79e849",
+        "status": 200
+      }
+    ],
+    "metadataSignatures": 6,
+    "publicWindowsPortable": {
+      "filename": "MineDock-0.4.0-Portable-x64.exe",
+      "size": 112639147,
+      "sha256": "312dfb650b543ce92b0fe8c86532d6a63fcffe3c5c5a2673b18ca29b10971d91",
+      "matchesValidatedNativeBuild": true
+    },
+    "checksumEntries": 19
+  },
+  "productionUpdateService": {
+    "at": "2026-10-09T11:08:47.916Z",
+    "targets": [
+      {
+        "platform": "win32",
+        "arch": "x64",
+        "target": "nsis",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "win32",
+        "arch": "x64",
+        "target": "portable",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "win32",
+        "arch": "arm64",
+        "target": "nsis",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "win32",
+        "arch": "arm64",
+        "target": "portable",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "linux",
+        "arch": "x64",
+        "target": "appimage",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "linux",
+        "arch": "x64",
+        "target": "deb",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "linux",
+        "arch": "arm64",
+        "target": "appimage",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "linux",
+        "arch": "arm64",
+        "target": "deb",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "darwin",
+        "arch": "x64",
+        "target": "maczip",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "darwin",
+        "arch": "x64",
+        "target": "dmg",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "target": "maczip",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      },
+      {
+        "platform": "darwin",
+        "arch": "arm64",
+        "target": "dmg",
+        "version": "0.4.0",
+        "signature": "verified by production UpdateService"
+      }
+    ],
+    "download": {
+      "version": "0.4.0",
+      "platform": "win32",
+      "arch": "x64",
+      "target": "portable",
+      "filename": "MineDock-0.4.0-Portable-x64.exe",
+      "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Portable-x64.exe",
+      "size": 112639147,
+      "sha256": "312dfb650b543ce92b0fe8c86532d6a63fcffe3c5c5a2673b18ca29b10971d91"
+    },
+    "currentVersionCheck": "passed",
+    "host": "isolated production service with declared comparison version; genuine 0.3.0 app replay and actual packaged 0.4.0 check recorded separately",
+    "installerExecuted": false
+  },
+  "actualPackagedCurrentVersion": {
+    "at": "2026-10-09T11:09:38.531Z",
+    "actualPackageVersion": "0.4.0",
+    "publicFeed": true,
+    "fetchStubbed": false,
+    "status": {
+      "currentVersion": "0.4.0",
+      "automaticChecks": false,
+      "trustedKeyConfigured": true,
+      "packaged": true,
+      "downloaded": false,
+      "lastChecked": "2026-10-09T11:09:29.835Z"
+    },
+    "isolatedData": true,
+    "portableSource": "verified public Windows x64 download"
+  },
+  "actualPublicLegacyUpgrade": {
+    "baseline": "0.3.0",
+    "candidate": "0.4.0",
+    "baselinePortableSha256": "9773b9cfb53811c94fbfb88f2c305698de64096df7900a1495856b27986e84dd",
+    "initialSchema": 5,
+    "legacyManual": true,
+    "feed": "actual public GitHub feed, signed metadata and public installer download",
+    "at": "2026-10-09T11:08:43.330Z",
+    "oldVersion": "0.3.0",
+    "signatureAndDownload": "verified by old production application",
+    "manualIntervention": "Explicit native helper execution after legacy launcher failed; not an automatic 0.3.0 upgrade",
+    "helperRelaunch": "completed; actual 0.4.0 startup log observed",
+    "replacedBinarySha256": "312dfb650b543ce92b0fe8c86532d6a63fcffe3c5c5a2673b18ca29b10971d91",
+    "finalSchema": 11,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "preMigrationDatabaseBackup": {
+      "schema": 5,
+      "quickCheck": "ok",
+      "playersAndTasksPreserved": true
+    },
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "sqliteDatabase": true,
+      "playerHistory": true,
+      "playerObservations": true,
+      "playerFiles": true,
+      "scheduledTasks": true,
+      "encryptedRconSecret": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    },
+    "isolatedData": true
+  },
+  "website": {
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "versionNumber": 2,
+    "source": "59ae38f5625c1ffdf64abffda036df5dfe184855",
+    "deploymentId": "appgdep_6ac8cb09234c8191b0e9a916e7a8bd4a",
+    "validation": [
+      {
+        "name": "desktop",
+        "width": 1440,
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      },
+      {
+        "name": "mobile",
+        "width": 390,
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      }
+    ]
+  }
+}

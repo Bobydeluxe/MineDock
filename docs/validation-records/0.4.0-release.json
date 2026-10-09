@@ -981,7 +981,9 @@
     "isolatedData": true
   },
   "publicVerification": {
-    "status": "recorded after publication in 0.4.0-public.json"
+    "status": "passed",
+    "record": "0.4.0-public.json",
+    "at": "2026-10-09T11:08:47.652Z"
   },
   "limits": [
     "Legacy 0.3.0 Windows launcher requires manual first upgrade on tested host",
