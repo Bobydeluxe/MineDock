@@ -16,6 +16,10 @@ On the same computer, a Java client usually connects through `localhost:PORT`. F
 
 Close MineDock, keep your existing server/storage folders, then open the verified 0.4.1 package under the same OS account. Your profile and SQLite database are reused; a database copy is saved before migration. Servers, preferences, backups, runtimes, player history and scheduled tasks are retained. The old Windows portable launcher can fail before its update helper starts; manually open the new verified portable or Setup package in that case. Never delete your data to upgrade.
 
+## Application updates
+
+Open **Settings** to check for a MineDock update. The updater verifies the publisher signature and package hash before offering installation. The public Windows x64 portable upgrade from 0.4.0 to 0.4.1 was tested with automatic replacement/restart and preserved data. You can also close the app and open a verified newer package manually under the same OS account. MineDock 0.4.1 displays **Up to date** after a successful check with no newer release. See [the exact public validation](validation.md) for other platforms and the legacy 0.3.0 manual step.
+
 ## Add a mod, plugin or pack
 
 Stop the server before changing content. In **Mods** or **Plugins**, search **Discover**, open a result and review its recommended compatible version. The preview names required dependencies; install the reviewed group together. Optional dependencies stay optional. Modrinth is the main provider; Hangar is a secondary plugin source. Installed content remains visible offline.

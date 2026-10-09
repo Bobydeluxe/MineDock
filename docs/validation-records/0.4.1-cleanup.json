@@ -653,5 +653,7 @@
     "Existing pinned Windows/taskbar visual state not observed",
     "Historical 0.3.0 launcher requires manual first upgrade on tested host",
     "Incremental deletion/garbage collection and legacy full-ZIP partial restore unavailable"
-  ]
+  ],
+  "historical": true,
+  "supersededBy": "0.4.1-release.json"
 }

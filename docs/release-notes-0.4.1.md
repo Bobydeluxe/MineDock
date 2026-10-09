@@ -42,6 +42,8 @@ Verify your download against [SHA256SUMS.txt](https://github.com/Bobydeluxe/Mine
 
 Close MineDock, retain your storage folders and use the same OS account. The application reuses your existing profile, servers, SQLite database, backups, runtimes, player data and tasks. Version 0.4.1 retains schema 11. From 0.3.0 on Windows, the first upgrade may require opening the verified new package manually. Keep a backup of your data. See [validation](validation.md) for exact migration evidence.
 
+The actual public Windows x64 update from 0.4.0 to 0.4.1 successfully downloads, replaces and restarts MineDock while preserving the checked data and a real Java 21 runtime. Direct migration from public 0.3.0 is also verified, with its documented manual launcher step. Other OS installation/update lifecycles remain unvalidated.
+
 ## Known issues
 
 Windows and macOS builds have no OS publisher certificate or notarization. Signed updater metadata is a separate integrity mechanism. The old 0.3.0 Windows launcher may require a manual first upgrade. Native packaged tests do not establish OS installation/update behavior on Linux/macOS/ARM64, multiplayer gameplay or live map rendering. Existing Windows pinned shortcuts may need to be re-pinned to refresh the OS icon cache; their visible taskbar state was not observed here. Incremental snapshot deletion/garbage collection and legacy full-ZIP partial restore remain unavailable. Bedrock offers only actually linked official platform binaries; PocketMine upstream support has ended. All historical engine combinations are not guaranteed compatible.
