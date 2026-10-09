@@ -18,8 +18,26 @@ test('light appearance keeps enabled server actions readable', async () =>
       .getByRole('button', { name: 'Start', exact: true })
       .first();
     await expect(start).toBeEnabled();
-    await expect(start).toHaveCSS('color', 'rgb(55, 123, 62)');
-    await expect(start).toHaveCSS('background-color', 'rgb(232, 242, 233)');
+    await expect(start).toHaveCSS('color', 'rgb(55, 107, 53)');
+    const contrast = await start.evaluate((element) => {
+      const context = document.createElement('canvas').getContext('2d')!;
+      const luminance = (color: string) => {
+        context.fillStyle = color;
+        context.fillRect(0, 0, 1, 1);
+        const channels = Array.from(context.getImageData(0, 0, 1, 1).data)
+          .slice(0, 3)
+          .map((value) => {
+            const v = value / 255;
+            return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+          });
+        return channels[0]! * 0.2126 + channels[1]! * 0.7152 + channels[2]! * 0.0722;
+      };
+      const style = getComputedStyle(element),
+        a = luminance(style.color),
+        b = luminance(style.backgroundColor);
+      return (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05);
+    });
+    expect(contrast).toBeGreaterThanOrEqual(4.5);
     await page
       .locator('.page-heading')
       .getByRole('button', { name: 'Create server', exact: true })
@@ -27,7 +45,7 @@ test('light appearance keeps enabled server actions readable', async () =>
     await centered(page);
     await expect(page.locator('.engine-option.selected')).toHaveCSS(
       'border-top-color',
-      'rgb(55, 123, 62)',
+      'rgb(23, 105, 95)',
     );
   }));
 

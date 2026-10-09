@@ -10,6 +10,8 @@ The unpublished 0.3.1 UI revision implements centered native dialogs with focus/
 
 ## Remaining prerequisites and validation
 
+The mineral teal/copper visual identity is ready for owner review in its separate branch/PR. It retains page organization, controls and existing journeys, updates the full native gallery, and supplies before/after comparisons and measured layout evidence. Review does not authorize merging or publication. The source stays 0.3.1 and public packages stay 0.3.0 until an explicitly approved release is prepared.
+
 The development mod manager now uses Modrinth exclusively for Fabric/Forge/NeoForge mods, with real staged file/SQLite transactions, named dependencies, batched updates, archived rollback, locks, collections, manual identification and pre-start health checks. Appended migration 6 retains existing binaries and published migrations. This work remains an unpublished source revision; a future minor release will receive its version after the complete release validation. Visual review changes belong to a separate PR and do not authorize a release.
 
 - Real client/server gameplay after personal EULA acceptance, including engine/loader historical-version coverage and Bedrock crossplay connectivity.

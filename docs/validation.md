@@ -1,5 +1,23 @@
 # MineDock validation
 
+## Charcoal dark-theme refinement, 8 October 2026
+
+Owner feedback refined the dark surfaces, text, borders and overlays to neutral charcoal grays. A before/after computed-style comparison confirms **all 76 light-theme tokens unchanged**, including the console. All ten relevant identity/polish cases pass across the targeted run and isolated rerun; two initial cases had a concurrent test-server port collision and pass when run separately. The visual case checks 23 contrast/focus combinations per theme, eight server states, mod badges, four desktop sizes, focus return and reduced motion. Lint, strict TypeScript, production compilation and unsigned Windows x64 NSIS/portable packaging pass. Backend, layout, languages and public release version are unchanged.
+
+The current local portable x64 SHA-256 is `4e898083d8692677e6bc6aa50b82ec592049002ff31adac9323265fba9620400`; NSIS x64 is `665e22b1b4a4b0c181bc0baee5284640c71436544e44ef454a3205deb8bb6826`. Current-head CI results are available in [PR #6 checks](https://github.com/Bobydeluxe/MineDock/pull/6/checks). Earlier full-suite evidence below describes the initial visual revision before this palette-only refinement.
+
+The 22 current dark captures are refreshed; the six approved light images are retained byte-for-byte. The native before/after record again measures 181 rectangles across 26 views/states with zero differences beyond 0.5 CSS pixels. All 120 checked local documentation links resolve. Active capture views now wait for the real process sampler before recording metrics; this is a QA-tool change only.
+
+## Initial visual identity review, 8 October 2026 (`863c6fc`)
+
+This separate style revision is based on the validated mod-manager branch. The source remains 0.3.1 and no release is published. Windows 11 x64 / Node 24 / pnpm 11.19: local lint and strict TypeScript pass; the full unit run passes **183 cases with four platform-specific skips (187 total in 24 files)**. The final full source UI run passes **25 cases in 3.6 minutes**. The final packaged Windows suite passes **nine actual Electron cases in 3.1 minutes**, against the rebuilt executable after the last semantic badge correction. Production compilation and unsigned Windows x64 NSIS/portable packaging pass. Historical results remain labeled separately below.
+
+The new visual case checks 23 foreground/background or focus combinations per theme, eight server states, mod states, secondary/disabled text, console levels, keyboard focus/return, reduced motion and native-layout boundaries at 760 × 520, 1360 × 900, 1920 × 1080 and 2560 × 1440. Text targets 4.5:1 and focus 3:1. A 4.33:1 light disabled-state contrast was found and corrected; the complete visual case then passed. Existing dialog, first-paint, small-window, nested focus, six-language, wizard and preference regressions are retained.
+
+Native before/after captures measure 181 rectangles across 26 views/states, agreeing in layout properties within 0.5 CSS pixels. The current gallery uses actual Electron/SQLite services and isolated QA records. Mod binaries were actually downloaded and verified; active console/lifecycle data comes from an inert external Node fixture, not Minecraft. No gameplay, interactive OS installation, new six-platform native package matrix or OS signing is claimed. See [design, geometry and capture provenance](design/visual-review.md).
+
+All 28 then-current native images were visually reviewed; eight historical comparison images are retained separately. All 119 checked local documentation links resolve. The public release is still v0.3.0; all twelve public package links return HTTP 200 with their expected content length. The original unsigned preview at `863c6fc` had portable x64 SHA-256 `c23975c97bbb06702c3fd1c5ef0b92e34f09ac0ac06fb27cb70620b5161c46e0` and NSIS x64 SHA-256 `31918b66ccad65a8db9882c96049a7fccc55c7bff8f85ed43b6ca62d1a1d1d0c`. Those local packages are superseded by the charcoal rebuild above; neither revision is uploaded as a release.
+
 ## Development mod manager, 4–8 October 2026
 
 The source remains 0.3.1 while review is pending. Windows 11 x64 / Node 24 / pnpm 11.19: lint and strict TypeScript pass; the full unit run passes **183 cases with four OS-specific skips (187 total in 24 files)**. The full source UI suite passes **24 cases**. Windows NSIS and portable x64 compile unsigned; the packaged suite includes **nine actual Electron cases**, including the mod management journey. No new public release or new six-platform packaging matrix is claimed.

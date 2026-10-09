@@ -383,7 +383,9 @@ export function ModsView({ server }: { server: Server }) {
                       </span>
                     </div>
                     <div className="mod-card-footer">
-                      <span className="badge">
+                      <span
+                        className={`badge ${installed ? (update ? 'update' : 'enabled') : compatible === true ? 'compatible' : compatible === false ? 'incompatible' : ''}`}
+                      >
                         {t(
                           installed
                             ? update
@@ -528,7 +530,7 @@ export function ModsView({ server }: { server: Server }) {
             </div>
           )}
           {items.slice(page * 30, page * 30 + 30).map((item) => (
-            <article className="mod-installed" key={item.id}>
+            <article className="mod-installed" key={item.id} data-enabled={item.enabled}>
               <input
                 type="checkbox"
                 aria-label={`${t('modSelect')} ${item.title}`}
@@ -551,7 +553,20 @@ export function ModsView({ server }: { server: Server }) {
                   {item.gameVersion ?? server.version} ·{' '}
                   {item.source ?? item.provider ?? 'modrinth'}
                 </small>
-                <span className="badge">
+                <span
+                  className={`badge ${
+                    inventory.data?.problems.some(
+                      (problem) =>
+                        problem.filename === item.filename && problem.severity === 'critical',
+                    )
+                      ? 'danger'
+                      : !item.enabled
+                        ? 'disabled'
+                        : available.some((update) => update.contentId === item.id)
+                          ? 'update'
+                          : 'enabled'
+                  }`}
+                >
                   {t(
                     inventory.data?.problems.some(
                       (problem) =>

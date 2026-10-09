@@ -8,12 +8,41 @@ import {
   keymap,
 } from '@codemirror/view';
 import { history, historyKeymap, defaultKeymap } from '@codemirror/commands';
-import { StreamLanguage, syntaxHighlighting, defaultHighlightStyle } from '@codemirror/language';
+import {
+  StreamLanguage,
+  syntaxHighlighting,
+  defaultHighlightStyle,
+  HighlightStyle,
+} from '@codemirror/language';
 import { json } from '@codemirror/lang-json';
 import { yaml } from '@codemirror/lang-yaml';
 import { xml } from '@codemirror/lang-xml';
 import { toml } from '@codemirror/legacy-modes/mode/toml';
 import { properties } from '@codemirror/legacy-modes/mode/properties';
+// Retain CodeMirror's token categories and emphasis, while adapting its built-in
+// fixed light palette to the current MineDock theme. No document logic changes.
+const syntaxColors: Record<string, string> = {
+  '#404740': 'comment',
+  '#708': 'keyword',
+  '#219': 'name',
+  '#164': 'string',
+  '#a11': 'string',
+  '#e40': 'string',
+  '#00f': 'name',
+  '#30a': 'name',
+  '#085': 'name',
+  '#167': 'name',
+  '#256': 'name',
+  '#00c': 'name',
+  '#940': 'comment',
+  '#f00': 'invalid',
+};
+const minedockHighlightStyle = HighlightStyle.define(
+  defaultHighlightStyle.specs.map((style) => ({
+    ...style,
+    ...(style.color ? { color: `var(--syntax-${syntaxColors[style.color] ?? 'name'})` } : {}),
+  })),
+);
 export function TextEditor({
   path,
   value,
@@ -53,7 +82,7 @@ export function TextEditor({
         doc: content.current,
         extensions: [
           language,
-          syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
+          syntaxHighlighting(minedockHighlightStyle, { fallback: true }),
           lineNumbers(),
           highlightActiveLine(),
           drawSelection(),

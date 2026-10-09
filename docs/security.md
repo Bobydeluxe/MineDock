@@ -2,6 +2,8 @@
 
 MineDock is local and runs with the current OS account permissions. It exposes no public administration API, tunnel or web panel. Its isolated renderer uses only validated named preload methods; main verifies the sender/frame/origin and validates all input. Server/installer processes use argument arrays and `shell: false`. The updater uses fixed native helper scripts only for operations requiring the OS installation flow.
 
+The visual-review branch adds local CSS tokens and edits original bundled SVG symbols; fonts use the native/system stack. It introduces no new renderer capabilities, remote font/CDN dependency, telemetry, credential setting or executable runtime library. Screenshot tooling uses ignored private QA storage and a test-only external child; it is not part of the packaged application. See [capture provenance](design/visual-review.md).
+
 ## Files, archives and recovery
 
 Relative paths reject traversal, null bytes, absolute paths, Windows ADS/device names and ambiguous trailing characters. `lstat`/`realpath` checks reject user links/junctions in server browsing, copies and ZIP imports. Verified macOS system aliases and ordinary Windows short-path names are normalized without accepting user-created links. Native selection approves a specific external source or export target; data/runtime/cache roots remain protected from overwriting.
