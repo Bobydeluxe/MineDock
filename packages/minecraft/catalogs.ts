@@ -105,6 +105,8 @@ export class PurpurCatalog implements EngineCatalog {
           `https://api.purpurmc.org/v2/purpur/${safeVersion(version)}/${pinned ? safeVersion(pinned) : 'latest'}`,
         ),
       );
+    if (pinned && build.build !== pinned)
+      throw new DomainError('VERSION', 'The upstream returned a different Purpur build.');
     return {
       url: `https://api.purpurmc.org/v2/purpur/${version}/${build.build}/download`,
       filename: `purpur-${version}-${build.build}.jar`,
@@ -116,37 +118,44 @@ export class PurpurCatalog implements EngineCatalog {
   }
 }
 export class FabricCatalog implements EngineCatalog {
-  async versions(): Promise<string[]> {
+  async games() {
     return z
       .array(z.object({ version: z.string(), stable: z.boolean() }))
-      .parse(await fetchJson('https://meta.fabricmc.net/v2/versions/game'))
-      .filter((v) => v.stable)
-      .map((v) => v.version);
+      .parse(await fetchJson('https://meta.fabricmc.net/v2/versions/game'));
+  }
+  async versions(): Promise<string[]> {
+    return (await this.games()).filter((v) => v.stable).map((v) => v.version);
   }
   async builds(version: string): Promise<string[]> {
+    return (await this.loaders(version)).map((v) => v.version);
+  }
+  async loaders(version: string) {
     return z
       .array(z.object({ loader: z.object({ version: z.string(), stable: z.boolean() }) }))
       .parse(
         await fetchJson(`https://meta.fabricmc.net/v2/versions/loader/${safeVersion(version)}`),
       )
-      .filter((v) => v.loader.stable)
-      .map((v) => v.loader.version);
+      .map((v) => v.loader);
   }
-  async installers(): Promise<{ version: string; url: string }[]> {
+  async installers(): Promise<{ version: string; url: string; stable: boolean }[]> {
     return z
       .array(z.object({ version: z.string(), url: z.string().url(), stable: z.boolean() }))
-      .parse(await fetchJson('https://meta.fabricmc.net/v2/versions/installer'))
-      .filter((v) => v.stable);
+      .parse(await fetchJson('https://meta.fabricmc.net/v2/versions/installer'));
   }
   async artifact(
     version: string,
     pinned?: string,
     selection: EngineSelection = {},
   ): Promise<EngineArtifact> {
-    const loaders = await this.builds(version);
+    const entries = await this.loaders(version);
+    const loaders = entries.map((v) => v.version);
     const installers = await this.installers();
-    const loader = selection.loaderVersion ?? pinned?.split('@')[0] ?? loaders[0];
-    const installer = selection.installerVersion ?? pinned?.split('@')[1] ?? installers[0]?.version;
+    const loader =
+      selection.loaderVersion ?? pinned?.split('@')[0] ?? entries.find((v) => v.stable)?.version;
+    const installer =
+      selection.installerVersion ??
+      pinned?.split('@')[1] ??
+      installers.find((v) => v.stable)?.version;
     if (!loader || !installer || !loaders.includes(loader))
       throw new DomainError('VERSION', 'No compatible Fabric loader is available.');
     const selected = installers.find((value) => value.version === installer);
@@ -180,8 +189,7 @@ export class ForgeCatalog implements EngineCatalog {
           await fetchJson(
             'https://maven.neoforged.net/api/maven/versions/releases/net/neoforged/neoforge',
           ),
-        )
-        .versions.filter((v) => !/-alpha|-beta/.test(v));
+        ).versions;
     const xml = await fetchText(
       'https://maven.minecraftforge.net/net/minecraftforge/forge/maven-metadata.xml',
     );
@@ -209,9 +217,10 @@ export class ForgeCatalog implements EngineCatalog {
     selection: EngineSelection = {},
   ): Promise<EngineArtifact> {
     const available = await this.builds(version);
-    const build = pinned ?? selection.loaderVersion ?? available[0];
+    const build =
+      pinned ?? selection.loaderVersion ?? available.find((v) => !/-alpha|-beta/.test(v));
     if (!build || !available.includes(build))
-      throw new DomainError('VERSION', 'No compatible stable loader build is available.');
+      throw new DomainError('VERSION', 'No compatible loader build is available.');
     const url =
       this.engine === 'forge'
         ? `https://maven.minecraftforge.net/net/minecraftforge/forge/${build}/forge-${build}-installer.jar`
@@ -279,14 +288,25 @@ export class BedrockCatalog implements EngineCatalog {
 }
 export class PocketMineCatalog implements EngineCatalog {
   async versions(): Promise<string[]> {
-    return z
-      .array(githubReleaseSchema)
-      .parse(
-        await fetchJson(
-          'https://api.github.com/repos/pmmp/PocketMine-MP/releases?per_page=100',
-          githubHeaders(),
-        ),
-      )
+    const releases: GithubRelease[] = [];
+    for (let page = 1; ; page++) {
+      const batch = z
+        .array(githubReleaseSchema)
+        .parse(
+          await fetchJson(
+            `https://api.github.com/repos/pmmp/PocketMine-MP/releases?per_page=100&page=${page}`,
+            githubHeaders(),
+          ),
+        );
+      releases.push(...batch);
+      if (batch.length < 100) break;
+      if (page >= 100)
+        throw new DomainError(
+          'CATALOG',
+          'The upstream release catalog exceeded its supported size.',
+        );
+    }
+    return releases
       .filter(
         (v) => !v.prerelease && !v.draft && v.assets.some((a) => a.name === 'PocketMine-MP.phar'),
       )

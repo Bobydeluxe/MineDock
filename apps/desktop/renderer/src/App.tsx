@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import {
   Box,
   LayoutDashboard,
@@ -14,7 +14,6 @@ import {
   Users,
   MemoryStick,
   HardDrive,
-  ShieldCheck,
   Terminal,
   Play,
   Square,
@@ -32,17 +31,17 @@ import { localizeMessage } from '../../../../packages/domain/localization';
 import { defaultLanguage } from '../../../../packages/domain/languages';
 import { engineDefinition } from '../../../../packages/domain/engines';
 import { AppContext, useApp, type Run } from './context';
-import { Button, Empty, Loading, ErrorBox, bytes, duration, Dialog, Field } from './ui';
+import { Button, Empty, Loading, ErrorBox, bytes, duration, Dialog } from './ui';
 import { CreateServer, Onboarding } from './wizard';
-import { EngineIcon } from './engine-icon';
+import brandIcon from '../../../../assets/brand/icon-128.png';
+import { ServerAvatar } from './profile';
 import { ImportServerDialog } from './imports';
 import type { ImportServerPreview } from '../../../../packages/domain/imports';
 import type { ModpackPreview } from '../../../../packages/domain/modpacks';
 import { ModpackDialog } from './modpacks';
 import { ServerPage } from './server';
-import { NotificationsView } from './health';
-import { BackupsView, ActivityView, SettingsView, OperationsView } from './management';
-type Page = 'dashboard' | 'backups' | 'activity' | 'settings' | 'operations' | 'notifications';
+import { BackupsView, SettingsView } from './management';
+type Page = 'dashboard' | 'backups' | 'settings';
 export function Status({ server }: { server: Server }) {
   const { t } = useApp();
   return (
@@ -122,8 +121,21 @@ export function App() {
   const [importPreview, setImportPreview] = useState<ImportServerPreview>();
   const [packPreview, setPackPreview] = useState<ModpackPreview>();
   const [progress, setProgress] = useState<Progress[]>([]);
-  const [palette, setPalette] = useState(false);
-  const [paletteSearch, setPaletteSearch] = useState('');
+  const unsaved = useRef(new Set<string>());
+  const [pendingNavigation, setPendingNavigation] = useState<{ action: () => void }>();
+  const registerUnsaved = useCallback((key: string, dirty: boolean) => {
+    if (dirty) unsaved.current.add(key);
+    else unsaved.current.delete(key);
+    void api?.setUnsavedChanges(unsaved.current.size > 0);
+    return () => {
+      unsaved.current.delete(key);
+      void api?.setUnsavedChanges(unsaved.current.size > 0);
+    };
+  }, []);
+  const requestNavigation = useCallback((action: () => void) => {
+    if (unsaved.current.size) setPendingNavigation({ action });
+    else action();
+  }, []);
   const refresh = useCallback(async () => {
     if (api) {
       const state = await api.snapshot();
@@ -190,14 +202,12 @@ export function App() {
   useEffect(() => {
     const key = (e: KeyboardEvent) => {
       if (!(e.ctrlKey || e.metaKey)) return;
-      if (e.key === 'k') {
-        e.preventDefault();
-        setPalette((p) => !p);
-      }
       if (e.key === ',') {
         e.preventDefault();
-        setSelected(undefined);
-        setPage('settings');
+        requestNavigation(() => {
+          setSelected(undefined);
+          setPage('settings');
+        });
       }
       if (e.shiftKey && e.key.toLowerCase() === 'n') {
         e.preventDefault();
@@ -243,8 +253,10 @@ export function App() {
   if (!snapshot) return <Loading label={t('loading')} />;
   const selectedServer = snapshot.servers.find((s) => s.id === selected);
   const navigate = (value: Page) => {
-    setSelected(undefined);
-    setPage(value);
+    requestNavigation(() => {
+      setSelected(undefined);
+      setPage(value);
+    });
   };
   return (
     <AppContext
@@ -257,9 +269,36 @@ export function App() {
         refresh,
         error: toast?.error ? toast.text : undefined,
         dismissError: () => setToast(undefined),
+        registerUnsaved,
+        requestNavigation,
       }}
     >
       <div className="app-shell">
+        {pendingNavigation && (
+          <Dialog
+            title={t('property.unsaved')}
+            closeLabel={t('close')}
+            onClose={() => setPendingNavigation(undefined)}
+          >
+            <div className="dialog-body">
+              <p>{t('property.leaveHelp')}</p>
+            </div>
+            <footer className="dialog-footer">
+              <Button onClick={() => setPendingNavigation(undefined)}>{t('cancel')}</Button>
+              <Button
+                variant="danger"
+                onClick={() => {
+                  const action = pendingNavigation.action;
+                  unsaved.current.clear();
+                  setPendingNavigation(undefined);
+                  action();
+                }}
+              >
+                {t('property.discard')}
+              </Button>
+            </footer>
+          </Dialog>
+        )}
         <aside className="sidebar">
           <a
             className="brand"
@@ -270,33 +309,11 @@ export function App() {
             }}
           >
             <span className="brand-mark">
-              <Box size={24} strokeWidth={1.7} />
+              <img src={brandIcon} width={36} height={36} alt="" />
             </span>
             {PRODUCT.name}
-            <span className="brand-version">BETA</span>
           </a>
-          <div className="workspace">
-            <span className="workspace-icon">
-              <HardDrive size={17} />
-            </span>
-            <div>
-              <strong>{t('localFirst')}</strong>
-              <small>
-                <i />
-                {t('local')}
-              </small>
-            </div>
-            <ChevronRight size={15} />
-          </div>
           <nav aria-label={t('dashboard')}>
-            <Button
-              className={!selectedServer && page === 'notifications' ? 'nav active' : 'nav'}
-              variant="ghost"
-              onClick={() => navigate('notifications')}
-            >
-              <Activity size={18} />
-              {t('notifications')}
-            </Button>
             <Button
               className={!selectedServer && page === 'dashboard' ? 'nav active' : 'nav'}
               variant="ghost"
@@ -314,26 +331,6 @@ export function App() {
               <Archive size={18} />
               {t('backups')}
               <span className="nav-count">{snapshot.backups.length}</span>
-            </Button>
-            <Button
-              className={!selectedServer && page === 'activity' ? 'nav active' : 'nav'}
-              variant="ghost"
-              onClick={() => navigate('activity')}
-            >
-              <Activity size={18} />
-              {t('activity')}
-            </Button>
-            <Button
-              variant="ghost"
-              className={!selectedServer && page === 'operations' ? 'nav active' : 'nav'}
-              aria-label={t('operations')}
-              onClick={() => navigate('operations')}
-            >
-              <Download size={18} />
-              {t('operations')}
-              {snapshot.operations?.some((operation) => operation.status === 'attention') && (
-                <span className="nav-count">!</span>
-              )}
             </Button>
           </nav>
           <div className="sidebar-heading">
@@ -353,10 +350,12 @@ export function App() {
                 key={s.id}
                 variant="ghost"
                 className={`nav server-link ${selected === s.id ? 'active' : ''}`}
-                onClick={() => setSelected(s.id)}
+                onClick={() => {
+                  if (s.id !== selected) requestNavigation(() => setSelected(s.id));
+                }}
               >
                 <span className="sidebar-engine">
-                  <EngineIcon engine={s.engine} size={24} />
+                  <ServerAvatar server={s} size={24} />
                   <i className={`server-dot ${s.status}`} aria-hidden="true" />
                 </span>
                 <span>{s.name}</span>
@@ -376,35 +375,9 @@ export function App() {
               <Settings2 size={18} />
               {t('settings')}
             </Button>
-            <div className="local-badge">
-              <ShieldCheck size={15} />
-              <span>Local-first · v{PRODUCT.version}</span>
-            </div>
           </div>
         </aside>
         <div className="main-shell">
-          <header className="topbar">
-            <div className="breadcrumb">
-              {PRODUCT.name}
-              <ChevronRight size={13} />
-              <strong>{selectedServer?.name ?? t(page)}</strong>
-            </div>
-            <div className="topbar-right">
-              <span className="host-status">
-                <i />
-                {t('local')}
-              </span>
-              <Button
-                variant="ghost"
-                aria-label={t('search')}
-                title={`${t('search')} · Ctrl+K`}
-                onClick={() => setPalette(true)}
-              >
-                <Search size={16} />
-                <kbd>Ctrl K</kbd>
-              </Button>
-            </div>
-          </header>
           {snapshot.mock && <div className="demo-banner">{t('mock')}</div>}
           <main tabIndex={-1}>
             {error && (
@@ -435,17 +408,10 @@ export function App() {
                     if (result.ok && result.value) setPackPreview(result.value);
                   });
                 }}
-                onOpen={setSelected}
-                onActivity={() => navigate('activity')}
+                onOpen={(id) => requestNavigation(() => setSelected(id))}
               />
-            ) : page === 'notifications' ? (
-              <NotificationsView />
             ) : page === 'backups' ? (
               <BackupsView />
-            ) : page === 'activity' ? (
-              <ActivityView />
-            ) : page === 'operations' ? (
-              <OperationsView />
             ) : (
               <SettingsView />
             )}
@@ -458,7 +424,7 @@ export function App() {
             }}
             onCreated={(s) => {
               setCreate(false);
-              setSelected(s.id);
+              requestNavigation(() => setSelected(s.id));
             }}
           />
         )}
@@ -471,7 +437,7 @@ export function App() {
             }}
             onCreated={(server) => {
               setPackPreview(undefined);
-              setSelected(server.id);
+              requestNavigation(() => setSelected(server.id));
             }}
           />
         )}
@@ -483,7 +449,7 @@ export function App() {
             }}
             onCreated={(server) => {
               setImportPreview(undefined);
-              setSelected(server.id);
+              requestNavigation(() => setSelected(server.id));
             }}
           />
         )}
@@ -534,56 +500,6 @@ export function App() {
             {t('loading')}
           </div>
         )}
-        {palette && (
-          <Dialog title={t('search')} closeLabel={t('close')} onClose={() => setPalette(false)}>
-            <div className="dialog-body">
-              <Field label={t('servers')}>
-                <input
-                  autoFocus
-                  value={paletteSearch}
-                  onChange={(e) => setPaletteSearch(e.target.value)}
-                  placeholder={t('searchServers')}
-                />
-              </Field>
-              {snapshot.servers
-                .filter((s) => s.name.toLowerCase().includes(paletteSearch.toLowerCase()))
-                .map((s) => (
-                  <Button
-                    key={s.id}
-                    className="palette-item"
-                    onClick={() => {
-                      setSelected(s.id);
-                      setPalette(false);
-                    }}
-                  >
-                    <ServerIcon size={16} />
-                    {s.name}
-                    <ChevronRight size={14} />
-                  </Button>
-                ))}
-              <Button
-                className="palette-item"
-                onClick={() => {
-                  setCreate(true);
-                  setPalette(false);
-                }}
-              >
-                <Plus size={16} />
-                {t('newServer')}
-              </Button>
-              <Button
-                className="palette-item"
-                onClick={() => {
-                  navigate('settings');
-                  setPalette(false);
-                }}
-              >
-                <Settings2 size={16} />
-                {t('settings')}
-              </Button>
-            </div>
-          </Dialog>
-        )}
       </div>
     </AppContext>
   );
@@ -593,13 +509,11 @@ function Dashboard({
   onImport,
   onModpack,
   onOpen,
-  onActivity,
 }: {
   onCreate: () => void;
   onImport: () => void;
   onModpack: () => void;
   onOpen: (id: string) => void;
-  onActivity: () => void;
 }) {
   const { snapshot, t } = useApp();
   const [query, setQuery] = useState('');
@@ -644,10 +558,6 @@ function Dashboard({
     <>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">
-            <span />
-            {t('serverManager')}
-          </div>
           <h1>{t('welcome')}</h1>
           <p>{t('welcomeSub')}</p>
         </div>
@@ -677,22 +587,6 @@ function Dashboard({
               {stat.value}
               <small>{stat.unit}</small>
             </strong>
-            <div className="metric-footer">
-              {stat.label === 'activeServers' ? (
-                <>
-                  <i className="live-dot" />
-                  {t('local')}
-                </>
-              ) : stat.label === 'allocatedMemory' ? (
-                <>{t('resources')}</>
-              ) : stat.label === 'storage' ? (
-                <>
-                  {snapshot.backups.length} {t('backups').toLowerCase()}
-                </>
-              ) : (
-                <>{t('allServers')}</>
-              )}
-            </div>
           </div>
         ))}
       </div>
@@ -744,7 +638,7 @@ function Dashboard({
             {servers.map((server) => (
               <article className="server-card" key={server.id}>
                 <div className="server-card-header">
-                  <EngineIcon engine={server.engine} size={44} />
+                  <ServerAvatar server={server} size={44} />
                   <span>{engineDefinition(server.engine).displayName}</span>
                   <Status server={server} />
                 </div>
@@ -762,7 +656,7 @@ function Dashboard({
                     <div>
                       <Users size={14} />
                       <strong>
-                        {server.players.length}
+                        {server.status === 'running' ? server.players.length : '—'}
                         <span> / {server.maxPlayers}</span>
                       </strong>
                     </div>
@@ -773,8 +667,8 @@ function Dashboard({
                     <div>
                       <Cpu size={14} />
                       <strong>
-                        {server.cpu.toFixed(1)}
-                        <span>%</span>
+                        {server.pid ? server.cpu.toFixed(1) : '—'}
+                        {server.pid && <span>%</span>}
                       </strong>
                     </div>
                   </div>
@@ -811,14 +705,10 @@ function Dashboard({
           </div>
         )}
       </section>
-      <div className="dashboard-bottom">
+      {snapshot.activity.length > 0 && (
         <section className="panel activity-preview">
           <div className="section-heading">
             <h2>{t('recentActivity')}</h2>
-            <Button variant="ghost" onClick={onActivity}>
-              {t('viewAll')}
-              <ArrowUpRight size={14} />
-            </Button>
           </div>
           {snapshot.activity.length ? (
             snapshot.activity.slice(0, 4).map((a) => (
@@ -842,18 +732,7 @@ function Dashboard({
             <div className="muted compact-empty">{t('noActivity')}</div>
           )}
         </section>
-        <section className="local-panel">
-          <ShieldCheck size={26} />
-          <h3>{t('localNote')}</h3>
-          <p>{t('localNoteSub')}</p>
-          <div className="local-panel-bottom">
-            SQLite <span>·</span> Java <span>·</span> {t('local')}
-            <span className="local-lock">
-              <ShieldCheck size={15} />
-            </span>
-          </div>
-        </section>
-      </div>
+      )}
     </>
   );
 }

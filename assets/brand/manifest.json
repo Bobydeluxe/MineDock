@@ -1,0 +1,30 @@
+{
+  "source": "MineDock_App_Icon.png",
+  "sourceSha256": "971924a944dbd9eec0de2f3bcf2af9c6265168db8563746e178e8cc77e03f5d7",
+  "sourcePixels": [
+    1254,
+    1254
+  ],
+  "sourceUnmodified": true,
+  "pngSizes": [
+    16,
+    24,
+    32,
+    48,
+    64,
+    128,
+    256,
+    512,
+    1024
+  ],
+  "icoSizes": [
+    16,
+    24,
+    32,
+    48,
+    64,
+    128,
+    256
+  ],
+  "conversion": "Pillow LANCZOS; no recoloring, tracing or regenerated mark"
+}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { EngineVersionPicker, type EngineChoice } from './engine-versions';
 import type { Server } from '../../../../packages/domain/types';
 import type {
   MigrationTarget,
@@ -6,7 +7,7 @@ import type {
   CloneInput,
 } from '../../../../packages/domain/migration';
 import { useApp } from './context';
-import { Button, Dialog, Field, ErrorBox, useData } from './ui';
+import { Button, Dialog, Field } from './ui';
 export function MigrationControls({ server }: { server: Server }) {
   const { api, t, run, busy } = useApp();
   const [open, setOpen] = useState(false),
@@ -14,17 +15,25 @@ export function MigrationControls({ server }: { server: Server }) {
     [engine, setEngine] = useState<MigrationTarget['engine']>(
       server.engine as MigrationTarget['engine'],
     ),
-    [version, setVersion] = useState(server.version),
+    [choice, setChoice] = useState<EngineChoice>({
+      version: server.version,
+      build: server.build,
+      loaderVersion:
+        server.loaderVersion ??
+        (['fabric', 'forge', 'neoforge'].includes(server.engine)
+          ? server.build.split('@')[0]
+          : undefined),
+      installerVersion:
+        server.installerVersion ??
+        (server.engine === 'fabric' ? server.build.split('@')[1] : undefined),
+    }),
+    [catalogReady, setCatalogReady] = useState(false),
     [review, setReview] = useState<MigrationReview>(),
     [confirmation, setConfirmation] = useState(''),
     [name, setName] = useState(server.name + ' copy'),
     [port, setPort] = useState(Math.min(server.port + 1, 65535)),
     [mode, setMode] = useState<CloneInput['mode']>('complete'),
     [latest, setLatest] = useState<string>();
-  const versions = useData(
-    () => (open ? api.versions(engine) : Promise.resolve([])),
-    [open, engine],
-  );
   const stopped = !server.pid && ['stopped', 'crashed'].includes(server.status),
     isJava = ['vanilla', 'paper', 'purpur', 'fabric', 'forge', 'neoforge'].includes(server.engine);
   return (
@@ -78,6 +87,7 @@ export function MigrationControls({ server }: { server: Server }) {
                 value={engine}
                 onChange={(e) => {
                   setEngine(e.target.value as MigrationTarget['engine']);
+                  setChoice({ version: choice.version });
                   setReview(undefined);
                 }}
               >
@@ -91,26 +101,19 @@ export function MigrationControls({ server }: { server: Server }) {
                 ))}
               </select>
             </Field>
-            <Field label={t('version')}>
-              <select
-                value={version}
-                onChange={(e) => {
-                  setVersion(e.target.value);
-                  setReview(undefined);
-                }}
-              >
-                {[...new Set([server.version, ...(versions.data ?? [])])].map((v) => (
-                  <option key={v} value={v}>
-                    {v}
-                  </option>
-                ))}
-              </select>
-            </Field>
-            {versions.error && <ErrorBox error={versions.error} />}
+            <EngineVersionPicker
+              engine={engine}
+              value={choice}
+              onReady={setCatalogReady}
+              onChange={(value) => {
+                setChoice(value);
+                setReview(undefined);
+              }}
+            />
             <Button
-              disabled={busy || !stopped}
+              disabled={busy || !stopped || !catalogReady}
               onClick={() => {
-                void run(() => api.migrationReview(server.id, { engine, version })).then((r) => {
+                void run(() => api.migrationReview(server.id, { engine, ...choice })).then((r) => {
                   if (r.ok) setReview(r.value);
                 });
               }}

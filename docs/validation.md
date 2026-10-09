@@ -1,5 +1,81 @@
 # MineDock validation
 
+## MineDock 0.4.1 release validation
+
+The current release contains the cleaned black interface and server customization described in [the release notes](release-notes-0.4.1.md). Its exact application/build inputs are `5492f9757477f87be1fd7d0bb90423e38ba95349`; later documentation, website and capture-helper changes do not alter the packaged application. The owner authorized publication on 9 October 2026.
+
+Lint, type checking and build pass. Local Windows tests pass **222 unit/integration cases** (4 OS skips), **29 UI journeys** and **13 packaged journeys**. The [six native jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/37950007485) produced **12 packages**: Windows/Linux x64/ARM64 pass 13 packaged journeys each; macOS Intel/Apple Silicon pass 12 each with one explicit unsupported directory-import skip. Six signed metadata files match the exact package sizes and SHA-256 hashes.
+
+Public asset, checksum, updater and website checks are recorded after publication. The pre-publication evidence below records what was checked before the release; earlier revisions retain their own historical evidence and limitations.
+
+## Historical pre-publication UI cleanup validation — 9 October 2026
+
+**0.4.1 remains an unpublished review build in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8); public downloads remain 0.4.0.** The cleaned application/build inputs are at `5492f9757477f87be1fd7d0bb90423e38ba95349`. Later documentation, image, website and capture-helper changes do not change these packaged inputs. [Machine-readable cleanup evidence](validation-records/0.4.1-cleanup.json) records the exact source, CI jobs, artifact integrity, public image hashes and update result. Earlier candidate evidence below is historical.
+
+| Check                                       | Actual result                                                                                                                                                         |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed locally and in source CI                                                                                                                                       |
+| `pnpm test`                                 | Windows: **222 passed, 4 OS skips, 226 total / 38 files**; Linux CI: 221 passed, 5 OS skips                                                                           |
+| `pnpm test:ui`                              | **29 passed** locally (6.2m) and in Linux source CI (6.6m)                                                                                                            |
+| Local `pnpm test:packaged`                  | **13 passed** (5.6m) on the newly built Windows x64 unpacked application                                                                                              |
+| Native Windows and Linux x64 / ARM64        | **13 packaged passes each**, all four jobs successful                                                                                                                 |
+| Native macOS Intel / Apple Silicon          | **12 passes + 1 existing directory-import skip each**, both jobs successful                                                                                           |
+| Artifacts                                   | **12 packages**, SHA-256 and sizes verified; **six updater metadata signatures** verified against the pinned publisher key                                            |
+| Cleanup regression                          | Removed routes/header/labels absent; Settings preferences and acknowledged real notification persist after restart; original server/world/properties remain unchanged |
+| Appearance and navigation                   | Neutral dark base RGB channels, both-theme contrast/focus, responsive geometry, dialogs, all six languages, important server pages and creation pass                  |
+| Current assets                              | **48 fresh actual Electron PNGs**, a nine-frame labeled slideshow; **17 obsolete comparison PNGs** retired from the current tree                                      |
+| Live website                                | Production **Sites version 5**, source `1987aa590bd640f23edf9f69aad9dec82a365b07`; five widths pass; all nine public gallery files match current local SHA-256        |
+| Public downloads and keyboard               | **13 distinct 0.4.0 URLs** return HTTP 200/nonzero size; skip link first; 12 visible keyboard focus targets                                                           |
+| Actual Windows update                       | Public **0.4.0 → exact new CI portable 0.4.1**: signature/download, native replacement and automatic relaunch pass; schema 11 and SQLite quick-check ok               |
+| Current candidate feed                      | Packaged 0.4.1 checks the real public GitHub feed and displays **Up to date**                                                                                         |
+
+[Source CI](https://github.com/Bobydeluxe/MineDock/actions/runs/37949981714) and [all six native jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/37950007485) pass at the recorded application source. Native packages/checksums remain review artifacts; no existing public binary was replaced. The local portable output was initially locked by the owner's open application, so packaging completed with the same distribution configuration in an isolated output directory.
+
+The newest update test uses **controlled transport because 0.4.1 is unpublished**. Production signature verification, exact CI bytes (Windows portable SHA-256 `b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87`), replacement/helper/relaunch and data checks are real. Settings, server, world/properties bytes, backup record/archive bytes, runtime reference, players/notes and scheduled task survive. This is not a public 0.4.1 download/update test. Existing 0.3.0 → 0.4.0 migration evidence remains below, including its manual first-upgrade caveat. Backend services and schema migrations were not changed by this cleanup.
+
+The [cleanup review](design/cleanup-041/README.md) explains the relocated notifications/recovery/history controls. [Current native captures](screenshots/README.md) use isolated QA records, actual verified content and an inert process fixture, not Minecraft multiplayer. Windows/Apple publisher certificates, Linux/macOS/ARM64 OS installer/update lifecycles, existing pinned taskbar appearance and live map/gameplay remain unvalidated. Earlier exact NSIS/icon lifecycle evidence below applies to its explicitly recorded earlier candidate bytes.
+
+## Historical reference-design candidate — 9 October 2026
+
+**These results describe the earlier candidate, before the owner's UI cleanup.** App/build inputs were at source `0ebd29526cfd1e1a6d9304ec619b560226143e67`; its following documentation commit did not change those inputs. The newer cleanup changes application code and requires its own evidence. [Machine-readable historical evidence](validation-records/0.4.1-reference.json) records that exact earlier input. At the time of this historical check, the public app was 0.4.0.
+
+| Check                                       | Actual result                                                                                                                                                                          |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed; final Windows setup and portable built                                                                                                                                         |
+| `pnpm test`                                 | Windows: **222 passed, 4 OS skips, 226 total in 38 files**                                                                                                                             |
+| `pnpm test:ui`                              | **28 passed** locally; **28 passed** in source CI                                                                                                                                      |
+| Local `pnpm test:packaged`                  | **12 passed** against the final Windows x64 unpacked binary                                                                                                                            |
+| Native Windows x64 / ARM64                  | **12 packaged tests passed each**, 222 unit passes + 4 OS skips each                                                                                                                   |
+| Native Linux x64 / ARM64                    | **12 packaged tests passed each**, 221 unit passes + 5 OS skips each                                                                                                                   |
+| Native macOS Intel / Apple Silicon          | **11 packaged passes + 1 unsupported skip each**, 222 unit passes + 4 OS skips each                                                                                                    |
+| Candidate artifact integrity                | **12 native packages**, matching SHA-256/size, **six trusted Ed25519 metadata signatures**; collected locally, not released                                                            |
+| Official probes                             | All eight catalog services; native Java 21/PHP; verified Geyser/Floodgate/ViaVersion transactions                                                                                      |
+| Real historical Fabric installer            | Minecraft 1.21.1, loader **0.16.9**, installer **1.0.1**, actual official installer CLI and verified Minecraft download                                                                |
+| Windows installed app                       | Final NSIS setup installs, launches 0.4.1, saves French settings and preserves world/properties/backup bytes; owned uninstall removes its shortcuts and retains isolated profile files |
+| Windows branding                            | ICO resources extracted from setup, portable and installed executable; real native window icon obtained with `WM_GETICON`; Desktop/Start-menu targets and icon locations verified      |
+| Appearance/accessibility                    | Both themes; 760×520, laptop/1080p/1440p viewports; status/text contrast, focus contrast, keyboard/dialog return and reduced motion pass                                               |
+| Current gallery                             | **48 actual Electron PNGs** and a labeled nine-frame slideshow; seven named before/after comparisons                                                                                   |
+| Public website                              | Sites version **4**, source `5969d2b986fb0769bbe823a644ad0e1e70a8a833`, production deployment succeeds; 390/768/1280/1440/1920 widths pass                                             |
+| Live links/keyboard                         | 13 distinct public release downloads respond HTTP 200, first skip link and 12 visible keyboard focus targets verified                                                                  |
+| Existing 0.4.0 release                      | Description is English; **all 20 asset identities, sizes and digests remain unchanged**                                                                                                |
+| GitHub social preview                       | Uploaded through the supported web setting; visually verified after reload                                                                                                             |
+
+[The native distribution workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37936740596) and [source validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37936740381) both complete successfully at the recorded app source. Native packages are available as CI artifacts for review; no 0.4.1 tag or public release is created. The macOS unsupported skip is the existing native directory-import journey; it is recorded rather than treated as a pass.
+
+### Complete official catalog observations
+
+The dated Windows probe reports 103 Vanilla releases; 55 Paper game versions with 92 builds for 1.21.11; 41 Purpur game versions with 33 builds; 48 stable Fabric game versions, **253 loaders and 67 installers**; 78 Forge game versions with 31 builds; 23 NeoForge game versions with 45 builds; one current BDS 1.26.52.3 binary; and 349 stable PocketMine releases (selected 5.44.3, Bedrock compatibility 1.26.30). These are live observations, not fixed UI limits. Refreshing the final capture's owned Paper cache selects the actually available stable recommendation **26.2** rather than an unavailable default from the earlier QA cache.
+
+The older Fabric installer runs for real, with SHA-256 `62edf170bdcc41edea85d33acf3eb85474258699b3d41f9418d286c836cb088d`. Its generated launcher names loader 0.16.9 and its downloaded Minecraft server matches upstream SHA-1 `59353fb40c36d304f2035d51e7d6e6baa98dc05c`. Neither a Minecraft executable nor a playable world is started; the real EULA is not accepted.
+
+### Actual 0.4.0 → final candidate update
+
+The unchanged executable extracted from the real public 0.4.0 portable verifies the publisher's actual pinned signature and downloads the exact private CI candidate, SHA-256 `990fa2c3fc80a3b4629ae98f76b29c21987b1d1dde74614e52bfe87a4ee80ff6`. Its production native helper replaces the portable and automatically relaunches **0.4.1**, with no manual intervention. Schema remains **11**, SQLite quick-check is **ok** and the installation audit exists. Settings, server, world/properties bytes, backup record/archive bytes, runtime reference, player history/note and scheduled task survive. Existing migration SQL is unchanged; profile images use optional profile JSON fields.
+
+**This is private candidate validation with controlled transport, not a public 0.4.1 release or a public 0.4.1 download test.** Production signature/download/helper checks are real. Separately, the actual final packaged 0.4.1 candidate checks the real public GitHub feed without interception and visibly shows **Up to date**. Historical 0.3.0→0.4.0 public validation below remains applicable with its manual first-upgrade caveat.
+
+The visible state of an existing pinned Windows/taskbar shortcut is not claimed observed. Linux/macOS/ARM64 OS installer/update lifecycles and actual multiplayer/map behavior remain unvalidated. See [the current design comparison](design/reference-041/README.md), [candidate notes](release-notes-0.4.1.md), [security](security.md) and [roadmap](roadmap.md). Public download links still use 0.4.0.
+
 ## Release validation — 9 October 2026
 
 MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `ad876c2b52f2a0b55120a66495ba6f34e5ddb9bc`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.

@@ -13,6 +13,7 @@ import {
   type ConfigField,
 } from '../domain/configuration';
 import { DomainError } from '../domain/errors';
+import { paperSettings } from '../domain/paper-settings';
 const secret = /password|secret|token|credential|private.?key|authentication|session/i;
 const hash = (text: string) => createHash('sha256').update(text).digest('hex');
 export class ConfigurationService {
@@ -111,9 +112,11 @@ export class ConfigurationService {
     if (hash(text) !== row.sha256)
       throw new DomainError('INTEGRITY', 'Configuration history is damaged.');
     // Both paths save the current version before applying the selected version.
-    if (String(row.file) === 'server.properties')
-      await this.core.saveProperties(id, parseProperties(text));
-    else await this.write(id, String(row.file), text);
+    if (String(row.file) === 'server.properties') {
+      const values = parseProperties(text);
+      for (const key of Object.keys(values)) if (secret.test(key)) delete values[key];
+      await this.core.saveProperties(id, values);
+    } else await this.write(id, String(row.file), text);
   }
   private async candidates(id: string) {
     const server = this.core.repo.server(id),
@@ -167,6 +170,9 @@ export class ConfigurationService {
         ) {
           const label = keys.join('.');
           fields.push({
+            ...(paperSettings[file + ':' + label]
+              ? { curated: true, ...paperSettings[file + ':' + label] }
+              : {}),
             key: keys,
             value: value as string | number | boolean,
             category: /network|packet|connection|proxy|join/i.test(label)
@@ -199,6 +205,14 @@ export class ConfigurationService {
       if (typeof field.value !== typeof input.value)
         throw new DomainError('CONFIG', 'The setting type cannot be changed.');
       if (typeof input.value === 'number' && Math.abs(input.value) > 1000000000)
+        throw new DomainError('CONFIG', 'The setting value is out of range.');
+      if (
+        typeof input.value === 'number' &&
+        field.curated &&
+        (!Number.isInteger(input.value) ||
+          (field.min !== undefined && input.value < field.min) ||
+          (field.max !== undefined && input.value > field.max))
+      )
         throw new DomainError('CONFIG', 'The setting value is out of range.');
       const original = await this.core.files.read(server.path, input.file);
       let output: string;

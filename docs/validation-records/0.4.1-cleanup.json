@@ -1,0 +1,657 @@
+{
+  "version": "0.4.1",
+  "state": "UI cleanup review candidate; not merged, tagged or released",
+  "at": "2026-10-09T15:32:15.943Z",
+  "publicRelease": "0.4.0",
+  "appSource": "5492f9757477f87be1fd7d0bb90423e38ba95349",
+  "local": {
+    "platform": "Windows 11 x64",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unit": {
+      "passed": 222,
+      "skipped": 4,
+      "total": 226,
+      "files": 38
+    },
+    "sourceUI": {
+      "passed": 29,
+      "duration": "6.2m"
+    },
+    "packaged": {
+      "passed": 13,
+      "duration": "5.6m"
+    },
+    "windowsBuild": "Passed using unchanged distribution configuration and isolated data/cleanup-windows output; standard output portable was locked by an already-open owner app"
+  },
+  "ci": {
+    "sourceUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/37949981714",
+    "sourceUI": {
+      "passed": 29,
+      "duration": "6.6m"
+    },
+    "sourceUnit": {
+      "passed": 221,
+      "skipped": 5,
+      "total": 226
+    },
+    "nativeUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/37950007485",
+    "nativeTests": [
+      {
+        "jobId": 113886038296,
+        "platform": "package (windows-11-arm, arm64, build:windows)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 0,
+          "duration": "6.4m"
+        }
+      },
+      {
+        "jobId": 113886038365,
+        "platform": "package (macos-15-intel, x64, build:mac)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 12,
+          "skipped": 1,
+          "duration": "58.9s"
+        }
+      },
+      {
+        "jobId": 113886038385,
+        "platform": "package (ubuntu-24.04, x64, build:linux)",
+        "unit": {
+          "passed": 221,
+          "skipped": 5,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 0,
+          "duration": "6.0m"
+        }
+      },
+      {
+        "jobId": 113886038446,
+        "platform": "package (macos-15, arm64, build:mac)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 12,
+          "skipped": 1,
+          "duration": "39.1s"
+        }
+      },
+      {
+        "jobId": 113886038517,
+        "platform": "package (windows-2025, x64, build:windows)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 0,
+          "duration": "7.0m"
+        }
+      },
+      {
+        "jobId": 113886038657,
+        "platform": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "unit": {
+          "passed": 221,
+          "skipped": 5,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 0,
+          "duration": "5.9m"
+        }
+      }
+    ],
+    "integrity": {
+      "runId": 37950007485,
+      "head": "5492f9757477f87be1fd7d0bb90423e38ba95349",
+      "version": "0.4.1",
+      "platforms": 6,
+      "installers": 12,
+      "signaturesVerified": 6
+    }
+  },
+  "update": {
+    "baseline": "0.4.0",
+    "candidate": "0.4.1",
+    "initialSchema": 11,
+    "legacyManual": false,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-09T15:29:18.656Z",
+    "oldVersion": "0.4.0",
+    "signatureAndDownload": "verified by old production application",
+    "helperRelaunch": "completed; actual 0.4.1 startup log observed",
+    "replacedBinarySha256": "b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87",
+    "finalSchema": 11,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "playerHistory": true,
+      "playerNotes": true,
+      "scheduledTask": true
+    }
+  },
+  "currentPublicFeed": {
+    "at": "2026-10-09T15:30:13.359Z",
+    "packaged": true,
+    "currentVersion": "0.4.1",
+    "feed": "real public GitHub feed; no interception",
+    "upToDate": true
+  },
+  "site": {
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "version": 5,
+    "source": "1987aa590bd640f23edf9f69aad9dec82a365b07",
+    "deployment": "appgdep_6ac9080bfbd88191a611ae45100e7fec",
+    "status": "succeeded",
+    "audience": "public",
+    "widths": [390, 768, 1280, 1440, 1920],
+    "noOverflowOrBrokenImages": true,
+    "publicImages": [
+      {
+        "name": "dashboard.png",
+        "sha256": "219d0e41d301e34d5768e90a8e59df191b9b2802477dacb879c6552dc5a2159c",
+        "size": 74850
+      },
+      {
+        "name": "dashboard-light.png",
+        "sha256": "6ef353578f6d9b6ee5e9fe79ee3b7b27fae6b542d64f21884cac9d4ec05956bb",
+        "size": 76103
+      },
+      {
+        "name": "create-server.png",
+        "sha256": "ebb5cd836bc99d5ae4e0b5f3c0dddb4a1c65778f9d8eb3ca613e9444604a6c87",
+        "size": 96190
+      },
+      {
+        "name": "fabric-versions.png",
+        "sha256": "9c85fc5907ea883cc0e4163d10e3e28e237fb5225363d3f2c7b0b5d531d4ff98",
+        "size": 96761
+      },
+      {
+        "name": "server-settings.png",
+        "sha256": "ede1dca5e284077bd47935b08ca05da7b285ed3a22d1fb86b8c6927c733e4211",
+        "size": 85792
+      },
+      {
+        "name": "console.png",
+        "sha256": "3cec9f4508f7021b80391c8ee59420b384998ecc0f7ae171c56d9191adb12305",
+        "size": 54798
+      },
+      {
+        "name": "backups.png",
+        "sha256": "4c829bf40cae81ced469cbd1a54be7757c2d77e1f249e8310b26a8d859da5782",
+        "size": 72006
+      },
+      {
+        "name": "mods.png",
+        "sha256": "caecf420c570e1a39375b1a7606496be7839ba3d111f699d05a33986d947d996",
+        "size": 71830
+      },
+      {
+        "name": "mods-light.png",
+        "sha256": "0c5ab16aeed6b9be51edb19e110175bfad07db7f73177423ab27a50535ce5eb2",
+        "size": 72344
+      }
+    ],
+    "skipLinkFirst": true,
+    "keyboardFocusTargets": 12,
+    "publicDownloads": [
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Setup-x64.exe",
+        "status": 200,
+        "size": 112858546
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Portable-x64.exe",
+        "status": 200,
+        "size": 112639147
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Setup-arm64.exe",
+        "status": 200,
+        "size": 106750330
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Portable-arm64.exe",
+        "status": 200,
+        "size": 106531455
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-x86_64.AppImage",
+        "status": 200,
+        "size": 127060768
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-amd64.deb",
+        "status": 200,
+        "size": 100731660
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.AppImage",
+        "status": 200,
+        "size": 128303300
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.deb",
+        "status": 200,
+        "size": 95875388
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-x64.dmg",
+        "status": 200,
+        "size": 133727129
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-x64.zip",
+        "status": 200,
+        "size": 133880977
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.dmg",
+        "status": 200,
+        "size": 129868801
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.zip",
+        "status": 200,
+        "size": 129979711
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/SHA256SUMS.txt",
+        "status": 200,
+        "size": 1749
+      }
+    ]
+  },
+  "screenshots": {
+    "currentPNG": 48,
+    "gifFrames": 9,
+    "retiredObsoletePNG": 17,
+    "gallery": [
+      {
+        "name": "backups.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "4c829bf40cae81ced469cbd1a54be7757c2d77e1f249e8310b26a8d859da5782",
+        "size": 72006
+      },
+      {
+        "name": "configuration.png",
+        "width": 1425,
+        "height": 3860,
+        "sha256": "b47f10fb094b2d852036dd92434a1e7a1a8461e2d2040e70d45749d39c9ab34d",
+        "size": 250741
+      },
+      {
+        "name": "console-active.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "e381f4f3985b23553ae598f50598e8f656a82d597266f0137fef41df0ccec22b",
+        "size": 69759
+      },
+      {
+        "name": "console-history.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "cbb6013c3bb3f5e05d3c365e46e591cc03437839a68a5c4805a72e2a2b805742",
+        "size": 82948
+      },
+      {
+        "name": "console-light.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "d62b3fd01d7fd00b8fd433643a1923472b167328db6420b057b7d59179384d50",
+        "size": 80963
+      },
+      {
+        "name": "console-macro.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "bb24a94d55863ffede3d744d9303b293f9abccb21fe7c0e80731844e353a5dc2",
+        "size": 81631
+      },
+      {
+        "name": "console.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "3cec9f4508f7021b80391c8ee59420b384998ecc0f7ae171c56d9191adb12305",
+        "size": 54798
+      },
+      {
+        "name": "create-server-light.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "242de951be405123628150ada2a29c9f3a189fb46c4921a560a50f0ddd572dff",
+        "size": 123121
+      },
+      {
+        "name": "create-server.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "ebb5cd836bc99d5ae4e0b5f3c0dddb4a1c65778f9d8eb3ca613e9444604a6c87",
+        "size": 96190
+      },
+      {
+        "name": "create-summary.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "ee1c18923817e1f1ba7fe4d4769225bab0793ae9e3bb07c2c596781c3ccedfa3",
+        "size": 96549
+      },
+      {
+        "name": "dashboard-active.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "7f37d215009b399ffe5e9656a8cbdb22ec103d798daffb287cdc2966cf052c3c",
+        "size": 76729
+      },
+      {
+        "name": "dashboard-light.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "6ef353578f6d9b6ee5e9fe79ee3b7b27fae6b542d64f21884cac9d4ec05956bb",
+        "size": 76103
+      },
+      {
+        "name": "dashboard.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "219d0e41d301e34d5768e90a8e59df191b9b2802477dacb879c6552dc5a2159c",
+        "size": 74850
+      },
+      {
+        "name": "datapacks.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "3260b5a7b4c51ceded9c13851b2318eebaf73e6b116a64ebee3b1ce5d9bcabe7",
+        "size": 91336
+      },
+      {
+        "name": "desktop-empty.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "8d98ff5ce487295c1d119ddc9d0fc1310c598b5f721e05fb11b077bbafeacc75",
+        "size": 56857
+      },
+      {
+        "name": "fabric-versions.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "9c85fc5907ea883cc0e4163d10e3e28e237fb5225363d3f2c7b0b5d531d4ff98",
+        "size": 96761
+      },
+      {
+        "name": "files.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "97b1818c8e6029b01769db31b834ccf94c512803a3bfea038a76ef671391588a",
+        "size": 70075
+      },
+      {
+        "name": "forge-builds.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "895a1184e37120c4300ff6bc73ddc67ff25c27478ba71bc8d59ce177cfa4f38d",
+        "size": 87686
+      },
+      {
+        "name": "import.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "0969ca057008dff062da83aadea963d71e44e3c6e9d014b871917cde6c329f98",
+        "size": 122801
+      },
+      {
+        "name": "migration.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "c8568219bf28edadcd9b3f25601772b11b746d16a202c1e5c6e746db2b0765b5",
+        "size": 100301
+      },
+      {
+        "name": "mod-menu.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "5990c43d82d03524afdad1db317e5e65274b48e485b5381791cc64b35547e50d",
+        "size": 81862
+      },
+      {
+        "name": "mods-installed.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "caecf420c570e1a39375b1a7606496be7839ba3d111f699d05a33986d947d996",
+        "size": 71830
+      },
+      {
+        "name": "mods-light.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "0c5ab16aeed6b9be51edb19e110175bfad07db7f73177423ab27a50535ce5eb2",
+        "size": 72344
+      },
+      {
+        "name": "mods.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "caecf420c570e1a39375b1a7606496be7839ba3d111f699d05a33986d947d996",
+        "size": 71830
+      },
+      {
+        "name": "neoforge-builds.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "eb667625920bd09b762e2190142515349e8817fe8742b004797a462543e58298",
+        "size": 90456
+      },
+      {
+        "name": "notifications.png",
+        "width": 1425,
+        "height": 1529,
+        "sha256": "19f10a8ef0a2f6714f4f8c8f98d2baf0ef5a3f53cfc711e8bb624aadba08313e",
+        "size": 118082
+      },
+      {
+        "name": "onboarding-desktop.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "739e39bca0ec2c435dacdc7b32f81a9472080f1246ffa6e53143108ed345d588",
+        "size": 81262
+      },
+      {
+        "name": "paper-builds.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "65c41045c5d2a478b7fee6e9f4857fc40126b12c970314760d0ad962c9a25b90",
+        "size": 84124
+      },
+      {
+        "name": "partial-restore.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "0561588ea6e052e5b9ef090bec8435882a37074ea015882718a2402a4f02f0c7",
+        "size": 103585
+      },
+      {
+        "name": "performance.png",
+        "width": 1425,
+        "height": 1161,
+        "sha256": "7e050f7a615130f316bde0541c56a37373a1d6afa02af232a79cb664b1e7470a",
+        "size": 69211
+      },
+      {
+        "name": "player-details.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "3014c170369c0e6727bc78949f2817c3465841c4f2a0226e34dd251501375740",
+        "size": 101967
+      },
+      {
+        "name": "players.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "6df5ec5bdf394a8b6c834891fd7f4ca0ebfc9b38f236be6bd71c8dafa3e2fef4",
+        "size": 70623
+      },
+      {
+        "name": "plugins.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "985f2f77e5ebd044e1adb605f3f4cda865412347599260f9690b8ec1f1c95d9e",
+        "size": 84927
+      },
+      {
+        "name": "properties-gameplay.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "d6681062c57558a5a196492ffdda1c8bcc5f1ae478b67b190cc58d82caeb3fc1",
+        "size": 86987
+      },
+      {
+        "name": "properties-network.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "65405ae7f871f55e637c84d2c3e6eef62122cba5bf9870ec545e8f7d14d1a5a4",
+        "size": 87792
+      },
+      {
+        "name": "properties-world.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "86b0c60d5de7ce02cdf00069e00d0a2cdf06f3f26462ef3f7a46f0d0cfac073b",
+        "size": 88784
+      },
+      {
+        "name": "purpur-builds.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "7b70d05fabe3da21201efdf2a6fdd3a982decf9300ee931dd98b315a210fa41e",
+        "size": 85268
+      },
+      {
+        "name": "resourcepacks.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "1a14a15655c67c3fe8ee99a5c17651148d0b29c5c96b48871107afeededbf88d",
+        "size": 92702
+      },
+      {
+        "name": "runtimes.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "1ce6d600c4d2cb78459ea6196120398cf5e60fa19704a8db6c3aac682de22f10",
+        "size": 81021
+      },
+      {
+        "name": "scheduler.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "104a36b00547389a51dd7b655e0bc840d099172cb88e05c17087b344aa36d328",
+        "size": 49223
+      },
+      {
+        "name": "server-active.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "5016c5536e1a7f707582e7292e6612a0cee397c914bf343e4b8c65e61b8906f2",
+        "size": 73873
+      },
+      {
+        "name": "server-light.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "cfe4d38171bbae717f5f0bca0a85c528661f259448bbd1e90f17c45d1e686704",
+        "size": 71109
+      },
+      {
+        "name": "server-settings-light.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "98020dca970ffb11813d59a43d6104599ffe1017f0f31edeb7fdb201f2d153dc",
+        "size": 86949
+      },
+      {
+        "name": "server-settings.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "ede1dca5e284077bd47935b08ca05da7b285ed3a22d1fb86b8c6927c733e4211",
+        "size": 85792
+      },
+      {
+        "name": "server.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "c364425f499903616d104062b4defc6e79df80786c2ab39d463b3551f4bb5ed2",
+        "size": 70248
+      },
+      {
+        "name": "settings-light.png",
+        "width": 1425,
+        "height": 1392,
+        "sha256": "0cf6ff3c7fd90cbaff2f341a6d2e7e6f5b2a190e59d8afe88b7de56442b3d679",
+        "size": 112425
+      },
+      {
+        "name": "settings.png",
+        "width": 1425,
+        "height": 1392,
+        "sha256": "d6c105d054360aed04cfa9041587c1d44d7f9ac57b5faa2478f7f140c5eb806f",
+        "size": 111171
+      },
+      {
+        "name": "worlds.png",
+        "width": 1440,
+        "height": 960,
+        "sha256": "5f3b9504a431c3a52e98899dafd9c846658f38e8c7f582e10598f6e95041abf9",
+        "size": 60667
+      }
+    ]
+  },
+  "scope": {
+    "backendServicesRemoved": false,
+    "migrationsChanged": false,
+    "notifications": "Settings → Notifications and Notification history",
+    "recovery": "Settings → Recovery and background tasks",
+    "audit": "Settings → History",
+    "retainedLocalSearch": true,
+    "removedGlobalCommandPalette": true
+  },
+  "limits": [
+    "No OS signing certificate or Apple notarization",
+    "macOS native directory-import journey skipped (one per architecture)",
+    "No Linux/macOS/ARM64 OS installation/update lifecycle validation",
+    "No Minecraft multiplayer or live map validation",
+    "0.4.1 private feed transport test; no public 0.4.1 release update verified",
+    "Existing pinned Windows/taskbar visual state not observed",
+    "Historical 0.3.0 launcher requires manual first upgrade on tested host",
+    "Incremental deletion/garbage collection and legacy full-ZIP partial restore unavailable"
+  ]
+}

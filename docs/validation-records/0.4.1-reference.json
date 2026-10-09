@@ -1,0 +1,651 @@
+{
+  "version": "0.4.1",
+  "state": "historical candidate before UI cleanup; not tagged or released",
+  "supersededBy": "0.4.1-cleanup.json",
+  "at": "2026-10-09T13:48:01.798Z",
+  "publicRelease": "0.4.0",
+  "appSource": "0ebd29526cfd1e1a6d9304ec619b560226143e67",
+  "local": {
+    "platform": "Windows 11 x64",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unit": {
+      "passed": 222,
+      "skipped": 4,
+      "total": 226,
+      "files": 38
+    },
+    "sourceUI": {
+      "passed": 28,
+      "duration": "5.3m"
+    },
+    "packaged": {
+      "passed": 12,
+      "duration": "5.0m"
+    }
+  },
+  "ci": {
+    "sourceUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/37936740381",
+    "nativeUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/37936740596",
+    "nativeTests": [
+      {
+        "jobId": 113840571410,
+        "platform": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "unit": {
+          "passed": 221,
+          "skipped": 5,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 12,
+          "skipped": 0,
+          "duration": "5.3m"
+        },
+        "conclusion": "success"
+      },
+      {
+        "jobId": 113840571771,
+        "platform": "package (macos-15-intel, x64, build:mac)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 11,
+          "skipped": 1,
+          "duration": "59.9s"
+        },
+        "conclusion": "success"
+      },
+      {
+        "jobId": 113840571863,
+        "platform": "package (windows-11-arm, arm64, build:windows)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 12,
+          "skipped": 0,
+          "duration": "5.7m"
+        },
+        "conclusion": "success"
+      },
+      {
+        "jobId": 113840571877,
+        "platform": "package (macos-15, arm64, build:mac)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 11,
+          "skipped": 1,
+          "duration": "41.8s"
+        },
+        "conclusion": "success"
+      },
+      {
+        "jobId": 113840571879,
+        "platform": "package (windows-2025, x64, build:windows)",
+        "unit": {
+          "passed": 222,
+          "skipped": 4,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 12,
+          "skipped": 0,
+          "duration": "6.1m"
+        },
+        "conclusion": "success"
+      },
+      {
+        "jobId": 113840571884,
+        "platform": "package (ubuntu-24.04, x64, build:linux)",
+        "unit": {
+          "passed": 221,
+          "skipped": 5,
+          "total": 226
+        },
+        "packaged": {
+          "passed": 12,
+          "skipped": 0,
+          "duration": "5.4m"
+        },
+        "conclusion": "success"
+      }
+    ]
+  },
+  "artifacts": {
+    "runId": 37936740596,
+    "head": "0ebd29526cfd1e1a6d9304ec619b560226143e67",
+    "version": "0.4.1",
+    "platforms": 6,
+    "installers": 12,
+    "signaturesVerified": 6,
+    "checksums": [
+      {
+        "sha256": "041404bc50565cfdf28c8b965a372137435c30ec9bb5f75028fc2a7ecd47d927",
+        "filename": "MineDock-0.4.1-Setup-x64.exe"
+      },
+      {
+        "sha256": "0482646872507bae4bb587dc033a077c12b602353fa5878f2c67e3447137cced",
+        "filename": "MineDock-0.4.1-arm64.zip"
+      },
+      {
+        "sha256": "0db99e13396fe312ce3800b247c0411c06f270e190696751bbdce3fd72d38284",
+        "filename": "MineDock-0.4.1-x86_64.AppImage"
+      },
+      {
+        "sha256": "2d9124d5f49aa97f9a12e8e983a40e054fb7c05334dcfe65a6204eb094eb5ce5",
+        "filename": "MineDock-0.4.1-Portable-arm64.exe"
+      },
+      {
+        "sha256": "32d5ab0ba84990d504d919a7856d28b2adb2561bfb107d0ebb5725134d1a41f4",
+        "filename": "update-darwin-arm64.json"
+      },
+      {
+        "sha256": "37a2f1e8481ad31a646dc8feb817a9edaf52c8418af11546dbe31de7ac455045",
+        "filename": "MineDock-0.4.1-arm64.deb"
+      },
+      {
+        "sha256": "3bb7239894fc059f9a306e1ebb30818b213c543dac0a04f3f8c5ff66bf332710",
+        "filename": "MineDock-0.4.1-Setup-arm64.exe"
+      },
+      {
+        "sha256": "3d71d54dddea2f8edc82042e8bd9a84937103caf3705cd904cb3023ac77be1eb",
+        "filename": "update-linux-arm64.json"
+      },
+      {
+        "sha256": "48ca8987fd4b305f3da755d8d10d63237e1781502457024ff62e1c40dd98149a",
+        "filename": "update-linux-x64.json"
+      },
+      {
+        "sha256": "5b2941536c9a206942ede6184c24b6b620282dafcca61cda38d9eded3d43233e",
+        "filename": "update-darwin-x64.json"
+      },
+      {
+        "sha256": "77bc9d4895a6b41886269f316686d63936f04756b8f4e39a5d32af3833dea95f",
+        "filename": "MineDock-0.4.1-amd64.deb"
+      },
+      {
+        "sha256": "8ba7e232921654854221d9c15ac9354755edc54e8d11378df3fa1e755cfe0ec6",
+        "filename": "MineDock-0.4.1-arm64.dmg"
+      },
+      {
+        "sha256": "990fa2c3fc80a3b4629ae98f76b29c21987b1d1dde74614e52bfe87a4ee80ff6",
+        "filename": "MineDock-0.4.1-Portable-x64.exe"
+      },
+      {
+        "sha256": "b06ea1b33ec0518b115ad5f2007c339ff20ae8f4c24389d197656d20a2f381ac",
+        "filename": "MineDock-0.4.1-x64.zip"
+      },
+      {
+        "sha256": "bb5a80cda9e00820954c6e688f7521e43b0aa98eea24cd8376ffec8e61b1b9fd",
+        "filename": "update-win32-arm64.json"
+      },
+      {
+        "sha256": "c0674261179a673323b5eabac2445bb1533d079286302c403b6395bc57a6e54e",
+        "filename": "MineDock-0.4.1-x64.dmg"
+      },
+      {
+        "sha256": "c0b687b7c692a1540481d91a9e8538958c351110a7035ab39dce594798fdceea",
+        "filename": "MineDock-0.4.1-arm64.AppImage"
+      },
+      {
+        "sha256": "fa6131c994827c39ef0eb3f4546f2abb4dfc7e31e7321484326bdb814c970248",
+        "filename": "update-win32-x64.json"
+      }
+    ]
+  },
+  "official": {
+    "at": "2026-10-09T13:10:20.490Z",
+    "platform": "win32",
+    "architecture": "x64",
+    "eulaAccepted": false,
+    "minecraftExecuted": false,
+    "catalogs": [
+      {
+        "engine": "vanilla",
+        "catalog": "validated",
+        "versions": 103,
+        "availableBuilds": 1,
+        "availableInstallers": 0,
+        "recommendedBuild": "1.21.11",
+        "installerExamples": [],
+        "version": "1.21.11",
+        "build": "1.21.11",
+        "java": 21,
+        "officialHash": "sha1"
+      },
+      {
+        "engine": "paper",
+        "catalog": "validated",
+        "versions": 55,
+        "availableBuilds": 92,
+        "availableInstallers": 0,
+        "recommendedBuild": "132",
+        "installerExamples": [],
+        "version": "1.21.11",
+        "build": "132",
+        "java": 21,
+        "officialHash": "sha256"
+      },
+      {
+        "engine": "purpur",
+        "catalog": "validated",
+        "versions": 41,
+        "availableBuilds": 33,
+        "availableInstallers": 0,
+        "recommendedBuild": "2568",
+        "installerExamples": [],
+        "version": "1.21.11",
+        "build": "2568",
+        "java": 21,
+        "officialHash": "md5"
+      },
+      {
+        "engine": "fabric",
+        "catalog": "validated",
+        "versions": 48,
+        "availableBuilds": 253,
+        "availableInstallers": 67,
+        "recommendedBuild": "0.19.5",
+        "recommendedInstaller": "1.1.2",
+        "installerExamples": [
+          {
+            "version": "1.1.2",
+            "stable": true,
+            "recommended": true
+          },
+          {
+            "version": "1.1.1",
+            "stable": false,
+            "recommended": false
+          },
+          {
+            "version": "1.1.0",
+            "stable": false,
+            "recommended": false
+          },
+          {
+            "version": "1.0.3",
+            "stable": false,
+            "recommended": false
+          }
+        ],
+        "version": "1.21.11",
+        "build": "0.19.5@1.1.2",
+        "java": 21,
+        "officialHash": "sha256"
+      },
+      {
+        "engine": "forge",
+        "catalog": "validated",
+        "versions": 78,
+        "availableBuilds": 31,
+        "availableInstallers": 0,
+        "recommendedBuild": "1.21.11-61.2.1",
+        "installerExamples": [],
+        "version": "1.21.11",
+        "build": "1.21.11-61.2.1",
+        "java": 21,
+        "officialHash": "sha1"
+      },
+      {
+        "engine": "neoforge",
+        "catalog": "validated",
+        "versions": 23,
+        "availableBuilds": 45,
+        "availableInstallers": 0,
+        "recommendedBuild": "21.11.45",
+        "installerExamples": [],
+        "version": "1.21.11",
+        "build": "21.11.45",
+        "java": 21,
+        "officialHash": "sha256"
+      },
+      {
+        "engine": "bedrock",
+        "catalog": "validated",
+        "versions": 1,
+        "availableBuilds": 1,
+        "availableInstallers": 0,
+        "recommendedBuild": "1.26.52.3",
+        "installerExamples": [],
+        "version": "1.26.52.3",
+        "build": "1.26.52.3",
+        "java": 0,
+        "officialHash": "not supplied"
+      },
+      {
+        "engine": "pocketmine",
+        "catalog": "validated",
+        "versions": 349,
+        "availableBuilds": 1,
+        "availableInstallers": 0,
+        "recommendedBuild": "5.44.3",
+        "installerExamples": [],
+        "version": "5.44.3",
+        "build": "5.44.3",
+        "java": 0,
+        "officialHash": "sha256",
+        "minecraftVersion": "1.26.30"
+      }
+    ],
+    "java": {
+      "version": "21.0.12.1",
+      "architecture": "x64",
+      "probe": "validated"
+    },
+    "php": {
+      "version": "8.2.30",
+      "zts": true,
+      "architecture": "x64",
+      "probe": "validated",
+      "pocketmine": "5.44.3"
+    },
+    "content": {
+      "hangarProjects": 20,
+      "hangarVersions": 200,
+      "icon": true,
+      "crossplay": {
+        "supported": true,
+        "geyserInstalled": true,
+        "floodgateInstalled": true,
+        "configured": true,
+        "configPath": "plugins/Geyser-Spigot/config.yml",
+        "port": 30335,
+        "authType": "floodgate"
+      },
+      "managed": [
+        {
+          "title": "Geyser",
+          "provider": "modrinth",
+          "version": "2.11.3-b1249"
+        },
+        {
+          "title": "Floodgate",
+          "provider": "geyser",
+          "version": "2.2.5 build 141"
+        },
+        {
+          "title": "ViaVersion",
+          "provider": "modrinth",
+          "version": "5.12.1"
+        }
+      ]
+    }
+  },
+  "fabricExactInstall": {
+    "at": "2026-10-09T12:50:54.239Z",
+    "platform": "win32",
+    "architecture": "x64",
+    "minecraft": "1.21.1",
+    "loader": "0.16.9",
+    "installer": "1.0.1",
+    "build": "0.16.9@1.0.1",
+    "url": "https://maven.fabricmc.net/net/fabricmc/fabric-installer/1.0.1/fabric-installer-1.0.1.jar",
+    "officialHash": {
+      "algorithm": "sha256",
+      "value": "62edf170bdcc41edea85d33acf3eb85474258699b3d41f9418d286c836cb088d"
+    },
+    "downloadSha256": "62edf170bdcc41edea85d33acf3eb85474258699b3d41f9418d286c836cb088d",
+    "launcher": "fabric-loader-0.16.9.jar\r\n\r\n",
+    "serverHash": "59353fb40c36d304f2035d51e7d6e6baa98dc05c",
+    "serverHashAlgorithm": "sha1",
+    "entrypointBytes": 634,
+    "eulaAccepted": false,
+    "minecraftExecuted": false,
+    "installerExecuted": true
+  },
+  "windowsInstaller": {
+    "pinnedVisualCheck": "not observed; no pre-existing pin changed",
+    "signature": "NotSigned",
+    "shortcuts": [
+      {
+        "type": "Desktop",
+        "targetIsOwnedInstalledApp": true,
+        "iconResourceIndex": 0
+      },
+      {
+        "type": "Start menu",
+        "targetIsOwnedInstalledApp": true,
+        "iconResourceIndex": 0
+      }
+    ],
+    "at": "2026-10-09T13:46:25.6555129Z",
+    "existingInstallationModified": false,
+    "installExitCode": 0,
+    "installerSha256": "041404bc50565cfdf28c8b965a372137435c30ec9bb5f75028fc2a7ecd47d927",
+    "icons": [
+      {
+        "target": "installed",
+        "width": 32,
+        "height": 32
+      },
+      {
+        "target": "setup",
+        "width": 32,
+        "height": 32
+      },
+      {
+        "target": "portable",
+        "width": 32,
+        "height": 32
+      }
+    ],
+    "executableSha256": "1df5be29ca513b3d9366041ffa39b3d9a3435eb4941beb3d76044039d901a000",
+    "portableSha256": "990fa2c3fc80a3b4629ae98f76b29c21987b1d1dde74614e52bfe87a4ee80ff6",
+    "profile": {
+      "at": "2026-10-09T13:46:48.123Z",
+      "version": "0.4.1",
+      "packaged": true,
+      "installedLaunch": true,
+      "settingsSaved": true,
+      "icon": {
+        "nativeWindow": true
+      },
+      "before": [
+        "d5941fb9b25b90bf9cded347cb7850d0b2aedf817df4055191a24657558ff189",
+        "41dfe7b99d19440905980e0bf796085e54515460ee604f8106d2b8b6b04a4751",
+        "2ee38629759d058e4cfd0b286ac34381079881cb0c624bb84d649bdfc9b58cc1"
+      ]
+    },
+    "uninstall": {
+      "shortcutsRemoved": true,
+      "existingInstallationModified": false,
+      "at": "2026-10-09T13:46:50.2085317Z",
+      "isolatedProfilePreserved": true,
+      "exitCode": 0
+    }
+  },
+  "upgrade": {
+    "baseline": "0.4.0",
+    "candidate": "0.4.1",
+    "initialSchema": 11,
+    "legacyManual": false,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-09T13:45:29.551Z",
+    "oldVersion": "0.4.0",
+    "signatureAndDownload": "verified by old production application",
+    "helperRelaunch": "completed; actual 0.4.1 startup log observed",
+    "replacedBinarySha256": "990fa2c3fc80a3b4629ae98f76b29c21987b1d1dde74614e52bfe87a4ee80ff6",
+    "finalSchema": 11,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "playerHistory": true,
+      "playerNotes": true,
+      "scheduledTask": true
+    }
+  },
+  "currentPublicFeed": {
+    "at": "2026-10-09T13:36:53.962Z",
+    "packaged": true,
+    "currentVersion": "0.4.1",
+    "feed": "real public GitHub feed; no interception",
+    "upToDate": true
+  },
+  "branding": {
+    "sourceSha256": "971924a944dbd9eec0de2f3bcf2af9c6265168db8563746e178e8cc77e03f5d7",
+    "sourceBytesUnchanged": true,
+    "socialPreview": "uploaded in supported GitHub web settings; visually confirmed after reload",
+    "socialProof": "docs/design/reference-041/github-social-preview.png"
+  },
+  "website": {
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "version": 4,
+    "source": "5969d2b986fb0769bbe823a644ad0e1e70a8a833",
+    "status": "succeeded",
+    "at": "2026-10-09T13:34:52.451144+00:00",
+    "widths": [
+      {
+        "width": 390,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      },
+      {
+        "width": 768,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      },
+      {
+        "width": 1280,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      },
+      {
+        "width": 1440,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      },
+      {
+        "width": 1920,
+        "language": "en",
+        "overflow": false,
+        "broken": [],
+        "anchors": [],
+        "errors": [],
+        "failed": []
+      }
+    ],
+    "skipLinkFirst": true,
+    "visibleKeyboardFocusTargets": 12,
+    "downloads": [
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Setup-x64.exe",
+        "status": 200,
+        "size": 112858546
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Portable-x64.exe",
+        "status": 200,
+        "size": 112639147
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Setup-arm64.exe",
+        "status": 200,
+        "size": 106750330
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-Portable-arm64.exe",
+        "status": 200,
+        "size": 106531455
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-x86_64.AppImage",
+        "status": 200,
+        "size": 127060768
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-amd64.deb",
+        "status": 200,
+        "size": 100731660
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.AppImage",
+        "status": 200,
+        "size": 128303300
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.deb",
+        "status": 200,
+        "size": 95875388
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-x64.dmg",
+        "status": 200,
+        "size": 133727129
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-x64.zip",
+        "status": 200,
+        "size": 133880977
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.dmg",
+        "status": 200,
+        "size": 129868801
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/MineDock-0.4.0-arm64.zip",
+        "status": 200,
+        "size": 129979711
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.0/SHA256SUMS.txt",
+        "status": 200,
+        "size": 1749
+      }
+    ]
+  },
+  "englishRelease": {
+    "at": "2026-10-09T12:03:42.144Z",
+    "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0",
+    "descriptionLanguage": "English",
+    "assetsUnchanged": true,
+    "assetCount": 20
+  },
+  "screenshots": {
+    "currentPNG": 48,
+    "gif": "nine real screenshot frames; no gameplay video",
+    "beforeAfterViews": 7
+  },
+  "limits": [
+    "No Windows/Apple OS signing certificate or notarization",
+    "Existing pinned Windows/taskbar visual state not observed",
+    "No Linux/macOS/ARM64 OS installation or update lifecycle validation",
+    "No real multiplayer, live map rendering or exhaustive historical engine combination testing",
+    "Old 0.3.0 Windows launcher needs a manual first upgrade on the tested host",
+    "Incremental deletion/GC and legacy full-ZIP partial restore unavailable"
+  ]
+}

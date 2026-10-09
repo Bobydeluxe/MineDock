@@ -3,6 +3,7 @@ import { useApp } from './context';
 import { Button, Field, Toggle, Dialog, ErrorBox, useData, bytes } from './ui';
 import type { Server } from '../../../../packages/domain/types';
 import type { Key } from './i18n';
+import type { HealthSettings } from '../../../../packages/domain/health';
 import { localizeMessage } from '../../../../packages/domain/localization';
 import { Confirm } from './management';
 export function HealthView({ server }: { server: Server }) {
@@ -118,13 +119,31 @@ export function HealthView({ server }: { server: Server }) {
     </section>
   );
 }
-export function NotificationsView() {
+export function NotificationSettings() {
   const { api, t, run, busy, snapshot } = useApp(),
     notices = useData(
       () => api.notices(),
       [snapshot.activity.length, snapshot.servers.map((s) => s.updatedAt).join()],
     ),
     settings = useData(() => api.healthSettings(), []);
+  const [preferences, setPreferences] = useState<HealthSettings>();
+  const [updating, setUpdating] = useState(false);
+  useEffect(() => {
+    if (settings.data) setPreferences(settings.data);
+  }, [settings.data]);
+  const configure = (patch: Partial<HealthSettings>) => {
+    if (!preferences || updating || busy) return;
+    const previous = preferences,
+      next = { ...preferences, ...patch };
+    setPreferences(next);
+    setUpdating(true);
+    void run(() => api.configureHealth(next))
+      .then((result) => {
+        setPreferences(result.ok && result.value ? result.value : previous);
+        if (!result.ok) settings.reload();
+      })
+      .finally(() => setUpdating(false));
+  };
   useEffect(
     () =>
       api.onEvent((event) => {
@@ -133,102 +152,96 @@ export function NotificationsView() {
     [api, notices.reload],
   );
   return (
-    <>
-      <section className="panel">
-        <div className="section-heading">
-          <h2>{t('notifications')}</h2>
-          <Button
-            disabled={busy}
-            onClick={() => {
-              void run(() => api.readNotices()).then(notices.reload);
-            }}
-          >
-            {t('health.readAll')}
-          </Button>
-        </div>
-        {notices.error && <ErrorBox error={notices.error} />}{' '}
-        {!notices.data?.length && <p>{t('noResults')}</p>}
-        {notices.data?.map((n) => (
-          <div className="installed-row" key={n.id}>
+    <section className="panel notification-settings">
+      <h2>{t('notifications')}</h2>
+      {settings.error && (
+        <ErrorBox error={settings.error} retry={settings.reload} retryLabel={t('retry')} />
+      )}
+      {preferences && (
+        <>
+          <Toggle
+            label={t('health.native')}
+            disabled={busy || updating}
+            checked={preferences.nativeNotifications}
+            onChange={(value) => configure({ nativeNotifications: value })}
+          />
+          {(
+            [
+              'crash',
+              'backupFailed',
+              'offline',
+              'update',
+              'lowDisk',
+              'playerJoin',
+              'playerLeave',
+            ] as const
+          ).map((key) => (
+            <Toggle
+              key={key}
+              disabled={busy || updating}
+              label={t(('notice.' + key) as Key)}
+              checked={preferences[key]}
+              onChange={(value) => configure({ [key]: value })}
+            />
+          ))}
+          <details>
+            <summary>{t('advanced')}</summary>
+            {(['cpuPercent', 'memoryPercent', 'diskFreeGiB', 'backupAgeHours'] as const).map(
+              (key) => (
+                <Field key={key} label={t(('health.' + key) as Key)}>
+                  <input
+                    type="number"
+                    disabled={busy || updating}
+                    defaultValue={preferences[key]}
+                    onBlur={(e) => {
+                      const value = Number(e.target.value);
+                      if (value !== preferences[key]) configure({ [key]: value });
+                    }}
+                  />
+                </Field>
+              ),
+            )}
+          </details>
+        </>
+      )}
+      <details className="notification-history">
+        <summary>{t('settings.notificationHistory')}</summary>
+        <Button
+          disabled={busy || !notices.data?.some((notice) => !notice.read)}
+          onClick={() => {
+            void run(() => api.readNotices()).then(notices.reload);
+          }}
+        >
+          {t('health.readAll')}
+        </Button>
+        {notices.error && (
+          <ErrorBox error={notices.error} retry={notices.reload} retryLabel={t('retry')} />
+        )}
+        {notices.loading && <p>{t('loading')}</p>}
+        {!notices.loading && !notices.error && !notices.data?.length && <p>{t('noResults')}</p>}
+        {notices.data?.map((notice) => (
+          <div className="installed-row" key={notice.id}>
             <div>
               <strong>
-                {t(('notice.' + n.code) as Key)}
-                {n.count > 1 ? ` ×${n.count}` : ''}
+                {t(('notice.' + notice.code) as Key)}
+                {notice.count > 1 ? ` ×${notice.count}` : ''}
               </strong>
               <small>
-                {snapshot.servers.find((s) => s.id === n.serverId)?.name} ·{' '}
-                {new Date(n.at).toLocaleString()}
+                {snapshot.servers.find((server) => server.id === notice.serverId)?.name} ·{' '}
+                {new Date(notice.at).toLocaleString(snapshot.settings.language)}
               </small>
             </div>
             <Button
-              disabled={busy || n.read}
+              disabled={busy || notice.read}
               onClick={() => {
-                void run(() => api.readNotices(n.id)).then(notices.reload);
+                void run(() => api.readNotices(notice.id)).then(notices.reload);
               }}
             >
-              {t(n.read ? 'health.read' : 'health.markRead')}
+              {t(notice.read ? 'health.read' : 'health.markRead')}
             </Button>
           </div>
         ))}
-      </section>
-      <section className="panel">
-        <h2>{t('health.preferences')}</h2>
-        {settings.data && (
-          <>
-            <Toggle
-              label={t('health.native')}
-              checked={settings.data.nativeNotifications}
-              onChange={(value) => {
-                void run(() =>
-                  api.configureHealth({ ...settings.data!, nativeNotifications: value }),
-                ).then(settings.reload);
-              }}
-            />
-            {(
-              [
-                'crash',
-                'backupFailed',
-                'offline',
-                'update',
-                'lowDisk',
-                'playerJoin',
-                'playerLeave',
-              ] as const
-            ).map((key) => (
-              <Toggle
-                key={key}
-                label={t(('notice.' + key) as Key)}
-                checked={settings.data![key]}
-                onChange={(value) => {
-                  void run(() => api.configureHealth({ ...settings.data!, [key]: value })).then(
-                    settings.reload,
-                  );
-                }}
-              />
-            ))}
-            <details>
-              <summary>{t('advanced')}</summary>
-              {(['cpuPercent', 'memoryPercent', 'diskFreeGiB', 'backupAgeHours'] as const).map(
-                (key) => (
-                  <Field key={key} label={t(('health.' + key) as Key)}>
-                    <input
-                      type="number"
-                      defaultValue={settings.data![key]}
-                      onBlur={(e) => {
-                        const value = Number(e.target.value);
-                        if (value !== settings.data![key])
-                          void run(() =>
-                            api.configureHealth({ ...settings.data!, [key]: value }),
-                          ).then(settings.reload);
-                      }}
-                    />
-                  </Field>
-                ),
-              )}
-            </details>
-          </>
-        )}
-      </section>
-    </>
+      </details>
+    </section>
   );
 }

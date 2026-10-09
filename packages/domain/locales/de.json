@@ -435,5 +435,17 @@
   "This mod file is too large.": "Diese Mod-Datei ist zu groß.",
   "This mod is already managed.": "Dieser Mod wird bereits verwaltet.",
   "Resolve incompatible or manual mods before changing Minecraft or the loader.": "Klären Sie inkompatible oder manuelle Mods vor dem Wechsel von Minecraft oder Loader.",
-  "This Modrinth project or version is no longer available.": "Dieses Modrinth-Projekt oder diese Version ist nicht mehr verfügbar."
+  "This Modrinth project or version is no longer available.": "Dieses Modrinth-Projekt oder diese Version ist nicht mehr verfügbar.",
+  "Choose an image smaller than 5 MB.": "Wähle ein Bild unter 5 MB.",
+  "Choose a PNG, JPEG or WebP image up to 4096 pixels per side.": "Wähle ein PNG-, JPEG- oder WebP-Bild mit höchstens 4096 Pixeln pro Seite.",
+  "Choose an image up to 4096 pixels per side.": "Wähle ein Bild mit höchstens 4096 Pixeln pro Seite.",
+  "Invalid profile thumbnail.": "Ungültiges Profilbild.",
+  "This property is not supported by the selected engine/version.": "Diese Eigenschaft wird von der gewählten Engine/Version nicht unterstützt.",
+  "Secrets must use the dedicated secure workflow.": "Geheimnisse müssen den vorgesehenen sicheren Ablauf verwenden.",
+  "Expected a boolean property.": "Eine boolesche Eigenschaft wird erwartet.",
+  "The property value is out of range.": "Der Eigenschaftswert liegt außerhalb des Bereichs.",
+  "Resource-pack SHA-1 must contain 40 hexadecimal characters.": "Der SHA-1 des Ressourcenpakets muss 40 Hexadezimalzeichen enthalten.",
+  "Invalid resource-pack URL.": "Ungültige Ressourcenpaket-URL.",
+  "Resource-pack prompt must be JSON text.": "Die Ressourcenpaket-Nachricht muss JSON-Text sein.",
+  "Invalid Minecraft version.": "Ungültige Minecraft-Version."
 }

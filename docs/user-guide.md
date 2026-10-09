@@ -1,10 +1,10 @@
 # A survival world with friends
 
-This guide describes the public **MineDock 0.4.0** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
+This guide describes the public **MineDock 0.4.1** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
 
 ## Create your first survival
 
-1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.
+1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.
 2. Open MineDock, choose your language/appearance and keep the proposed folders unless you have a reason to change them.
 3. Choose **Create server**. Vanilla suits an unmodified world; Paper or Purpur supports plugins. Fabric, Forge and NeoForge support their corresponding mods. Your friends must use a matching Minecraft version and, for modded play, matching required client mods.
 4. Choose the version and a reasonable memory allowance. Keep survival and normal difficulty. Review every setting before creating the server.
@@ -14,7 +14,7 @@ On the same computer, a Java client usually connects through `localhost:PORT`. F
 
 ## Upgrade an existing 0.3.x profile
 
-Close MineDock, keep your existing server/storage folders, then open the verified 0.4.0 package under the same OS account. Your profile and SQLite database are reused; a database copy is saved before migration. Servers, preferences, backups, runtimes, player history and scheduled tasks are retained. The old Windows portable launcher can fail before its update helper starts; manually open the new verified portable or Setup package in that case. Never delete your data to upgrade.
+Close MineDock, keep your existing server/storage folders, then open the verified 0.4.1 package under the same OS account. Your profile and SQLite database are reused; a database copy is saved before migration. Servers, preferences, backups, runtimes, player history and scheduled tasks are retained. The old Windows portable launcher can fail before its update helper starts; manually open the new verified portable or Setup package in that case. Never delete your data to upgrade.
 
 ## Add a mod, plugin or pack
 
@@ -73,3 +73,15 @@ For compatible Paper/Purpur versions, open the BlueMap/Dynmap assistant, review 
 Stop the server and export a `.minedock` package with the native file picker. Review what it includes; arbitrary plugin configurations require explicit opt-in, and worlds/player files can contain private information. Known secrets are excluded by default and managed RCON secrets are always regenerated.
 
 On the other computer choose **Import MineDock package**, review the inventory and confirm. MineDock verifies hashes and prepares new paths, ports, an official engine and an appropriate runtime. This needs Internet access and any required personal EULA acceptance. It does not rewrite every third-party plugin's absolute path. Read the [package format and privacy policy](package-format.md) before sharing an archive publicly.
+
+## Server customization in 0.4.1
+
+Navigation is Dashboard, Backups, your server entries and Settings. The upper breadcrumb/global-search bar and the dedicated Activity/Operations/Notifications navigation have been removed. Local page search still works. Open **Settings → Notifications** to choose desktop delivery and categories; expand **Notification history** to read or acknowledge alerts. **Recovery and background tasks** retains cancellation and reviewed recovery, while **History** retains searchable audit records. These Settings panels avoid permanently occupying the sidebar. Dark appearance uses neutral black/charcoal surfaces; light appearance remains available.
+
+In MineDock 0.4.1, creation preselects a working recommended build. Use **Show all available builds / loader versions** to search older available releases. Fabric has separate loader and installer lists; the review includes both exact selections. A warning does not claim an older version is necessarily beta: it records the upstream stable flag. Refresh contacts upstream; an offline cached catalog is explicitly labeled. Availability does not guarantee that every historical game/mod combination works.
+
+In **Server → Settings**, the **Server profile** name and chosen local image belong to MineDock. They do not rename the world or invent a Java server-name property. Choose a PNG/JPEG/WebP up to 5 MB and 4096 pixels per side; the native app saves a bounded local PNG. Reset restores the engine symbol.
+
+Stop the server before editing actual properties. Choose a category or search by label/key/description, edit only the intended values, then **Review and save**. Inspect the diff and acknowledge world/network/identity risks. A full safety backup and encrypted history are recorded; changes apply on the next start. Unset inherited settings remain unset until edited. Discard or cancel a navigation/close warning to keep working. If another program edited the file, refresh and review again rather than overwriting it. RCON credentials use the secure workflow and are never shown in this editor.
+
+Some Java properties were removed in later game releases; their controls are omitted rather than writing ignored values. Bedrock/PocketMine show fields supported by their actual files. Paper/Purpur advanced configuration first shows curated paths present in that version’s files; opt into other discovered scalars or use raw YAML for complex structures. Fabric has no invented universal mod-settings schema.

@@ -1,5 +1,37 @@
 # Changelog
 
+## 0.4.1
+
+### Added
+
+- The approved MineDock cube icon across desktop packages, window, website, README and reproducible platform assets.
+- Complete official version/build lists with refresh, persistent offline cache, advanced search and independent Fabric loader/installer choices.
+- A categorized server properties editor, reviewed diffs, local profile names/images and curated existing Paper configuration controls.
+- An original survival dusk website, responsive download choices and actual 0.4.1 screenshots.
+
+### Improved
+
+- Compact server rows, informative creation tiles, console category tabs and backup type filters follow the owner’s design reference.
+- A focused cleanup removes the top breadcrumb/search strip, workspace promotion, sidebar Activity/Operations/Notifications entries, repeated page ribbons, beta/local badges and redundant metric captions. Dark surfaces are neutral black/charcoal; notification preferences/history and recovery/history access are inside Settings.
+- Important controls remain readable in dark/light appearances; six offline app languages include all new labels and warnings.
+- The shared create/migration selector preserves explicit versions and shows unsupported choices for review.
+- Unsaved changes are guarded when navigating or closing the window; inherited properties stay unset unless edited.
+
+### Fixed
+
+- Fabric no longer hides all older loaders/installers behind the upstream stable flag; the chosen pair is pinned and retained.
+- Beginner Paper selection skips game versions that have no stable build available.
+- Properties save patches only edited effective values, preserving comments, CRLF, ordering and unknown keys; stale files refuse changes.
+- Removed Java properties are gated by game version, RCON secrets stay hidden, and manual pack URL changes clear stale active-pack metadata.
+- The creation review includes the exact chosen build and Fabric installer.
+- Notification switches update immediately, persist their actual settings and restore their previous state if saving fails.
+
+### Known issues
+
+- Upstream catalog availability is not proof of every historical combination or live Minecraft multiplayer. See the exact validation record.
+- Windows/macOS binaries remain unsigned; the historical 0.3.0 Windows first upgrade may require manual installation.
+- Incremental object garbage collection, live map/multiplayer validation and native OS upgrade coverage retain the 0.4.0 limits.
+
 ## 0.4.0
 
 ### Added

@@ -28,7 +28,7 @@ import {
 } from 'lucide-react';
 import type { Server, LogLine, FileEntry } from '../../../../packages/domain/types';
 import { engineDefinition } from '../../../../packages/domain/engines';
-import { EngineIcon } from './engine-icon';
+import { ServerAvatar } from './profile';
 import { useApp } from './context';
 import { Status, ServerActions } from './App';
 import { ContentView } from './content';
@@ -92,7 +92,7 @@ const tabIcons = {
   settings: Settings2,
 };
 export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: () => void }) {
-  const { t, api, snapshot, run, busy } = useApp();
+  const { t, api, snapshot, run, busy, requestNavigation } = useApp();
   const [tab, setTab] = useState<(typeof tabs)[number]>('overview');
   const [remove, setRemove] = useState(false);
   const diagnostic = useData(() => api.diagnostic(), []);
@@ -102,12 +102,8 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
     <>
       <div className="page-heading server-page-heading">
         <div>
-          <div className="eyebrow">
-            <span />
-            {t('servers')}
-          </div>
           <div className="title-with-status">
-            <EngineIcon engine={server.engine} size={42} />
+            <ServerAvatar server={server} size={42} />
             <h1>{server.name}</h1>
             <Status server={server} />
           </div>
@@ -142,7 +138,9 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
               key={value}
               className={tab === value ? 'selected' : ''}
               aria-pressed={tab === value}
-              onClick={() => setTab(value)}
+              onClick={() => {
+                if (value !== tab) requestNavigation(() => setTab(value));
+              }}
             >
               {(() => {
                 const Icon = tabIcons[value];
@@ -176,7 +174,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
                 <Users size={18} />
               </div>
               <strong>
-                {server.players.length}
+                {server.status === 'running' ? server.players.length : '—'}
                 <small>/ {server.maxPlayers}</small>
               </strong>
               <div className="metric-footer">{t('connectedPlayers')}</div>
@@ -187,8 +185,8 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
                 <Cpu size={18} />
               </div>
               <strong>
-                {server.cpu.toFixed(1)}
-                <small>%</small>
+                {server.pid ? server.cpu.toFixed(1) : '—'}
+                {server.pid && <small>%</small>}
               </strong>
               <div className="metric-footer">{t('resources')}</div>
             </div>
@@ -197,7 +195,7 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
                 {t('memory')}
                 <MemoryStick size={18} />
               </div>
-              <strong>{bytes(server.memory)}</strong>
+              <strong>{server.pid && server.memory ? bytes(server.memory) : '—'}</strong>
               <div className="metric-footer">
                 {engineDefinition(server.engine).capabilities.javaMemory
                   ? `${t('memoryAllocated')} · ${server.memoryMax / 1024} ${t('gigabytes')}`
@@ -435,13 +433,15 @@ function ConsoleView({ server }: { server: Server }) {
         <ErrorBox error={initial.error} retry={initial.reload} retryLabel={t('retry')} />
       )}
       <div className="console-toolbar">
-        <select
-          aria-label={t('console.category')}
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
+        <div className="console-category-tabs" role="group" aria-label={t('console.category')}>
           {(['all', 'chat', 'warnings', 'errors'] as const).map((c) => (
-            <option key={c} value={c}>
+            <button
+              key={c}
+              type="button"
+              aria-pressed={category === c}
+              className={category === c ? 'selected' : ''}
+              onClick={() => setCategory(c)}
+            >
               {t(
                 c === 'all'
                   ? 'allLevels'
@@ -451,9 +451,9 @@ function ConsoleView({ server }: { server: Server }) {
                       ? 'console.warnings'
                       : 'console.errors',
               )}
-            </option>
+            </button>
           ))}
-        </select>
+        </div>
         <div className="search-input">
           <Search size={15} />
           <input

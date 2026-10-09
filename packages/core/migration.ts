@@ -86,12 +86,12 @@ export class MigrationService {
       target.engine,
       target.version,
       target.build,
-      { loaderVersion: target.loaderVersion },
+      { loaderVersion: target.loaderVersion, installerVersion: target.installerVersion },
     );
     const future = { ...server, ...target, javaMajor: artifact.java };
     const review: MigrationReview = {
       token: randomUUID(),
-      target: { ...target, build: artifact.build, loaderVersion: artifact.loaderVersion },
+      target: { ...target, build: artifact.build, loaderVersion: artifact.loaderVersion, installerVersion: artifact.installerVersion },
       javaMajor: artifact.java,
       items: [
         { category: 'runtime', title: 'Java ' + artifact.java, status: 'compatible' },

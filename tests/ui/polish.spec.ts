@@ -241,7 +241,12 @@ for (const engine of ['Forge', 'NeoForge']) {
         .getByRole('button', { name: engine, exact: true })
         .click();
       await page.getByLabel('Server name', { exact: true }).fill(`${engine} visual test`);
-      await expect(page.getByLabel('Loader version', { exact: true })).toHaveValue('demo');
+      await page.getByLabel('Show all available builds / loader versions', { exact: true }).check();
+      await expect(
+        page
+          .getByRole('region', { name: 'Loader version', exact: true })
+          .getByRole('button', { name: 'demo Recommended', exact: true }),
+      ).toHaveAttribute('aria-pressed', 'true');
       for (let index = 0; index < 3; index++)
         await page.getByRole('button', { name: 'Continue', exact: true }).click();
       await expect(page.locator('.installation-summary')).toContainText('demo');
@@ -298,6 +303,17 @@ test('new wizard labels and engine descriptions work in all six languages', asyn
       await page.getByLabel(previous('language'), { exact: true }).selectOption(code);
       await page.getByRole('button', { name: previous('save'), exact: true }).click();
       await expect(page.locator('html')).toHaveAttribute('lang', code);
+      await expect(
+        page
+          .locator('.notification-settings')
+          .getByRole('heading', { name: t('notifications'), exact: true }),
+      ).toBeVisible();
+      await expect(page.locator('.notification-history > summary')).toHaveText(
+        t('settings.notificationHistory'),
+      );
+      await expect(page.locator('.recovery-controls > summary')).toContainText(
+        t('settings.recovery'),
+      );
       await page
         .locator('.sidebar-heading')
         .getByRole('button', { name: t('newServer'), exact: true })

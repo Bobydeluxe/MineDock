@@ -4,10 +4,14 @@ import path from 'node:path';
 import yazl from 'yazl';
 import { fixture } from '../helpers';
 import type { Api } from '../../packages/domain/types';
+import { HealthService } from '../../packages/core/health';
 
 test('native survival journey: configuration history, local packs, partial restore, player notes, notices and package preview', async () => {
   const f = await fixture();
   f.repo.saveSettings({ ...f.repo.settings(), onboarded: true });
+  const health = new HealthService(f.repo, f.bus);
+  health.push(f.server.id, 'crash');
+  health.close();
   await mkdir(path.join(f.server.path, 'config'));
   await writeFile(
     path.join(f.server.path, 'config/paper-global.yml'),
@@ -157,13 +161,15 @@ test('native survival journey: configuration history, local packs, partial resto
     await page.keyboard.press('Escape');
 
     await page
-      .locator('.sidebar')
-      .getByRole('button', { name: 'Notifications', exact: true })
+      .locator('.sidebar-bottom')
+      .getByRole('button', { name: 'Settings', exact: true })
       .click();
+    await page.locator('.notification-history > summary').click();
     await page.getByRole('button', { name: 'Mark all read', exact: true }).click();
     const notices = await page.evaluate(() =>
       (window as unknown as { minedock: Api }).minedock.notices(),
     );
+    expect(notices.length).toBeGreaterThan(0);
     expect(notices.every((n) => n.read)).toBe(true);
   } finally {
     await desktop.close();

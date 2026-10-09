@@ -14,6 +14,8 @@ export interface AppContextValue {
   refresh: () => Promise<void>;
   error?: string;
   dismissError: () => void;
+  registerUnsaved: (key: string, dirty: boolean) => () => void;
+  requestNavigation: (action: () => void) => void;
 }
 export const AppContext = createContext<AppContextValue | undefined>(undefined);
 export function useApp(): AppContextValue {

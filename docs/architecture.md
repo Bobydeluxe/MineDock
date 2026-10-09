@@ -48,3 +48,11 @@ Migrations 7–11 append notices, player sessions/notes, incremental manifests, 
 Notifications are capped at 400 and grouped over fifteen minutes; sustained process thresholds use thirty seconds. Player sessions retain at most 180 days/20,000 records per server. Performance samples are at most one per thirty seconds with seven-day retention and bounded aggregation; lag context is capped at 200 events. Configuration history retains at most ten versions/file, 200/server, 20 MB/server and 90 days. These limits and unsupported measurements are explained in [the evolution ledger](survival-evolution.md).
 
 The public product site is buildless static HTML/CSS using bundled engine symbols and real native captures. `scripts/build-site.mjs` prepares its separate ignored deployment checkout. It exposes no desktop IPC, backend, analytics or private server data.
+
+## 0.4.1 catalog, properties and profile paths
+
+Validated EngineCatalogData flows from MinecraftVersionService through typed main/preload IPC into EngineVersionPicker, reused in creation and migration. Cached JSON under the selected data root retains complete official choices and fetch timestamps. Explicit loader/installer/build choices are optional create/migration fields and become the resolved persistent server profile.
+
+PropertiesEditor reads an actual property document plus raw SHA-256. Domain field metadata applies real engine/version gates; only changed values reach AppCore. Saves hold the existing server lock, require a stopped server, validate types/ports/identity, make a full safety backup and encrypted configuration-history entry, recheck the original bytes and atomically patch only edited effective occurrences. Raw file editing remains available.
+
+Native local image selection validates headers and dimensions before decoding, normalizes to at most 128px PNG, and stores the bounded data URL in server-profile JSON. Display-name changes do not touch server.properties or worlds. These optional profile fields need no new SQLite migration; existing schema 1–11, server paths, runtimes, jobs, backup/player/history tables and update trust keys are retained.

@@ -5,12 +5,13 @@ export const migrationTargetSchema = z
     version: z.string().regex(/^[a-zA-Z0-9._-]{1,40}$/),
     build: z
       .string()
-      .regex(/^[a-zA-Z0-9._+-]{1,80}$/)
+      .regex(/^[a-zA-Z0-9._+@-]{1,80}$/)
       .optional(),
     loaderVersion: z
       .string()
       .regex(/^[a-zA-Z0-9._+-]{1,80}$/)
       .optional(),
+    installerVersion: z.string().regex(/^[a-zA-Z0-9._+-]{1,80}$/).optional(),
   })
   .strict();
 export type MigrationTarget = z.infer<typeof migrationTargetSchema>;

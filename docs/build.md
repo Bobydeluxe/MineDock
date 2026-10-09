@@ -1,5 +1,7 @@
 # Build commands
 
+The current public release is **MineDock 0.4.1**. Its twelve packages come from the six validated native jobs recorded in [validation](validation.md). Rebuild the approved platform icons with `python scripts/build-brand-assets.py` before changing their packaging inputs.
+
 ```sh
 pnpm install --frozen-lockfile
 pnpm lint

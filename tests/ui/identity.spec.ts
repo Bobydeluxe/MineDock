@@ -115,20 +115,22 @@ test('visual identity keeps readable states, keyboard focus and desktop geometry
         const geometry = await page.evaluate(() => {
           const sidebar = document.querySelector('.sidebar')!.getBoundingClientRect(),
             main = document.querySelector('.main-shell')!.getBoundingClientRect(),
-            top = document.querySelector('.topbar')!.getBoundingClientRect();
+            content = document.querySelector('main')!.getBoundingClientRect();
           return {
             sidebarLeft: sidebar.left,
             sidebarRight: sidebar.right,
             mainLeft: main.left,
-            headerTop: top.top,
-            headerHeight: top.height,
+            contentTop: content.top,
+            reservedTop:
+              document.querySelector('.demo-banner')?.getBoundingClientRect().bottom ?? 0,
+            headerExists: document.querySelector('.topbar') !== null,
             overflow: document.documentElement.scrollWidth > innerWidth,
           };
         });
         expect(geometry.sidebarLeft).toBe(0);
         expect(geometry.mainLeft).toBe(geometry.sidebarRight);
-        expect(geometry.headerTop).toBe(0);
-        expect(geometry.headerHeight).toBe(65);
+        expect(geometry.contentTop).toBe(geometry.reservedTop);
+        expect(geometry.headerExists).toBe(false);
         expect(geometry.overflow).toBe(false);
         const trigger = page
           .locator('.page-heading')

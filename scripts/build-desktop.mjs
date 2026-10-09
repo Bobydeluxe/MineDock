@@ -23,5 +23,6 @@ await build({
 });
 await mkdir('dist/assets', { recursive: true });
 await copyFile('apps/desktop/assets/icon.png', 'dist/assets/icon.png');
+await copyFile('apps/desktop/assets/icon.ico', 'dist/assets/icon.ico');
 await copyFile('LICENSE', 'dist/LICENSE.txt');
 await writeNotices(backend.metafile.inputs);

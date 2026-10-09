@@ -40,10 +40,16 @@ async function main(): Promise<void> {
           if (!versions.length) throw new Error(`${engine}: empty official catalog.`);
           const version = versions.includes('1.21.11') ? '1.21.11' : versions[0]!,
             artifact = await core.versions.artifact(engine, version);
+          const catalog = await core.versions.catalog(engine, version, true);
           results.push({
             engine,
             catalog: 'validated',
             versions: versions.length,
+            availableBuilds: catalog.builds.length,
+            availableInstallers: catalog.installers.length,
+            recommendedBuild: catalog.builds.find((v) => v.recommended)?.version,
+            recommendedInstaller: catalog.installers.find((v) => v.recommended)?.version,
+            installerExamples: catalog.installers.slice(0, 4),
             version,
             build: artifact.build,
             java: artifact.java,
@@ -60,7 +66,7 @@ async function main(): Promise<void> {
       console.log('Official engine catalog results:', JSON.stringify(results));
     }
     if (flags.has('--runtimes')) {
-      const runtime = await core.runtime.install(21),
+      const runtime = await core.runtime.ensure(21),
         health = await inspectJava(runtime.path);
       if (!health || health.major !== 21 || health.arch !== process.arch)
         throw new Error('Official Java runtime native probe failed.');

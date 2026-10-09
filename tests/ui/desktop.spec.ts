@@ -105,10 +105,10 @@ test('real Electron shell: setup, folders, localization, empty dashboard, runtim
       page.getByText(translator('en')('noServers'), { exact: true }).last(),
     ).toBeVisible();
     await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
-    await expect(page.locator('.button.nav.active')).toHaveCSS('color', 'rgb(128, 202, 190)');
+    await expect(page.locator('.button.nav.active')).toHaveCSS('color', 'rgb(67, 210, 203)');
     await expect(page.locator('.page-heading .button.primary')).toHaveCSS(
       'background-color',
-      'rgb(128, 202, 190)',
+      'rgb(67, 210, 203)',
     );
     if (!executablePath)
       await page.screenshot({ path: 'test-results/desktop-empty.png', animations: 'disabled' });

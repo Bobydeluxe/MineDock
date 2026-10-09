@@ -1,4 +1,4 @@
-import { randomBytes, randomUUID } from 'node:crypto';
+import { randomBytes, randomUUID, createHash } from 'node:crypto';
 import { mkdir, readFile, rm, statfs, realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
@@ -25,7 +25,8 @@ import { IconCache } from '../marketplace/icons';
 import { atomicWrite } from '../security/paths';
 import { LocalSecretStore, type SecretStore } from '../security/secrets';
 import { findAvailablePort, checkPort, lanIp } from '../networking/network';
-import { parseProperties, serializeProperties } from '../domain/properties';
+import { parseProperties, patchProperties } from '../domain/properties';
+import { validatePropertyChanges } from '../domain/property-fields';
 import { DomainError, readableError } from '../domain/errors';
 import {
   createServerSchema,
@@ -255,6 +256,7 @@ export class AppCore {
     this.maps = new MapAssistant(this);
     this.packages = new PackageService(this);
     this.catalogs = new MarketplaceRegistry(this.repo);
+    this.versions.configureCache(path.join(this.root, 'cache', 'engines'));
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
     this.skins = new PlayerSkins(this.icons);
     this.crossplay = new CrossplayService(this.repo, this.marketplace.manager);
@@ -392,7 +394,12 @@ export class AppCore {
           'PLATFORM',
           'This server engine is unavailable on this operating system.',
         );
-      const artifact = await this.versions.artifact(input.engine, input.version, undefined, input);
+      const artifact = await this.versions.artifact(
+        input.engine,
+        input.version,
+        input.build,
+        input,
+      );
       const root = this.repo.settings().serverRoot;
       const folder = path.join(root, id);
       await mkdir(folder, { recursive: true });
@@ -507,56 +514,140 @@ export class AppCore {
       : this.jobs.review(id);
   }
   async properties(id: string): Promise<Record<string, string>> {
-    const properties = parseProperties(
-      await readFile(path.join(this.repo.server(id).path, 'server.properties'), 'utf8'),
-    );
-    delete properties['rcon.password'];
-    return properties;
+    return (await this.propertiesDocument(id)).values;
   }
-  async saveProperties(id: string, raw: Record<string, string>): Promise<void> {
+  async updateProfile(id: string, raw: { name: string; thumbnail?: string | null }) {
+    const input = z
+      .object({
+        name: z.string().trim().min(1).max(60),
+        thumbnail: z
+          .string()
+          .max(180000)
+          .regex(/^data:image\/png;base64,[a-zA-Z0-9+/=]+$/)
+          .nullable()
+          .optional(),
+      })
+      .strict()
+      .parse(raw);
+    if (input.thumbnail) {
+      const png = Buffer.from(input.thumbnail.split(',')[1]!, 'base64');
+      if (
+        png.length < 24 ||
+        png.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a' ||
+        png.subarray(12, 16).toString() !== 'IHDR' ||
+        png.readUInt32BE(16) < 1 ||
+        png.readUInt32BE(20) < 1 ||
+        png.readUInt32BE(16) > 128 ||
+        png.readUInt32BE(20) > 128
+      )
+        throw new DomainError('IMAGE', 'Invalid profile thumbnail.');
+    }
+    await this.exclusive(id, async () => {
+      const server = this.repo.server(id);
+      server.name = input.name;
+      if (input.thumbnail !== undefined) server.thumbnail = input.thumbnail ?? undefined;
+      this.repo.saveServer(server);
+      this.repo.audit('server.configured', server.name, id);
+    });
+  }
+  async propertiesDocument(id: string) {
+    const text = await readFile(path.join(this.repo.server(id).path, 'server.properties'), 'utf8');
+    const values = parseProperties(text);
+    for (const key of Object.keys(values))
+      if (/password|secret|token|credential|private.?key/i.test(key)) delete values[key];
+    return { values, sha256: createHash('sha256').update(text).digest('hex') };
+  }
+  async saveProperties(
+    id: string,
+    raw: Record<string, string>,
+    expectedSha256?: string,
+  ): Promise<void> {
     await this.exclusive(id, async () => {
       const server = this.assertStopped(id);
       const values = z.record(z.string().max(120), z.string().max(2000)).parse(raw);
       const definition = engineDefinition(server.engine);
+      const original = await readFile(path.join(server.path, 'server.properties'), 'utf8');
+      if (expectedSha256 && createHash('sha256').update(original).digest('hex') !== expectedSha256)
+        throw new DomainError('STALE', 'Refresh configuration before editing.');
+      const current = parseProperties(original);
+      validatePropertyChanges(server, current, values);
+      const changed = Object.fromEntries(
+        Object.entries(values).filter(([key, value]) => current[key] !== value),
+      );
+      const merged = { ...current, ...values };
       if ('rcon.password' in values)
         throw new DomainError('SECRET', 'The application manages the RCON password.');
-      const port = z.coerce.number().int().min(1024).max(65535).parse(values['server-port']);
-      const players = z.coerce.number().int().min(1).max(1000).parse(values['max-players']);
-      const view = z.coerce.number().int().min(2).max(32).parse(values['view-distance']);
+      const port = z.coerce
+        .number()
+        .int()
+        .min(1024)
+        .max(65535)
+        .parse(merged['server-port'] ?? server.port);
+      const players = z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(1000)
+        .parse(merged['max-players'] ?? server.maxPlayers);
+      const view = z.coerce
+        .number()
+        .int()
+        .min(2)
+        .max(server.engine === 'bedrock' ? 96 : 32)
+        .parse(merged['view-distance'] ?? server.viewDistance);
       const simulation =
         definition.edition === 'bedrock'
           ? server.simulationDistance
-          : z.coerce.number().int().min(2).max(32).parse(values['simulation-distance']);
+          : z.coerce
+              .number()
+              .int()
+              .min(2)
+              .max(32)
+              .parse(merged['simulation-distance'] ?? server.simulationDistance);
       const mode = z
         .enum(['survival', 'creative', 'adventure', 'spectator'])
-        .parse(values.gamemode);
-      const difficulty = z.enum(['peaceful', 'easy', 'normal', 'hard']).parse(values.difficulty);
+        .parse(
+          ['survival', 'creative', 'adventure', 'spectator'][Number(merged.gamemode)] ??
+            merged.gamemode ??
+            server.gamemode,
+        );
+      const difficulty = z
+        .enum(['peaceful', 'easy', 'normal', 'hard'])
+        .parse(
+          ['peaceful', 'easy', 'normal', 'hard'][Number(merged.difficulty)] ??
+            merged.difficulty ??
+            server.difficulty,
+        );
       if ((await this.reservedPorts(id)).has(port) || !(await checkPort(port, definition.protocol)))
         throw new DomainError('PORT', 'This port is already in use.');
-      const worldName = values['level-name'] ?? 'world';
-      if (!/^[a-zA-Z0-9_-]{1,60}$/.test(worldName))
+      const worldName = merged['level-name'] ?? 'world';
+      if (changed['level-name'] !== undefined && !/^[a-zA-Z0-9_-]{1,60}$/.test(worldName))
         throw new DomainError(
           'WORLD',
           'The world folder name must contain only letters, digits, hyphens and underscores.',
         );
-      if (values['server-ip'] && values['server-ip'] !== '127.0.0.1')
+      if (changed['server-ip'] && changed['server-ip'] !== '127.0.0.1')
         throw new DomainError('BIND', 'V1 allows an empty bind address (LAN) or 127.0.0.1.');
       for (const key of ['online-mode', 'pvp', 'white-list'])
         if (definition.edition === 'java' || key === 'online-mode')
-          z.enum(['true', 'false']).parse(values[key]);
-      const current = parseProperties(
-        await readFile(path.join(server.path, 'server.properties'), 'utf8'),
-      );
-      await this.backups.create(id, 'before_settings');
+          if (merged[key] !== undefined) z.enum(['true', 'false']).parse(merged[key]);
       const props: Record<string, string> = {
         ...current,
         ...values,
       };
+      for (const key of ['rcon.port', 'query.port'])
+        if (
+          changed[key] &&
+          props[key] &&
+          (Number(props[key]) === port ||
+            (await this.reservedPorts(id)).has(Number(props[key])) ||
+            !(await checkPort(Number(props[key]), key === 'query.port' ? 'udp' : 'tcp')))
+        )
+          throw new DomainError('PORT', 'This port is already in use.');
       if (definition.capabilities.rcon)
         Object.assign(props, {
           'rcon.password': this.secrets.decrypt(this.repo.secret(id)),
-          'rcon.port': current['rcon.port'] ?? '',
-          'enable-rcon': 'true',
+          'rcon.port': props['rcon.port'] ?? current['rcon.port'] ?? '',
         });
       const ipv6Port =
         definition.protocol === 'udp'
@@ -574,8 +665,17 @@ export class AppCore {
           (await this.reservedPorts(id)).has(ipv6Port))
       )
         throw new DomainError('PORT', 'The IPv6 UDP port is already in use.');
+      await this.backups.create(id, 'before_settings');
       await this.configuration.remember(id, 'server.properties');
-      await atomicWrite(path.join(server.path, 'server.properties'), serializeProperties(props));
+      if ((await readFile(path.join(server.path, 'server.properties'), 'utf8')) !== original)
+        throw new DomainError('STALE', 'Refresh configuration before editing.');
+      await atomicWrite(
+        path.join(server.path, 'server.properties'),
+        patchProperties(original, {
+          ...changed,
+          ...(definition.capabilities.rcon ? { 'rcon.password': props['rcon.password']! } : {}),
+        }),
+      );
       Object.assign(server, {
         port,
         ipv6Port,
@@ -584,13 +684,19 @@ export class AppCore {
         simulationDistance: simulation,
         difficulty,
         gamemode: mode,
-        motd: props.motd ?? props['server-name'],
-        seed: props['level-seed'],
-        pvp: props.pvp === 'true',
-        whitelist: (props['white-list'] ?? props['allow-list']) === 'true',
-        onlineMode: props['online-mode'] === 'true',
+        motd: props.motd ?? props['server-name'] ?? server.motd,
+        seed: props['level-seed'] ?? server.seed,
+        pvp: props.pvp === undefined ? server.pvp : props.pvp === 'true',
+        whitelist:
+          (props['white-list'] ?? props['allow-list']) === undefined
+            ? server.whitelist
+            : (props['white-list'] ?? props['allow-list']) === 'true',
+        onlineMode:
+          props['online-mode'] === undefined ? server.onlineMode : props['online-mode'] === 'true',
         status: 'stopped',
       });
+      if ('resource-pack' in changed || 'resource-pack-sha1' in changed)
+        server.activeResourcePack = undefined;
       this.repo.saveServer(server);
       this.repo.audit('server.configured', server.name, id);
     });

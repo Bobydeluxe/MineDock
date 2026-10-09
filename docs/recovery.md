@@ -1,6 +1,6 @@
 # Interrupted operations and recovery
 
-The Operations view shows persistent jobs, phase/progress, cancellation and failures. Downloads, extraction, copies, imports/exports, content changes, modpacks, runtime work, world work, backups and storage scans use cancellation at safe boundaries. Cancelling prepared work retains the installed state and records the outcome; an atomic commit cannot be interrupted halfway by a UI cancellation.
+In MineDock 0.4.1, open **Settings → Recovery and background tasks** for unfinished jobs, cancellation, failures and reviewed recovery. Completed audit records are available under **Settings → History**. These panels are collapsed; there is no standalone Operations destination. Downloads, extraction, copies, imports/exports, content changes, modpacks, runtime work, world work, backups and storage scans use cancellation at safe boundaries. Cancelling prepared work retains the installed state and records the outcome; an atomic commit cannot be interrupted halfway by a UI cancellation.
 
 HTTP partial records include the temporary path, offset, expected hash/size and server validators. A resumed request requires valid Range/content-range/entity data; ignored Range or changed entities cause a clean restart. An incomplete installed server remains blocked until its pinned installation is retried. An interrupted modpack retries the whole approved pack, not just an empty engine install.
 

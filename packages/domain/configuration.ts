@@ -12,6 +12,9 @@ export interface ConfigField {
   key: string[];
   value: string | number | boolean;
   category: 'gameplay' | 'resources' | 'world' | 'network' | 'advanced';
+  curated?: boolean;
+  min?: number;
+  max?: number;
 }
 export interface ConfigDocument {
   file: string;

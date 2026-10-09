@@ -8,11 +8,13 @@ import {
   powerSaveBlocker,
   Menu,
   Notification,
+  nativeImage,
 } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { AppCore } from '../../packages/core/app';
+import { profileImageSize } from '../../packages/security/profile-image';
 import { testReachability } from '../../packages/networking/reachability';
 import { readableError, structuredError } from '../../packages/domain/errors';
 import { localizeMessage } from '../../packages/domain/localization';
@@ -50,6 +52,8 @@ import { translator } from './renderer/src/i18n';
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
 let quitting = false;
+let unsavedChanges = false,
+  reviewingClose = false;
 let blocker: number | undefined;
 const consoleBatches = new Map<string, import('../../packages/domain/types').LogLine[]>();
 const consoleFlush = setInterval(() => {
@@ -114,6 +118,18 @@ function register(core: AppCore): void {
     ),
   );
   handle('installers', (engine) => core.versions.installers(engineSchema.parse(engine)));
+  handle('engineCatalog', (engine, version, refresh, snapshots) =>
+    core.versions.catalog(
+      engineSchema.parse(engine),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9._+-]{1,80}$/)
+        .optional()
+        .parse(version),
+      z.boolean().optional().parse(refresh),
+      z.boolean().optional().parse(snapshots),
+    ),
+  );
   handle('create', (value) => core.create(value as Parameters<AppCore['create']>[0]));
   handle('previewModpack', async () => {
     const result = await dialog.showOpenDialog(window!, {
@@ -205,8 +221,47 @@ function register(core: AppCore): void {
     return response;
   });
   handle('properties', (value) => core.properties(id(value)));
-  handle('saveProperties', (value, props) =>
-    core.saveProperties(id(value), z.record(z.string(), z.string()).parse(props)),
+  handle('setUnsavedChanges', (dirty) => {
+    unsavedChanges = z.boolean().parse(dirty);
+  });
+  handle('propertiesDocument', (value) => core.propertiesDocument(id(value)));
+  handle('updateProfile', (value, input) =>
+    core.updateProfile(id(value), input as { name: string; thumbnail?: string | null }),
+  );
+  handle('selectProfileIcon', async () => {
+    const selected = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Images', extensions: ['png', 'jpg', 'jpeg', 'webp'] }],
+    });
+    if (selected.canceled || !selected.filePaths[0]) return undefined;
+    const { readFile, stat } = await import('node:fs/promises');
+    const file = selected.filePaths[0];
+    if ((await stat(file)).size > 5 * 1024 * 1024)
+      throw new Error('Choose an image smaller than 5 MB.');
+    const buffer = await readFile(file);
+    profileImageSize(buffer);
+    const image = nativeImage.createFromBuffer(buffer),
+      size = image.getSize();
+    if (image.isEmpty() || !size.width || !size.height || size.width > 4096 || size.height > 4096)
+      throw new Error('Choose an image up to 4096 pixels per side.');
+    return image
+      .resize({
+        width: Math.max(1, Math.round((128 * size.width) / Math.max(size.width, size.height))),
+        height: Math.max(1, Math.round((128 * size.height) / Math.max(size.width, size.height))),
+        quality: 'best',
+      })
+      .toDataURL();
+  });
+  handle('saveProperties', (value, props, sha256) =>
+    core.saveProperties(
+      id(value),
+      z.record(z.string(), z.string()).parse(props),
+      z
+        .string()
+        .regex(/^[a-f0-9]{64}$/)
+        .optional()
+        .parse(sha256),
+    ),
   );
   handle('configureServer', (value, options) =>
     core.configureServer(id(value), options as Parameters<AppCore['configureServer']>[1]),
@@ -932,7 +987,11 @@ if (single)
         minWidth: 760,
         minHeight: 520,
         title: 'MineDock',
-        icon: path.join(__dirname, 'assets', 'icon.png'),
+        icon: path.join(
+          __dirname,
+          'assets',
+          process.platform === 'win32' ? 'icon.ico' : 'icon.png',
+        ),
         backgroundColor: '#101216',
         show: process.env.MINEDOCK_TEST !== '1',
         webPreferences: {
@@ -944,6 +1003,33 @@ if (single)
         },
       });
       register(core);
+      window.on('close', (event) => {
+        if (!unsavedChanges || quitting) return;
+        event.preventDefault();
+        if (reviewingClose) return;
+        reviewingClose = true;
+        const t = translator(core!.repo.settings().language);
+        void dialog
+          .showMessageBox(window!, {
+            type: 'question',
+            title: t('property.unsaved'),
+            message: t('property.leaveHelp'),
+            buttons: [t('cancel'), t('property.discard')],
+            defaultId: 0,
+            cancelId: 0,
+            noLink: true,
+          })
+          .then(({ response }) => {
+            reviewingClose = false;
+            if (response === 1) {
+              unsavedChanges = false;
+              window?.close();
+            }
+          })
+          .catch(() => {
+            reviewingClose = false;
+          });
+      });
       window.webContents.setWindowOpenHandler(({ url }) => {
         const allowed = [
           'https://www.minecraft.net/eula',

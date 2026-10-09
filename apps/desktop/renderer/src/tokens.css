@@ -1,32 +1,32 @@
-/* MineDock: charcoal/warm surfaces, oxidized teal identity and restrained copper.
+/* MineDock: neutral black surfaces, teal actions and restrained copper.
    Color and elevation live here; layout dimensions remain in style.css. */
 :root {
   color-scheme: dark;
-  --background: #151515;
-  --surface-sidebar: #1c1c1c;
-  --surface-panel: #232323;
-  --surface-card: #292929;
-  --surface-interactive: #333333;
-  --surface-hover: #3b3b3b;
-  --surface-input: #1a1a1a;
-  --surface-modal: #2c2c2c;
-  --surface-console: #121212;
+  --background: #0b0b0b;
+  --surface-sidebar: #101010;
+  --surface-panel: #171717;
+  --surface-card: #1c1c1c;
+  --surface-interactive: #262626;
+  --surface-hover: #303030;
+  --surface-input: #111111;
+  --surface-modal: #181818;
+  --surface-console: #080808;
   --surface-disabled: #252525;
   --text-primary: #ecebe8;
   --text-secondary: #cfceca;
   --text-muted: #b0aea8;
   --text-quiet: #a6a39c;
-  --accent-primary: #80cabe;
-  --accent-primary-hover: #99dacd;
+  --accent-primary: #43d2cb;
+  --accent-primary-hover: #77e5dd;
   --accent-on-primary: #102c29;
-  --accent-secondary: #d0aa83;
+  --accent-secondary: #efae75;
   --success: #a2d299;
   --warning: #e6be79;
   --danger: #f0a4a5;
   --info: #a5c6e2;
-  --border-subtle: #3e3e3e;
-  --border-control: #7d7d78;
-  --border-hover: #90908a;
+  --border-subtle: #383838;
+  --border-control: #7c7c7c;
+  --border-hover: #909090;
   --focus: #a0e0d4;
   --console-text: #dbdad6;
   --console-muted: #aaa79f;
@@ -37,7 +37,6 @@
   --console-border: #53534f;
   --overlay: #0a0a0ac2;
   --shadow-color: #00000066;
-  --texture-line: #80cabe0a;
 }
 :root[data-theme='light'] {
   color-scheme: light;
@@ -68,7 +67,6 @@
   --focus: #0b7364;
   --overlay: #10282682;
   --shadow-color: #213d3526;
-  --texture-line: #17695f09;
   /* Preserve the approved light console when neutralizing the dark theme. */
   --surface-console: #101b21;
   --console-text: #d0dee3;
@@ -79,7 +77,7 @@
   --font-ui: 'Segoe UI', Inter, system-ui, sans-serif;
   --font-brand: 'Bahnschrift', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'Cascadia Code', 'Consolas', ui-monospace, monospace;
-  --radius-control: 4px;
+  --radius-control: 6px;
   --radius-card: 8px;
   --radius-dialog: 12px;
   --radius-indicator: 2px;
@@ -88,7 +86,7 @@
   --motion-state: 180ms;
   --shadow-menu: 0 8px 24px var(--shadow-color);
   --shadow-dialog: 0 20px 65px var(--shadow-color);
-  --surface-selected: color-mix(in srgb, var(--accent-primary) 13%, var(--surface-panel));
+  --surface-selected: var(--surface-hover);
   --surface-success: color-mix(in srgb, var(--success) 10%, var(--surface-panel));
   --surface-warning: color-mix(in srgb, var(--warning) 10%, var(--surface-panel));
   --surface-danger: color-mix(in srgb, var(--danger) 9%, var(--surface-panel));
@@ -114,4 +112,7 @@
   --accent: var(--accent-primary);
   --accent-dark: var(--surface-selected);
   --input: var(--surface-input);
+}
+:root[data-theme='light'] {
+  --surface-selected: color-mix(in srgb, var(--accent-primary) 13%, var(--surface-panel));
 }

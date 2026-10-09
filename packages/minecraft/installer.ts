@@ -9,6 +9,7 @@ import type { SecretStore } from '../security/secrets';
 import { atomicWrite } from '../security/paths';
 import { findAvailablePort } from '../networking/network';
 import { parseProperties, serializeProperties } from '../domain/properties';
+import { supportsJavaProperty, javaPropertyFields } from '../domain/property-fields';
 import { readableError } from '../domain/errors';
 import type { Server, InstalledContent } from '../domain/types';
 import { engineDefinition } from '../domain/engines';
@@ -205,6 +206,7 @@ export class ServerInstaller {
         'enable-command-block': 'false',
         'spawn-protection': '16',
       };
+      if(definition.edition==='java')for(const field of javaPropertyFields)if(field.key in props&&!supportsJavaProperty(server.version,field.key))delete props[field.key];
       if (definition.edition === 'bedrock') {
         server.ipv6Port = server.ipv6Port ?? 19133;
         for (const key of [
