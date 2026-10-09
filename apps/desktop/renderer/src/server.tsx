@@ -33,6 +33,7 @@ import { useApp } from './context';
 import { Status, ServerActions } from './App';
 import { ContentView } from './content';
 import { WorldsView } from './worlds';
+import { WorldControls } from './world-controls';
 import { FileTools, ArchiveTools } from './file-tools';
 import { StorageView } from './storage';
 import { PlayersView } from './players';
@@ -297,7 +298,12 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       )}
       {tab === 'console' && <ConsoleView server={server} />}
       {tab === 'players' && <PlayersView server={server} />}
-      {tab === 'world' && <WorldsView server={server} />}
+      {tab === 'world' && (
+        <>
+          <WorldControls server={server} />
+          <WorldsView server={server} />
+        </>
+      )}
       {tab === 'plugins' && <ContentView server={server} />}
       {tab === 'files' && <FilesView server={server} />}
       {tab === 'backups' && <BackupsView serverId={server.id} />}

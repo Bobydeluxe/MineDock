@@ -23,7 +23,7 @@ import type {
   ManualContent,
 } from './content';
 
-export const PRODUCT = { name: 'MineDock', version: '0.4.1' } as const;
+export const PRODUCT = { name: 'MineDock', version: '0.5.0' } as const;
 export const engineSchema = z.enum(engineIds);
 export type Engine = z.infer<typeof engineSchema>;
 export type ServerStatus =
@@ -363,6 +363,59 @@ export interface Api {
   playerDetails(id: string, name: string): Promise<import('./players').PlayerDetails>;
   playerNote(id: string, name: string, note: string): Promise<void>;
   playerSkin(id: string, name: string): Promise<string | null>;
+  administrationCapabilities(
+    id: string,
+  ): Promise<import('./administration').AdministrationCapabilities>;
+  administrationHistory(
+    id: string,
+    name?: string,
+  ): Promise<import('./administration').AdminEvent[]>;
+  playerInventory(
+    id: string,
+    name: string,
+    preferLive?: boolean,
+  ): Promise<import('./administration').PlayerInventory>;
+  editPlayerInventory(
+    id: string,
+    input: import('./administration').InventoryEdit,
+  ): Promise<import('./administration').PlayerInventory>;
+  playerInventorySnapshots(
+    id: string,
+    uuid: string,
+  ): Promise<import('./administration').PlayerSnapshot[]>;
+  previewPlayerInventoryRestore(
+    id: string,
+    name: string,
+    uuid: string,
+    snapshot: string,
+  ): Promise<import('./administration').InventoryRestorePreview>;
+  restorePlayerInventory(
+    id: string,
+    token: string,
+    confirmation: string,
+  ): Promise<import('./administration').PlayerInventory>;
+  administerPlayer(
+    id: string,
+    input: import('./administration').PlayerActionInput,
+  ): Promise<import('./administration').PlayerActionResult>;
+  administerPlayers(
+    id: string,
+    input: import('./administration').PlayerBatchInput,
+  ): Promise<{ results: import('./administration').PlayerActionResult[]; cancelled: boolean }>;
+  administerIp(
+    id: string,
+    input: import('./administration').IpAction,
+  ): Promise<import('./administration').CommandResult>;
+  itemCatalog(id: string): Promise<import('./administration').ItemCatalog>;
+  worldControls(
+    id: string,
+    query?: boolean,
+  ): Promise<import('./administration').WorldControlsState>;
+  applyWorldControl(
+    id: string,
+    input: import('./administration').WorldControl,
+    confirmation?: string,
+  ): Promise<import('./administration').CommandResult[]>;
   setWhitelist(id: string, enabled: boolean): Promise<void>;
   health(id: string): Promise<import('./health').HealthReport>;
   healthSettings(): Promise<import('./health').HealthSettings>;

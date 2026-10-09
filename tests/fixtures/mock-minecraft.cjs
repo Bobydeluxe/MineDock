@@ -35,11 +35,17 @@ const server = net.createServer((socket) => {
         socket.write(packet(authenticated ? id : -1, 2, ''));
       } else if (authenticated) {
         const response =
-          command === 'list'
+          command === 'list' || command === 'minecraft:list'
             ? 'There are 1 of a max of 20 players online: TestPlayer'
             : command === 'multipart'
               ? 'first'
-              : 'Saved the game';
+              : command.includes('save-all')
+                ? 'Saving the game (this may take a moment!)Saved the game'
+                : command.includes('save-off')
+                  ? 'Automatic saving is now disabled'
+                  : command.includes('save-on')
+                    ? 'Automatic saving is now enabled'
+                    : 'Saved the game';
         const reply = packet(id, 0, response);
         socket.write(reply.subarray(0, 6));
         socket.write(reply.subarray(6));

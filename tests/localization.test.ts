@@ -8,6 +8,55 @@ import { settingsSchema } from '../packages/domain/types';
 import { Repository } from '../packages/database/database';
 import { EventBus } from '../packages/core/events';
 import { dictionaries, translator } from '../apps/desktop/renderer/src/i18n';
+import { readFileSync } from 'node:fs';
+import { gameRules } from '../packages/domain/admin-commands';
+import type { Server } from '../packages/domain/types';
+
+it('covers static and dynamic player/world administration labels in all six languages', () => {
+  const keys = new Set<string>();
+  for (const file of ['administration-ui.tsx', 'player-profile.tsx', 'world-controls.tsx']) {
+    const text = readFileSync(path.join('apps/desktop/renderer/src', file), 'utf8');
+    for (const match of text.matchAll(/\ba\('([^']+)'\)/g)) keys.add('admin.' + match[1]);
+  }
+  for (const action of [
+    'message',
+    'teleport',
+    'gamemode',
+    'kick',
+    'ban',
+    'pardon',
+    'op',
+    'deop',
+    'whitelistAdd',
+    'whitelistRemove',
+    'give',
+    'clear',
+    'replace',
+    'effect',
+    'effectClear',
+    'experience',
+    'spawnpoint',
+    'title',
+    'kill',
+    'inventory.remove',
+    'inventory.empty',
+    'inventory.replace',
+    'inventory.restore',
+  ])
+    keys.add('admin.action.' + action);
+  for (const version of ['1.13.2', '1.21.5', '1.21.11', '26.1'])
+    for (const rule of gameRules({ engine: 'paper', version } as Server)) {
+      keys.add('admin.rule.' + rule.key);
+      keys.add('admin.ruleHelp.' + rule.key);
+    }
+  for (const state of ['confirmed', 'sent', 'unverifiable', 'failed']) keys.add('admin.' + state);
+  for (const language of languageCodes)
+    for (const key of keys)
+      expect(
+        (dictionaries[language] as Record<string, string>)[key],
+        language + ': ' + key,
+      ).toBeTruthy();
+});
 
 it.each(languageCodes)(
   'has complete UI and message catalogs for %s, with matching placeholders',

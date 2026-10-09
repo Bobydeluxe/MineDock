@@ -42,6 +42,22 @@ const api: Api = {
   playerDetails: (id, name) => call('playerDetails', id, name),
   playerNote: (id, name, note) => call('playerNote', id, name, note),
   playerSkin: (id, name) => call('playerSkin', id, name),
+  administrationCapabilities: (id) => call('administrationCapabilities', id),
+  administrationHistory: (id, name) => call('administrationHistory', id, name),
+  playerInventory: (id, name, preferLive) => call('playerInventory', id, name, preferLive),
+  editPlayerInventory: (id, input) => call('editPlayerInventory', id, input),
+  playerInventorySnapshots: (id, uuid) => call('playerInventorySnapshots', id, uuid),
+  previewPlayerInventoryRestore: (id, name, uuid, snapshot) =>
+    call('previewPlayerInventoryRestore', id, name, uuid, snapshot),
+  restorePlayerInventory: (id, token, confirmation) =>
+    call('restorePlayerInventory', id, token, confirmation),
+  administerPlayer: (id, input) => call('administerPlayer', id, input),
+  administerPlayers: (id, input) => call('administerPlayers', id, input),
+  administerIp: (id, input) => call('administerIp', id, input),
+  itemCatalog: (id) => call('itemCatalog', id),
+  worldControls: (id, query) => call('worldControls', id, query),
+  applyWorldControl: (id, input, confirmation) =>
+    call('applyWorldControl', id, input, confirmation),
   setWhitelist: (id, enabled) => call('setWhitelist', id, enabled),
   health: (id) => call('health', id),
   healthSettings: () => call('healthSettings'),

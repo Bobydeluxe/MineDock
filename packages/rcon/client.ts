@@ -26,7 +26,9 @@ export async function rconCommand(
     const sentinel = auth + 2;
     let buffer = Buffer.alloc(0);
     let output = '';
+    let responseBytes = 0;
     let authenticated = false;
+    let sentinelSent = false;
     let done = false;
     const finish = (error?: Error): void => {
       if (done) return;
@@ -77,11 +79,22 @@ export async function rconCommand(
         if (!authenticated && id === auth && type === 2) {
           authenticated = true;
           socket.write(encodePacket(request, 2, command));
-          // Minecraft sends an unknown-command response for the sentinel, delimiting prior output.
-          socket.write(encodePacket(sentinel, 2, ''));
           continue;
         }
-        if (id === request && type === 0) output += packet.subarray(12, -2).toString('utf8');
+        if (id === request && type === 0) {
+          responseBytes += packet.length - 14;
+          if (responseBytes > 4 * 1024 * 1024) {
+            finish(new Error('RCON response is too large.'));
+            return;
+          }
+          output += packet.subarray(12, -2).toString('utf8');
+          // Send only after the first reply: Minecraft's RCON reader can discard coalesced
+          // request + sentinel packets. The sentinel still follows all command output.
+          if (!sentinelSent) {
+            sentinelSent = true;
+            socket.write(encodePacket(sentinel, 2, ''));
+          }
+        }
         if (id === sentinel) {
           finish();
           return;

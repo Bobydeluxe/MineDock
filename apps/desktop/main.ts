@@ -47,7 +47,16 @@ import { healthSettingsSchema } from '../../packages/domain/health';
 import { backupSafetySchema, restoreScopeSchema } from '../../packages/domain/snapshots';
 import { migrationTargetSchema, cloneSchema } from '../../packages/domain/migration';
 import { logSearchSchema, macroSchema } from '../../packages/domain/console';
+import {
+  playerNameSchema,
+  inventoryEditSchema,
+  playerActionInputSchema,
+  playerBatchSchema,
+  worldControlSchema,
+  ipActionSchema,
+} from '../../packages/domain/administration';
 import { translator } from './renderer/src/i18n';
+import { moderatePlayerSchema } from '../../packages/domain/players';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -359,6 +368,57 @@ function register(core: AppCore): void {
   handle('playerDetails', (value, name) =>
     core.players.details(id(value), z.string().max(32).parse(name)),
   );
+  handle('administrationCapabilities', (value) => core.administration.capabilities(id(value)));
+  handle('administrationHistory', (value, name) =>
+    core.administration.history(
+      id(value),
+      name === undefined ? undefined : playerNameSchema.parse(name),
+    ),
+  );
+  handle('playerInventory', (value, name, preferLive) =>
+    core.playerInventory.get(
+      id(value),
+      playerNameSchema.parse(name),
+      z.boolean().optional().parse(preferLive),
+    ),
+  );
+  handle('editPlayerInventory', (value, input) =>
+    core.playerInventory.edit(id(value), inventoryEditSchema.parse(input)),
+  );
+  handle('playerInventorySnapshots', (value, uuid) =>
+    core.playerInventory.snapshots(id(value), id(uuid)),
+  );
+  handle('previewPlayerInventoryRestore', (value, name, uuid, snapshot) =>
+    core.playerInventory.previewRestore(
+      id(value),
+      playerNameSchema.parse(name),
+      id(uuid),
+      id(snapshot),
+    ),
+  );
+  handle('restorePlayerInventory', (value, token, confirmation) =>
+    core.playerInventory.restore(id(value), id(token), playerNameSchema.parse(confirmation)),
+  );
+  handle('administerPlayer', (value, input) =>
+    core.administration.player(id(value), playerActionInputSchema.parse(input)),
+  );
+  handle('administerPlayers', (value, input) =>
+    core.administration.batch(id(value), playerBatchSchema.parse(input)),
+  );
+  handle('administerIp', (value, input) =>
+    core.administration.ip(id(value), ipActionSchema.parse(input)),
+  );
+  handle('itemCatalog', (value) => core.administration.items(id(value)));
+  handle('worldControls', (value, query) =>
+    core.administration.worldState(id(value), z.boolean().optional().parse(query)),
+  );
+  handle('applyWorldControl', (value, input, confirmation) =>
+    core.administration.world(
+      id(value),
+      worldControlSchema.parse(input),
+      z.string().max(120).optional().parse(confirmation),
+    ),
+  );
   handle('playerNote', (value, name, note) =>
     core.exclusive(id(value), async () =>
       core.players.note(
@@ -460,11 +520,18 @@ function register(core: AppCore): void {
       await core.packs.import(server, packKind, result.filePaths[0]!, packWorld);
     });
   });
-  handle('moderatePlayer', (value, input) =>
-    core.exclusive(id(value), () =>
-      core.players.moderate(id(value), input as Parameters<typeof core.players.moderate>[1]),
-    ),
-  );
+  handle('moderatePlayer', async (value, raw) => {
+    const input = moderatePlayerSchema.parse(raw);
+    const result = await core.administration.player(id(value), {
+      name: input.name,
+      confirmation: input.confirmation,
+      input:
+        input.action === 'kick' || input.action === 'ban'
+          ? { action: input.action, ...(input.reason ? { reason: input.reason } : {}) }
+          : { action: input.action },
+    });
+    return result.response;
+  });
   handle('writeFile', (value, file, content) =>
     core.configuration.write(
       id(value),

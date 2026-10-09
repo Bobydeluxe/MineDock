@@ -87,4 +87,12 @@ export const migrations = [
     sql: `CREATE TABLE config_versions (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, file TEXT NOT NULL, at TEXT NOT NULL, sha256 TEXT NOT NULL, content TEXT NOT NULL, bytes INTEGER NOT NULL);
     CREATE INDEX config_versions_by_file ON config_versions(server_id,file,at);`,
   },
+  {
+    version: 12,
+    sql: `CREATE TABLE administration_events (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT, at TEXT NOT NULL, metadata TEXT NOT NULL);
+    CREATE INDEX administration_events_by_player ON administration_events(server_id,name,at);
+    CREATE TABLE player_data_snapshots (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, uuid TEXT NOT NULL, at TEXT NOT NULL, metadata TEXT NOT NULL);
+    CREATE INDEX player_data_snapshots_by_player ON player_data_snapshots(server_id,uuid,at);
+    CREATE TABLE player_data_journal (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, uuid TEXT NOT NULL, metadata TEXT NOT NULL);`,
+  },
 ];

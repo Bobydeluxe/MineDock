@@ -99,9 +99,15 @@ export class OperationService {
         },
       });
       operation.recoverable = false;
-      phase('completed');
-      this.repo.audit(kind + '.completed', label, serverId);
-      this.logger.write(`${kind}.completed ${operation.id}`);
+      phase(controller.signal.aborted ? 'cancelled' : 'completed');
+      this.repo.audit(
+        kind + (controller.signal.aborted ? '.cancelled' : '.completed'),
+        label,
+        serverId,
+      );
+      this.logger.write(
+        `${kind}.${controller.signal.aborted ? 'cancelled' : 'completed'} ${operation.id}`,
+      );
       return value;
     } catch (error) {
       operation.error = controller.signal.aborted ? 'Operation cancelled.' : readableError(error);

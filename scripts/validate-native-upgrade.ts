@@ -361,7 +361,7 @@ try {
     encryptedSecretBefore
   )
     throw Error('Encrypted RCON secret changed');
-  if (evidence.finalSchema !== 11 || evidence.quickCheck !== 'ok')
+  if (evidence.finalSchema !== migrations.length || evidence.quickCheck !== 'ok')
     throw Error('Migration or database integrity failed');
   evidence.installAudit = !!verify
     .prepare("SELECT id FROM events WHERE action='app.update.installed'")
