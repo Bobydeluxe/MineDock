@@ -23,7 +23,7 @@ As checked on 4 October 2026, [PocketMine-MP upstream](https://github.com/pmmp/P
 
 See [validation](validation.md) for actual OS/runtime results. Automated installer/lifecycle fixtures are not gameplay validation or a guarantee that all historical engine versions work.
 
-## Full catalogs in the 0.4.1 review build
+## Full catalogs in MineDock 0.4.1
 
 Official catalogs pass through validated IPC into the same create/migration picker. One-hour memory/disk cache preserves timestamps; refresh explicitly retries upstream and a saved offline fallback is labeled. No fixed top-N filter is applied to engine builds or Fabric installers. PocketMine follows upstream release pagination. BDS only offers the current officially linked OS binary; historical Microsoft binaries are not invented.
 

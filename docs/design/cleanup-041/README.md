@@ -1,6 +1,6 @@
 # MineDock 0.4.1 — focused UI cleanup
 
-The owner's annotated review requested simplification, not another redesign. Existing server rows, creation/version selectors, categorized settings, console controls and backup workflows are retained. The current public release is 0.4.0; this cleaned application is the unpublished 0.4.1 review build in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8).
+The owner's annotated review requested simplification, not another redesign. Existing server rows, creation/version selectors, categorized settings, console controls and backup workflows are retained. The current public release is MineDock 0.4.1, implemented in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8).
 
 ## Removed from the actual application
 
@@ -44,4 +44,4 @@ Every base surface has equal RGB channels. Teal remains in action buttons, selec
 
 The [complete 48-image gallery](../../screenshots/README.md) records isolated QA profiles, real verified content and inert-process measurements. It does not claim Minecraft multiplayer. The site gallery uses these current captures. Earlier interface images have been retired from the current tree; [the immutable earlier review](https://github.com/Bobydeluxe/MineDock/blob/944caa8726dd26f2851230fabfcf39149e5c38c1/docs/design/reference-041/README.md) remains in Git history.
 
-See [validation](../../validation.md) for exact commands, native build coverage and remaining platform limitations. No published binary is overwritten and no release is created by this cleanup.
+See [validation](../../validation.md) for exact commands, native build coverage and remaining platform limitations. The 0.4.1 release publishes the validated cleanup packages as separate assets. Historical published binaries remain unchanged.

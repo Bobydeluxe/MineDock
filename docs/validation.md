@@ -1,6 +1,14 @@
 # MineDock validation
 
-## UI cleanup candidate — 9 October 2026
+## MineDock 0.4.1 release validation
+
+The current release contains the cleaned black interface and server customization described in [the release notes](release-notes-0.4.1.md). Its exact application/build inputs are `5492f9757477f87be1fd7d0bb90423e38ba95349`; later documentation, website and capture-helper changes do not alter the packaged application. The owner authorized publication on 9 October 2026.
+
+Lint, type checking and build pass. Local Windows tests pass **222 unit/integration cases** (4 OS skips), **29 UI journeys** and **13 packaged journeys**. The [six native jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/37950007485) produced **12 packages**: Windows/Linux x64/ARM64 pass 13 packaged journeys each; macOS Intel/Apple Silicon pass 12 each with one explicit unsupported directory-import skip. Six signed metadata files match the exact package sizes and SHA-256 hashes.
+
+Public asset, checksum, updater and website checks are recorded after publication. The pre-publication evidence below records what was checked before the release; earlier revisions retain their own historical evidence and limitations.
+
+## Historical pre-publication UI cleanup validation — 9 October 2026
 
 **0.4.1 remains an unpublished review build in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8); public downloads remain 0.4.0.** The cleaned application/build inputs are at `5492f9757477f87be1fd7d0bb90423e38ba95349`. Later documentation, image, website and capture-helper changes do not change these packaged inputs. [Machine-readable cleanup evidence](validation-records/0.4.1-cleanup.json) records the exact source, CI jobs, artifact integrity, public image hashes and update result. Earlier candidate evidence below is historical.
 
@@ -29,7 +37,7 @@ The [cleanup review](design/cleanup-041/README.md) explains the relocated notifi
 
 ## Historical reference-design candidate — 9 October 2026
 
-**These results describe the earlier candidate, before the owner's UI cleanup.** App/build inputs were at source `0ebd29526cfd1e1a6d9304ec619b560226143e67`; its following documentation commit did not change those inputs. The newer cleanup changes application code and requires its own evidence. [Machine-readable historical evidence](validation-records/0.4.1-reference.json) records that exact earlier input. The current public app remains 0.4.0.
+**These results describe the earlier candidate, before the owner's UI cleanup.** App/build inputs were at source `0ebd29526cfd1e1a6d9304ec619b560226143e67`; its following documentation commit did not change those inputs. The newer cleanup changes application code and requires its own evidence. [Machine-readable historical evidence](validation-records/0.4.1-reference.json) records that exact earlier input. At the time of this historical check, the public app was 0.4.0.
 
 | Check                                       | Actual result                                                                                                                                                                          |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

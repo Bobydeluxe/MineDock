@@ -1,10 +1,10 @@
 # Implemented scope and remaining validation
 
-## Included in MineDock 0.4.0
+## Included in MineDock 0.4.1
 
 The existing eight engines, official runtimes, imports/worlds/files, Modrinth mod manager, backups, schedules and recovery remain. The friends survival evolution adds datapacks/resource packs, health/notices/crash evidence, player sessions/notes, incremental snapshots/partial restores, migration/clones, console search/macros, performance/JVM tools, configuration history/maps/reachability and `.minedock` transfer. English is primary; all six app languages remain bundled. See [the exact ledger](survival-evolution.md), [feature list](../MineDock-Features.txt), [user guide](user-guide.md) and [validation](validation.md).
 
-The static product site, native capture/GIF workflow, user changelog and internal security review are included in the public [MineDock 0.4.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records the implementation review.
+The static product site, native capture/GIF workflow, user changelog and internal security review are retained in [MineDock 0.4.1](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records the implementation review.
 
 ## Functional limits and follow-up
 
@@ -16,7 +16,7 @@ The static product site, native capture/GIF workflow, user changelog and interna
 
 ## Remaining native validation and publication
 
-- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.4.0 evidence is recorded in validation.
+- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.4.1 matrix and historical 0.4.0 evidence are recorded in validation.
 - Windows x64 lifecycle/updater results are recorded explicitly in validation. Linux/macOS OS installation/upgrades, ARM64 lifecycle, protected install paths and native keychain behavior need their own environments.
 - Actual Minecraft client gameplay, map rendering, historical loader coverage and Bedrock crossplay need real servers/clients and personal EULA acceptance. Capture fixtures are not gameplay.
 - Supply Windows/Apple certificates before claiming Authenticode/notarization; publisher metadata signing is separate.
@@ -24,8 +24,8 @@ The static product site, native capture/GIF workflow, user changelog and interna
 
 Docker, remote accounts/RBAC, tunnels, cloud synchronization/providers, optional AI and universal world conversion remain future scope. None appears as a working button. MineDock must remain open to supervise servers/tasks and does not configure routers/firewalls.
 
-## 0.4.1 review implementation
+## Added in 0.4.1
 
-Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are implemented on codex/reference-design-041. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The site uses public 0.4.0 downloads and current candidate screenshots. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
+Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The site uses public 0.4.1 downloads and matching current screenshots. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
 
-The application candidate is not merged/tagged/released until explicit owner approval. All six native jobs and artifact checks pass for the recorded app source; changed app inputs require repeating them. GitHub's social preview is installed and verified. Direct visual confirmation of an existing pinned Windows shortcut remains a manual check where the connected tools cannot observe it.
+The owner authorized merging and publishing the validated 0.4.1 changes. All six native jobs and artifact checks pass for the recorded app source; changed app inputs require repeating them. GitHub's social preview is installed and verified. Direct visual confirmation of an existing pinned Windows shortcut remains a manual check where the connected tools cannot observe it.

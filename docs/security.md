@@ -42,10 +42,10 @@ Configuration history is encrypted and bounded; saves/restores require a fresh f
 
 The [internal security review](security-audit.md) records evidence and unresolved risks. It is not an independent audit. Windows helper execution now avoids `DETACHED_PROCESS`; the exact old/new packaged validation and public-0.3.0 limitation are recorded separately from unit helper tests.
 
-## 0.4.1 review additions
+## 0.4.1 additions
 
 Profile images are chosen through the native file dialog; the renderer does not pass arbitrary file paths or remote URLs. PNG/JPEG/WebP containers are limited to 5 MB and 4096px per side before native decoding; the result is a local bounded 128px PNG. Core validates the persisted data URL, PNG header and nonzero bounded dimensions. Profile names are trimmed and limited to 60 characters. Profile identity is separate from a real world folder or MOTD.
 
 Graphical properties exclude secret-like keys, including RCON passwords. Typed/domain validation rejects invented/removed properties, invalid numeric ranges, unsafe new world-folder names and resource URLs containing credentials. Network/RCON/online-mode/world edits require visible review. Save uses stopped-server locks, raw-file SHA checks before and after backup work, a full safety archive, encrypted history and atomic replacement. External programs should still be stopped while editing: the filesystem does not provide a universal compare-and-swap transaction with third-party writers.
 
-The original user-supplied icon and generated landscape have explicit provenance; neither implies Mojang affiliation. Public 0.4.0 executable assets are immutable in this task. Existing OS signing, networking, incremental object retention and multiplayer limitations remain.
+The original user-supplied icon and generated landscape have explicit provenance; neither implies Mojang affiliation. Historical 0.4.0 executable assets are retained unchanged; 0.4.1 has its own signed metadata and checksums. Existing OS signing, networking, incremental object retention and multiplayer limitations remain.

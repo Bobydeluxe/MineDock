@@ -1,6 +1,6 @@
 # Native desktop gallery
 
-Current MineDock 0.4.1 cleanup-build captures from the actual compiled Electron application, refreshed on 9 October 2026; public downloads remain 0.4.0. There are **48 current PNGs and a labeled nine-frame GIF**. The header and noisy sidebar/decorative elements are removed, dark base surfaces are neutral black, and notifications are inside Settings. Storage is isolated, mods are real hash-verified downloads, and administration records are QA fixtures. Active measurements use an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [the cleanup review](../design/cleanup-041/README.md).
+Current MineDock 0.4.1 captures from the actual compiled Electron application, refreshed on 9 October 2026; public downloads contain this interface. There are **48 current PNGs and a labeled nine-frame GIF**. The header and noisy sidebar/decorative elements are removed, dark base surfaces are neutral black, and notifications are inside Settings. Storage is isolated, mods are real hash-verified downloads, and administration records are QA fixtures. Active measurements use an inert Node child, not Minecraft gameplay. Unavailable TPS/MSPT stays unavailable. See [the cleanup review](../design/cleanup-041/README.md).
 
 | View            | Dark                                               | Light / other state                                                                      |
 | --------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -31,7 +31,7 @@ Current MineDock 0.4.1 cleanup-build captures from the actual compiled Electron 
 
 Normal captures share a 1440 × 960 native content viewport. Settings may use a full-page image to include the existing lower sections. Older comparison images are retired from the current tree and remain available in immutable Git history. No secrets are displayed.
 
-Additional real candidate views: [Fabric lists](fabric-versions.png), [Paper](paper-builds.png), [Purpur](purpur-builds.png), [Forge](forge-builds.png), [NeoForge](neoforge-builds.png), [general properties](server-settings.png), [light properties](server-settings-light.png), [gameplay](properties-gameplay.png), [network](properties-network.png), [world](properties-world.png). [Reference and current UI review](../design/reference-041/README.md).
+Additional real 0.4.1 views: [Fabric lists](fabric-versions.png), [Paper](paper-builds.png), [Purpur](purpur-builds.png), [Forge](forge-builds.png), [NeoForge](neoforge-builds.png), [general properties](server-settings.png), [light properties](server-settings-light.png), [gameplay](properties-gameplay.png), [network](properties-network.png), [world](properties-world.png). [Reference and current UI review](../design/reference-041/README.md).
 
 ## Reproduce the assets
 

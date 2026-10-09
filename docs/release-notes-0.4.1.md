@@ -1,6 +1,6 @@
-# MineDock 0.4.1 — review candidate
+# MineDock 0.4.1
 
-These notes describe the implemented candidate. **0.4.0 remains the public release.** Publishing 0.4.1 requires the owner's explicit approval and the verified native artifacts recorded in [validation](validation.md).
+A cleaner black interface, complete engine version lists and safer server customization. All survival, content and backup tools from 0.4.0 remain available. English is the default; French, German, Spanish, Portuguese and Italian are included.
 
 ## Added
 
@@ -12,7 +12,7 @@ These notes describe the implemented candidate. **0.4.0 remains the public relea
 
 ## Improved
 
-The interface keeps compact server rows, numbered creation steps, engine information and clear controls, with a focused cleanup to neutral black/charcoal surfaces. Dashboard, Backups, servers and Settings form the main navigation. The breadcrumb/global-search strip, workspace promotion and repeated decorative labels are removed. Notifications, their preferences/history, recovery tools and searchable audit history live in Settings. Console categories and backup filters use real logs and backup metadata. All six languages remain available; English is primary. The website uses original dusk scenery and actual cleaned candidate screenshots, with downloads still pointing to the public release.
+The interface keeps compact server rows, numbered creation steps, engine information and clear controls, with a focused cleanup to neutral black/charcoal surfaces. Dashboard, Backups, servers and Settings form the main navigation. The breadcrumb/global-search strip, workspace promotion and repeated decorative labels are removed. Notifications, their preferences/history, recovery tools and searchable audit history live in Settings. Console categories and backup filters use real logs and backup metadata. All six languages remain available; English is primary. The website uses original dusk scenery and actual 0.4.1 screenshots, with downloads for every produced platform.
 
 ## Fixed
 
@@ -22,6 +22,25 @@ The interface keeps compact server rows, numbered creation steps, engine informa
 - Properties saves preserve unrelated comments, formatting, unknown keys and inherited values, reject stale files and removed/version-incompatible settings, protect secrets and take safety backups.
 - Unsaved property/profile edits are protected during navigation and native window closing.
 - Unavailable server metrics remain unavailable instead of inventing activity.
+
+## Download
+
+Choose the package matching your computer. No Node.js or pnpm installation is needed.
+
+| Platform            | Packages                                                                                                                                                                                                                |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows x64         | [Setup](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-x64.exe) · [Portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-x64.exe)     |
+| Windows ARM64       | [Setup](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-arm64.exe) · [Portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-arm64.exe) |
+| Linux x64           | [AppImage](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x86_64.AppImage) · [deb](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-amd64.deb)            |
+| Linux ARM64         | [AppImage](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.AppImage) · [deb](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.deb)             |
+| macOS Intel         | [dmg](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.dmg) · [zip](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.zip)                           |
+| macOS Apple Silicon | [dmg](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.dmg) · [zip](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.zip)                       |
+
+Verify your download against [SHA256SUMS.txt](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/SHA256SUMS.txt). [Complete feature list](https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-Features.txt). Twelve packages were produced on their native OS/architecture and passed the recorded packaged tests.
+
+### Upgrading
+
+Close MineDock, retain your storage folders and use the same OS account. The application reuses your existing profile, servers, SQLite database, backups, runtimes, player data and tasks. Version 0.4.1 retains schema 11. From 0.3.0 on Windows, the first upgrade may require opening the verified new package manually. Keep a backup of your data. See [validation](validation.md) for exact migration evidence.
 
 ## Known issues
 

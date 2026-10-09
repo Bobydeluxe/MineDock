@@ -1,14 +1,13 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Public version: 0.4.0 (friends survival evolution)
+Public version: 0.4.1 (clean interface and server customization)
 Updated: 9 October 2026
-Branch implementation: 0.4.1 review build — not yet published
 Repository: https://github.com/Bobydeluxe/MineDock
 
 English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Download public 0.4.0 for its released features. Additions explicitly labeled 0.4.1 require the reviewed branch/build until that version is approved and published.
+Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retained.
 
 ======================================================================
 1. DESKTOP APPLICATION — IMPLEMENTED
@@ -22,8 +21,8 @@ Download public 0.4.0 for its released features. Additions explicitly labeled 0.
 - Original Minecraft console output, file contents and external content retained.
 - Light, dark and system themes; server status and recent activity.
 - Implemented teal/copper action accents, with neutral black/charcoal base surfaces
-  in the 0.4.1 review build, shared tokens, semantic states and keyboard-visible focus.
-- The 0.4.1 review build keeps Dashboard, Backups, Servers and Settings navigation,
+  in 0.4.1, shared tokens, semantic states and keyboard-visible focus.
+- MineDock 0.4.1 keeps Dashboard, Backups, Servers and Settings navigation,
   server rows, wizard tiles and categorized settings. Activity/Operations pages,
   the top breadcrumb/search strip and decorative workspace/page labels are removed.
   Notification preferences/history and recovery/history access move into Settings.
@@ -288,7 +287,7 @@ Download public 0.4.0 for its released features. Additions explicitly labeled 0.
 - Publisher CI secret configured separately from OS-signing certificates.
 - Publisher-signed update metadata verifies each available native package.
 - Real public Windows portable download rechecked against signed size/hash.
-- The current release is 0.4.0; older 0.3.0 Windows users may need a manual first upgrade.
+- The current release is 0.4.1; older 0.3.0 Windows users may need a manual first upgrade.
 - Native updater/install/uninstall evidence and public-0.3.0 launcher limit are
   recorded precisely in docs/validation.md; native OSes are not interchangeable.
 
@@ -422,10 +421,10 @@ Download public 0.4.0 for its released features. Additions explicitly labeled 0.
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
 - Release documentation includes appended schemas, validation and known limits.
-- Public packages and checksum links target v0.4.0.
+- Public packages and checksum links target v0.4.1.
 
 ======================================================================
-27. REFERENCE DESIGN AND CUSTOMIZATION — IMPLEMENTED IN 0.4.1 REVIEW BUILD
+27. REFERENCE DESIGN AND CUSTOMIZATION — IMPLEMENTED IN 0.4.1
 ======================================================================
 - Exact approved teal/copper icon with reproducible PNG/ICO/ICNS/favicon sizes.
 - Compact server rows, informative engine tiles, console category tabs and
@@ -444,7 +443,7 @@ Download public 0.4.0 for its released features. Additions explicitly labeled 0.
 - Inherited settings stay unset unless edited; unsaved navigation/close guards.
 - Curated existing Paper scalar paths, advanced discovered scalars and raw YAML.
 - Original dusk website scene, English public release text and real screenshots.
-- Website downloads continue to public 0.4.0 until a newer release is published.
+- Website downloads point to the published 0.4.1 packages and checksums.
 
 ======================================================================
 28. FUTURE OPTIONS — NOT IMPLEMENTED

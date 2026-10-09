@@ -1,6 +1,6 @@
 # MineDock visual identity review
 
-This document retains the **historical 0.3.1 style review**, based on [PR #5](https://github.com/Bobydeluxe/MineDock/pull/5). The current gallery now documents the [0.4.1 cleaned UI candidate](cleanup-041/README.md); the public release remains **0.4.0**. All palette descriptions, before/after statements and geometry measurements below describe the earlier style-only revision and remain historical evidence.
+This document retains the **historical 0.3.1 style review**, based on [PR #5](https://github.com/Bobydeluxe/MineDock/pull/5). The current gallery now documents the [0.4.1 cleaned UI](cleanup-041/README.md); the public release is **0.4.1**. All palette descriptions, before/after statements and geometry measurements below describe the earlier style-only revision and remain historical evidence.
 
 The style-only revision retained the existing sidebar, page order, cards, tabs, creation/import steps, dialogs and user journeys. Its changes were confined to CSS tokens/styles, presentation classes, editor highlights and eight original symbols. The subsequent survival revision adds real services and secondary panels, documented in [the evolution ledger](../survival-evolution.md).
 

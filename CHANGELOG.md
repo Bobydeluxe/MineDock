@@ -1,13 +1,13 @@
 # Changelog
 
-## 0.4.1 — Unreleased review build
+## 0.4.1
 
 ### Added
 
 - The approved MineDock cube icon across desktop packages, window, website, README and reproducible platform assets.
 - Complete official version/build lists with refresh, persistent offline cache, advanced search and independent Fabric loader/installer choices.
 - A categorized server properties editor, reviewed diffs, local profile names/images and curated existing Paper configuration controls.
-- An original survival dusk website, responsive download choices and actual candidate screenshots.
+- An original survival dusk website, responsive download choices and actual 0.4.1 screenshots.
 
 ### Improved
 
@@ -28,7 +28,6 @@
 
 ### Known issues
 
-- This version has not been approved, merged, tagged or publicly released. Current downloads remain 0.4.0.
 - Upstream catalog availability is not proof of every historical combination or live Minecraft multiplayer. See the exact validation record.
 - Windows/macOS binaries remain unsigned; the historical 0.3.0 Windows first upgrade may require manual installation.
 - Incremental object garbage collection, live map/multiplayer validation and native OS upgrade coverage retain the 0.4.0 limits.
