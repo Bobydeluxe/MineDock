@@ -31,6 +31,7 @@ import { SnapshotControls } from './snapshots';
 import { PropertiesEditor } from './properties-editor';
 import { ProfileControls } from './profile';
 import { PackageControls } from './packages';
+import { NotificationSettings } from './health';
 const scheduleDate = (at: string, language: string, timeZone: string) => {
   try {
     return new Date(at).toLocaleString(language, { timeZone });
@@ -476,20 +477,24 @@ export function SchedulesView({ serverId }: { serverId: string }) {
     </>
   );
 }
-export function OperationsView() {
+function RecoveryControls() {
   const { snapshot, t, api, run, busy } = useApp();
   const [review, setReview] = useState<string>();
+  const active =
+    snapshot.operations?.filter((operation) =>
+      ['pending', 'downloading', 'verifying', 'extracting', 'applying', 'attention'].includes(
+        operation.status,
+      ),
+    ) ?? [];
   return (
     <>
-      <div className="page-heading">
-        <div>
-          <h1>{t('operations')}</h1>
-          <p>{t('operationsHelp')}</p>
-        </div>
-      </div>
-      <section className="panel">
-        {snapshot.operations?.length ? (
-          snapshot.operations.map((operation) => (
+      <details className="panel recovery-controls">
+        <summary>
+          {t('settings.recovery')}
+          {active.length > 0 && ` (${active.length})`}
+        </summary>
+        {active.length ? (
+          active.map((operation) => (
             <div className="activity-row" key={operation.id}>
               <div>
                 <strong>{operation.label}</strong>
@@ -536,9 +541,9 @@ export function OperationsView() {
             </div>
           ))
         ) : (
-          <Empty icon={<Clock size={25} />} title={t('noActivity')} />
+          <p className="muted">{t('settings.noRecovery')}</p>
         )}
-      </section>
+      </details>
       {review && <RecoveryDialog id={review} onClose={() => setReview(undefined)} />}
     </>
   );
@@ -649,7 +654,7 @@ function ServerOptionsView({ server }: { server: Server }) {
     </section>
   );
 }
-export function ActivityView() {
+function HistoryControls() {
   const { snapshot, t } = useApp();
   const [query, setQuery] = useState('');
   const items = snapshot.activity.filter((a) =>
@@ -658,43 +663,32 @@ export function ActivityView() {
       .includes(query.toLowerCase()),
   );
   return (
-    <>
-      <div className="page-heading">
-        <div>
-          <div className="eyebrow">
-            <span />
-            {t('activity')}
-          </div>
-          <h1>{t('activityTitle')}</h1>
-          <p>{t('activitySub')}</p>
-        </div>
-      </div>
-      <section className="panel">
-        <Field label={t('search')}>
-          <input value={query} onChange={(e) => setQuery(e.target.value)} />
-        </Field>
-        {!items.length ? (
-          <Empty icon={<Activity size={28} />} title={t('noActivity')} />
-        ) : (
-          items.map((item) => (
-            <div className="activity-row" key={item.id}>
-              <span className={`activity-icon ${item.success ? '' : 'failed'}`}>
-                <Activity size={16} />
-              </span>
-              <div>
-                <strong>{localizeMessage(item.detail, snapshot.settings.language)}</strong>
-                <small>
-                  {activityLabel(item.action, snapshot.settings.language)}
-                  {item.serverId &&
-                    ` · ${snapshot.servers.find((s) => s.id === item.serverId)?.name ?? item.serverId}`}
-                </small>
-              </div>
-              <time>{new Date(item.at).toLocaleString(snapshot.settings.language)}</time>
+    <details className="panel history-controls">
+      <summary>{t('settings.history')}</summary>
+      <Field label={t('search')}>
+        <input value={query} onChange={(e) => setQuery(e.target.value)} />
+      </Field>
+      {!items.length ? (
+        <Empty icon={<Activity size={28} />} title={t('noActivity')} />
+      ) : (
+        items.map((item) => (
+          <div className="activity-row" key={item.id}>
+            <span className={`activity-icon ${item.success ? '' : 'failed'}`}>
+              <Activity size={16} />
+            </span>
+            <div>
+              <strong>{localizeMessage(item.detail, snapshot.settings.language)}</strong>
+              <small>
+                {activityLabel(item.action, snapshot.settings.language)}
+                {item.serverId &&
+                  ` · ${snapshot.servers.find((s) => s.id === item.serverId)?.name ?? item.serverId}`}
+              </small>
             </div>
-          ))
-        )}
-      </section>
-    </>
+            <time>{new Date(item.at).toLocaleString(snapshot.settings.language)}</time>
+          </div>
+        ))
+      )}
+    </details>
   );
 }
 export function SettingsView() {
@@ -724,12 +718,7 @@ export function SettingsView() {
     <>
       <div className="page-heading">
         <div>
-          <div className="eyebrow">
-            <span />
-            {t('settings')}
-          </div>
           <h1>{t('settings')}</h1>
-          <p>{t('localFirst')}</p>
         </div>
         <Button
           variant="primary"
@@ -786,6 +775,7 @@ export function SettingsView() {
             />
             <p className="muted small-text">{t('preventSleepHelp')}</p>
           </section>
+          <NotificationSettings />
           <section className="panel">
             <div className="section-heading">
               <h2>{t('folders')}</h2>
@@ -859,6 +849,8 @@ export function SettingsView() {
         <div>
           <RuntimeControls />
           <UpdateControls />
+          <RecoveryControls />
+          <HistoryControls />
           <section className="panel">
             <div className="section-heading">
               <h2>{t('about')}</h2>

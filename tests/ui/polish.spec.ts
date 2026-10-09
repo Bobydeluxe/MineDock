@@ -303,6 +303,17 @@ test('new wizard labels and engine descriptions work in all six languages', asyn
       await page.getByLabel(previous('language'), { exact: true }).selectOption(code);
       await page.getByRole('button', { name: previous('save'), exact: true }).click();
       await expect(page.locator('html')).toHaveAttribute('lang', code);
+      await expect(
+        page
+          .locator('.notification-settings')
+          .getByRole('heading', { name: t('notifications'), exact: true }),
+      ).toBeVisible();
+      await expect(page.locator('.notification-history > summary')).toHaveText(
+        t('settings.notificationHistory'),
+      );
+      await expect(page.locator('.recovery-controls > summary')).toContainText(
+        t('settings.recovery'),
+      );
       await page
         .locator('.sidebar-heading')
         .getByRole('button', { name: t('newServer'), exact: true })

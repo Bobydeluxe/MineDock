@@ -926,5 +926,9 @@
   "property.leaveHelp": "Sair desta página e descartar as alterações não guardadas?",
   "property.invalid": "Verifique os valores, intervalos, URL ou formato JSON antes de guardar.",
   "config.curatedHelp": "As definições comuns do Paper só aparecem se existirem na configuração desta versão. Use o editor de ficheiros para YAML complexo.",
-  "config.showAll": "Mostrar todas as definições escalares encontradas"
+  "config.showAll": "Mostrar todas as definições escalares encontradas",
+  "settings.notificationHistory": "Histórico de notificações",
+  "settings.recovery": "Recuperação e tarefas em segundo plano",
+  "settings.noRecovery": "Nenhuma tarefa em segundo plano requer atenção.",
+  "settings.history": "Histórico"
 }

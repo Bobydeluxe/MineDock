@@ -3,6 +3,19 @@
   display: block;
   object-fit: contain;
 }
+.notification-history {
+  margin-top: 20px;
+}
+.notification-history > .button {
+  margin: 12px 0;
+}
+.recovery-controls .activity-row {
+  flex-wrap: wrap;
+}
+.setup-progress {
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
 .status {
   font-size: 12px;
 }

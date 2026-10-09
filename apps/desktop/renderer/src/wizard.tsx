@@ -730,7 +730,7 @@ export function Onboarding() {
               <ShieldCheck size={30} />
             )}
           </div>
-          <small className="eyebrow">{step + 1} / 4</small>
+          <p className="setup-progress">{step + 1} / 4</p>
           <h2>{t(titles[step]!)}</h2>
           <p className="muted">{t('setupSub')}</p>
           {step === 0 && (

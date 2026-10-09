@@ -102,10 +102,6 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
     <>
       <div className="page-heading server-page-heading">
         <div>
-          <div className="eyebrow">
-            <span />
-            {t('servers')}
-          </div>
           <div className="title-with-status">
             <ServerAvatar server={server} size={42} />
             <h1>{server.name}</h1>

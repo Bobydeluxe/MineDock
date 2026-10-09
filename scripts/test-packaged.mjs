@@ -18,6 +18,7 @@ const child = spawn(
     'test',
     'tests/ui/desktop.spec.ts',
     'tests/ui/administration-desktop.spec.ts',
+    'tests/ui/cleanup-desktop.spec.ts',
     'tests/ui/files-desktop.spec.ts',
     'tests/ui/worlds-desktop.spec.ts',
     'tests/ui/recovery-retention-desktop.spec.ts',

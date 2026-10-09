@@ -227,6 +227,15 @@ if (!process.argv.includes('--first-start')) {
     );
     await expect(page.locator('.sidebar')).toBeVisible();
     const capture = async (name: string, fullPage = false, resetScroll = true) => {
+      if (phase === 'after') {
+        await expect(
+          page.locator('.topbar, .breadcrumb, .workspace, .eyebrow, .local-panel, .brand-version'),
+        ).toHaveCount(0);
+        for (const label of ['Operations', 'Activity', 'Notifications'])
+          await expect(
+            page.locator('.sidebar').getByRole('button', { name: label, exact: true }),
+          ).toHaveCount(0);
+      }
       await page
         .locator('.loading')
         .waitFor({ state: 'hidden', timeout: 30000 })
@@ -245,7 +254,6 @@ if (!process.argv.includes('--first-start')) {
       layouts[name] = await page.evaluate(() => {
         const selectors = [
           '.sidebar',
-          '.topbar',
           '.page-heading',
           '.page-heading .actions',
           '.metric-grid',
@@ -415,10 +423,11 @@ if (!process.argv.includes('--first-start')) {
     await tabs.getByRole('button', { name: 'Metrics', exact: true }).click();
     await capture('performance', true);
     await page
-      .locator('.sidebar')
-      .getByRole('button', { name: 'Notifications', exact: true })
+      .locator('.sidebar-bottom')
+      .getByRole('button', { name: 'Settings', exact: true })
       .click();
-    await capture('notifications');
+    await page.locator('.notification-history > summary').click();
+    await capture('notifications', true);
     await openPaper();
     await tabs.getByRole('button', { name: 'Players', exact: true }).click();
     await page.getByRole('button', { name: 'Player details', exact: true }).first().click();

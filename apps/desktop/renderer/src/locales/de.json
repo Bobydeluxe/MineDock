@@ -926,5 +926,9 @@
   "property.leaveHelp": "Diese Seite verlassen und ungespeicherte Änderungen verwerfen?",
   "property.invalid": "Prüfe Werte, Bereiche, URL oder JSON-Format vor dem Speichern.",
   "config.curatedHelp": "Gängige Paper-Einstellungen erscheinen nur, wenn sie in der Konfiguration dieser Version vorhanden sind. Komplexes YAML im Dateieditor bearbeiten.",
-  "config.showAll": "Alle erkannten skalaren Einstellungen anzeigen"
+  "config.showAll": "Alle erkannten skalaren Einstellungen anzeigen",
+  "settings.notificationHistory": "Benachrichtigungsverlauf",
+  "settings.recovery": "Wiederherstellung und Hintergrundaufgaben",
+  "settings.noRecovery": "Keine Hintergrundaufgabe erfordert Aufmerksamkeit.",
+  "settings.history": "Verlauf"
 }

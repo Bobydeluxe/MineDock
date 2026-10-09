@@ -59,7 +59,11 @@ test('real Electron recovery and retention: preserve uncertain copies, preview a
   });
   try {
     const page = await desktop.firstWindow();
-    await page.getByRole('button', { name: 'Operations', exact: true }).click();
+    await page
+      .locator('.sidebar-bottom')
+      .getByRole('button', { name: 'Settings', exact: true })
+      .click();
+    await page.locator('.recovery-controls > summary').click();
     await page.getByRole('button', { name: 'Review recovery', exact: true }).click();
     const dialog = page.getByRole('dialog');
     await expect(dialog.getByText('Interrupted restore', { exact: true }).first()).toBeVisible();

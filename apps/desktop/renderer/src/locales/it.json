@@ -926,5 +926,9 @@
   "property.leaveHelp": "Uscire da questa pagina e scartare le modifiche non salvate?",
   "property.invalid": "Controlla valori, intervalli, URL o formato JSON prima di salvare.",
   "config.curatedHelp": "Le impostazioni Paper comuni appaiono solo se presenti nella configurazione di questa versione. Usa l’editor di file per YAML complesso.",
-  "config.showAll": "Mostra tutte le impostazioni scalari rilevate"
+  "config.showAll": "Mostra tutte le impostazioni scalari rilevate",
+  "settings.notificationHistory": "Cronologia delle notifiche",
+  "settings.recovery": "Ripristino e attività in background",
+  "settings.noRecovery": "Nessuna attività in background richiede attenzione.",
+  "settings.history": "Cronologia"
 }

@@ -926,5 +926,9 @@
   "property.leaveHelp": "Leave this page and discard your unsaved changes?",
   "property.invalid": "Check the highlighted values, ranges, URL or JSON format before saving.",
   "config.curatedHelp": "Common Paper settings are shown only when present in this version’s configuration. Use the file editor for complex YAML.",
-  "config.showAll": "Show all discovered configuration scalars"
+  "config.showAll": "Show all discovered configuration scalars",
+  "settings.notificationHistory": "Notification history",
+  "settings.recovery": "Recovery and background tasks",
+  "settings.noRecovery": "No background task needs attention.",
+  "settings.history": "History"
 }

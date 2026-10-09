@@ -926,5 +926,9 @@
   "property.leaveHelp": "Quitter cette page et abandonner les modifications non enregistrées ?",
   "property.invalid": "Vérifiez les valeurs, les plages, l’URL ou le format JSON avant d’enregistrer.",
   "config.curatedHelp": "Les paramètres Paper courants ne sont affichés que s’ils existent dans la configuration de cette version. Utilisez l’éditeur de fichiers pour le YAML complexe.",
-  "config.showAll": "Afficher tous les paramètres scalaires détectés"
+  "config.showAll": "Afficher tous les paramètres scalaires détectés",
+  "settings.notificationHistory": "Historique des notifications",
+  "settings.recovery": "Récupération et tâches en arrière-plan",
+  "settings.noRecovery": "Aucune tâche en arrière-plan ne nécessite d’intervention.",
+  "settings.history": "Historique"
 }
