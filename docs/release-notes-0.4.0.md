@@ -18,7 +18,7 @@ Modrinth is the primary content experience. Advanced tools stay secondary to cre
 
 ## Fixed
 
-Windows update helpers now launch independently through a hidden native bootstrap. Configuration editing preserves comments and rejects stale writes. Resource-pack removal clears its server URL/hash. Clones choose independent available ports, and migrations block unknown compatibility.
+Compatible server plugins such as Geyser are accepted when version environment metadata is unknown and project support is known; explicit client-only versions remain blocked. Windows update helpers now launch independently through a hidden native bootstrap. Configuration editing preserves comments and rejects stale writes. Resource-pack removal clears its server URL/hash. Clones choose independent available ports, and migrations block unknown compatibility.
 
 ## Download
 

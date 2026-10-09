@@ -61,8 +61,12 @@ function version(value: unknown): ContentVersion {
     })),
   };
 }
-function supportsServer(environment: string | string[]): boolean {
-  return (Array.isArray(environment) ? environment : [environment]).some((value) =>
+function supportsServer(environment: string | string[]): boolean | undefined {
+  const values = (Array.isArray(environment) ? environment : [environment]).filter(
+    (value) => value !== 'unknown',
+  );
+  if (!values.length) return undefined;
+  return values.some((value) =>
     [
       'client_and_server',
       'client_only_server_optional',
@@ -319,9 +323,9 @@ export class ModrinthCatalog implements ContentCatalog {
       id: item.id,
       title: item.title,
       archived: item.status === 'archived',
-      serverSide: item.environment
-        ? supportsServer(item.environment)
-        : ['required', 'optional'].includes(item.server_side ?? ''),
+      serverSide:
+        (item.environment ? supportsServer(item.environment) : undefined) ??
+        ['required', 'optional'].includes(item.server_side ?? ''),
       description: item.description,
       body: item.body,
       iconUrl: item.icon_url ?? undefined,

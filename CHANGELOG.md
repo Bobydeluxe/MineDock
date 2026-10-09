@@ -23,6 +23,8 @@
 
 ### Fixed
 
+- Compatible server plugins such as Geyser are no longer rejected when a Modrinth version reports an unknown environment; explicit client-only versions remain blocked.
+
 - Selected resource-pack removal clears its server properties, pack plans include engine/world identity, and package import validates generated world/network settings.
 - Windows update helpers launch hidden without `DETACHED_PROCESS`, which caused PowerShell to exit before executing its script on the validation host. Native launch and failed-relaunch rollback now have regression coverage.
 - Configuration editing preserves comments and refuses stale writes; cloned profiles choose independent available ports.

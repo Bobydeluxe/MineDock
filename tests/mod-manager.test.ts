@@ -572,6 +572,23 @@ it('accepts the current official project/version environment arrays and rejects 
     await f.cleanup();
   }
 });
+it('uses known project support when Modrinth reports unknown version environment, retaining client-only refusal', async () => {
+  const f = await setup();
+  try {
+    f.data.projects.main!.environment = 'unknown';
+    f.data.versions.mainV1!.environment = 'unknown';
+    f.data.versions.mainV2!.environment = ['unknown', 'client_only'];
+    expect((await f.catalog.project('main')).serverSide).toBe(true);
+    expect((await f.catalog.version('mainV1')).serverSide).toBeUndefined();
+    expect(compatibleContent(f.server, await f.catalog.version('mainV2'))).toBe(false);
+    await f.install();
+    expect(f.repo.content(f.server.id).find((item) => item.projectId === 'main')?.versionId).toBe(
+      'mainV1',
+    );
+  } finally {
+    await f.cleanup();
+  }
+});
 it('resolves dependencies pinned only by version ID before installing', async () => {
   const f = await setup();
   try {
