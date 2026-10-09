@@ -68,6 +68,10 @@ test('explicit demo UI: create, start, command, stop, backup, settings, restore'
       .getByRole('navigation', { name: 'Server details' })
       .getByRole('button', { name: 'Plugins', exact: true })
       .click();
+    await page
+      .locator('summary')
+      .filter({ hasText: /^Hangar$/ })
+      .click();
     await page.getByRole('button', { name: 'Choose version', exact: true }).click();
     await page.getByLabel('Available version', { exact: true }).selectOption('demo');
     await expect(page.getByRole('dialog')).toContainText('explicit demo fixture');

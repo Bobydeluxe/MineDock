@@ -55,6 +55,7 @@ test('real Electron updates: persist optional checks and reject an unsigned rele
     await expect(
       panel.getByRole('button', { name: 'Restart and install', exact: true }),
     ).toHaveCount(0);
+    await expect(panel.getByRole('status').getByText('Up to date', { exact: true })).toHaveCount(0);
     expect(f.repo.server(f.server.id).version).toBe(f.server.version);
     await toggle.uncheck();
     await page.screenshot({ path: 'test-results/updates-real-desktop.png' });

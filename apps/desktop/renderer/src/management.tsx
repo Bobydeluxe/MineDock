@@ -27,6 +27,8 @@ import { RuntimeControls } from './runtime-controls';
 import { RecoveryDialog } from './recovery';
 import { RetentionControls } from './retention';
 import { UpdateControls } from './updates';
+import { SnapshotControls } from './snapshots';
+import { PackageControls } from './packages';
 const scheduleDate = (at: string, language: string, timeZone: string) => {
   try {
     return new Date(at).toLocaleString(language, { timeZone });
@@ -196,7 +198,11 @@ export function BackupsView({ serverId }: { serverId?: string }) {
           </div>
         )}
       </section>
+      {snapshot.servers.find((s) => s.id === selected) && (
+        <SnapshotControls server={snapshot.servers.find((s) => s.id === selected)!} />
+      )}
       {selected && <RetentionControls key={selected} serverId={selected} />}
+      <PackageControls server={snapshot.servers.find((s) => s.id === selected)} />
       {confirmation && (
         <Confirm
           name={name}
@@ -555,6 +561,7 @@ export function PropertiesView({ server }: { server: Server }) {
   const { api, t, run, busy } = useApp();
   const data = useData(() => api.properties(server.id), [server.id]);
   const [values, setValues] = useState<Record<string, string>>({});
+  const [search, setSearch] = useState('');
   useEffect(() => {
     if (data.data) setValues(data.data);
   }, [data.data]);
@@ -581,6 +588,9 @@ export function PropertiesView({ server }: { server: Server }) {
         </Button>
       </div>
       <ServerOptionsView server={server} />
+      <Field label={t('search')}>
+        <input value={search} onChange={(event) => setSearch(event.target.value)} />
+      </Field>
       {data.error ? (
         <ErrorBox error={data.error} retry={data.reload} retryLabel={t('retry')} />
       ) : data.loading ? (
@@ -595,6 +605,7 @@ export function PropertiesView({ server }: { server: Server }) {
                   .filter(
                     (p) =>
                       p.section === section &&
+                      (p.key + ' ' + t(p.label)).toLowerCase().includes(search.toLowerCase()) &&
                       (engineDefinition(server.engine).edition === 'java' ||
                         ![
                           'simulation-distance',
@@ -620,7 +631,13 @@ export function PropertiesView({ server }: { server: Server }) {
                       <Field
                         key={prop.key}
                         label={t(prop.label)}
-                        hint={prop.type === 'text' ? prop.key : undefined}
+                        hint={
+                          prop.key === 'simulation-distance'
+                            ? t('config.simulationHelp')
+                            : prop.type === 'text'
+                              ? prop.key
+                              : undefined
+                        }
                       >
                         {prop.type === 'mode' || prop.type === 'difficulty' ? (
                           <select

@@ -45,6 +45,11 @@ export function UpdateControls() {
             </p>
           )}
           {status.data.error && <ErrorBox error={status.data.error} />}
+          {status.data.lastChecked && !available && !status.data.error && (
+            <p className="hint" role="status">
+              {t('upToDate')}
+            </p>
+          )}
           <div className="actions">
             <Button
               disabled={busy || !status.data.trustedKeyConfigured}

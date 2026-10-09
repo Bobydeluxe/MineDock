@@ -1,5 +1,5 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Source version: 0.3.1 beta (development UI and mod manager; not yet published)
+Public version: 0.4.0 (friends survival evolution)
 Updated: 8 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
@@ -7,7 +7,7 @@ English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Older 0.2.0 release downloads do not include the 0.3.0 extensions.
+Download the 0.4.0 package to use the features listed here.
 
 ======================================================================
 1. DESKTOP APPLICATION — IMPLEMENTED
@@ -105,8 +105,8 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Confirmed uninstall; required dependencies protected from premature removal.
 - Safety backup and staged folder exchange before managed mutations.
 - Files changed outside MineDock reported rather than silently overwritten.
-- Manual datapack/resource/config folders remain visible; no general-purpose
-  datapack/resource-pack installer is included.
+- Manual datapack/resource/config folders remain visible and separate from
+  tracked Modrinth/local pack management described in section 20.
 
 ======================================================================
 5. JAVA/BEDROCK CROSSPLAY — IMPLEMENTED; GAMEPLAY UNVALIDATED
@@ -282,10 +282,11 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Writable macOS ZIP bundle replacement; dmg uses system installer.
 - Persistent installation request/result checked on next startup.
 - Publisher CI secret configured separately from OS-signing certificates.
-- Public v0.3.0 signed feed verified for all twelve native package targets.
+- Publisher-signed update metadata verifies each available native package.
 - Real public Windows portable download rechecked against signed size/hash.
-- Published 0.3.0 correctly reported no newer version in the feed validation.
-- Actual newer-version OS installation/relaunch remains unvalidated.
+- The current release is 0.4.0; older 0.3.0 Windows users may need a manual first upgrade.
+- Native updater/install/uninstall evidence and public-0.3.0 launcher limit are
+  recorded precisely in docs/validation.md; native OSes are not interchangeable.
 
 ======================================================================
 17. SECURITY, DATABASE AND DISTRIBUTION — IMPLEMENTED
@@ -293,7 +294,7 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Electron sandbox/context isolation; renderer has no Node access.
 - Narrow typed preload, payload/frame/origin/sender validation, structured errors.
 - No production fallback to demo/mock backend.
-- Published SQLite migrations 1–5 preserved; appended migration 6.
+- Existing SQLite migrations 1–6 preserved; appended migrations 7–11.
 - Retired catalogue credentials removed; existing binaries retained as local mods.
 - WAL checkpoint/database backup before upgrade; persistent feature histories.
 - Path/size/archive/link checks; verified native system aliases normalized.
@@ -315,7 +316,7 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Tests cover migration preservation, paths/archives, resumable HTTP, dependency
   conflicts, imports, worlds, file operations, players/storage, schedules,
   runtimes, retention/recovery and signed-update tampering/refusal.
-- Twenty-five UI cases include actual Electron/main/preload/SQLite journeys and
+- Twenty-six source UI cases include actual Electron/main/preload/SQLite journeys and
   explicit isolated demo scenarios; fixtures never become production data.
 - Packaged suite includes actual Electron journeys and native dialog resizing.
 - Six-language preference/reload/restart tested.
@@ -327,17 +328,104 @@ Older 0.2.0 release downloads do not include the 0.3.0 extensions.
 - Real Minecraft clients/gameplay/crossplay/historical-engine compatibility
   unvalidated without owner consent and clients.
 - OS signing/notarization require missing certificates/credentials.
-- Interactive NSIS/deb/dmg installation, keychain behavior, large-server load,
+- Windows x64 NSIS lifecycle is validated separately; Linux/macOS installation,
+  keychain behavior, large-server load,
   disk-full and extended power-loss testing remain separate validation work.
 - Exact current build/test outcomes: docs/validation.md.
 
 ======================================================================
 19. FUTURE OPTIONS — NOT IMPLEMENTED
 ======================================================================
-- General datapack/resource-pack installation and compatibility.
 - Docker runner/isolation; cloud synchronization/hosting.
 - Remote multi-user roles/accounts and hosted server management.
 - General alert integrations and AI administration.
 - Universal Java/Bedrock world conversion.
 
 These are future scope, not buttons that pretend to work.
+
+======================================================================
+20. DATAPACKS AND RESOURCE PACKS — IMPLEMENTED
+======================================================================
+- Contextual Modrinth ZIP search, versions, required/optional dependency preview.
+- Managed and manual local inventory, world selection, updates, local ZIP import.
+- Datapack enable/disable/remove with reviewed stopped-server transactions.
+- Server resource-pack selection with actual SHA-1/SHA-256 and file size.
+- Local packs require a reachable URL serving identical bytes; no hosting added.
+- Selected pack removal clears resource-pack properties; manual files stay local.
+
+======================================================================
+21. HEALTH, NOTICES AND PLAYERS — IMPLEMENTED WITH MEASURED DATA
+======================================================================
+- Healthy/attention/problem reports: crash, backup age, disk, CPU/process RAM,
+  runtime, stopped game-port availability and known content problems.
+- New stable Minecraft version notifications and reviewed migration entry.
+- At most 400 persisted notices, read/all-read, preferences, 15-minute grouping.
+- Sustained CPU/process-memory alerts; optional native system notices default off.
+- Bounded redacted crash evidence and possible content candidates, never certainty
+  from a filename; disabling requires confirmation and supported content type.
+- Player details, first/last observations, today/7/30-day observed sessions.
+- Bounded 180-day/20,000-session history, private notes, reliable official skins.
+- Real whitelist and confirmed moderation; missing identities remain unavailable.
+
+======================================================================
+22. INCREMENTAL/PARTIAL/EXTERNAL BACKUPS — IMPLEMENTED WITH LIMITS
+======================================================================
+- Stopped-server manifests and immutable SHA-256 file-object deduplication.
+- Full ZIP backups remain; full safety ZIP before every partial restoration.
+- Exact replacement/removal preview for world/config/mods/plugins/datapacks.
+- Separate content-change/Minecraft-change safety settings, both default on.
+- Mounted NAS/disk path access, actual write and free-space probe.
+- No snapshot deletion/garbage collector; legacy ZIP partial restore unavailable.
+
+======================================================================
+23. MIGRATION AND CLONES — IMPLEMENTED WITH GUARDED UNKNOWN CONTENT
+======================================================================
+- Official Minecraft/engine/runtime checks and classified compatibility review.
+- Recoverable Minecraft and Paper/Purpur migration; downgrade/unknown refusal.
+- Preserve worlds/configuration and install reviewed content/runtime changes.
+- Changed datapack/resource-pack releases require explicit update/removal first.
+- Complete clone or fresh-world clone retaining configuration/content/datapacks.
+- Independent profiles, available ports, no copied temporary/session locks.
+
+======================================================================
+24. CONSOLE AND PERFORMANCE — IMPLEMENTED WITH MEASUREMENT LIMITS
+======================================================================
+- Contextual command suggestions, chat/warning/error categories.
+- Actual plain/gzip historical logs: text/date/level/player search with bounds.
+- Cancellable restart/save/backup/announcement and custom bounded macros.
+- Host-aware RAM choices; standard/G1/safe allowlisted custom JVM presets.
+- Recognized Paper/Purpur TPS/MSPT, actual process CPU/RAM/player measurements.
+- Seven-day bounded samples, 1h/24h/7d aggregation and lag/log context.
+- JVM heap/swap are unavailable; process working set is labeled correctly.
+
+======================================================================
+25. CONFIGURATION, MAPS AND INTERNET CHECK — IMPLEMENTED WITH LIMITS
+======================================================================
+- Searchable server properties and existing YAML/JSON scalar graphical options.
+- Text editor retained for complex structures/HOCON/TOML, comments preserved.
+- Stale-write refusal and encrypted history: 10 versions/file, 200/server,
+  20 MB/server, 90 days; current file preserved before confirmed restoration.
+- Read-only identity/bind/whitelist/RCON advice; Windows ACL/firewall uninspected.
+- Compatible BlueMap/Dynmap preview/dependencies and loopback-only preparation.
+- Explicit BlueMap asset consent; validated local map URL; actual render untested.
+- Local Java TCP check plus explicit-consent fixed external observer/cache time.
+- Local success never proves Internet reachability; unsupported UDP/IPv6 unknown.
+
+======================================================================
+26. PORTABLE MINEDOCK PACKAGE — IMPLEMENTED WITH PRIVACY POLICY
+======================================================================
+- Documented format-1 .minedock ZIP: validated profile/inventory/file SHA-256.
+- Native export/import, preview, fresh local paths/ports/RCON/host-adjusted RAM.
+- Official destination engine/runtime preparation needs Internet and EULA consent.
+- Known secrets excluded; arbitrary plugin configuration requires opt-in.
+- Worlds/player files may contain private data; review before public sharing.
+- No offline runtime bundle or universal plugin path/cross-edition conversion.
+
+======================================================================
+27. WEBSITE, DOCS AND REVIEW
+======================================================================
+- Static public product site, original engine icons and real native app captures.
+- Beginner survival guide, user changelog and internal (not independent) review.
+- Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
+- Release documentation includes appended schemas, validation and known limits.
+- Public packages and checksum links target v0.4.0.

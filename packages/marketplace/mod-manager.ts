@@ -32,6 +32,7 @@ import type { DownloadManager } from '../minecraft/downloads';
 import { ModrinthCatalog } from './modrinth';
 import { ManagedContentService, compatibleContent } from './content';
 import { inspectMod } from './local-mods';
+import { engineDefinition } from '../domain/engines';
 
 function fail(code: string, message: string): never {
   throw new DomainError(code, message);
@@ -54,13 +55,18 @@ export class ModManager {
     private readonly downloads: DownloadManager,
   ) {}
   private assertServer(server: Server) {
-    if (!['fabric', 'forge', 'neoforge'].includes(server.engine))
+    if (!['fabric', 'forge', 'neoforge', 'paper', 'purpur'].includes(server.engine))
       fail('MOD_ENGINE', 'This server does not support the mod manager.');
   }
   async search(server: Server, input: ModSearch, signal?: AbortSignal) {
     this.assertServer(server);
     const query = modSearchSchema.parse(input),
-      result = await this.catalog.browse(server, query, signal);
+      result = await this.catalog.browse(
+        server,
+        query,
+        signal,
+        !engineDefinition(server.engine).capabilities.mods,
+      );
     // Search facets describe projects across all their releases. Verify that one
     // actual version supports this exact Minecraft/loader pair before labeling it.
     let next = 0;
@@ -111,7 +117,10 @@ export class ModManager {
       signal?.throwIfAborted();
       const project = await this.catalog.project(projectId, signal),
         id = project.id;
-      if (!project.serverSide || project.kind !== 'mod')
+      if (
+        !project.serverSide ||
+        project.kind !== (engineDefinition(server.engine).capabilities.mods ? 'mod' : 'plugin')
+      )
         fail('MOD_SIDE', 'This mod does not support dedicated servers.');
       const previous = installed.find(
         (item) => (item.provider ?? 'modrinth') === 'modrinth' && item.projectId === id,
@@ -375,8 +384,8 @@ export class ModManager {
         enabled: old?.enabled ?? true,
         provider: 'modrinth',
         source: 'modrinth',
-        folder: 'mods',
-        kind: 'mod',
+        folder: engineDefinition(server.engine).contentFolder!,
+        kind: engineDefinition(server.engine).capabilities.mods ? 'mod' : 'plugin',
         sha256: await sha256(target, context?.signal),
         fileHash: { algorithm: file.hash.algorithm as 'sha512' | 'sha1', value: file.hash.value },
         gameVersion: server.version,
@@ -409,14 +418,28 @@ export class ModManager {
     stage: string,
     context?: OperationContext,
   ): Promise<InstalledContent[]> {
-    const selections = this.repo
-      .content(server.id)
-      .filter((item) => item.provider !== 'local')
-      .map((item) => ({ projectId: item.projectId, versionId: item.versionId }));
+    const selections = [];
+    for (const item of this.repo.content(server.id).filter((item) => item.provider !== 'local')) {
+      if (item.provider && item.provider !== 'modrinth') continue;
+      const current = await this.catalog.version(item.versionId, context?.signal);
+      const next = compatibleContent(server, current)
+        ? current
+        : (await this.catalog.versions(server, item.projectId, context?.signal)).find(
+            (v) => compatibleContent(server, v) && v.releaseType === 'release',
+          );
+      if (!next || (item.pinned && next.id !== item.versionId))
+        fail('MOD_MIGRATION', 'A locked or incompatible project needs review before migration.');
+      selections.push({ projectId: item.projectId, versionId: next.id });
+    }
     if (!selections.length) return this.repo.content(server.id);
     const plan = await this.plan(server, { selections, collection: true }, context?.signal);
     this.plans.delete(plan.token);
-    const items = await this.stage(server, plan, path.join(stage, 'mods'), context);
+    const items = await this.stage(
+      server,
+      plan,
+      path.join(stage, engineDefinition(server.engine).contentFolder!),
+      context,
+    );
     // Versions which already support the destination retain their binaries and metadata provenance.
     for (const item of items)
       if (item.provider !== 'local') {
@@ -602,7 +625,7 @@ export class ModManager {
   }
   async inventory(server: Server, force = false): Promise<ModInventory> {
     this.assertServer(server);
-    const root = path.join(server.path, 'mods');
+    const root = path.join(server.path, engineDefinition(server.engine).contentFolder!);
     await mkdir(root, { recursive: true });
     const installed = this.repo.content(server.id),
       result: ModInventory = {
@@ -742,7 +765,7 @@ export class ModManager {
     return result;
   }
   async preflight(server: Server) {
-    if (!['fabric', 'forge', 'neoforge'].includes(server.engine)) return;
+    if (!['fabric', 'forge', 'neoforge', 'paper', 'purpur'].includes(server.engine)) return;
     const scan = await this.inventory(server);
     const critical = scan.problems.filter((problem) => problem.severity === 'critical');
     if (critical.length)
@@ -848,7 +871,7 @@ export class ModManager {
       iconUrl: project.iconUrl,
       categories: project.categories ?? [],
       provider: 'modrinth',
-      kind: 'mod',
+      kind: engineDefinition(server.engine).capabilities.mods ? 'mod' : 'plugin',
     };
     this.repo.db
       .prepare(
@@ -909,7 +932,10 @@ export class ModManager {
     validateRelative(name);
     if (path.basename(name) !== name || !/\.jar(?:\.disabled)?$/i.test(name))
       fail('MOD_FILE', 'Choose a JAR in the mods folder.');
-    const filename = await containedPath(path.join(server.path, 'mods'), name),
+    const filename = await containedPath(
+        path.join(server.path, engineDefinition(server.engine).contentFolder!),
+        name,
+      ),
       info = await stat(filename);
     if (info.size > 256 * 1024 ** 2) fail('MOD_FILE', 'This mod file is too large.');
     const hash = createHash('sha512');
@@ -918,7 +944,11 @@ export class ModManager {
       version = await this.catalog.byHash(value);
     if (!version || !compatibleContent(server, version)) return false;
     const project = await this.catalog.project(version.projectId);
-    if (!project.serverSide || project.kind !== 'mod') return false;
+    if (
+      !project.serverSide ||
+      project.kind !== (engineDefinition(server.engine).capabilities.mods ? 'mod' : 'plugin')
+    )
+      return false;
     const installed = this.repo.content(server.id);
     if (
       installed.some(
@@ -961,8 +991,8 @@ export class ModManager {
       provider: 'modrinth',
       source: 'local',
       automatic: false,
-      folder: 'mods',
-      kind: 'mod',
+      folder: engineDefinition(server.engine).contentFolder!,
+      kind: engineDefinition(server.engine).capabilities.mods ? 'mod' : 'plugin',
       sha256: await sha256(filename),
       fileHash: { algorithm: 'sha512', value },
       gameVersion: server.version,

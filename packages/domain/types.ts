@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { jvmSchema } from './performance';
 import { languageCodes } from './languages';
 import { engineIds } from './engines';
 import type { Operation, RecoveryAction, RecoveryReview } from './operations';
@@ -22,7 +23,7 @@ import type {
   ManualContent,
 } from './content';
 
-export const PRODUCT = { name: 'MineDock', version: '0.3.1' } as const;
+export const PRODUCT = { name: 'MineDock', version: '0.4.0' } as const;
 export const engineSchema = z.enum(engineIds);
 export type Engine = z.infer<typeof engineSchema>;
 export type ServerStatus =
@@ -71,6 +72,7 @@ export const createServerSchema = z
 export type CreateServerInput = z.infer<typeof createServerSchema>;
 export const serverOptionsSchema = z
   .object({
+    jvm: jvmSchema.optional(),
     memoryMin: z.number().int().min(256).max(131072),
     memoryMax: z.number().int().min(512).max(131072),
     autoStart: z.boolean(),
@@ -80,6 +82,10 @@ export const serverOptionsSchema = z
   .refine((v) => v.memoryMin <= v.memoryMax, { message: 'Invalid minimum memory.' });
 export type ServerOptions = z.infer<typeof serverOptionsSchema>;
 export interface Server extends Omit<CreateServerInput, 'eula'> {
+  jvm?: import('./performance').JvmOptions;
+  macros?: import('./console').MacroInput[];
+  packs?: import('./packs').PackFile[];
+  activeResourcePack?: string;
   modpack?: ModpackProfile;
   id: string;
   path: string;
@@ -286,6 +292,7 @@ export interface Progress {
   error?: string;
 }
 export type AppEvent =
+  | { type: 'notice'; notice: import('./health').Notice }
   | { type: 'server'; server: Server }
   | { type: 'log'; serverId: string; line: LogLine }
   | { type: 'logs'; serverId: string; lines: LogLine[] }
@@ -305,6 +312,77 @@ export interface Snapshot {
 
 /** Closed IPC contract. The renderer has no filesystem, process or network capabilities. */
 export interface Api {
+  exportPackage(id: string, includeSensitive: boolean, confirmation: string): Promise<void>;
+  previewPackage(): Promise<import('./package').PackagePreview | null>;
+  importPackage(input: z.infer<typeof import('./package').packageImportSchema>): Promise<Server>;
+  testReachability(
+    id: string,
+    input: z.input<typeof import('../networking/reachability').reachabilitySchema>,
+  ): Promise<import('../networking/reachability').Reachability>;
+  mapPlan(id: string, kind: import('./maps').MapKind): Promise<import('./mods').ModPlan>;
+  mapApply(id: string, input: z.infer<typeof import('./maps').mapApplySchema>): Promise<void>;
+  mapStatus(id: string): Promise<import('./maps').MapStatus[]>;
+  openMap(id: string, kind: import('./maps').MapKind): Promise<void>;
+  configDocuments(id: string): Promise<import('./configuration').ConfigDocument[]>;
+  editConfig(id: string, input: import('./configuration').ConfigEdit): Promise<void>;
+  configHistory(id: string): Promise<import('./configuration').ConfigVersion[]>;
+  restoreConfig(id: string, version: string, confirmation: string): Promise<void>;
+  configAudit(id: string): Promise<import('./configuration').ConfigAudit>;
+  performance(id: string, hours: number): Promise<import('./performance').PerformanceReport>;
+  searchHistoricalLogs(
+    id: string,
+    input: import('./console').LogSearch,
+  ): Promise<import('./console').LogSearchResult>;
+  runMacro(id: string, input: import('./console').MacroInput): Promise<string>;
+  saveMacro(id: string, input: import('./console').MacroInput): Promise<void>;
+  latestMinecraft(id: string): Promise<string | null>;
+  migrationReview(
+    id: string,
+    target: import('./migration').MigrationTarget,
+  ): Promise<import('./migration').MigrationReview>;
+  applyMigration(id: string, token: string, confirmation: string): Promise<void>;
+  cloneServer(id: string, input: import('./migration').CloneInput): Promise<Server>;
+  incrementalSnapshots(id: string): Promise<import('./snapshots').IncrementalSnapshot[]>;
+  createIncremental(id: string): Promise<import('./snapshots').IncrementalSnapshot>;
+  previewPartial(
+    id: string,
+    snapshotId: string,
+    scope: import('./snapshots').RestoreScope,
+  ): Promise<import('./snapshots').PartialPreview>;
+  restorePartial(id: string, token: string, confirmation: string): Promise<void>;
+  backupSafety(): Promise<import('./snapshots').BackupSafety>;
+  configureBackupSafety(
+    input: import('./snapshots').BackupSafety,
+  ): Promise<import('./snapshots').BackupSafety>;
+  testBackupStorage(): Promise<{ freeBytes: number; writable: boolean }>;
+  playerDetails(id: string, name: string): Promise<import('./players').PlayerDetails>;
+  playerNote(id: string, name: string, note: string): Promise<void>;
+  playerSkin(id: string, name: string): Promise<string | null>;
+  setWhitelist(id: string, enabled: boolean): Promise<void>;
+  health(id: string): Promise<import('./health').HealthReport>;
+  healthSettings(): Promise<import('./health').HealthSettings>;
+  configureHealth(
+    input: import('./health').HealthSettings,
+  ): Promise<import('./health').HealthSettings>;
+  notices(): Promise<import('./health').Notice[]>;
+  readNotices(id?: string): Promise<void>;
+  crashReport(id: string): Promise<import('./health').CrashReport>;
+  revealCrash(id: string): Promise<void>;
+  packSearch(id: string, kind: import('./packs').PackKind, query: string): Promise<Project[]>;
+  packInventory(
+    id: string,
+    kind: import('./packs').PackKind,
+    world?: string,
+  ): Promise<import('./packs').PackInventory>;
+  packVersions(
+    id: string,
+    kind: import('./packs').PackKind,
+    projectId: string,
+  ): Promise<ContentVersion[]>;
+  packPlan(id: string, input: import('./packs').PackRequest): Promise<import('./packs').PackPlan>;
+  packApply(id: string, token: string): Promise<void>;
+  packAction(id: string, input: import('./packs').PackAction): Promise<void>;
+  packImport(id: string, kind: import('./packs').PackKind, world?: string): Promise<void>;
   modSearch(
     id: string,
     input: import('./mods').ModSearch,

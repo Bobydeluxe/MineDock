@@ -59,4 +59,32 @@ export const migrations = [
       CREATE INDEX mod_events_by_server_time ON mod_events(server_id,at);
     `,
   },
+  {
+    version: 7,
+    sql: `CREATE TABLE survival_notices (id TEXT PRIMARY KEY, server_id TEXT REFERENCES servers(id) ON DELETE CASCADE, code TEXT NOT NULL, metadata TEXT NOT NULL);
+    CREATE INDEX survival_notices_by_server ON survival_notices(server_id,code);
+  `,
+  },
+  {
+    version: 8,
+    sql: `CREATE TABLE player_sessions (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, started_at TEXT NOT NULL, last_at TEXT NOT NULL, ended_at TEXT, interrupted INTEGER NOT NULL DEFAULT 0);
+    CREATE INDEX player_sessions_by_player ON player_sessions(server_id,name,started_at);
+    CREATE TABLE player_notes (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, name TEXT NOT NULL, note TEXT NOT NULL, PRIMARY KEY(server_id,name));`,
+  },
+  {
+    version: 9,
+    sql: `CREATE TABLE incremental_snapshots (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, metadata TEXT NOT NULL, path TEXT NOT NULL);
+  CREATE INDEX incremental_snapshots_by_server ON incremental_snapshots(server_id);`,
+  },
+  {
+    version: 10,
+    sql: `CREATE TABLE performance_samples (server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, cpu REAL NOT NULL, memory REAL NOT NULL, players INTEGER NOT NULL, tps REAL, mspt REAL, max_mspt REAL, PRIMARY KEY(server_id,at));
+    CREATE TABLE lag_events (id INTEGER PRIMARY KEY AUTOINCREMENT, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, at TEXT NOT NULL, metadata TEXT NOT NULL);
+    CREATE INDEX lag_events_by_server ON lag_events(server_id,at);`,
+  },
+  {
+    version: 11,
+    sql: `CREATE TABLE config_versions (id TEXT PRIMARY KEY, server_id TEXT NOT NULL REFERENCES servers(id) ON DELETE CASCADE, file TEXT NOT NULL, at TEXT NOT NULL, sha256 TEXT NOT NULL, content TEXT NOT NULL, bytes INTEGER NOT NULL);
+    CREATE INDEX config_versions_by_file ON config_versions(server_id,file,at);`,
+  },
 ];

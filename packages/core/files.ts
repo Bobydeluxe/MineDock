@@ -60,6 +60,10 @@ export class FileService {
     return text;
   }
   async write(root: string, relative: string, content: string): Promise<void> {
+    await this.validate(relative, content);
+    await atomicWrite(await containedPath(root, relative), content);
+  }
+  async validate(relative: string, content: string): Promise<void> {
     if (
       /(?:^|[/\\])(?:saved-refresh-tokens\.json|\.env|credentials\.json|secrets\.json)$/i.test(
         relative,
@@ -94,7 +98,6 @@ export class FileService {
         );
       }
     }
-    await atomicWrite(await containedPath(root, relative), content);
   }
   async mkdir(root: string, relative: string): Promise<void> {
     await mkdir(await containedPath(root, relative));

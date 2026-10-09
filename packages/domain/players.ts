@@ -28,6 +28,7 @@ export interface PlayerObservation {
   observedMs: number;
   sessionStartedAt?: string;
   lastObservedAt?: string;
+  sessionId?: string;
 }
 export interface KnownPlayer extends PlayerObservation {
   online: boolean;
@@ -47,4 +48,16 @@ export interface PlayerReport {
   actions: ModerationAction[];
   bannedIpCount?: number;
   warnings: string[];
+}
+export interface PlayerSession {
+  id: string;
+  startedAt: string;
+  lastAt: string;
+  endedAt?: string;
+  interrupted: boolean;
+}
+export interface PlayerDetails {
+  note: string;
+  sessions: PlayerSession[];
+  observedMs: { today: number; week: number; month: number };
 }

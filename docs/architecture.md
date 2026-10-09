@@ -21,7 +21,7 @@ MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQL
 
 The renderer shares one native dialog wrapper, portaled to `document.body` and opened before paint in the browser top layer. It manages nested body scroll locks, focus, bounded internal scrolling and explicit dismissal. Eight bundled original SVG symbols identify engines across creation, server lists, details and imports. These interface components preserve the same preload/service contracts; see [UI design](ui.md).
 
-The proposed visual identity centralizes material/color/radius/focus/motion tokens in `apps/desktop/renderer/src/tokens.css`. Existing layout rules and responsive breakpoints remain in `style.css`. Presentation-only classes expose existing mod states; editor token categories use theme colors. No new IPC, business service, database migration or runtime UI dependency is introduced by the visual PR. Native QA captures and labeled before/after evidence are described in [visual review](design/visual-review.md).
+The visual identity centralizes material/color/radius/focus/motion tokens in `apps/desktop/renderer/src/tokens.css`. Existing layout rules and responsive breakpoints remain in `style.css`. Presentation-only classes expose existing mod states; editor token categories use theme colors. The historical visual change introduced no new IPC, business service, database migration or runtime UI dependency. Native QA captures and labeled before/after evidence are described in [visual review](design/visual-review.md).
 
 ## Persistence and transactions
 
@@ -38,3 +38,13 @@ File and database renames are not a distributed transaction. Journals close reco
 The existing event bus carries server state, logs, metrics, progress and audit. Console IPC batches every 100 ms, at most 500 lines per server per batch. The renderer retains 5,000 virtualized lines. Active processes are sampled every five seconds, metrics are saved every fifteen seconds and retained seven days. Player session observations are persisted separately from game statistics.
 
 Shutdown stops schedulers/updater checks, cancels long jobs and downloads, waits for pending work, stops servers gracefully, flushes logs and snapshots/closes SQLite. Persisted orphan PIDs are never killed automatically because they may have been reused. Minecraft logs remain external server data.
+
+## Friends survival services (0.4.0)
+
+The same core/preload contract now composes world-scoped pack transactions, bounded health/notices, observed player sessions, incremental snapshots, migration/clone plans, historical log search/macros, performance aggregation, configuration history/maps/reachability and portable packages. These are main-process services, not renderer filesystem capabilities. A reviewed plan is short-lived and bound to the current server/inventory; native selections authorize import/export locations.
+
+Migrations 7–11 append notices, player sessions/notes, incremental manifests, performance/lag samples and encrypted configuration versions. Migrations 1–6 remain byte-for-byte unchanged. Full ZIP backups remain independent from immutable file-object snapshots. Partial restore stages only the selected section and creates a full safety archive first. Packages carry a verified format-1 manifest and selected data; the destination resolves its official engine/runtime and regenerates local identity, ports and secrets.
+
+Notifications are capped at 400 and grouped over fifteen minutes; sustained process thresholds use thirty seconds. Player sessions retain at most 180 days/20,000 records per server. Performance samples are at most one per thirty seconds with seven-day retention and bounded aggregation; lag context is capped at 200 events. Configuration history retains at most ten versions/file, 200/server, 20 MB/server and 90 days. These limits and unsupported measurements are explained in [the evolution ledger](survival-evolution.md).
+
+The public product site is buildless static HTML/CSS using bundled engine symbols and real native captures. `scripts/build-site.mjs` prepares its separate ignored deployment checkout. It exposes no desktop IPC, backend, analytics or private server data.

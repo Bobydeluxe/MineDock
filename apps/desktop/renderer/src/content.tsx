@@ -10,17 +10,26 @@ import { Confirm } from './management';
 import { CrossplayView } from './crossplay';
 import { EngineIcon } from './engine-icon';
 export function ContentView({ server }: { server: Server }) {
-  return engineDefinition(server.engine).capabilities.mods ? (
-    <ModsView server={server} />
+  return engineDefinition(server.engine).capabilities.mods ||
+    ['paper', 'purpur'].includes(server.engine) ? (
+    <>
+      <ModsView server={server} />
+      {['paper', 'purpur'].includes(server.engine) && (
+        <details className="panel">
+          <summary>Hangar</summary>
+          <PluginContentView server={server} hangar />
+        </details>
+      )}
+    </>
   ) : (
     <PluginContentView server={server} />
   );
 }
-function PluginContentView({ server }: { server: Server }) {
+function PluginContentView({ server, hangar = false }: { server: Server; hangar?: boolean }) {
   const { api, t, run, busy } = useApp();
   const [query, setQuery] = useState(''),
     [search, setSearch] = useState(''),
-    [provider, setProvider] = useState<MarketplaceId>('modrinth');
+    [provider, setProvider] = useState<MarketplaceId>(hangar ? 'hangar' : 'modrinth');
   const [selection, setSelection] = useState<{ project: Project; item?: InstalledContent }>();
   const [history, setHistory] = useState<InstalledContent>();
   const [remove, setRemove] = useState<InstalledContent>();
@@ -287,7 +296,7 @@ function PluginContentView({ server }: { server: Server }) {
     </>
   );
 }
-function ContentIcon({ project }: { project: Project }) {
+export function ContentIcon({ project }: { project: Project }) {
   const { api } = useApp();
   const icon = useData(
     () => (project.iconUrl ? api.contentIcon(project.iconUrl) : Promise.resolve(null)),

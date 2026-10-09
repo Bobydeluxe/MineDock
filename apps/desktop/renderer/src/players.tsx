@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Users } from 'lucide-react';
 import { useApp } from './context';
-import { Button, Field, Empty, ErrorBox, Loading, useData } from './ui';
+import { Button, Field, Empty, ErrorBox, Loading, useData, Dialog, Toggle } from './ui';
 import { Confirm } from './management';
 import { engineDefinition } from '../../../../packages/domain/engines';
 import type { Server } from '../../../../packages/domain/types';
 import type { ModerationAction, ModeratePlayerInput } from '../../../../packages/domain/players';
 import { localizeMessage } from '../../../../packages/domain/localization';
+import type { KnownPlayer } from '../../../../packages/domain/players';
 const playTime = (seconds: number) =>
   `${Math.floor(seconds / 3600)}h ${Math.floor(seconds / 60) % 60}m ${Math.floor(seconds) % 60}s`;
 export function PlayersView({ server }: { server: Server }) {
@@ -23,6 +24,7 @@ export function PlayersView({ server }: { server: Server }) {
     [reason, setReason] = useState(''),
     [confirmation, setConfirmation] = useState<ModeratePlayerInput>(),
     [response, setResponse] = useState('');
+  const [details, setDetails] = useState<KnownPlayer>();
   const players = (data.data?.players ?? []).filter(
     (player) =>
       (filter === 'known' ||
@@ -56,6 +58,16 @@ export function PlayersView({ server }: { server: Server }) {
             {t('refresh')}
           </Button>
         </div>
+        {engineDefinition(server.engine).edition === 'java' && (
+          <Toggle
+            label={t('whitelist')}
+            checked={server.whitelist}
+            onChange={(value) => {
+              void run(() => api.setWhitelist(server.id, value));
+            }}
+          />
+        )}
+        <p className="hint">{t('player.whitelistHelp')}</p>
         <div className="player-filters">
           <Field label={t('playerList')}>
             <select
@@ -100,6 +112,7 @@ export function PlayersView({ server }: { server: Server }) {
                 <div className="section-heading">
                   <div>
                     <h3>{player.name}</h3>
+                    <Button onClick={() => setDetails(player)}>{t('player.details')}</Button>
                     <div className="tags">
                       <span>{t(player.online ? 'running' : 'stopped')}</span>
                       {player.operator && (
@@ -204,6 +217,18 @@ export function PlayersView({ server }: { server: Server }) {
           </p>
         )}
       </section>
+      {details && (
+        <PlayerDetailsDialog
+          server={server}
+          player={details}
+          actions={actions}
+          onModerate={(action) => {
+            setConfirmation({ action, name: details.name, confirmation: details.name });
+            setDetails(undefined);
+          }}
+          onClose={() => setDetails(undefined)}
+        />
+      )}
       <section className="panel">
         <h2>{t('moderate')}</h2>
         <div className="form-grid">
@@ -260,5 +285,143 @@ export function PlayersView({ server }: { server: Server }) {
         />
       )}
     </>
+  );
+}
+function PlayerDetailsDialog({
+  server,
+  player,
+  actions,
+  onModerate,
+  onClose,
+}: {
+  server: Server;
+  player: KnownPlayer;
+  actions: ModerationAction[];
+  onModerate: (action: ModerationAction) => void;
+  onClose: () => void;
+}) {
+  const { api, t, run, busy } = useApp(),
+    data = useData(() => api.playerDetails(server.id, player.name), [server.id, player.name]),
+    skin = useData(() => api.playerSkin(server.id, player.name), [server.id, player.name]);
+  const [note, setNote] = useState<string>();
+  return (
+    <Dialog title={player.name} closeLabel={t('close')} onClose={onClose}>
+      <div className="dialog-body">
+        {skin.data ? (
+          <div className="player-skin">
+            <div
+              role="img"
+              aria-label={player.name}
+              style={{ width: 96, height: 96, position: 'relative', overflow: 'hidden' }}
+            >
+              {[8, 40].map((x) => (
+                <img
+                  key={x}
+                  src={skin.data!}
+                  alt=""
+                  style={{
+                    position: 'absolute',
+                    width: 768,
+                    height: 'auto',
+                    maxWidth: 'none',
+                    left: -x * 12,
+                    top: -96,
+                    imageRendering: 'pixelated',
+                  }}
+                />
+              ))}
+            </div>
+          </div>
+        ) : (
+          <Users size={48} aria-label={t('player.defaultIcon')} />
+        )}
+        <p>{player.uuid ?? t('unavailable')}</p>
+        <p>
+          {t('firstSeen')}:{' '}
+          {player.firstSeen ? new Date(player.firstSeen).toLocaleString() : t('unavailable')}
+        </p>
+        <p>
+          {t('lastSeen')}:{' '}
+          {player.lastSeen ? new Date(player.lastSeen).toLocaleString() : t('unavailable')}
+        </p>
+        <p>
+          {[
+            player.whitelisted ? t('whitelist') : '',
+            player.operator ? 'OP' : '',
+            player.banned ? t('ban') : '',
+          ]
+            .filter(Boolean)
+            .join(' · ')}
+        </p>
+        <details>
+          <summary>{t('moderate')}</summary>
+          <div className="button-row">
+            {actions.map((action) => (
+              <Button
+                key={action}
+                disabled={busy || server.status !== 'running'}
+                onClick={() => onModerate(action)}
+              >
+                {t(action)}
+              </Button>
+            ))}
+          </div>
+        </details>
+        {data.error && <ErrorBox error={data.error} />}
+        {data.data && (
+          <>
+            <div className="metric-grid">
+              {(['today', 'week', 'month'] as const).map((key) => (
+                <div className="metric-card" key={key}>
+                  <strong>{playTime(data.data!.observedMs[key] / 1000)}</strong>
+                  <small>
+                    {t(
+                      key === 'today'
+                        ? 'player.today'
+                        : key === 'week'
+                          ? 'player.week'
+                          : 'player.month',
+                    )}
+                  </small>
+                </div>
+              ))}
+            </div>
+            <Field label={t('player.notes')}>
+              <textarea
+                maxLength={4000}
+                rows={4}
+                value={note ?? data.data.note}
+                onChange={(e) => setNote(e.target.value)}
+              />
+            </Field>
+            <p className="hint">{t('player.notesHelp')}</p>
+            <Button
+              disabled={busy}
+              onClick={() => {
+                void run(() =>
+                  api.playerNote(server.id, player.name, note ?? data.data!.note),
+                ).then(data.reload);
+              }}
+            >
+              {t('save')}
+            </Button>
+            <details open>
+              <summary>{t('player.sessions')}</summary>
+              <p className="hint">{t('player.sessionsHelp')}</p>
+              {data.data.sessions.map((session) => (
+                <p key={session.id}>
+                  <time>{new Date(session.startedAt).toLocaleString()}</time> →{' '}
+                  {new Date(session.endedAt ?? session.lastAt).toLocaleString()} ·{' '}
+                  {playTime(
+                    Math.max(0, Date.parse(session.lastAt) - Date.parse(session.startedAt)) / 1000,
+                  )}{' '}
+                  {session.interrupted ? '· ' + t('player.interrupted') : ''}
+                </p>
+              ))}
+            </details>
+          </>
+        )}
+      </div>
+    </Dialog>
   );
 }

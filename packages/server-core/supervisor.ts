@@ -21,6 +21,7 @@ import { engineDefinition } from '../domain/engines';
 import { containedPath } from '../security/paths';
 import { PlayerService } from '../core/players';
 import { phpRuntimeArguments } from '../runtime-manager/php';
+import { jvmArguments } from '../domain/performance';
 export async function startCommand(
   server: Server,
 ): Promise<{ executable: string; args: string[] }> {
@@ -46,7 +47,11 @@ export async function startCommand(
         '--disable-ansi',
       ],
     };
-  const args = [`-Xms${server.memoryMin}M`, `-Xmx${server.memoryMax}M`];
+  const args = [
+    `-Xms${server.memoryMin}M`,
+    `-Xmx${server.memoryMax}M`,
+    ...jvmArguments(server.jvm, server.javaMajor),
+  ];
   if (server.launchArgsFile) {
     await stat(await containedPath(server.path, server.launchArgsFile));
     args.push('@' + server.launchArgsFile, 'nogui');

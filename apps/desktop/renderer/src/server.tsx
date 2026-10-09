@@ -36,6 +36,16 @@ import { WorldsView } from './worlds';
 import { FileTools, ArchiveTools } from './file-tools';
 import { StorageView } from './storage';
 import { PlayersView } from './players';
+import { PacksView } from './packs';
+import { HealthView } from './health';
+import { MigrationControls } from './migration';
+import { ConsoleToolsView } from './console-tools';
+import { commandCatalog, logCategory } from '../../../../packages/domain/console';
+import type { Key } from './i18n';
+import { PerformanceView, MemoryJvmControls } from './performance';
+import { ConfigurationControls } from './configuration';
+import { MapControls } from './maps';
+import { ReachabilityControls } from './reachability';
 import {
   Button,
   Field,
@@ -59,6 +69,8 @@ const tabs = [
   'players',
   'world',
   'plugins',
+  'datapacks',
+  'resourcepacks',
   'files',
   'backups',
   'schedules',
@@ -71,6 +83,8 @@ const tabIcons = {
   players: Users,
   world: Globe2,
   plugins: Puzzle,
+  datapacks: Puzzle,
+  resourcepacks: Puzzle,
   files: Folder,
   backups: Archive,
   schedules: CalendarClock,
@@ -116,11 +130,12 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       {server.engine === 'pocketmine' && <p className="hint">{t('pocketmineSupport')}</p>}
       <nav className="tabs" aria-label={t('serverDetails')}>
         {tabs
-          .filter(
-            (value) =>
-              value !== 'plugins' ||
-              engineDefinition(server.engine).capabilities.plugins ||
-              engineDefinition(server.engine).capabilities.mods,
+          .filter((value) =>
+            value === 'datapacks' || value === 'resourcepacks'
+              ? engineDefinition(server.engine).edition === 'java'
+              : value !== 'plugins' ||
+                engineDefinition(server.engine).capabilities.plugins ||
+                engineDefinition(server.engine).capabilities.mods,
           )
           .map((value) => (
             <button
@@ -143,8 +158,17 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
             </button>
           ))}
       </nav>
+      {tab === 'datapacks' && <PacksView key="datapacks" server={server} kind="datapack" />}
+      {tab === 'resourcepacks' && (
+        <PacksView key="resourcepacks" server={server} kind="resourcepack" />
+      )}
       {tab === 'overview' && (
         <>
+          <HealthView server={server} />
+          <details className="panel">
+            <summary>{t('migration.title')}</summary>
+            <MigrationControls server={server} />
+          </details>
           <div className="metric-grid">
             <div className="metric-card">
               <div className="metric-label">
@@ -280,10 +304,19 @@ export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: (
       {tab === 'files' && <FilesView server={server} />}
       {tab === 'backups' && <BackupsView serverId={server.id} />}
       {tab === 'schedules' && <SchedulesView serverId={server.id} />}
-      {tab === 'analytics' && <AnalyticsView serverId={server.id} />}
+      {tab === 'analytics' && (
+        <>
+          <AnalyticsView serverId={server.id} />
+          <PerformanceView server={server} />
+        </>
+      )}
       {tab === 'settings' && (
         <>
           <PropertiesView server={server} />
+          <MemoryJvmControls server={server} />
+          <ConfigurationControls server={server} />
+          <MapControls server={server} />
+          <ReachabilityControls server={server} />
           <section className="panel danger-panel">
             <h2>
               {t(server.externalFolder ? 'detachServer' : 'delete')} · {server.name}
@@ -323,6 +356,7 @@ function ConsoleView({ server }: { server: Server }) {
   const [lines, setLines] = useState<LogLine[]>([]);
   const [query, setQuery] = useState('');
   const [level, setLevel] = useState('all');
+  const [category, setCategory] = useState('all');
   const [auto, setAuto] = useState(true);
   const [command, setCommand] = useState('');
   const [history, setHistory] = useState<string[]>([]);
@@ -346,7 +380,9 @@ function ConsoleView({ server }: { server: Server }) {
   );
   const filtered = lines.filter(
     (l) =>
-      (level === 'all' || level === l.level) && l.text.toLowerCase().includes(query.toLowerCase()),
+      (level === 'all' || level === l.level) &&
+      (category === 'all' || logCategory(l.text) === category) &&
+      l.text.toLowerCase().includes(query.toLowerCase()),
   );
   const parent = useRef<HTMLDivElement>(null);
   const virtual = useVirtualizer({
@@ -399,6 +435,25 @@ function ConsoleView({ server }: { server: Server }) {
         <ErrorBox error={initial.error} retry={initial.reload} retryLabel={t('retry')} />
       )}
       <div className="console-toolbar">
+        <select
+          aria-label={t('console.category')}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          {(['all', 'chat', 'warnings', 'errors'] as const).map((c) => (
+            <option key={c} value={c}>
+              {t(
+                c === 'all'
+                  ? 'allLevels'
+                  : c === 'chat'
+                    ? 'console.chat'
+                    : c === 'warnings'
+                      ? 'console.warnings'
+                      : 'console.errors',
+              )}
+            </option>
+          ))}
+        </select>
         <div className="search-input">
           <Search size={15} />
           <input
@@ -468,6 +523,11 @@ function ConsoleView({ server }: { server: Server }) {
         <Terminal size={18} />
         <input
           aria-label={t('command')}
+          list={
+            engineDefinition(server.engine).edition === 'java'
+              ? 'server-command-suggestions'
+              : undefined
+          }
           placeholder={t('command')}
           value={command}
           onChange={(e) => setCommand(e.target.value)}
@@ -495,6 +555,12 @@ function ConsoleView({ server }: { server: Server }) {
           {t('send')}
         </Button>
       </form>
+      <datalist id="server-command-suggestions">
+        {commandCatalog.map((c) => (
+          <option key={c.command} value={c.command} label={t(c.description as Key)} />
+        ))}
+      </datalist>
+      <ConsoleToolsView server={server} />
       <p className="muted small-text">{t('commandHelp')}</p>
     </section>
   );

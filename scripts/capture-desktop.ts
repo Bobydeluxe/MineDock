@@ -179,6 +179,17 @@ try {
       nextRun: new Date(Date.now() + 86400000).toISOString(),
     });
   }
+  await writeFile(
+    path.join(paper.path, 'config/paper-global.yml'),
+    '# Private QA configuration\nchunk-system:\n  io-threads: 2\n',
+  );
+  await writeFile(
+    path.join(paper.path, 'config/paper-world-defaults.yml'),
+    'entities:\n  spawning:\n    per-player-mob-spawns: true\n',
+  );
+  await core.configuration.remember(paper.id, 'config/paper-global.yml');
+  if (!core.incremental.list(paper.id).length) await core.incremental.create(paper.id);
+  core.health.push(paper.id, 'backupFailed', 'Private QA notification');
   core.repo.saveSettings({
     ...core.repo.settings(),
     serverRoot: path.join(root, 'servers'),
@@ -297,34 +308,83 @@ if (!process.argv.includes('--first-start')) {
         .getByRole('navigation', { name: 'Servers', exact: true })
         .getByRole('button', { name: /Fabric mod library/ })
         .click();
-    await capture('dashboard');
-    await page
-      .locator('.page-heading')
-      .getByRole('button', { name: 'Create server', exact: true })
-      .click();
-    await page.getByLabel('Server name', { exact: true }).fill('Weekend survival');
-    await page.getByLabel('Minecraft version', { exact: true }).waitFor();
-    await capture('create-server');
-    for (let i = 0; i < 3; i++)
-      await page.getByRole('button', { name: 'Continue', exact: true }).click();
-    await capture('create-summary');
-    await page.keyboard.press('Escape');
-    await openPaper();
-    await capture('server');
     const tabs = page.getByRole('navigation', { name: 'Server details' });
-    for (const [label, name] of [
-      ['Players', 'players'],
-      ['Worlds', 'worlds'],
-      ['Files', 'files'],
-      ['Backups', 'backups'],
-      ['Tasks', 'scheduler'],
-    ] as const) {
-      await tabs.getByRole('button', { name: label, exact: true }).click();
-      await capture(name);
+    if (!process.argv.includes('--resume-evolution')) {
+      await capture('dashboard');
+      await page
+        .locator('.page-heading')
+        .getByRole('button', { name: 'Create server', exact: true })
+        .click();
+      await page.getByLabel('Server name', { exact: true }).fill('Weekend survival');
+      await page.getByLabel('Minecraft version', { exact: true }).waitFor();
+      await capture('create-server');
+      for (let i = 0; i < 3; i++)
+        await page.getByRole('button', { name: 'Continue', exact: true }).click();
+      await capture('create-summary');
+      await page.keyboard.press('Escape');
+      await openPaper();
+      await capture('server');
+      for (const [label, name] of [
+        ['Players', 'players'],
+        ['Worlds', 'worlds'],
+        ['Files', 'files'],
+        ['Backups', 'backups'],
+        ['Tasks', 'scheduler'],
+      ] as const) {
+        await tabs.getByRole('button', { name: label, exact: true }).click();
+        await capture(name);
+      }
+      await tabs.getByRole('button', { name: 'Plugins', exact: true }).click();
+      await page.locator('.mod-card').first().waitFor();
+      await capture('plugins');
+      for (const [label, name] of [
+        ['Datapacks', 'datapacks'],
+        ['Resource packs', 'resourcepacks'],
+      ] as const) {
+        await tabs.getByRole('button', { name: label, exact: true }).click();
+        await capture(name);
+      }
+      await tabs.getByRole('button', { name: 'Settings', exact: true }).click();
+      await page.getByText('Advanced configuration', { exact: true }).click();
+      const configuration = page
+        .locator('details.panel')
+        .filter({ has: page.locator('summary').filter({ hasText: /^Advanced configuration$/ }) });
+      const paperConfig = configuration
+        .locator('details')
+        .filter({ has: page.locator('summary').filter({ hasText: /^config\/paper-global.yml$/ }) })
+        .first();
+      await paperConfig.locator(':scope > summary').click();
+      await paperConfig
+        .locator('summary')
+        .filter({ hasText: /^Resources$/ })
+        .click();
+      await capture('configuration', true);
     }
-    await tabs.getByRole('button', { name: 'Plugins', exact: true }).click();
-    await page.locator('.plugin-card').first().waitFor();
-    await capture('plugins');
+    await openPaper();
+    await tabs.getByRole('button', { name: 'Overview', exact: true }).click();
+    await page
+      .locator('summary')
+      .filter({ hasText: /^Server evolution$/ })
+      .click();
+    await page.getByRole('button', { name: 'Analyze upgrade', exact: true }).click();
+    await capture('migration');
+    await page.keyboard.press('Escape');
+    await tabs.getByRole('button', { name: 'Metrics', exact: true }).click();
+    await capture('performance', true);
+    await page
+      .locator('.sidebar')
+      .getByRole('button', { name: 'Notifications', exact: true })
+      .click();
+    await capture('notifications');
+    await openPaper();
+    await tabs.getByRole('button', { name: 'Players', exact: true }).click();
+    await page.getByRole('button', { name: 'Player details', exact: true }).first().click();
+    await capture('player-details');
+    await page.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).click();
+    await tabs.getByRole('button', { name: 'Backups', exact: true }).click();
+    await page.getByRole('button', { name: 'Review restoration', exact: true }).first().click();
+    await capture('partial-restore');
+    await page.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).click();
     await openFabric();
     await tabs.getByRole('button', { name: 'Mods', exact: true }).click();
     await page.getByRole('tab', { name: 'Installed', exact: true }).click();
@@ -354,6 +414,17 @@ if (!process.argv.includes('--first-start')) {
     await openPaper();
     await tabs.getByRole('button', { name: 'Console', exact: true }).click();
     await capture('console');
+    await page.getByText('Console tools', { exact: true }).click();
+    await page.getByRole('button', { name: 'Search historical logs', exact: true }).click();
+    await capture('console-history');
+    await page.keyboard.press('Escape');
+    await page.getByRole('button', { name: 'Custom macro', exact: true }).click();
+    await page.getByLabel('Macro name', { exact: true }).fill('Evening routine');
+    await page.getByRole('button', { name: 'Add step', exact: true }).click();
+    await page.getByRole('dialog').getByRole('combobox').last().selectOption('backup');
+    await capture('console-macro');
+    await page.keyboard.press('Escape');
+    await page.getByText('Console tools', { exact: true }).click();
     // The existing process launcher and all application services remain unchanged.
     // A private external child fixture supplies lifecycle/log/RCON data; it is never shipped.
     await desktop.evaluate(

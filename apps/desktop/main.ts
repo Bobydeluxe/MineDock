@@ -7,11 +7,13 @@ import {
   safeStorage,
   powerSaveBlocker,
   Menu,
+  Notification,
 } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { z } from 'zod';
 import { AppCore } from '../../packages/core/app';
+import { testReachability } from '../../packages/networking/reachability';
 import { readableError, structuredError } from '../../packages/domain/errors';
 import { localizeMessage } from '../../packages/domain/localization';
 import { engineSchema } from '../../packages/domain/types';
@@ -38,6 +40,12 @@ import { containedPath } from '../../packages/security/paths';
 import { LocalSecretStore, redact, type SecretStore } from '../../packages/security/secrets';
 import { prepareUpdateLaunch, launchUpdate } from '../../packages/updates/install';
 import { DomainError } from '../../packages/domain/errors';
+import { packKindSchema, packRequestSchema, packActionSchema } from '../../packages/domain/packs';
+import { healthSettingsSchema } from '../../packages/domain/health';
+import { backupSafetySchema, restoreScopeSchema } from '../../packages/domain/snapshots';
+import { migrationTargetSchema, cloneSchema } from '../../packages/domain/migration';
+import { logSearchSchema, macroSchema } from '../../packages/domain/console';
+import { translator } from './renderer/src/i18n';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -210,25 +218,207 @@ function register(core: AppCore): void {
     core.files.read(core.repo.server(id(value)).path, relative.parse(file)),
   );
   handle('playerReport', (value) => core.players.report(id(value)));
+  handle('performance', (value, hours) =>
+    core.performance.report(id(value), z.number().int().min(1).max(168).parse(hours)),
+  );
+  handle('configDocuments', (value) => core.configuration.documents(id(value)));
+  handle('exportPackage', async (value, sensitive, confirmation) => {
+    const serverId = id(value);
+    core.assertStopped(serverId);
+    const includesSensitive = z.boolean().parse(sensitive),
+      name = text.parse(confirmation);
+    const result = await dialog.showSaveDialog(window!, {
+      defaultPath: 'MineDock-server.minedock',
+      filters: [{ name: 'MineDock package', extensions: ['minedock'] }],
+    });
+    if (!result.canceled && result.filePath)
+      await core.packages.export(serverId, result.filePath, includesSensitive, name);
+  });
+  handle('previewPackage', async () => {
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'MineDock package', extensions: ['minedock'] }],
+    });
+    return result.canceled || !result.filePaths[0]
+      ? null
+      : core.packages.preview(result.filePaths[0]);
+  });
+  handle('importPackage', (input) => core.packages.import(input));
+  handle('testReachability', (value, input) =>
+    testReachability(core.repo.server(id(value)), input),
+  );
+  handle('mapPlan', (value, kind) => core.maps.plan(id(value), kind));
+  handle('mapApply', (value, input) => core.maps.apply(id(value), input));
+  handle('mapStatus', (value) => core.maps.status(id(value)));
+  handle('openMap', async (value, kind) => {
+    const status = (await core.maps.status(id(value))).find((item) => item.kind === kind);
+    if (!status?.url) throw new DomainError('MAP', 'Configure a local map before opening it.');
+    await shell.openExternal(status.url);
+  });
+  handle('configHistory', (value) => core.configuration.history(id(value)));
+  handle('configAudit', (value) => core.configuration.audit(id(value)));
+  handle('editConfig', (value, input) => core.configuration.edit(id(value), input));
+  handle('restoreConfig', (value, version, confirmation) =>
+    core.configuration.restore(id(value), id(version), text.parse(confirmation)),
+  );
+  handle('searchHistoricalLogs', (value, input) =>
+    core.consoleTools.search(id(value), logSearchSchema.parse(input)),
+  );
+  handle('runMacro', (value, input) =>
+    core.consoleTools.macro(id(value), macroSchema.parse(input)),
+  );
+  handle('saveMacro', (value, input) =>
+    core.exclusive(id(value), async () =>
+      core.consoleTools.save(id(value), macroSchema.parse(input)),
+    ),
+  );
+  handle('latestMinecraft', (value) => core.migration.latest(id(value)));
+  handle('migrationReview', (value, target) =>
+    core.migration.review(id(value), migrationTargetSchema.parse(target)),
+  );
+  handle('applyMigration', (value, token, confirmation) =>
+    core.migration.apply(id(value), id(token), text.parse(confirmation)),
+  );
+  handle('cloneServer', (value, input) =>
+    core.exclusive('create', () =>
+      core.exclusive(id(value), () => core.migration.clone(id(value), cloneSchema.parse(input))),
+    ),
+  );
+  handle('incrementalSnapshots', (value) => core.incremental.list(id(value)));
+  handle('createIncremental', (value) =>
+    core.exclusive(id(value), () => core.incremental.create(id(value))),
+  );
+  handle('previewPartial', (value, snapshot, scope) =>
+    core.incremental.preview(id(value), id(snapshot), restoreScopeSchema.parse(scope)),
+  );
+  handle('restorePartial', (value, token, confirmation) =>
+    core.exclusive(id(value), () =>
+      core.incremental.restore(id(value), id(token), text.parse(confirmation)),
+    ),
+  );
+  handle('backupSafety', () => core.incremental.settings());
+  handle('configureBackupSafety', (value) =>
+    core.incremental.configure(backupSafetySchema.parse(value)),
+  );
+  handle('testBackupStorage', () => core.incremental.testStorage());
+  handle('playerDetails', (value, name) =>
+    core.players.details(id(value), z.string().max(32).parse(name)),
+  );
+  handle('playerNote', (value, name, note) =>
+    core.exclusive(id(value), async () =>
+      core.players.note(
+        id(value),
+        z.string().max(32).parse(name),
+        z.string().max(4000).parse(note),
+      ),
+    ),
+  );
+  handle('playerSkin', async (value, name) => {
+    const report = await core.players.report(id(value)),
+      player = report.players.find((p) => p.name === z.string().max(32).parse(name));
+    return player?.uuid && player.identityMode === 'online' && !player.identityConflict
+      ? core.skins.get(player.uuid)
+      : null;
+  });
+  handle('setWhitelist', (value, enabled) =>
+    core.exclusive(id(value), async () => {
+      const server = core.repo.server(id(value)),
+        on = z.boolean().parse(enabled);
+      if (!['vanilla', 'paper', 'purpur', 'fabric', 'forge', 'neoforge'].includes(server.engine))
+        throw new DomainError('CAPABILITY', 'Whitelist switching requires a Java server.');
+      if (!core.supervisor.isRunning(server.id))
+        throw new DomainError('RUNNING', 'Start the server before sending moderation commands.');
+      const response = await core.supervisor.command(server.id, 'whitelist ' + (on ? 'on' : 'off'));
+      if (/unknown|error|failed|incorrect/i.test(response))
+        throw new DomainError('COMMAND', response);
+      core.repo.saveServer({ ...server, whitelist: on });
+      core.repo.audit(
+        'player.whitelist.configured',
+        on ? 'Whitelist enabled.' : 'Whitelist disabled.',
+        server.id,
+      );
+    }),
+  );
+  handle('health', (value) => core.health.report(id(value)));
+  handle('healthSettings', () => core.health.settings());
+  handle('configureHealth', (value) => core.health.configure(healthSettingsSchema.parse(value)));
+  handle('notices', () => core.health.notices());
+  handle('readNotices', (value) => core.health.read(z.string().uuid().optional().parse(value)));
+  handle('crashReport', (value) => core.health.crash(id(value)));
+  handle('revealCrash', async (value) => {
+    const server = core.repo.server(id(value)),
+      report = await core.health.crash(server.id);
+    if (report.path) shell.showItemInFolder(await containedPath(server.path, report.path));
+  });
+  handle('packSearch', (value, kind, query) =>
+    core.packs.search(
+      core.repo.server(id(value)),
+      packKindSchema.parse(kind),
+      z.string().max(120).parse(query),
+    ),
+  );
+  handle('packInventory', (value, kind, world) =>
+    core.packs.inventory(
+      core.repo.server(id(value)),
+      packKindSchema.parse(kind),
+      z.string().max(120).optional().parse(world),
+    ),
+  );
+  handle('packVersions', (value, kind, project) =>
+    core.packs.versions(
+      core.repo.server(id(value)),
+      packKindSchema.parse(kind),
+      modId.parse(project),
+    ),
+  );
+  handle('packPlan', (value, input) =>
+    core.packs.plan(core.repo.server(id(value)), packRequestSchema.parse(input)),
+  );
+  handle('packApply', (value, token) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      await core.safetyBackup(server.id, 'before_packs');
+      await core.packs.apply(server, id(token));
+    }),
+  );
+  handle('packAction', (value, input) =>
+    core.exclusive(id(value), async () => {
+      const server = core.assertStopped(id(value));
+      const action = packActionSchema.parse(input);
+      await core.safetyBackup(server.id, 'before_packs');
+      await core.packs.action(server, action);
+    }),
+  );
+  handle('packImport', async (value, kind, world) => {
+    const serverId = id(value);
+    core.assertStopped(serverId);
+    const packKind = packKindSchema.parse(kind),
+      packWorld = z.string().max(120).optional().parse(world);
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Minecraft pack', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return;
+    await core.exclusive(serverId, async () => {
+      const server = core.assertStopped(serverId);
+      await core.safetyBackup(serverId, 'before_packs');
+      await core.packs.import(server, packKind, result.filePaths[0]!, packWorld);
+    });
+  });
   handle('moderatePlayer', (value, input) =>
     core.exclusive(id(value), () =>
       core.players.moderate(id(value), input as Parameters<typeof core.players.moderate>[1]),
     ),
   );
   handle('writeFile', (value, file, content) =>
-    core.exclusive(id(value), async () => {
-      const server = core.assertStopped(id(value));
-      core.fileOperations.protect(server, relative.parse(file));
-      await core.files.write(
-        server.path,
-        relative.parse(file),
-        z
-          .string()
-          .max(2 * 1024 * 1024)
-          .parse(content),
-      );
-      core.repo.audit('file.saved', relative.parse(file), server.id);
-    }),
+    core.configuration.write(
+      id(value),
+      relative.parse(file),
+      z
+        .string()
+        .max(2 * 1024 * 1024)
+        .parse(content),
+    ),
   );
   handle('mkdir', (value, file) =>
     core.exclusive(id(value), () =>
@@ -500,7 +690,7 @@ function register(core: AppCore): void {
   handle('modApply', (value, token) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_mods');
+      await core.safetyBackup(server.id, 'before_mods');
       return core.mods.apply(server, id(token));
     }),
   );
@@ -526,7 +716,7 @@ function register(core: AppCore): void {
         input = modBulkSchema.parse(raw);
       if (input.confirmation !== server.name)
         throw new DomainError('CONFIRM', 'Incorrect confirmation.');
-      await core.backups.create(server.id, 'before_mods');
+      await core.safetyBackup(server.id, 'before_mods');
       return core.mods.bulk(server, input);
     }),
   );
@@ -632,7 +822,7 @@ function register(core: AppCore): void {
       const server = core.assertStopped(id(value));
       const item = core.repo.content(server.id).find((item) => item.id === id(content));
       if (!item || item.title !== text.parse(confirm)) throw new Error('Incorrect confirmation.');
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       return core.marketplace.manager.install(
         server,
         catalog(item.provider ?? 'modrinth'),
@@ -645,14 +835,14 @@ function register(core: AppCore): void {
   handle('uninstallContent', (value, content, confirm) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       return core.marketplace.manager.uninstall(server, id(content), text.parse(confirm));
     }),
   );
   handle('rollbackContent', (value, content, history, confirm) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       const item = core.repo.content(server.id).find((item) => item.id === id(content));
       await core.marketplace.manager.rollback(
         server,
@@ -671,7 +861,7 @@ function register(core: AppCore): void {
   handle('installContent', (value, project, provider, version) =>
     core.exclusive(id(value), async () => {
       const server = core.assertStopped(id(value));
-      await core.backups.create(server.id, 'before_content');
+      await core.safetyBackup(server.id, 'before_content');
       return core.marketplace.manager.install(
         server,
         catalog(provider),
@@ -768,6 +958,19 @@ if (single)
         callback(false),
       );
       core.bus.subscribe((event) => {
+        if (
+          event.type === 'notice' &&
+          core?.health.settings().nativeNotifications &&
+          Notification.isSupported()
+        ) {
+          const t = translator(core.repo.settings().language);
+          new Notification({
+            title: event.notice.serverId
+              ? core.repo.server(event.notice.serverId).name
+              : 'MineDock',
+            body: t(('notice.' + event.notice.code) as Parameters<typeof t>[0]),
+          }).show();
+        }
         if (event.type === 'log') {
           const lines = consoleBatches.get(event.serverId) ?? [];
           lines.push(event.line);

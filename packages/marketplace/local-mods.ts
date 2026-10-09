@@ -1,6 +1,7 @@
 import yauzl from 'yauzl';
 import { stat } from 'node:fs/promises';
 import type { LocalMod } from '../domain/mods';
+import { parseDocument } from 'yaml';
 
 /** Reads only bounded metadata entries; never extracts or executes a JAR. */
 export async function inspectMod(filename: string, enabled: boolean): Promise<LocalMod> {
@@ -38,6 +39,8 @@ export async function inspectMod(filename: string, enabled: boolean): Promise<Lo
               'quilt.mod.json',
               'META-INF/mods.toml',
               'META-INF/neoforge.mods.toml',
+              'plugin.yml',
+              'paper-plugin.yml',
             ].includes(entry.fileName)
           ) {
             zip.readEntry();
@@ -89,6 +92,22 @@ export async function inspectMod(filename: string, enabled: boolean): Promise<Lo
       if (typeof depends?.minecraft === 'string') result.minecraft = depends.minecraft;
       result.serverOnly = data.environment === 'server' ? true : undefined;
       if (data.environment === 'client') result.serverOnly = false;
+    }
+    const plugin = metadata['paper-plugin.yml'] ?? metadata['plugin.yml'];
+    if (plugin) {
+      const document = parseDocument(plugin);
+      if (document.errors.length) throw new Error('Invalid plugin metadata.');
+      const data = document.toJS({ maxAliasCount: 20 }) as Record<string, unknown>;
+      result.title = typeof data.name === 'string' ? data.name : '';
+      result.version = data.version !== undefined ? String(data.version) : undefined;
+      result.modIds = result.title ? [result.title.toLowerCase()] : [];
+      result.loaders = ['paper', 'purpur'];
+      if (Array.isArray(data.depend))
+        result.required = Object.fromEntries(
+          data.depend
+            .filter((d): d is string => typeof d === 'string')
+            .map((d) => [d.toLowerCase(), '*']),
+        );
     }
     for (const [name, text] of Object.entries(metadata).filter(([name]) =>
       name.endsWith('.toml'),

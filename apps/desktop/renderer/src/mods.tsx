@@ -37,7 +37,9 @@ function ModIcon({ url, title }: { url?: string; title: string }) {
   );
 }
 export function ModsView({ server }: { server: Server }) {
-  const { api, t, run, busy, snapshot } = useApp();
+  const { api, t: appT, run, busy, snapshot } = useApp();
+  const t = (key: Key) =>
+    appT(key === 'mods' && !engineDefinition(server.engine).capabilities.mods ? 'plugins' : key);
   const [view, setView] = useState<'discover' | 'installed' | 'updates'>('discover'),
     [query, setQuery] = useState(''),
     [debounced, setDebounced] = useState('');
@@ -728,7 +730,10 @@ export function ModsView({ server }: { server: Server }) {
           </details>
           <details>
             <summary>{t('advanced')}</summary>
-            <Button disabled={locked} onClick={() => setMigration(true)}>
+            <Button
+              disabled={locked || !engineDefinition(server.engine).capabilities.mods}
+              onClick={() => setMigration(true)}
+            >
               {t('modMigration')}
             </Button>
           </details>
@@ -1058,6 +1063,7 @@ function ModDetails({
                 </div>
               </div>
               <p>{project.description}</p>
+              {project.archived && <p className="warning-text">{t('modArchived')}</p>}
               <p className="muted">
                 {project.categories?.join(' · ')} ·{' '}
                 {project.updatedAt && new Date(project.updatedAt).toLocaleDateString()}

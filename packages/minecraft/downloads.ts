@@ -9,6 +9,8 @@ import type { DownloadPartial } from '../domain/operations';
 
 const hosts = [
   'piston-meta.mojang.com',
+  'sessionserver.mojang.com',
+  'textures.minecraft.net',
   'piston-data.mojang.com',
   'launchermeta.mojang.com',
   'launcher.mojang.com',

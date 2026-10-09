@@ -56,9 +56,13 @@ export class ManagedContentService {
     ) => Promise<{ value: T; items: InstalledContent[]; profile?: Server }>,
     label: string,
     wholeServer = false,
+    relativeScope?: string,
   ): Promise<T> {
-    const folder = this.folder(server),
-      destination = wholeServer ? server.path : path.join(server.path, folder),
+    const destination = wholeServer
+        ? server.path
+        : relativeScope
+          ? await containedPath(server.path, relativeScope)
+          : path.join(server.path, this.folder(server)),
       stage = destination + '.content-staging',
       previous = destination + '.content-previous';
     const run = async (context?: OperationContext): Promise<T> => {

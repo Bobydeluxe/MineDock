@@ -293,6 +293,6 @@ export class Repository {
     await backup(this.db, path.join(this.root, 'app.db.daily.bak'));
   }
   close(): void {
-    this.db.close();
+    if (this.db.isOpen) this.db.close();
   }
 }

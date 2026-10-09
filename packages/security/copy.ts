@@ -10,6 +10,7 @@ export interface CopyOptions {
   maximumBytes?: number;
   maximumFiles?: number;
   progress?: (bytes: number) => void;
+  exclude?: (relative: string) => boolean;
 }
 export async function copyRegularFile(
   source: string,
@@ -74,6 +75,7 @@ export async function copyDirectory(
         file = await containedPath(source, child),
         target = await containedPath(destination, child),
         info = await lstat(file);
+      if (options.exclude?.(child)) continue;
       if (info.isDirectory()) {
         await mkdir(target);
         await walk(child);

@@ -1,5 +1,5 @@
 import { randomBytes, randomUUID } from 'node:crypto';
-import { mkdir, readFile, rm, statfs, realpath } from 'node:fs/promises';
+import { mkdir, readFile, rm, statfs, realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { execFile } from 'node:child_process';
@@ -52,6 +52,17 @@ import { RuntimeMaintenance } from '../runtime-manager/maintenance';
 import { recoveryActionSchema, type RecoveryAction } from '../domain/operations';
 import { copyRegularFile } from '../security/copy';
 import { sha256 } from '../backups/archive';
+import { PackService } from '../marketplace/packs';
+import { HealthService } from './health';
+import { PlayerSkins } from './skins';
+import { IncrementalBackups } from '../backups/incremental';
+import { MigrationService } from './migration';
+import { ConsoleTools } from './console-tools';
+import { PerformanceService } from './performance';
+import { jvmArguments } from '../domain/performance';
+import { ConfigurationService } from './configuration';
+import { MapAssistant } from './maps';
+import { PackageService } from './packages';
 import { UpdateService } from '../updates/service';
 import { PRODUCT } from '../domain/types';
 const exec = promisify(execFile);
@@ -82,6 +93,16 @@ export class AppCore {
   readonly modpacks: ModpackService;
   readonly storage: StorageService;
   readonly players: PlayerService;
+  readonly packs: PackService;
+  readonly health: HealthService;
+  readonly skins: PlayerSkins;
+  readonly incremental: IncrementalBackups;
+  readonly migration: MigrationService;
+  readonly consoleTools: ConsoleTools;
+  readonly performance: PerformanceService;
+  readonly configuration: ConfigurationService;
+  readonly maps: MapAssistant;
+  readonly packages: PackageService;
   readonly runtimeMaintenance: RuntimeMaintenance;
   private readonly operations = new Map<string, Promise<unknown>>();
   private readonly maintenance: NodeJS.Timeout;
@@ -92,6 +113,7 @@ export class AppCore {
     private readonly secrets: SecretStore,
   ) {
     this.repo = new Repository(root, this.bus);
+    this.health = new HealthService(this.repo, this.bus);
     this.logger = new Logger(path.join(root, 'logs'));
     this.downloads = new DownloadManager(this.bus, this.repo);
     this.jobs = new OperationService(this.repo, this.bus, this.logger);
@@ -170,8 +192,71 @@ export class AppCore {
       this.marketplace.manager,
       this.downloads,
     );
+    this.packs = new PackService(
+      this.repo,
+      this.marketplace.catalog,
+      this.downloads,
+      this.marketplace.manager,
+    );
+    this.health.setChecks(async (id) => {
+      const server = this.repo.server(id);
+      const issues: import('../domain/health').HealthIssue[] = [];
+      const definition = engineDefinition(server.engine);
+      const runtime =
+        definition.runtimeType === 'java'
+          ? (server.runtimePath ?? server.javaPath)
+          : definition.runtimeType === 'php'
+            ? server.runtimePath
+            : undefined;
+      if (
+        definition.runtimeType !== 'native' &&
+        (!runtime ||
+          !(await stat(runtime).then(
+            (s) => s.isFile(),
+            () => false,
+          )))
+      ) {
+        issues.push({ code: 'runtime', severity: 'problem' });
+        this.health.push(id, 'runtime');
+      }
+      if (
+        !server.pid &&
+        ['stopped', 'crashed'].includes(server.status) &&
+        !(await checkPort(server.port, definition.protocol))
+      )
+        issues.push({ code: 'port', severity: 'problem' });
+      if (
+        definition.contentFolder &&
+        ['paper', 'purpur', 'fabric', 'quilt', 'forge', 'neoforge'].includes(server.engine)
+      ) {
+        const scan = await this.mods.inventory(server);
+        if (scan.problems.length) {
+          issues.push({
+            code: 'content',
+            severity: scan.problems.some((p) => p.severity === 'critical') ? 'problem' : 'warning',
+            detail: String(scan.problems.length),
+          });
+          this.health.push(id, 'content');
+        }
+      }
+      return issues;
+    });
+    this.incremental = new IncrementalBackups(
+      this.repo,
+      this.jobs,
+      this.marketplace.manager,
+      (id) => this.assertStopped(id),
+      (id, reason) => this.backups.create(id, reason),
+    );
+    this.migration = new MigrationService(this);
+    this.consoleTools = new ConsoleTools(this);
+    this.performance = new PerformanceService(this);
+    this.configuration = new ConfigurationService(this, secrets);
+    this.maps = new MapAssistant(this);
+    this.packages = new PackageService(this);
     this.catalogs = new MarketplaceRegistry(this.repo);
     this.icons = new IconCache(path.join(this.root, 'cache', 'icons'));
+    this.skins = new PlayerSkins(this.icons);
     this.crossplay = new CrossplayService(this.repo, this.marketplace.manager);
     this.imports = new ServerImportService(
       this.repo,
@@ -227,11 +312,12 @@ export class AppCore {
           this.repo.retainMetrics();
           await this.repo.snapshotDatabase();
           await this.refreshStorage();
+          await this.migration.checkLatest();
         })
         .catch((e) => this.logger.write(String(e), true));
     }, 3600000);
     this.maintenance.unref();
-    this.logger.write('MineDock started.');
+    this.logger.write('MineDock ' + PRODUCT.version + ' started.');
   }
   static async open(root: string, secrets?: SecretStore): Promise<AppCore> {
     await mkdir(root, { recursive: true });
@@ -244,6 +330,7 @@ export class AppCore {
     await core.worlds.cleanPreviews();
     await core.modpacks.cleanup(true);
     await core.fileOperations.cleanTemporaryArchives();
+    await core.packages.clean();
     await core.repo.snapshotDatabase();
     return core;
   }
@@ -257,6 +344,11 @@ export class AppCore {
       mock: false,
       operations: this.repo.operations(),
     };
+  }
+  async safetyBackup(id: string, reason: string, minecraft = false) {
+    const settings = this.incremental.settings();
+    if (minecraft ? settings.beforeMinecraft : settings.beforeContent)
+      return this.backups.create(id, reason);
   }
   async exclusive<T>(id: string, operation: () => Promise<T>): Promise<T> {
     if (this.closing) throw new DomainError('CLOSING', 'The application is shutting down.');
@@ -482,6 +574,7 @@ export class AppCore {
           (await this.reservedPorts(id)).has(ipv6Port))
       )
         throw new DomainError('PORT', 'The IPv6 UDP port is already in use.');
+      await this.configuration.remember(id, 'server.properties');
       await atomicWrite(path.join(server.path, 'server.properties'), serializeProperties(props));
       Object.assign(server, {
         port,
@@ -545,7 +638,7 @@ export class AppCore {
         installerVersion: artifact.installerVersion,
         javaMajor: artifact.java,
       };
-      await this.backups.create(id, 'before_mod_migration');
+      await this.safetyBackup(id, 'before_mod_migration', true);
       await this.installer.install(id, {
         kind: 'mods.migrate',
         replacement: future,
@@ -557,6 +650,7 @@ export class AppCore {
     return this.exclusive(id, async () => {
       const options = serverOptionsSchema.parse(raw);
       const server = this.assertStopped(id);
+      jvmArguments(options.jvm ?? server.jvm, server.javaMajor);
       if (!engineDefinition(server.engine).capabilities.javaMemory) {
         Object.assign(server, { autoStart: options.autoStart, autoRestart: options.autoRestart });
         this.repo.saveServer(server);
@@ -626,7 +720,7 @@ export class AppCore {
       this.repo.audit('server.trashed', server.name);
     });
   }
-  private async reservedPorts(excludeGameServerId?: string): Promise<Set<number>> {
+  async reservedPorts(excludeGameServerId?: string): Promise<Set<number>> {
     const used = new Set<number>();
     for (const server of this.repo.servers()) {
       if (server.id !== excludeGameServerId) used.add(server.port);
@@ -692,6 +786,8 @@ export class AppCore {
   }
   async close(): Promise<void> {
     this.closing = true;
+    this.health.close();
+    await this.performance.close();
     clearInterval(this.maintenance);
     const updateShutdown = this.updates.close();
     this.downloads.cancelAll();
@@ -699,6 +795,7 @@ export class AppCore {
     await updateShutdown;
     await this.scheduler.close();
     await Promise.allSettled([...this.operations.values()]);
+    await this.packages.close();
     await this.maintenanceWork;
     await this.supervisor.close();
     await this.repo.snapshotDatabase();

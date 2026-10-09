@@ -225,12 +225,25 @@ it('never trusts an unsigned legacy release and cancels an in-flight check befor
   }
 });
 it.skipIf(process.platform !== 'win32')(
+  'reports a failed native launch before the app can quit',
+  async () => {
+    const f = await fixture();
+    try {
+      await expect(
+        launchUpdate({ command: path.join(f.root, 'missing-installer.exe'), args: [] }),
+      ).rejects.toMatchObject({ code: 'UPDATE_INSTALL' });
+    } finally {
+      await f.cleanup();
+    }
+  },
+);
+it.skipIf(process.platform !== 'win32')(
   'uses native literal-path PowerShell operations to replace a portable fixture and preserves its previous copy',
   async () => {
     const f = await fixture(),
       release = signed();
     try {
-      const root = path.join(f.root, 'updates'),
+      const root = path.join(f.root, "updates space 'literal' $value"),
         destination = path.join(f.root, 'portable space $literal.exe'),
         source = path.join(f.root, 'download.exe');
       await mkdir(root);
@@ -255,7 +268,10 @@ it.skipIf(process.platform !== 'win32')(
           "$ErrorActionPreference = 'Stop'\nfunction Start-Process { param($FilePath,$WindowStyle) }",
         ),
       );
-      await promisify(execFile)(plan.command, plan.args, { windowsHide: true, timeout: 15000 });
+      await launchUpdate(plan);
+      await expect
+        .poll(() => readFile(plan.resultFile!, 'utf8'), { timeout: 15000 })
+        .toContain('completed');
       const result = JSON.parse((await readFile(plan.resultFile!, 'utf8')).replace(/^\uFEFF/, ''));
       expect(result, JSON.stringify(result)).toMatchObject({ status: 'completed' });
       expect(await readFile(destination)).toEqual(release.bytes);
@@ -281,10 +297,10 @@ it.skipIf(process.platform !== 'win32')(
           "$ErrorActionPreference = 'Stop'\nfunction Start-Process { param($FilePath,$WindowStyle) throw 'Fixture restart rejected.' }",
         ),
       );
-      await promisify(execFile)(failedPlan.command, failedPlan.args, {
-        windowsHide: true,
-        timeout: 15000,
-      });
+      await launchUpdate(failedPlan);
+      await expect
+        .poll(() => readFile(failedPlan.resultFile!, 'utf8'), { timeout: 15000 })
+        .toContain('failed');
       expect(
         JSON.parse((await readFile(failedPlan.resultFile!, 'utf8')).replace(/^\uFEFF/, '')),
       ).toMatchObject({ status: 'failed' });

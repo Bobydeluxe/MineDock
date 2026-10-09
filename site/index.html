@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta
+      name="description"
+      content="MineDock is a local desktop app for creating, managing and backing up a Minecraft survival server with friends."
+    />
+    <meta name="theme-color" content="#f2f0e8" />
+    <title>MineDock — A place for your next survival</title>
+    <link rel="icon" href="assets/engines/vanilla.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+    <header>
+      <a class="brand" href="#" aria-label="MineDock home"
+        ><span class="brand-mark" aria-hidden="true">M</span>MineDock</a
+      >
+      <nav aria-label="Main navigation">
+        <a href="#features">Features</a><a href="#engines">Engines</a
+        ><a href="#guide">Get started</a
+        ><a href="https://github.com/Bobydeluxe/MineDock">GitHub ↗</a>
+      </nav>
+      <a class="button small" href="#download">Download</a>
+    </header>
+    <main id="main">
+      <section class="hero">
+        <p class="eyebrow"><span></span> YOUR COMPUTER. YOUR WORLD. YOUR FRIENDS.</p>
+        <h1>A place for your<br />next <em>survival.</em></h1>
+        <p class="intro">
+          Build a little world together. MineDock takes care of the server, the mods and the backups
+          — right on your desktop.
+        </p>
+        <div class="hero-actions">
+          <a class="button" href="#download">Get MineDock <span aria-hidden="true">↓</span></a
+          ><a class="text-link" href="#inside"
+            >Take a look inside <span aria-hidden="true">↘</span></a
+          >
+        </div>
+        <p class="fine">Free & open source · Windows, Linux & macOS · No hosting subscription</p>
+        <figure class="hero-screen" id="inside">
+          <div class="window-bar">
+            <span></span><span></span><span></span><small>MineDock / your next adventure</small>
+          </div>
+          <img
+            src="assets/dashboard-light.png"
+            width="1440"
+            height="960"
+            alt="MineDock's warm light dashboard with server cards and everyday actions"
+            fetchpriority="high"
+          />
+          <figcaption>
+            Actual MineDock 0.4.0 Electron capture. Isolated QA profiles; no Minecraft gameplay
+            shown.
+          </figcaption>
+        </figure>
+      </section>
+      <section class="statement">
+        <p>
+          For the weekend world.<br />For the family server.<br />For the friends who always say
+          <em>“one more block.”</em>
+        </p>
+        <div>
+          <span class="section-number">01 / MADE FOR SMALL SERVERS</span>
+          <p>
+            You don't need to be a server administrator. Create a server, start it, copy its address
+            and invite your friends. More advanced tools are there when you need them.
+          </p>
+        </div>
+      </section>
+      <section id="features" class="features">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">LESS SETUP. MORE PLAY.</p>
+            <h2>Your world, taken care of.</h2>
+          </div>
+          <p class="development-note">
+            Friends survival evolution<br /><strong>0.4.0 · available now</strong><br />Available
+            for Windows, Linux and macOS.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <span class="feature-symbol" aria-hidden="true">＋</span>
+            <h3>A library for your server</h3>
+            <p>
+              Find compatible mods, plugins, datapacks and resource packs on Modrinth. Review
+              required dependencies before installing. Manual files stay yours.
+            </p>
+            <a
+              href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/user-guide.md#add-a-mod-plugin-or-pack"
+              >Explore content →</a
+            >
+          </article>
+          <article>
+            <span class="feature-symbol" aria-hidden="true">↶</span>
+            <h3>A way back</h3>
+            <p>
+              Keep full ZIP backups or deduplicated incremental snapshots. Review exactly what a
+              partial restoration will replace before confirming.
+            </p>
+            <a
+              href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/user-guide.md#back-up-and-restore-your-world"
+              >Learn about backups →</a
+            >
+          </article>
+          <article>
+            <span class="feature-symbol" aria-hidden="true">◎</span>
+            <h3>A server for your friends</h3>
+            <p>
+              Manage your whitelist, inspect observed player sessions and keep private local notes.
+              Create a fresh survival with the same configuration.
+            </p>
+            <a
+              href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/user-guide.md#invite-an-approved-friend"
+              >Invite your friends →</a
+            >
+          </article>
+        </div>
+      </section>
+      <section class="product-story">
+        <figure>
+          <img
+            loading="lazy"
+            src="assets/mods-light.png"
+            width="1440"
+            height="960"
+            alt="Installed Modrinth mods in MineDock's light appearance"
+          />
+          <figcaption>Real verified Modrinth downloads in an isolated native profile.</figcaption>
+        </figure>
+        <div>
+          <p class="eyebrow">THE GOOD STUFF, WITHOUT THE GUESSWORK</p>
+          <h2>A few mods.<br />A whole new adventure.</h2>
+          <p>
+            MineDock filters content for your Minecraft version and engine. Required dependencies,
+            version choices and potential conflicts appear before you make a change.
+          </p>
+          <p class="fine">
+            Compatibility comes from provider metadata and file inspection. Unknown means unknown.
+          </p>
+        </div>
+      </section>
+      <section class="product-story reverse">
+        <figure>
+          <img
+            loading="lazy"
+            src="assets/backups.png"
+            width="1440"
+            height="960"
+            alt="Full backups and incremental snapshots in the native MineDock application"
+          />
+          <figcaption>Actual backup interface using local QA server files.</figcaption>
+        </figure>
+        <div>
+          <p class="eyebrow">KEEP THE VILLAGE YOU BUILT</p>
+          <h2>Make changes.<br />Keep a way back.</h2>
+          <p>
+            Restore a world without replacing the rest of your server. Keep backups on your
+            computer, a mounted NAS folder or an external drive. Safety backups are enabled by
+            default.
+          </p>
+          <p class="fine">
+            Incremental snapshots currently require a stopped server. MineDock never opens router
+            ports for you.
+          </p>
+        </div>
+      </section>
+      <section id="engines" class="engines">
+        <p class="eyebrow">PICK YOUR KIND OF WORLD</p>
+        <h2>Eight engines.<br />One familiar home.</h2>
+        <div class="engine-grid">
+          <div>
+            <img src="assets/engines/vanilla.svg" alt="" /><strong>Vanilla</strong
+            ><span>The original Java experience</span>
+          </div>
+          <div>
+            <img src="assets/engines/paper.svg" alt="" /><strong>Paper</strong
+            ><span>Java with plugins</span>
+          </div>
+          <div>
+            <img src="assets/engines/purpur.svg" alt="" /><strong>Purpur</strong
+            ><span>More Paper configuration</span>
+          </div>
+          <div>
+            <img src="assets/engines/fabric.svg" alt="" /><strong>Fabric</strong
+            ><span>A lightweight mod loader</span>
+          </div>
+          <div>
+            <img src="assets/engines/forge.svg" alt="" /><strong>Forge</strong
+            ><span>Established modded worlds</span>
+          </div>
+          <div>
+            <img src="assets/engines/neoforge.svg" alt="" /><strong>NeoForge</strong
+            ><span>A modern modding ecosystem</span>
+          </div>
+          <div>
+            <img src="assets/engines/bedrock.svg" alt="" /><strong>Bedrock</strong
+            ><span>Windows / Linux x64 server</span>
+          </div>
+          <div>
+            <img src="assets/engines/pocketmine.svg" alt="" /><strong>PocketMine-MP</strong
+            ><span>PHP plugins · upstream ended</span>
+          </div>
+        </div>
+        <p class="fine">
+          Original MineDock symbols, not official project logos. Availability and features depend on
+          the engine and platform.
+        </p>
+      </section>
+      <section id="guide" class="guide">
+        <div>
+          <p class="eyebrow">YOUR FIRST EVENING</p>
+          <h2>From download<br />to “I'm in.”</h2>
+          <a
+            class="text-link"
+            href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/user-guide.md"
+            >Read the beginner guide ↗</a
+          >
+        </div>
+        <ol>
+          <li>
+            <span>01</span>
+            <div>
+              <h3>Create your server</h3>
+              <p>
+                Choose an engine and version, review the settings and personally accept the
+                Minecraft EULA.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>02</span>
+            <div>
+              <h3>Start your world</h3>
+              <p>Wait for the server's ready message. Connect with a matching Minecraft client.</p>
+            </div>
+          </li>
+          <li>
+            <span>03</span>
+            <div>
+              <h3>Bring your friends</h3>
+              <p>
+                Copy the address and manage the whitelist. Friends outside your home need suitable
+                network and router configuration.
+              </p>
+            </div>
+          </li>
+          <li>
+            <span>04</span>
+            <div>
+              <h3>Keep a backup</h3>
+              <p>
+                Save your world before big changes. MineDock stays open to supervise servers and run
+                scheduled tasks.
+              </p>
+            </div>
+          </li>
+        </ol>
+      </section>
+      <section class="privacy">
+        <span class="section-number">02 / LOCAL BY DESIGN</span>
+        <h2>Your server stays<br /><em>on your computer.</em></h2>
+        <p>
+          Your worlds, backups, configuration and private notes live locally. Official downloads and
+          marketplace searches use Internet access. Testing external reachability shares only the
+          address and port you explicitly approve.
+        </p>
+        <div>
+          <a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/security.md"
+            >Security & privacy ↗</a
+          ><a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/security-audit.md"
+            >Internal audit & known risks ↗</a
+          >
+        </div>
+      </section>
+      <section class="faq">
+        <p class="eyebrow">A FEW THINGS TO KNOW</p>
+        <h2>Before you get started.</h2>
+        <details>
+          <summary>Is MineDock a hosting service?</summary>
+          <p>
+            No. The Minecraft server runs on your own computer. You provide the hardware, a
+            Minecraft client and the network connection. MineDock helps you manage the server
+            locally.
+          </p>
+        </details>
+        <details>
+          <summary>Can my friends connect from outside my home?</summary>
+          <p>
+            Yes, with suitable network configuration. MineDock does not automatically change your
+            router or firewall. The reachability tool distinguishes local connectivity from an
+            external observer, and asks before sharing your address.
+          </p>
+        </details>
+        <details>
+          <summary>Do I need to install Java or Node?</summary>
+          <p>
+            End-user packages include Electron; you do not need Node or pnpm. MineDock can download
+            a suitable managed Java runtime for supported Java servers. Some engines have their own
+            platform requirements.
+          </p>
+        </details>
+        <details>
+          <summary>Which features are in the download today?</summary>
+          <p>
+            MineDock 0.4.0 includes the friends survival features shown here. Screenshots come from
+            the real desktop app with isolated QA records. Read the release notes for downloads,
+            checksums and known limits.
+          </p>
+          <a href="https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0"
+            >Read the 0.4.0 release notes ↗</a
+          >
+        </details>
+        <details>
+          <summary>Why does Windows or macOS warn about the app?</summary>
+          <p>
+            Current packages have no Windows or Apple signing certificate. Download only from the
+            project release page, read its notes and compare the published SHA-256 checksums. Signed
+            update metadata is separate from operating-system code signing.
+          </p>
+        </details>
+        <details>
+          <summary>Can I move my server to another computer?</summary>
+          <p>
+            The .minedock package copies selected world, content and configuration data with a
+            verified manifest. The destination prepares its own official engine and runtime. Default
+            export excludes known secrets and arbitrary plugin configurations; review the documented
+            limits before sharing.
+          </p>
+          <a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/package-format.md"
+            >Read the package policy ↗</a
+          >
+        </details>
+      </section>
+      <section id="download" class="download">
+        <p class="eyebrow">YOUR NEXT WORLD IS WAITING</p>
+        <h2>Make room<br />for your friends.</h2>
+        <p>MineDock 0.4.0 · free & open source</p>
+        <div class="download-links">
+          <a class="button" href="https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0"
+            >Windows <span>Setup / portable</span></a
+          ><a class="button" href="https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0"
+            >Linux <span>AppImage / deb</span></a
+          ><a class="button" href="https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0"
+            >macOS <span>dmg / zip</span></a
+          >
+        </div>
+        <p class="fine">
+          Choose x64 or ARM64 for your computer on the release page. Current Windows/macOS packages
+          are unsigned.
+          <a href="https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.0"
+            >Release notes & checksums ↗</a
+          >
+        </p>
+      </section>
+    </main>
+    <footer>
+      <a class="brand" href="#">MineDock</a>
+      <p>A little home for a world with friends.</p>
+      <div>
+        <a href="https://github.com/Bobydeluxe/MineDock">Source</a
+        ><a href="https://github.com/Bobydeluxe/MineDock/issues/new/choose">Report a bug</a
+        ><a href="https://github.com/Bobydeluxe/MineDock/blob/main/LICENSE">MIT license</a>
+      </div>
+      <small
+        >Not affiliated with Mojang or Microsoft. Minecraft is a trademark of its owners.</small
+      >
+    </footer>
+  </body>
+</html>

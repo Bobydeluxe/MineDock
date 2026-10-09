@@ -159,6 +159,114 @@ export function createMockApi(): Api {
   }, 5000);
   window.addEventListener('beforeunload', () => clearInterval(timer));
   return {
+    performance: async () => ({ samples: [], lags: [] }),
+    configDocuments: async () => [],
+    exportPackage: async () => {},
+    previewPackage: async () => null,
+    importPackage: async () => {
+      throw new Error('Use the desktop application to import a package.');
+    },
+    testReachability: async () => ({
+      local: 'unknown',
+      external: 'unknown',
+      at: new Date().toISOString(),
+      port: 25565,
+      firewall: 'unknown',
+    }),
+    mapPlan: async () => {
+      throw new Error('Use the desktop application to install maps.');
+    },
+    mapApply: async () => {
+      throw new Error('Use the desktop application to install maps.');
+    },
+    mapStatus: async () => [],
+    openMap: async () => {},
+    editConfig: async () => {},
+    configHistory: async () => [],
+    restoreConfig: async () => {},
+    configAudit: async () => ({ findings: ['permissionsUnknown'], port: 25565, bind: '' }),
+    searchHistoricalLogs: async () => ({ lines: [], files: 0, truncated: false }),
+    saveMacro: async () => {},
+    runMacro: async () => {
+      throw new Error('Macros require the desktop app.');
+    },
+    latestMinecraft: async () => null,
+    migrationReview: async () => {
+      throw new Error('Migration checks require the desktop app.');
+    },
+    applyMigration: async () => {
+      throw new Error('Migration requires the desktop app.');
+    },
+    cloneServer: async () => {
+      throw new Error('Cloning requires the desktop app.');
+    },
+    incrementalSnapshots: async () => [],
+    createIncremental: async () => {
+      throw new Error('Incremental backups require the desktop app.');
+    },
+    previewPartial: async () => {
+      throw new Error('Restoring snapshots requires the desktop app.');
+    },
+    restorePartial: async () => {
+      throw new Error('Restoring snapshots requires the desktop app.');
+    },
+    backupSafety: async () => ({ beforeContent: true, beforeMinecraft: true }),
+    configureBackupSafety: async (input) => input,
+    testBackupStorage: async () => {
+      throw new Error('Storage checks require the desktop app.');
+    },
+    playerDetails: async () => ({
+      note: '',
+      sessions: [],
+      observedMs: { today: 0, week: 0, month: 0 },
+    }),
+    playerNote: async () => {},
+    playerSkin: async () => null,
+    setWhitelist: async (id, enabled) => {
+      const s = data.servers.find((s) => s.id === id)!;
+      s.whitelist = enabled;
+      emit({ type: 'server', server: s });
+    },
+    health: async () => ({
+      state: 'healthy',
+      issues: [],
+      hostFreeBytes: 0,
+      memorySource: 'process-working-set',
+    }),
+    healthSettings: async () => ({
+      nativeNotifications: false,
+      crash: true,
+      backupFailed: true,
+      offline: true,
+      update: true,
+      lowDisk: true,
+      playerJoin: false,
+      playerLeave: false,
+      cpuPercent: 90,
+      memoryPercent: 90,
+      diskFreeGiB: 2,
+      backupAgeHours: 48,
+    }),
+    configureHealth: async (input) => input,
+    notices: async () => [],
+    readNotices: async () => {},
+    crashReport: async () => ({ text: '', diagnosis: '', evidence: [], candidates: [] }),
+    revealCrash: async () => {},
+    packSearch: async () => [],
+    packInventory: async () => ({ installed: [], manual: [], problems: [] }),
+    packVersions: async () => [],
+    packPlan: async () => {
+      throw new Error('Use the desktop app to review real packs.');
+    },
+    packApply: async () => {
+      throw new Error('Use the desktop app to install packs.');
+    },
+    packAction: async () => {
+      throw new Error('Use the desktop app to change packs.');
+    },
+    packImport: async () => {
+      throw new Error('Use the desktop app to import packs.');
+    },
     worlds: async (id) => structuredClone(worlds(id)),
     worldAction: async (id, input) => {
       const entries = worlds(id),

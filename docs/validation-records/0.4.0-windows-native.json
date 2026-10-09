@@ -1,0 +1,83 @@
+{
+  "platform": "Windows 11 x64",
+  "date": "2026-10-08",
+  "automaticPackagedUpgrade": {
+    "baseline": "0.4.0",
+    "candidate": "0.4.1",
+    "baselinePortableSha256": "7b516e03e6ff9278abe306eccbf0a8604cad532ebd046368bdeecbd00def9417",
+    "initialSchema": 11,
+    "legacyManual": false,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-08T21:45:32.466Z",
+    "oldVersion": "0.4.0",
+    "signatureAndDownload": "verified by old production application",
+    "helperRelaunch": "completed; actual 0.4.1 startup log observed",
+    "replacedBinarySha256": "6d13fcfbbb64e8bb44bd1d345170ffb71f1e193f99a78d9b4fd4a36ffe4789c7",
+    "finalSchema": 11,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    },
+    "isolatedData": true
+  },
+  "publicLegacyUpgradeWithManualStep": {
+    "baseline": "0.3.0",
+    "candidate": "0.4.0",
+    "baselinePortableSha256": "9773b9cfb53811c94fbfb88f2c305698de64096df7900a1495856b27986e84dd",
+    "initialSchema": 5,
+    "legacyManual": true,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-08T21:28:10.030Z",
+    "oldVersion": "0.3.0",
+    "signatureAndDownload": "verified by old production application",
+    "manualIntervention": "Explicit native helper execution after legacy launcher failed; not an automatic 0.3.0 upgrade",
+    "helperRelaunch": "completed; actual 0.4.0 startup log observed",
+    "replacedBinarySha256": "bb85b7032ee49e1f94ca1d2141945ecdd17d5535a7b9455fe2a1228b2d7caa13",
+    "finalSchema": 11,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    },
+    "isolatedData": true
+  },
+  "nsisLifecycle": {
+    "ExitCode": 0,
+    "ApplicationRemoved": true,
+    "DesktopShortcutCreated": true,
+    "DesktopShortcutRemoved": true,
+    "StartMenuShortcutsCreated": 1,
+    "StartMenuShortcutsRemoved": true,
+    "RegistryRemoved": true,
+    "IsolatedSettingsServerWorldBackupBytesPreserved": true,
+    "DefaultUserDatabaseObserved": true,
+    "DefaultUserDatabasePreserved": true,
+    "InstalledLaunch": true,
+    "SettingsSaved": true,
+    "testedCandidateSha256": "539e7b8878419f77a7a1523760d8824ccbd29bffb5aa5e1f2d77e34f3b4b23ad",
+    "revisionNote": "Lifecycle tested before final restore/console dialog styling and macro label; installer/updater logic unchanged. Final candidate hashes are in validation.md."
+  }
+}

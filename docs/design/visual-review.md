@@ -1,8 +1,8 @@
 # MineDock visual identity review
 
-This is a **style review**, based on the development mod-manager revision in [PR #5](https://github.com/Bobydeluxe/MineDock/pull/5). The application source version stays **0.3.1**; the latest public release stays **0.3.0**. No automatic merge or release is part of this review.
+This document retains the **historical 0.3.1 style review**, based on [PR #5](https://github.com/Bobydeluxe/MineDock/pull/5). The current gallery has since been refreshed for the **0.4.0 survival evolution** in [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7); the public release is **0.4.0**. The earlier geometry measurements below belong to the style-only revision, not to newly added survival panels. The geometry measurements below remain historical review evidence.
 
-The existing sidebar, page order, cards, tabs, creation/import steps, dialogs and user journeys are retained. Production changes are confined to CSS tokens/styles, presentation classes, the editor highlight palette and eight original vector symbols. Server, download, database, RCON, backup, scheduler and update services are unchanged relative to the mod-manager branch.
+The style-only revision retained the existing sidebar, page order, cards, tabs, creation/import steps, dialogs and user journeys. Its changes were confined to CSS tokens/styles, presentation classes, editor highlights and eight original symbols. The subsequent survival revision adds real services and secondary panels, documented in [the evolution ledger](../survival-evolution.md).
 
 ## Palette and material system
 

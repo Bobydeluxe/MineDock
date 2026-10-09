@@ -1,6 +1,6 @@
 # Interface design and validation
 
-The 0.3.1 visual-review source gives the existing interface a mineral teal/copper identity and uses the same real preload/core services. Sidebar placement, page/tab order, card geometry, wizard steps and user journeys stay unchanged. See the [before/after review](design/visual-review.md) for the palette, native comparisons and measured geometry.
+The 0.4.0 survival revision inherits the reviewed mineral teal/copper identity, warm light and neutral charcoal dark. Ordinary creation/start/content/backup journeys stay primary; the new migration, configuration, JVM, audit and map tools are secondary. Pack/player/crash/migration dialogs reuse the shared padded scrolling body, and expanded server tabs scroll horizontally. See [historical visual measurements](design/visual-review.md) and [current native captures](screenshots/README.md).
 
 ## Shared appearance
 
@@ -8,7 +8,7 @@ The 0.3.1 visual-review source gives the existing interface a mineral teal/coppe
 
 Owner review refined the dark surfaces to neutral charcoal grays, with neutral text, borders and overlays. Teal/copper remain accents. All 76 calculated light-theme tokens remain unchanged, including the light console, whose previous inherited colors are now explicitly preserved.
 
-These presentation changes do not alter persistence, security boundaries, downloads, process supervision or update rules. English remains the default with the existing six offline languages.
+The historical presentation-only changes did not alter services; the current survival revision adds the services recorded in [the ledger](survival-evolution.md). English remains the default with six offline languages.
 
 ## Dialogs
 

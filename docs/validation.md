@@ -1,5 +1,78 @@
 # MineDock validation
 
+## Release validation — 9 October 2026
+
+MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `2b977c2472b71559c9e8f8c78f5c4c7b79293a33`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.
+
+| Required check                              | Actual result                                                                                                                                     |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed on local Windows and all six native runners                                                                                                |
+| `pnpm test`                                 | Local: **214 passed, 4 OS skips, 218 total / 37 files**; Windows/macOS same; Linux **213 passed, 5 OS skips**                                     |
+| `pnpm test:ui`                              | Fresh full run after compatibility fix: **26 passed**, 4.8 minutes; source CI also passes                                                         |
+| Local `pnpm test:packaged`                  | **10 passed**, 4.4 minutes                                                                                                                        |
+| Native packaged Windows x64 / ARM64         | **10 passed each**                                                                                                                                |
+| Native packaged Linux x64 / ARM64           | **10 passed each**                                                                                                                                |
+| Native packaged macOS Intel / Apple Silicon | **9 passed + 1 unsupported skip each**                                                                                                            |
+| Official downloads on six native hosts      | Real engine catalogs, Java 21 executable probes, available official PHP runtimes and hash-verified Geyser/Floodgate/ViaVersion configuration pass |
+| Paper bootstrap on six native hosts         | Reaches the `eula=false` gate; no playable world or multiplayer claim                                                                             |
+| Release integrity                           | **12 native packages**, six pinned-key Ed25519 metadata signatures and matching SHA-256/size verified                                             |
+| Current screenshots/site                    | **38 real Electron PNGs + nine-frame labeled GIF**, refreshed 9 October; site desktop/mobile local QA passes                                      |
+
+The [six-platform workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37917545004) completed successfully. Its exact downloaded artifacts are the release inputs. The initial official-content run found a real Geyser compatibility bug: Modrinth's version environment `unknown` was treated as client-only. The corrected fallback requires known project/loader support, still blocks explicit client-only versions, passes its regression and succeeds against the real upstream downloads on all six hosts.
+
+### Upgrade with the exact release portable
+
+The unchanged public **0.3.0** binary loads schema 5, verifies the new publisher signature and downloads the actual release candidate portable, SHA-256 `25843511682a0b13b2857bd9d2b18198f44d176e7ed966ff69355307836376c1`. On this host its legacy detached launcher fails; explicit execution of its prepared native helper then replaces the executable and genuinely relaunches **0.4.0**. **This is a validated upgrade with a manual recovery step, not a seamless automatic 0.3.0 upgrade.** Normal users should close the old app and open the verified new package under the same OS account, keeping their storage folders/profile.
+
+Schema **5→11** and SQLite quick-check `ok` are verified, including the schema-5 pre-migration database copy. Existing settings, server, world/properties, full-backup record/bytes, runtime reference and executable, SQLite data, player history/observations/files, two scheduled tasks and encrypted RCON secret all survive. Real OpenJDK **21.0.12.1** successfully probes before and after. Published migrations 1–5 and the existing migration 6 remain unchanged. Testing uses owned isolated data; no user server is started or replaced.
+
+### Public follow-up and limits
+
+After upload, release assets, public checksums/downloads, all twelve update targets, genuine legacy public-feed replay, packaged 0.4.0 current-version check and the production website are verified separately; their record is added here after execution. Historical private 0.4.0→0.4.1 QA and isolated NSIS lifecycle evidence are retained below with their own hashes, not represented as the release artifact's OS installation result.
+
+Packages are unsigned by Windows/Apple OS certificates; update metadata signatures are separate. No multiplayer/map-rendering, Linux/macOS/ARM64 OS installation or upgrade lifecycle, JVM heap/swap, Windows ACL/firewall or local UDP/IPv6 inspection is claimed. Incremental deletion/GC and legacy ZIP partial restore remain unavailable; complex configuration structures remain textual; changed pack releases need explicit review before Minecraft migration. See [the complete ledger](survival-evolution.md), [security](security.md) and [roadmap](roadmap.md).
+
+## Historical pre-release candidate — 8 October 2026
+
+At this pre-release checkpoint, source 0.4.0 was under review in [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7), stacked on PR #6/#5. Public downloads were then 0.3.0. Local host: Windows 11 x64, Node 24.19, pnpm 11.25, Electron 44.5.1. Historical results below belong to their stated earlier revisions.
+
+| Final check                            | Actual result                                                                                                                         |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| ESLint / strict TypeScript             | Passed                                                                                                                                |
+| Full Vitest regression                 | **213 passed, 4 platform-specific skips; 217 total in 37 files**                                                                      |
+| Production main/preload/renderer build | Passed; nonblocking Rollup annotation/chunk-size warnings                                                                             |
+| Full source UI suite                   | **26 passed, 4.7 minutes**                                                                                                            |
+| Final Windows x64 packaged suite       | **10 passed, 4.4 minutes**, sequentially after all installer work                                                                     |
+| Windows NSIS + portable compilation    | Passed; unsigned                                                                                                                      |
+| Six language catalogs                  | **849 UI keys each**, matching keys/placeholders; existing shared diagnostics retained                                                |
+| Existing migration SQL                 | **1–6 unchanged** against the actual base Git reference; published **1–5 unchanged** against v0.3.0                                   |
+| Current native gallery                 | **38 PNGs + one nine-frame labeled GIF**; real Electron with isolated records                                                         |
+| Static website local QA                | Desktop 1440 px / mobile 390 px: no overflow, broken images/anchors, page errors or failed requests; FAQ and download navigation pass |
+
+After the final restore/console dialog padding correction, production compilation and the affected native survival journey pass again in both source and packaged Windows (one case each). A final macro-name label correction then passes the 14 localization checks and actual source/packaged dialog assertions. The full-suite counts above describe the build before these final interface refinements. The automatic upgrade replay uses the final portable hash below. NSIS lifecycle and public legacy manual recovery use an earlier build, recorded by hash in the evidence; installer/updater logic is unchanged by the final dialog styling/label correction.
+
+The new native survival journey runs production main/preload/core/SQLite/files: commented YAML edit/history restoration, native local datapack import, persisted player note, hash-verified incremental world-only restore preserving unrelated configuration with a safety ZIP, native `.minedock` export/preview and read-all notices. Existing creation/dialogs/six-language preferences, content plans/updates/rollback, files/worlds/imports/recovery/retention and updater rejection stay covered. External API/CDN fixtures are explicitly controlled; no Minecraft process/client is started by these UI tests.
+
+The [public website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) is deployed from saved Sites version 1, source `d0f39cfd373e663c8022d638b5a0a56105097bc9`. The actual production URL also passes the same 1440/390-pixel image/anchor/overflow/error and FAQ/download checks.
+
+### Actual Windows lifecycle and upgrade
+
+[Machine-readable evidence](validation-records/0.4.0-windows-native.json) records three distinct native paths:
+
+1. **NSIS install / installed launch / uninstall:** native silent installer and uninstaller both exit 0 in an owned isolated installation. The installed app opens and saves a preference. Desktop and Start-menu shortcuts are created then removed, the app and registry entry disappear, and isolated settings/server/world/full-backup bytes remain identical. The pre-existing default user database was read-only fingerprinted and also remains identical. No other installation was uninstalled.
+2. **Automatic packaged 0.4.0 → private 0.4.1 QA candidate:** old packaged code verifies the pinned publisher signature and actual portable bytes, starts the production helper, closes, replaces its executable, genuinely relaunches 0.4.1 and records `app.update.installed`. SQLite quick-check is `ok`; settings, server, world/properties, backup record/bytes and runtime reference remain. A real isolated copy of OpenJDK 21.0.12.1 retains its executable hash and successfully runs `-version` afterward. The newer version is only a private test binary; release-feed/metadata/artifact **transport** is controlled, while production updater/signature/hash/native replacement logic runs. At this checkpoint neither new version was publicly released.
+3. **Genuine public 0.3.0 → 0.4.0 with manual recovery:** unchanged packaged files extracted from the verified public portable load schema 5 and perform production signed download verification. Its detached-PowerShell launcher fails before its helper runs on this host. The test explicitly executes that prepared native helper, then observes real 0.4.0 startup, schema **5→11**, quick-check `ok`, installation audit and preserved data/actual Java. **This is not a successful automatic legacy upgrade.** A first manual verified-package upgrade is required for users encountering the old launcher failure here.
+
+The Windows fix uses a short hidden bootstrap and native `Start-Process -WindowStyle Hidden` for independent helper/installer lifetime. Native regression tests now use the production launcher, paths with spaces/apostrophes/literal `$`, failed launcher reporting and failed-relaunch rollback. The [replay script/instructions](development.md) reproduce the full application journey with isolated data.
+
+### Candidate hashes and limits
+
+Local final Windows x64 portable SHA-256: `7b516e03e6ff9278abe306eccbf0a8604cad532ebd046368bdeecbd00def9417`.
+Local final Windows x64 NSIS SHA-256: `961ce45101780474e8e45c85336b5833cbe9259e793a011c5a18878090e60f3a`.
+These earlier local candidate files were not uploaded as a release. [Current GitHub checks](https://github.com/Bobydeluxe/MineDock/pull/7/checks) identify their own exact source head; a configured six-platform matrix is not a new executed 0.4.0 matrix.
+
+No live multiplayer, actual map rendering, other OS install/upgrade, ARM64 lifecycle, OS signing/notarization, JVM heap/swap or Windows ACL/firewall inspection is claimed. Incremental deletion/GC and legacy ZIP partial restore are unavailable. Pack release changes remain an explicit migration prerequisite. New graphical options cover bounded existing YAML/JSON primitives; complex structures remain textual. The GIF is a labeled slideshow of actual captures, not a continuous recording or game video. The security document is an internal developer review, not an independent audit. See [the ledger](survival-evolution.md) and [roadmap](roadmap.md).
+
 ## Charcoal dark-theme refinement, 8 October 2026
 
 Owner feedback refined the dark surfaces, text, borders and overlays to neutral charcoal grays. A before/after computed-style comparison confirms **all 76 light-theme tokens unchanged**, including the console. All ten relevant identity/polish cases pass across the targeted run and isolated rerun; two initial cases had a concurrent test-server port collision and pass when run separately. The visual case checks 23 contrast/focus combinations per theme, eight server states, mod badges, four desktop sizes, focus return and reduced motion. Lint, strict TypeScript, production compilation and unsigned Windows x64 NSIS/portable packaging pass. Backend, layout, languages and public release version are unchanged.
@@ -16,11 +89,11 @@ The new visual case checks 23 foreground/background or focus combinations per th
 
 Native before/after captures measure 181 rectangles across 26 views/states, agreeing in layout properties within 0.5 CSS pixels. The current gallery uses actual Electron/SQLite services and isolated QA records. Mod binaries were actually downloaded and verified; active console/lifecycle data comes from an inert external Node fixture, not Minecraft. No gameplay, interactive OS installation, new six-platform native package matrix or OS signing is claimed. See [design, geometry and capture provenance](design/visual-review.md).
 
-All 28 then-current native images were visually reviewed; eight historical comparison images are retained separately. All 119 checked local documentation links resolve. The public release is still v0.3.0; all twelve public package links return HTTP 200 with their expected content length. The original unsigned preview at `863c6fc` had portable x64 SHA-256 `c23975c97bbb06702c3fd1c5ef0b92e34f09ac0ac06fb27cb70620b5161c46e0` and NSIS x64 SHA-256 `31918b66ccad65a8db9882c96049a7fccc55c7bff8f85ed43b6ca62d1a1d1d0c`. Those local packages are superseded by the charcoal rebuild above; neither revision is uploaded as a release.
+All 28 then-current native images were visually reviewed; eight historical comparison images are retained separately. All 119 checked local documentation links resolve. At that historical checkpoint the public release was v0.3.0; all twelve public package links return HTTP 200 with their expected content length. The original unsigned preview at `863c6fc` had portable x64 SHA-256 `c23975c97bbb06702c3fd1c5ef0b92e34f09ac0ac06fb27cb70620b5161c46e0` and NSIS x64 SHA-256 `31918b66ccad65a8db9882c96049a7fccc55c7bff8f85ed43b6ca62d1a1d1d0c`. Those local packages are superseded by the charcoal rebuild above; neither revision is uploaded as a release.
 
-## Development mod manager, 4–8 October 2026
+## Historical development mod manager, 4–8 October 2026
 
-The source remains 0.3.1 while review is pending. Windows 11 x64 / Node 24 / pnpm 11.19: lint and strict TypeScript pass; the full unit run passes **183 cases with four OS-specific skips (187 total in 24 files)**. The full source UI suite passes **24 cases**. Windows NSIS and portable x64 compile unsigned; the packaged suite includes **nine actual Electron cases**, including the mod management journey. No new public release or new six-platform packaging matrix is claimed.
+At this historical checkpoint, source was 0.3.1 while review was pending. Windows 11 x64 / Node 24 / pnpm 11.19: lint and strict TypeScript passed; the full unit run passed **183 cases with four OS-specific skips (187 total in 24 files)**. The full source UI suite passed **24 cases**. Windows NSIS and portable x64 compiled unsigned; the packaged suite included **nine actual Electron cases**, including the mod management journey. This checkpoint did not include a new public release or a new six-platform packaging matrix.
 
 The 37 mod-manager cases cover Fabric/Forge/NeoForge JAR transactions; named required and optional dependencies; constraints, conflicts, pins and shared dependency removal; updates and archived rollback; cancellation and failed-batch preservation; manual metadata/hash identification; favorites and destination collections; offline local administration; bounded caches and 300-mod updates in three requests; appended schema-6 upgrade with preserved encrypted RCON secrets and old binaries; rejected retired download hosts; local startup blocking; and whole-server migration preserving world/configuration/property bytes, including comments and line endings, or restoring the old profile/files on failure.
 
@@ -52,7 +125,7 @@ The UI suite includes eight real Electron cases, six existing explicit demo jour
 
 Each language now has **567 UI keys and 408 shared messages**. Nine current renderer captures were visually reviewed in dark/light appearance, including the complete console panel. Two additional native Electron captures show first start and the fresh empty dashboard. Captures disclose explicit demo mode and simulated game data. Existing server imports, worlds, backups, files, players, schedules, runtimes and update behavior remain covered by the existing backend/UI suites. No real Minecraft EULA was accepted for this revision.
 
-The six-platform native execution below belongs to **0.3.0**, not a new 0.3.1 matrix. The latest public download remains 0.3.0; 0.3.1 is an unpublished source revision with a locally compiled Windows x64 package.
+The six-platform native execution below belongs to **0.3.0**, not a new 0.3.1 matrix. At that checkpoint the public download remained 0.3.0; 0.3.1 was an unpublished source revision with a locally compiled Windows x64 package.
 
 The [initial Linux GitHub validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37219775900) at application source `d26461e` passed frozen installation, lint, strict types, a fresh full unit run (**147 passed, 4 OS-specific skips**), production compilation and **all 22 then-existing UI cases** under Xvfb. Its independent push validation passed as well. A later repeat exposed an intermittent loss of a draft language selection. A deterministic regression reproduced it: an unrelated snapshot refresh reset unchanged persisted preferences over the form draft. The renderer now compares persisted values before synchronizing. The new regression and six-language journey both pass. Current-head CI results are available in [PR #4](https://github.com/Bobydeluxe/MineDock/pull/4/checks). These are source-build/Electron checks, not a newly packaged six-platform 0.3.1 matrix.
 
