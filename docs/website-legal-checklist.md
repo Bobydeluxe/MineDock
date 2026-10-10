@@ -17,7 +17,7 @@ For professional publishers, consult current official guidance for [an individua
 
 The planned host is GitHub Pages / GitHub, Inc. Its postal identification and official support/privacy links are sourced in the draft notice from [GitHub's statement](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement). A suitable current general hosting telephone contact has **not** been verified; leave this marked pending where the applicable notice requires it. The official [SIRT description](https://docs.github.com/en/site-policy/security-policies/github-sirt-description-rfc-2350) says no telephone is available for that team; a security team contact must not be repurposed as an invented host phone number.
 
-GitHub Pages is not yet active for this repo. The new notice does not purport to identify the current ChatGPT Sites host. Keep the legacy site unchanged until the replacement and its legal text are approved.
+GitHub Pages is not yet active for this repo. The new notice does not purport to identify the current ChatGPT Sites host. Keep the legacy host/audience until the replacement and its legal text are approved. The separately authorized 0.5.0 application release updates that existing homepage’s version/download links; it does not deploy Pages or legal drafts.
 
 ## Actual technology audit
 
@@ -45,4 +45,4 @@ An anonymous browser visit to the current legacy site on 10 October 2026 returne
 
 Keep the MIT code license distinct from the supplied icon's provenance, dependencies, Minecraft textures/skins and mod licenses. Captures have existing explicit owner permission for public website/GitHub use, while original game/client/cache files remain excluded. Keep synthetic-data/version disclosures and links to [asset policy](asset-policy.md), [brand provenance](../assets/brand/README.md) and [dependency notices](THIRD_PARTY_NOTICES.md). Owner permission is not a legal certification of third-party rights.
 
-Before launch: fill and review every TODO, resolve applicable host contact gaps, review terms/privacy/IP pages, record the actual review date/statuses, obtain explicit merge/website publication approval, configure Pages/environment, deploy from `main` and verify the real host. Google verification can follow separately. None of this authorizes a 0.5.0 application release.
+Before launch: fill and review every TODO, resolve applicable host contact gaps, review terms/privacy/IP pages, record the actual review date/statuses, obtain explicit approval for the reviewed legal changes and Pages publication, configure Pages/environment, deploy from `main` and verify the real host. Google verification can follow separately. The application release was authorized and published separately; it does not approve these legal drafts.

@@ -1,5 +1,20 @@
 # MineDock validation
 
+## MineDock 0.5.0 public release — 10 October 2026
+
+[MineDock 0.5.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) is the current stable release. [Machine-readable release evidence](validation-records/0.5.0-release.json) records the exact artifacts, checks and migration bytes. Historical sections below describe their own earlier checkpoints.
+
+- Lint, typecheck and build pass. **286 unit tests pass / 5 OS skips** (291 cases, 45 files). Source Electron UI: **31 passes / 1 private-resource skip**, plus the owned local-client case passes separately: all **32 UI cases** are validated locally.
+- Local Windows packaged: **16 passes / no skips**. [Six native jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/38060927812) pass: Windows/Linux each **15 packaged passes / 1 private-resource skip**; macOS each **14 passes / 2 skips** (private resources and native Bedrock directory import). Native Windows x64 needed one retry after a five-second inventory-backup wait expired. The reviewed 30-second wait keeps every backup, saved-byte, restore and snapshot assertion; application inputs are unchanged.
+- **12 packages + 6 signed updater files + features + SHA256SUMS = 20 public assets**, all anonymously downloadable with verified size/digest. All **19 manifest entries** and **6 pinned Ed25519 signatures** match. The public Windows x64 portable was actually downloaded and matches the tested CI bytes: SHA-256 `2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06`.
+- Real public **Windows 0.4.1 → 0.5.0** verifies the feed/signature/download, replaces the portable and automatically relaunches. SQLite **11 → 12**, quick-check **ok**, schema-11 safety copy and installation audit pass. Servers, settings, worlds/properties, backup metadata/bytes, real Java runtime, player history/observations/NBT/notes, encrypted secret and tasks are preserved.
+- Real public **0.3.0 → 0.5.0** also passes SQLite **5 → 12** and data preservation with the documented manual native-helper recovery after its legacy launcher fails. Normal 0.3.0 users should close it and open the verified new package manually; this is not described as seamless automatic upgrading.
+- Production updater selection verifies all **12 platform/package targets**. The actual public packaged **0.5.0** checks GitHub and visibly shows **Up to date**.
+- The [official v0.5.0 tag workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/38063115196) passes all six native jobs with the reviewed waits. Main source validation passes; the Pages review build passes and its deployment is skipped. All twenty older 0.4.1 assets retain their recorded sizes and hashes.
+- Existing public website **version 10** uses 0.5.0 downloads; five widths pass, seven native screenshot hashes match per width, and thirteen distinct download URLs are valid. The Pages review export passes **641 static assertions / 30 browser cases**, and its deployment is skipped while legal approval is false. Website export and game archives are absent from the checked desktop package.
+
+Fourteen new native interface captures and source-specific real Paper/item probes remain documented with honest provenance. OS signing/notarization, Linux/macOS/ARM64 OS upgrade lifecycles, connected-client multiplayer/inventory, exhaustive rendering and the legally gated Pages migration remain limitations. See [release notes](release-notes-0.5.0.md), [asset policy](asset-policy.md), [security](security.md) and [roadmap](roadmap.md).
+
 ## Historical website migration preparation — 10 October 2026
 
 GitHub Pages is **PREPARED ONLY**: the authenticated Pages/environment endpoints and proposed public project URL returned 404; the existing legacy site returns 200. The owner confirmed a non-professional individual publisher, anonymity and no public email yet. Production is deliberately blocked on required contact/host-disclosure review and explicit merge/publication approval. No release, merge or primary-site switch was performed.

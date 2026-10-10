@@ -8,7 +8,7 @@ Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gamepl
 
 ## Website migration — prepared only
 
-The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation are prepared in PR #9. The owner confirmed non-professional status, anonymity and no public email yet. Legal/contact review, confirmation of required private identity disclosure to the host, explicit merge/publication approval and actual deployment remain outstanding. The legacy site remains primary until the replacement is verified. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
+The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation are prepared in the merged PR #9. The owner confirmed non-professional status, anonymity and no public email yet. Legal/contact review, confirmation of required private identity disclosure to the host, explicit Pages publication approval and actual deployment remain outstanding. The existing public site now uses 0.5.0 downloads and remains primary until the replacement is verified. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
 
 ## Included in MineDock 0.4.1
 
@@ -36,6 +36,6 @@ Docker, remote accounts/RBAC, tunnels, cloud synchronization/providers, optional
 
 ## Added in 0.4.1
 
-Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The site uses public 0.4.1 downloads and matching current screenshots. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
+Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The original 0.4.1 site and captures record that release; the current homepage uses 0.5.0 downloads and discloses retained baseline screens. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
 
 The owner authorized merging and publishing the validated 0.4.1 changes. All six native jobs and artifact checks pass for the recorded app source; changed app inputs require repeating them. GitHub's social preview is installed and verified. Direct visual confirmation of an existing pinned Windows shortcut remains a manual check where the connected tools cannot observe it.

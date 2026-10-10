@@ -1,0 +1,782 @@
+{
+  "version": "0.5.0",
+  "state": "Published stable application release; GitHub Pages remains legally gated",
+  "at": "2026-10-10T17:34:19.827Z",
+  "release": {
+    "id": 409027004,
+    "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0",
+    "tag": "v0.5.0",
+    "assets": 20,
+    "source": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+    "artifactSource": "1ef2ab0783500e13682ef800aa8ff58af182c380",
+    "publishedAt": "2026-10-10T15:20:40Z"
+  },
+  "artifactSource": "1ef2ab0783500e13682ef800aa8ff58af182c380",
+  "applicationSource": "aa4f141475ab516205b827daa045da5b2dcbd94b",
+  "reviewedHead": "9bfd6793cc2d32c383283118b70314277d01dd59",
+  "packagedInputsMatchReleaseTag": true,
+  "local": {
+    "platform": "Windows 11 x64",
+    "source": "9bfd6793cc2d32c383283118b70314277d01dd59",
+    "lint": "passed",
+    "typecheck": "passed as pnpm build typecheck phase",
+    "build": "passed",
+    "unit": {
+      "passed": 286,
+      "skipped": 5,
+      "total": 291,
+      "files": 45
+    },
+    "sourceUI": {
+      "passed": 31,
+      "skipped": 1,
+      "total": 32,
+      "duration": "7.2m"
+    },
+    "ownedResourceUI": {
+      "passed": 1,
+      "skipped": 0,
+      "duration": "22.7s",
+      "privateClientUsed": true
+    },
+    "correctedBackupWaitUI": {
+      "passed": 1,
+      "duration": "37.1s",
+      "backupAndRestoreAssertionsRetained": true
+    },
+    "packaged": {
+      "passed": 16,
+      "skipped": 0,
+      "duration": "6.9m",
+      "artifact": "local Windows package; distinct from native CI release artifact"
+    },
+    "websiteReview": {
+      "staticAssertions": 641,
+      "browserCases": 30,
+      "pages": 6,
+      "widths": [390, 768, 1280, 1440, 1920]
+    },
+    "legacyWebsiteReleasePreview": {
+      "widths": 5,
+      "imagesMatchedPerWidth": 7,
+      "downloadUrls": 13,
+      "overflow": 0,
+      "brokenImages": 0,
+      "errors": 0
+    },
+    "documentation": {
+      "relativeLinksVerified": 337,
+      "nativeCaptureHashesVerified": 14,
+      "privateGameFilesTracked": false
+    },
+    "packageIsolation": {
+      "websiteFilesExcluded": 40,
+      "applicationFilesWithSameInclusion": 12
+    },
+    "releaseArtifactSmoke": {
+      "passed": 2,
+      "duration": "58.2s",
+      "sha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06",
+      "cases": ["owned private images", "verified inventory backup/edit/restore"]
+    }
+  },
+  "native": {
+    "runId": 38060927812,
+    "head": "1ef2ab0783500e13682ef800aa8ff58af182c380",
+    "version": "0.5.0",
+    "platforms": 6,
+    "installers": 12,
+    "signaturesVerified": 6,
+    "jobs": [
+      {
+        "id": 114241787435,
+        "name": "package (windows-2025, x64, build:windows)",
+        "status": "completed",
+        "conclusion": "success",
+        "failures": []
+      },
+      {
+        "id": 114241787895,
+        "name": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "status": "completed",
+        "conclusion": "success",
+        "failures": []
+      },
+      {
+        "id": 114241788556,
+        "name": "package (macos-15, arm64, build:mac)",
+        "status": "completed",
+        "conclusion": "success",
+        "failures": []
+      },
+      {
+        "id": 114241809051,
+        "name": "package (ubuntu-24.04, x64, build:linux)",
+        "status": "completed",
+        "conclusion": "success",
+        "failures": []
+      },
+      {
+        "id": 114241811002,
+        "name": "package (windows-11-arm, arm64, build:windows)",
+        "status": "completed",
+        "conclusion": "success",
+        "failures": []
+      },
+      {
+        "id": 114241817860,
+        "name": "package (macos-15-intel, x64, build:mac)",
+        "status": "completed",
+        "conclusion": "success",
+        "failures": []
+      }
+    ],
+    "testCounts": [
+      {
+        "id": 114241787435,
+        "name": "package (windows-2025, x64, build:windows)",
+        "results": [
+          "✓ tests/updates.test.ts (7 tests | 2 skipped) 7055ms",
+          "✓ tests/player-inventory.test.ts (7 tests | 1 skipped) 3819ms",
+          "✓ tests/runtime-tar.test.ts (4 tests | 2 skipped) 761ms",
+          " Test Files  45 passed (45)",
+          "      Tests  286 passed | 5 skipped (291)",
+          "1 skipped",
+          "15 passed (8.5m)"
+        ]
+      },
+      {
+        "id": 114241787895,
+        "name": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "results": [
+          "✓ tests/updates.test.ts (7 tests | 3 skipped) 212ms",
+          "✓ tests/runtime-tar.test.ts (4 tests | 2 skipped) 69ms",
+          " Test Files  45 passed (45)",
+          "      Tests  286 passed | 5 skipped (291)",
+          "1 skipped",
+          "15 passed (7.2m)"
+        ]
+      },
+      {
+        "id": 114241788556,
+        "name": "package (macos-15, arm64, build:mac)",
+        "results": [
+          "✓ tests/updates.test.ts (7 tests | 3 skipped) 262ms",
+          "✓ tests/runtime-tar.test.ts (4 tests | 1 skipped) 112ms",
+          " Test Files  45 passed (45)",
+          "      Tests  287 passed | 4 skipped (291)",
+          "2 skipped",
+          "14 passed (52.1s)"
+        ]
+      },
+      {
+        "id": 114241809051,
+        "name": "package (ubuntu-24.04, x64, build:linux)",
+        "results": [
+          "✓ tests/updates.test.ts (7 tests | 3 skipped) 233ms",
+          "✓ tests/runtime-tar.test.ts (4 tests | 2 skipped) 81ms",
+          " Test Files  45 passed (45)",
+          "      Tests  286 passed | 5 skipped (291)",
+          "1 skipped",
+          "15 passed (7.1m)"
+        ]
+      },
+      {
+        "id": 114241811002,
+        "name": "package (windows-11-arm, arm64, build:windows)",
+        "results": [
+          "✓ tests/updates.test.ts (7 tests | 2 skipped) 9860ms",
+          "✓ tests/player-inventory.test.ts (7 tests | 1 skipped) 3918ms",
+          "✓ tests/runtime-tar.test.ts (4 tests | 2 skipped) 781ms",
+          " Test Files  45 passed (45)",
+          "      Tests  286 passed | 5 skipped (291)",
+          "1 skipped",
+          "15 passed (7.7m)"
+        ]
+      },
+      {
+        "id": 114241817860,
+        "name": "package (macos-15-intel, x64, build:mac)",
+        "results": [
+          "✓ tests/updates.test.ts (7 tests | 3 skipped) 600ms",
+          "✓ tests/runtime-tar.test.ts (4 tests | 1 skipped) 263ms",
+          " Test Files  45 passed (45)",
+          "      Tests  287 passed | 4 skipped (291)",
+          "2 skipped",
+          "14 passed (1.5m)"
+        ]
+      }
+    ],
+    "initialWindowsX64Attempt": {
+      "job": 114238855837,
+      "result": "one UI wait exceeded 5 seconds after saved inventory Apply change",
+      "retryJob": 114241787435,
+      "resolution": "retry passes; reviewed test now allows 30 seconds for verified backup/restore and retains all file, backup, snapshot and inventory assertions",
+      "applicationCodeChanged": false
+    }
+  },
+  "prePublicationUpgrade": {
+    "baseline": "0.4.1",
+    "candidate": "0.5.0",
+    "baselinePortableSha256": "b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87",
+    "initialSchema": 11,
+    "legacyManual": false,
+    "feed": "controlled transport only; production metadata signature and actual installer bytes",
+    "at": "2026-10-10T15:17:12.404Z",
+    "oldVersion": "0.4.1",
+    "signatureAndDownload": "verified by old production application",
+    "helperRelaunch": "completed; actual 0.5.0 startup log observed",
+    "replacedBinarySha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06",
+    "finalSchema": 12,
+    "quickCheck": "ok",
+    "installAudit": true,
+    "preMigrationDatabaseBackup": {
+      "schema": 11,
+      "quickCheck": "ok",
+      "playersNotesAndTasksPreserved": true
+    },
+    "dataPreserved": {
+      "settings": true,
+      "server": true,
+      "world": true,
+      "properties": true,
+      "backupRecord": true,
+      "backupBytes": true,
+      "runtimeReference": true,
+      "sqliteDatabase": true,
+      "playerHistory": true,
+      "playerObservations": true,
+      "playerFiles": true,
+      "playerInventoryBytes": true,
+      "privatePlayerNotes": true,
+      "scheduledTasks": true,
+      "encryptedRconSecret": true
+    },
+    "actualJavaRuntime": {
+      "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+      "binaryBytesPreserved": true,
+      "executableProbeAfterUpgrade": true
+    }
+  },
+  "public": {
+    "assets": {
+      "at": "2026-10-10T15:21:00.780Z",
+      "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0",
+      "latest": "v0.5.0",
+      "title": "MineDock 0.5.0",
+      "assets": [
+        {
+          "name": "MineDock-0.5.0-amd64.deb",
+          "size": 102230068,
+          "sha256": "1d09f3d2adcc6928bf296cc1cf1a87dec6e52bb07b72909be1f11585e8e646ec",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-arm64.AppImage",
+          "size": 129902202,
+          "sha256": "04778aff5356570bb2258add221c9bb0fb78c76f43537454cefb58c4de9cac19",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-arm64.deb",
+          "size": 97377608,
+          "sha256": "7158dcbc8128a428a38ab3b30f8e95967212537dfec056adc9374feed347ba22",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-arm64.dmg",
+          "size": 132624734,
+          "sha256": "c710811b4fd8794837e71f1fe55c549b94c6516e6cc3b943baeba277373eeff8",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-arm64.zip",
+          "size": 131739986,
+          "sha256": "6799c645173c7200307ec8b168369b47622aa98c6dd979158c173a062b533c78",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-Portable-arm64.exe",
+          "size": 107590911,
+          "sha256": "68bca6609e256739480aeaa4db0145f23672941556ca5488f50471bb4436f9fd",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-Portable-x64.exe",
+          "size": 113697903,
+          "sha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-Setup-arm64.exe",
+          "size": 107879847,
+          "sha256": "732bc3dc4d93d6a03835b97a41db2d5d9902997678869d012eff306b5b007105",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-Setup-x64.exe",
+          "size": 113987387,
+          "sha256": "9bb0547ae7096fa69542e23e8d65d523854186a64edc2843f990e3c959ce7305",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-x64.dmg",
+          "size": 136492238,
+          "sha256": "a8197ad81f19655b1a5718bafc7a32af75331c5aef0dccc2f878a60e384150e7",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-x64.zip",
+          "size": 135641252,
+          "sha256": "0d464483a16a69e3f57132cef30fa2cd25605efeef936af3ffcd6491fa6b9aed",
+          "status": 200
+        },
+        {
+          "name": "MineDock-0.5.0-x86_64.AppImage",
+          "size": 128655525,
+          "sha256": "6fcb6fe755bfbcb36ec4b8b60d7724834596e26848b3f706f9e22355629c8bbf",
+          "status": 200
+        },
+        {
+          "name": "MineDock-Features.txt",
+          "size": 32511,
+          "sha256": "f188d42263c870264a076185a7f2f626a41081e9b50cad8e598e971e742066d7",
+          "status": 200
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "size": 1749,
+          "sha256": "dc26443a6b29c2b1a07fd8123f7dfdd6aa4df898a8e83439407231e49c21667e",
+          "status": 200
+        },
+        {
+          "name": "update-darwin-arm64.json",
+          "size": 1270,
+          "sha256": "045a2ea6db733aac09b64ca65a73f290cc4def9f5b41a4a7917349b3b017035a",
+          "status": 200
+        },
+        {
+          "name": "update-darwin-x64.json",
+          "size": 1254,
+          "sha256": "d214215e3e8f72adf2eff50c896297c3084a444618c1c52442710f6005f6694f",
+          "status": 200
+        },
+        {
+          "name": "update-linux-arm64.json",
+          "size": 1282,
+          "sha256": "5365a231733a453f0bcd6d479940383cd3e39c69704777a55baf0d3be9cd9cb0",
+          "status": 200
+        },
+        {
+          "name": "update-linux-x64.json",
+          "size": 1282,
+          "sha256": "880af510cfbdd45f581bd5d37d7a1715c3fbe1afb63d8489ea2da9d29ecaccba",
+          "status": 200
+        },
+        {
+          "name": "update-win32-arm64.json",
+          "size": 1314,
+          "sha256": "9323117a8d147dd2662814051a7d2d98192f2b3b02ec13b00b4c59b73f4eaf9f",
+          "status": 200
+        },
+        {
+          "name": "update-win32-x64.json",
+          "size": 1298,
+          "sha256": "ad415d327157d627575b956ac90e14eddf2f3bb199aeb1444b291cc3d87bfa45",
+          "status": 200
+        }
+      ],
+      "metadataSignatures": 6,
+      "publicWindowsPortable": {
+        "filename": "MineDock-0.5.0-Portable-x64.exe",
+        "size": 113697903,
+        "sha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06",
+        "matchesValidatedNativeBuild": true
+      },
+      "checksumEntries": 19
+    },
+    "updater": {
+      "at": "2026-10-10T15:21:05.931Z",
+      "targets": [
+        {
+          "platform": "win32",
+          "arch": "x64",
+          "target": "nsis",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "win32",
+          "arch": "x64",
+          "target": "portable",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "win32",
+          "arch": "arm64",
+          "target": "nsis",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "win32",
+          "arch": "arm64",
+          "target": "portable",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "linux",
+          "arch": "x64",
+          "target": "appimage",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "linux",
+          "arch": "x64",
+          "target": "deb",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "linux",
+          "arch": "arm64",
+          "target": "appimage",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "linux",
+          "arch": "arm64",
+          "target": "deb",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "darwin",
+          "arch": "x64",
+          "target": "maczip",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "darwin",
+          "arch": "x64",
+          "target": "dmg",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "darwin",
+          "arch": "arm64",
+          "target": "maczip",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        },
+        {
+          "platform": "darwin",
+          "arch": "arm64",
+          "target": "dmg",
+          "version": "0.5.0",
+          "signature": "verified by production UpdateService"
+        }
+      ],
+      "download": {
+        "version": "0.5.0",
+        "platform": "win32",
+        "arch": "x64",
+        "target": "portable",
+        "filename": "MineDock-0.5.0-Portable-x64.exe",
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Portable-x64.exe",
+        "size": 113697903,
+        "sha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06"
+      },
+      "currentVersionCheck": "passed",
+      "host": "isolated production service with declared comparison version; genuine 0.4.1 app replay and actual packaged 0.5.0 check recorded separately",
+      "installerExecuted": false
+    },
+    "current": {
+      "at": "2026-10-10T17:29:00.958Z",
+      "packaged": true,
+      "currentVersion": "0.5.0",
+      "feed": "real public GitHub feed; no interception",
+      "upToDate": true
+    },
+    "windows041To050": {
+      "baseline": "0.4.1",
+      "candidate": "0.5.0",
+      "baselinePortableSha256": "b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87",
+      "initialSchema": 11,
+      "legacyManual": false,
+      "feed": "actual public GitHub feed, signed metadata and public installer download",
+      "at": "2026-10-10T15:21:09.664Z",
+      "oldVersion": "0.4.1",
+      "signatureAndDownload": "verified by old production application",
+      "helperRelaunch": "completed; actual 0.5.0 startup log observed",
+      "replacedBinarySha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06",
+      "finalSchema": 12,
+      "quickCheck": "ok",
+      "installAudit": true,
+      "preMigrationDatabaseBackup": {
+        "schema": 11,
+        "quickCheck": "ok",
+        "playersNotesAndTasksPreserved": true
+      },
+      "dataPreserved": {
+        "settings": true,
+        "server": true,
+        "world": true,
+        "properties": true,
+        "backupRecord": true,
+        "backupBytes": true,
+        "runtimeReference": true,
+        "sqliteDatabase": true,
+        "playerHistory": true,
+        "playerObservations": true,
+        "playerFiles": true,
+        "playerInventoryBytes": true,
+        "privatePlayerNotes": true,
+        "scheduledTasks": true,
+        "encryptedRconSecret": true
+      },
+      "actualJavaRuntime": {
+        "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+        "binaryBytesPreserved": true,
+        "executableProbeAfterUpgrade": true
+      }
+    },
+    "windows030To050": {
+      "baseline": "0.3.0",
+      "candidate": "0.5.0",
+      "baselinePortableSha256": "9773b9cfb53811c94fbfb88f2c305698de64096df7900a1495856b27986e84dd",
+      "initialSchema": 5,
+      "legacyManual": true,
+      "feed": "actual public GitHub feed, signed metadata and public installer download",
+      "at": "2026-10-10T17:32:21.174Z",
+      "oldVersion": "0.3.0",
+      "signatureAndDownload": "verified by old production application",
+      "manualIntervention": "Explicit native helper execution after legacy launcher failed; not an automatic 0.3.0 upgrade",
+      "helperRelaunch": "completed; actual 0.5.0 startup log observed",
+      "replacedBinarySha256": "2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06",
+      "finalSchema": 12,
+      "quickCheck": "ok",
+      "installAudit": true,
+      "preMigrationDatabaseBackup": {
+        "schema": 5,
+        "quickCheck": "ok",
+        "playersAndTasksPreserved": true
+      },
+      "dataPreserved": {
+        "settings": true,
+        "server": true,
+        "world": true,
+        "properties": true,
+        "backupRecord": true,
+        "backupBytes": true,
+        "runtimeReference": true,
+        "sqliteDatabase": true,
+        "playerHistory": true,
+        "playerObservations": true,
+        "playerFiles": true,
+        "playerInventoryBytes": true,
+        "scheduledTasks": true,
+        "encryptedRconSecret": true
+      },
+      "actualJavaRuntime": {
+        "version": "openjdk version \"21.0.12.1\" 2026-08-18 LTS",
+        "binaryBytesPreserved": true,
+        "executableProbeAfterUpgrade": true
+      }
+    }
+  },
+  "website": {
+    "deployment": {
+      "id": "appgdep_6aca76c0c93c8191b0353787ced7f8ea",
+      "project_id": "appgprj_6ac7f4f976b081918a08b548e427f782",
+      "version_id": "appgprj_6ac7f4f976b081918a08b548e427f782~appgver_af9327a2f47081919773b9d23a52d24f",
+      "status": "succeeded",
+      "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+      "updated_at": "2026-10-10T17:33:01.460089+00:00",
+      "failure_message": null
+    },
+    "source": "7d0dae596f6cbd2665b1aef10499ab18cca9b0d2",
+    "validatedWidths": [390, 768, 1280, 1440, 1920],
+    "nativeImagesMatchedPerWidth": 7,
+    "downloadUrls": 13,
+    "pagesPublicationApproved": false,
+    "legalDraftsPublished": false
+  },
+  "screenshots": {
+    "count": 14,
+    "provenance": "docs/screenshots/player-world-050/provenance.json",
+    "baselineCapturesKeepTheirOriginal041Provenance": true
+  },
+  "retainedCoverage": {
+    "actualPaper": "1.21.11 build 132, Java 21, no clients; source-specific historical administration record",
+    "itemProbes": "98/132 across four exact Java releases; 6/6 actual Adorn models",
+    "record": "0.5.0-remote-item-assets.json"
+  },
+  "limits": [
+    "No OS publisher certificates or macOS notarization",
+    "Linux/macOS/ARM64 OS installer/update lifecycles not established by packaged app tests",
+    "Minecraft multiplayer, connected-client inventory and Bedrock/PocketMine gameplay unvalidated",
+    "Partial item rendering; future/custom Java NBT read-only; no Bedrock/PocketMine native inventory storage",
+    "GitHub Pages legal/contact/host-disclosure review pending; existing site remains primary"
+  ],
+  "officialTagChecks": {
+    "id": 38063115196,
+    "name": "Build distribution artifacts",
+    "event": "push",
+    "branch": "v0.5.0",
+    "head": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38063115196",
+    "jobs": [
+      {
+        "id": 114245227954,
+        "name": "package (windows-11-arm, arm64, build:windows)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 114245228011,
+        "name": "package (macos-15-intel, x64, build:mac)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 114245228030,
+        "name": "package (ubuntu-24.04, x64, build:linux)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 114245228033,
+        "name": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 114245228102,
+        "name": "package (windows-2025, x64, build:windows)",
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "id": 114245228109,
+        "name": "package (macos-15, arm64, build:mac)",
+        "status": "completed",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "publicAudit": {
+    "at": "2026-10-10T17:34:01.913Z",
+    "release": {
+      "tag": "v0.5.0",
+      "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0",
+      "draft": false,
+      "prerelease": false,
+      "assets": 20
+    },
+    "tagCommit": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+    "main": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+    "old041AssetsUnchanged": true,
+    "pagesEnabled": false,
+    "workflows": [
+      {
+        "id": 38063115196,
+        "name": "Build distribution artifacts",
+        "event": "push",
+        "branch": "v0.5.0",
+        "head": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38063115196",
+        "jobs": [
+          {
+            "id": 114245227954,
+            "name": "package (windows-11-arm, arm64, build:windows)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 114245228011,
+            "name": "package (macos-15-intel, x64, build:mac)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 114245228030,
+            "name": "package (ubuntu-24.04, x64, build:linux)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 114245228033,
+            "name": "package (ubuntu-24.04-arm, arm64, build:linux)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 114245228102,
+            "name": "package (windows-2025, x64, build:windows)",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 114245228109,
+            "name": "package (macos-15, arm64, build:mac)",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 38063101565,
+        "name": "Deploy website to GitHub Pages",
+        "event": "push",
+        "branch": "main",
+        "head": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38063101565",
+        "jobs": [
+          {
+            "id": 114245189122,
+            "name": "build",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "id": 114245223572,
+            "name": "deploy",
+            "status": "completed",
+            "conclusion": "skipped"
+          }
+        ]
+      },
+      {
+        "id": 38063101527,
+        "name": "Validate",
+        "event": "push",
+        "branch": "main",
+        "head": "36f7cd12ad8832773377a8b92cd7da3fd616efef",
+        "status": "completed",
+        "conclusion": "success",
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38063101527",
+        "jobs": [
+          {
+            "id": 114245188699,
+            "name": "checks",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  }
+}
