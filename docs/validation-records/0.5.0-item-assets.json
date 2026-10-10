@@ -1,0 +1,606 @@
+{
+  "version": "0.5.0",
+  "state": "Unreleased PR #9 review; public release remains 0.4.1",
+  "at": "2026-10-10T10:17:33.687Z",
+  "appSource": "c6c465fa9770353e97de346151f573d566c98af1",
+  "buildSource": "a303fb88c6e945e368bdd1ec75f8f900899961fa",
+  "applicationInputsUnchangedAfterBuild": true,
+  "local": {
+    "platform": "Windows 11 x64",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unit": {
+      "passed": 265,
+      "skipped": 5,
+      "total": 270,
+      "files": 44
+    },
+    "sourceUI": {
+      "passed": 31,
+      "duration": "7.2m",
+      "ownedClient": "Official Java 26.3 installed through Modrinth; SHA-1 verified; actual production resolver; synthetic NBT fixture; 200% DPI"
+    },
+    "packaged": {
+      "passed": 15,
+      "skipped": 0,
+      "duration": "6.6m",
+      "source": "c6c465fa9770353e97de346151f573d566c98af1"
+    },
+    "focusedItemTests": {
+      "passed": 16
+    }
+  },
+  "ci": {
+    "nativeUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/38043504508",
+    "nativeTests": [
+      {
+        "jobId": 114188291866,
+        "platform": "package (ubuntu-24.04, x64, build:linux)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 265,
+          "skipped": 5,
+          "total": 270
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 1,
+          "duration": "6.9m"
+        }
+      },
+      {
+        "jobId": 114188291911,
+        "platform": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 265,
+          "skipped": 5,
+          "total": 270
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 1,
+          "duration": "7.1m"
+        }
+      },
+      {
+        "jobId": 114188291924,
+        "platform": "package (windows-11-arm, arm64, build:windows)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 265,
+          "skipped": 5,
+          "total": 270
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 1,
+          "duration": "7.4m"
+        }
+      },
+      {
+        "jobId": 114188291930,
+        "platform": "package (macos-15-intel, x64, build:mac)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 266,
+          "skipped": 4,
+          "total": 270
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 2,
+          "duration": "55.2s"
+        }
+      },
+      {
+        "jobId": 114188291936,
+        "platform": "package (macos-15, arm64, build:mac)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 266,
+          "skipped": 4,
+          "total": 270
+        },
+        "packaged": {
+          "passed": 13,
+          "skipped": 2,
+          "duration": "56.7s"
+        }
+      },
+      {
+        "jobId": 114188291989,
+        "platform": "package (windows-2025, x64, build:windows)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 265,
+          "skipped": 5,
+          "total": 270
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 1,
+          "duration": "7.8m"
+        }
+      }
+    ],
+    "sourceRuns": [
+      {
+        "id": 38043505350,
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38043505350",
+        "head": "a303fb88c6e945e368bdd1ec75f8f900899961fa",
+        "conclusion": "success"
+      },
+      {
+        "id": 38043502264,
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38043502264",
+        "head": "a303fb88c6e945e368bdd1ec75f8f900899961fa",
+        "conclusion": "success"
+      }
+    ],
+    "sourceTests": {
+      "unit": {
+        "passed": 265,
+        "skipped": 5,
+        "total": 270
+      },
+      "ui": {
+        "passed": 30,
+        "skipped": 1,
+        "duration": "7.5m"
+      }
+    },
+    "artifacts": [
+      {
+        "name": "MineDock-0.5.0-Portable-arm64.exe",
+        "size": 107555702,
+        "sha256": "0a1af598ba639b1cf5069e4d0daaaaa49add1c741e0db0be63248ff7912d9c3b"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.AppImage",
+        "size": 129856818,
+        "sha256": "0e8842a7c4baa1b41e845c98612d2c9426da17ccbdcc27d2fd9d0eb117c30083"
+      },
+      {
+        "name": "MineDock-0.5.0-x64.dmg",
+        "size": 136468296,
+        "sha256": "38efa317ede1c52b6ad70ed5a1046f02a2214a2a391e785bdc11826f340a2a05"
+      },
+      {
+        "name": "MineDock-0.5.0-amd64.deb",
+        "size": 102194288,
+        "sha256": "78bceb13e97e2a274e2c0188bb134a84de030a18d90c76aa7d9a709a98f0c242"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.deb",
+        "size": 97342316,
+        "sha256": "7dadea288d3fdf91b9e774c1daf2ee725e4e48fc8a873a439c5201e43d499567"
+      },
+      {
+        "name": "MineDock-0.5.0-Setup-arm64.exe",
+        "size": 107844724,
+        "sha256": "b05d0b782e36fffc7e0b385af5a4535dfe87eb93be6cc82ec8941510273ff849"
+      },
+      {
+        "name": "MineDock-0.5.0-Portable-x64.exe",
+        "size": 113662643,
+        "sha256": "b78cdd29e727a26f7fc5eb937253573d03000086e752a37ad8417903faf5461b"
+      },
+      {
+        "name": "MineDock-0.5.0-Setup-x64.exe",
+        "size": 113952046,
+        "sha256": "bbe5f0fa66b3262da0d6a2ce241caaacae9e6684551c2966d58ca7ad838632b4"
+      },
+      {
+        "name": "MineDock-0.5.0-x86_64.AppImage",
+        "size": 128614260,
+        "sha256": "bf881bece5a8a6cc142a275c696ad8fa461c35f12ec7f5a76f72985e69a4fae1"
+      },
+      {
+        "name": "MineDock-0.5.0-x64.zip",
+        "size": 135597331,
+        "sha256": "cef6167e15702ca72b3d430fc893f75cb56f488a2fc7294f220d26f485ec5b9a"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.dmg",
+        "size": 132601775,
+        "sha256": "f66990aaf741f62e340f4a2f088b3a12d4c21b1ec13bd2c4c6585d98c502569e"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.zip",
+        "size": 131696065,
+        "sha256": "fed3c5aceaff13ded076bd5e98bd067b9d302c9c85b544b17861902d32da52a6"
+      }
+    ],
+    "metadataSignaturesVerified": 6,
+    "failedInitialRun": {
+      "id": 38043194673,
+      "cause": "macOS /var system symlink in new synthetic test temporary directory; canonicalize QA root with realpath, preserving client link rejection",
+      "fix": "a303fb88c6e945e368bdd1ec75f8f900899961fa"
+    }
+  },
+  "upstream": {
+    "source": "Private official client JARs, verified against Mojang SHA-1; existing owned Modrinth 26.3 installation. No client assets are committed.",
+    "versions": [
+      {
+        "edition": "java",
+        "version": "1.20.1",
+        "clientSha1": "0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838",
+        "registry": 1255,
+        "schema": "legacy-model",
+        "ready": 14,
+        "examples": 24
+      },
+      {
+        "edition": "java",
+        "version": "1.21.1",
+        "clientSha1": "30c73b1c5da787909b2f73340419fdf13b9def88",
+        "registry": 1333,
+        "schema": "legacy-model",
+        "ready": 15,
+        "examples": 24
+      },
+      {
+        "edition": "java",
+        "version": "1.21.4",
+        "clientSha1": "a7e5a6024bfd3cd614625aa05629adf760020304",
+        "registry": 1385,
+        "schema": "items-presentation",
+        "ready": 15,
+        "examples": 24
+      },
+      {
+        "edition": "java",
+        "version": "26.3",
+        "clientSha1": "e877b6a07acd633fb3bb475002175cec036e7b87",
+        "registry": 1658,
+        "schema": "items-presentation",
+        "ready": 17,
+        "examples": 24
+      }
+    ],
+    "cold": {
+      "renders": 61,
+      "memoryHits": 0,
+      "diskHits": 0,
+      "metadataRequests": 16,
+      "fallbacks": 31,
+      "peakConcurrent": 1
+    },
+    "repeat200Ms": 121,
+    "memory": {
+      "renders": 61,
+      "memoryHits": 200,
+      "diskHits": 0,
+      "metadataRequests": 16,
+      "fallbacks": 31,
+      "peakConcurrent": 1,
+      "visualEntries": 24,
+      "negativeEntries": 35,
+      "registryContexts": 4,
+      "languageContexts": 1,
+      "openClients": 4,
+      "pending": 0
+    },
+    "cache": {
+      "files": 127,
+      "bytes": 180381
+    },
+    "note": "96 representative cases; 61 ready, 35 explicit unavailable including IDs absent from that release. Not exhaustive coverage."
+  },
+  "captures": {
+    "at": "2026-10-10T09:51:55.337Z",
+    "version": "0.5.0",
+    "publicRelease": false,
+    "captures": [
+      {
+        "file": "players.png",
+        "sha256": "45e78b6b059355e60feb79847fab496d5cb7981e5f1f069160110783cc1f8161",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile.png",
+        "sha256": "b380e60794346cf537169b685cbeb032bc2d5ea290758412491eaad5b965bdb3",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "inventory-slot.png",
+        "sha256": "44bddcca30111d65a35b7c235046761add7f5a6fcf4c7f878f44f3c1791cf9c7",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "ender-chest.png",
+        "sha256": "f94e4599031f99307fae63ec99176a840f0e89f0a891327566bc58081c65ebd5",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "item-picker.png",
+        "sha256": "2dd2859954f2bb97574a4263e5a652777339d2048f78261820bea6bae3627bc0",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "group-actions.png",
+        "sha256": "5d507087ae94c90757c6814b28826114609fc50864a55dea25a458497e69c965",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile-light.png",
+        "sha256": "5f36cf7f6d9d419971d22a83e42852f087f9f137270364da98c247ed9e7df860",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile-compact.png",
+        "sha256": "3c6cba368750d48fcb7e14d9f99507dbbeb8554e2894ed699251731d1cf805c6",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+        "viewport": {
+          "width": 900,
+          "height": 760
+        }
+      },
+      {
+        "file": "world-controls.png",
+        "sha256": "10a94ba40e02edd2000cb7e03095ade6f6a51fbd6b1d8cf5a2f0bae8d692cb9b",
+        "provenance": "Actual Electron and real isolated Paper 1.21.11 build 132, Java 21, personally accepted EULA; native RCON reads, no connected players, no added plugins. Weather cannot be read natively and remains unavailable.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "gamerules.png",
+        "sha256": "a398658094b9d5ece0b8d4cce983a5eb2d3c18526be317b0945e5341026fcdaa",
+        "provenance": "Actual native Minecraft 1.21.11 gamerule responses from the isolated Paper server; current values read through RCON, not fixtures.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      }
+    ]
+  },
+  "website": {
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "version": 8,
+    "source": "447c417e8e5407bc35c114b31f373e7910ad8d0a",
+    "deployment": "appgdep_6aca0c8fc5e48191985ff2cd921be973",
+    "status": "succeeded",
+    "widths": [390, 768, 1280, 1440, 1920],
+    "imageHashes": [
+      {
+        "name": "player-profile.png",
+        "sha256": "b380e60794346cf537169b685cbeb032bc2d5ea290758412491eaad5b965bdb3"
+      },
+      {
+        "name": "group-actions.png",
+        "sha256": "5d507087ae94c90757c6814b28826114609fc50864a55dea25a458497e69c965"
+      },
+      {
+        "name": "world-controls.png",
+        "sha256": "10a94ba40e02edd2000cb7e03095ade6f6a51fbd6b1d8cf5a2f0bae8d692cb9b"
+      }
+    ],
+    "downloads": [
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-x64.exe",
+        "status": 200,
+        "size": 113772193
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-x64.exe",
+        "status": 200,
+        "size": 113482705
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-arm64.exe",
+        "status": 200,
+        "size": 107664722
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-arm64.exe",
+        "status": 200,
+        "size": 107375758
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x86_64.AppImage",
+        "status": 200,
+        "size": 128347896
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-amd64.deb",
+        "status": 200,
+        "size": 101996516
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.AppImage",
+        "status": 200,
+        "size": 129590415
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.deb",
+        "status": 200,
+        "size": 97143928
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.dmg",
+        "status": 200,
+        "size": 136209972
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.zip",
+        "status": 200,
+        "size": 135342086
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.dmg",
+        "status": 200,
+        "size": 132337272
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.zip",
+        "status": 200,
+        "size": 131440820
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/SHA256SUMS.txt",
+        "status": 200,
+        "size": 1749
+      }
+    ],
+    "publicRelease": {
+      "tag": "v0.4.1",
+      "assets": 20,
+      "assetDigests": [
+        {
+          "name": "MineDock-0.4.1-amd64.deb",
+          "size": 101996516,
+          "digest": "sha256:03d52a07927fa1449f655d91bc422428e2ae725f5008f55a4c29d07af44397ca"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.AppImage",
+          "size": 129590415,
+          "digest": "sha256:4cb93ae19a30ad6c414755b7c11105c808ec17782a6a69777bd105221a9e2fa8"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.deb",
+          "size": 97143928,
+          "digest": "sha256:4c171c6e6ed14ba449c32d23af7236aa28aa1755d458bf4c7e418db6ad33ba4e"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.dmg",
+          "size": 132337272,
+          "digest": "sha256:ba9c5a45b9c3245ee2a7b968d1f5a7ca5086ab83faf0c06c2094d547d62df0a5"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.zip",
+          "size": 131440820,
+          "digest": "sha256:461b46322e096e5977df2eb338dd938c739c6b1374b01865022df5804aa770cd"
+        },
+        {
+          "name": "MineDock-0.4.1-Portable-arm64.exe",
+          "size": 107375758,
+          "digest": "sha256:40c7b9605e7c471bda6b7b9d1f22f2b76dbc6fccfac3b287a3b7d8c7a052fc5a"
+        },
+        {
+          "name": "MineDock-0.4.1-Portable-x64.exe",
+          "size": 113482705,
+          "digest": "sha256:b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87"
+        },
+        {
+          "name": "MineDock-0.4.1-Setup-arm64.exe",
+          "size": 107664722,
+          "digest": "sha256:a2a0644001f8256b62910f9d9fda7e430142f2ca458c7abb3288b48aec61ff9c"
+        },
+        {
+          "name": "MineDock-0.4.1-Setup-x64.exe",
+          "size": 113772193,
+          "digest": "sha256:b40e783b88cf2c3e8fe227619f4762dfd4077e69752687ed81fd13269c9127fc"
+        },
+        {
+          "name": "MineDock-0.4.1-x64.dmg",
+          "size": 136209972,
+          "digest": "sha256:b279ce26434a17ea430e42f628f1857a1fdb7eb3733c091b96a7a0bc85198c73"
+        },
+        {
+          "name": "MineDock-0.4.1-x64.zip",
+          "size": 135342086,
+          "digest": "sha256:4eef83365851c6c4f13b0fed124335e93e0d44be71bddcca0ffbf1b47f4ebf16"
+        },
+        {
+          "name": "MineDock-0.4.1-x86_64.AppImage",
+          "size": 128347896,
+          "digest": "sha256:346e8891ac329c1385768d83b059caa9b94338100f8ca6c39ac196af37c802d4"
+        },
+        {
+          "name": "MineDock-Features.txt",
+          "size": 29672,
+          "digest": "sha256:ed81694132e4c23f9d26579e4e20e5566d265d92abf9b591f84eccc128da8a12"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "size": 1749,
+          "digest": "sha256:aa5d5654e0682dff4c115188ecc1765d2af567c2abfc1f3de0d870ae4f161fb1"
+        },
+        {
+          "name": "update-darwin-arm64.json",
+          "size": 1270,
+          "digest": "sha256:eb0621abe1de08a673de91d0871cbb205abd085ab4570c1adc6c54f99a2d2f66"
+        },
+        {
+          "name": "update-darwin-x64.json",
+          "size": 1254,
+          "digest": "sha256:ad4506f5a7b1f5c08606aeb39affdfccd40f659a2e53d544ebbb8059e9d5fa8b"
+        },
+        {
+          "name": "update-linux-arm64.json",
+          "size": 1282,
+          "digest": "sha256:e0ae8e0759fd5c4d05b3737b1f5248952b882e27aadf029885939ba281f8bfee"
+        },
+        {
+          "name": "update-linux-x64.json",
+          "size": 1282,
+          "digest": "sha256:56b65b40bb8914511e094597509280684e5404ddef748c62066a0af81d42ffe1"
+        },
+        {
+          "name": "update-win32-arm64.json",
+          "size": 1314,
+          "digest": "sha256:da001f962f1955776a8f82d6ed47dd24f6750010b391612e70df3e75374f46b6"
+        },
+        {
+          "name": "update-win32-x64.json",
+          "size": 1298,
+          "digest": "sha256:51c6b3b5476cfd4be9c5348ad6634f38ca91af8a171dae6de099fcc7362ff68c"
+        }
+      ]
+    },
+    "publicAssetsUnchanged": 20
+  },
+  "scope": {
+    "minecraftGameAssetsBundled": false,
+    "metadataSource": "Exact-release mcmeta registry reports; factual metadata, not a game asset licence",
+    "localAssetSource": "Owned exact-version official Java client; private local derivation only",
+    "databaseMigrationAdded": false,
+    "playerNBTArchitectureRewritten": false,
+    "merged": false,
+    "tagCreated": false,
+    "releasePublished": false
+  },
+  "limits": [
+    "An owned exact-version official client and online first registration are required for game images.",
+    "Special/context/animated models, uncertain legacy tinting, resource-pack or modded art and Bedrock art use explicit fallbacks.",
+    "Vanilla metadata does not certify mod/datapack availability. Categories are omitted because trustworthy metadata is not supplied.",
+    "The owned-client UI case is skipped in native CI without private client assets; macOS also skips the existing unsupported directory-import case.",
+    "Actual multiplayer/online player gameplay and exhaustive historical/mod combinations remain unvalidated.",
+    "Future Java NBT remains read-only; existing stopped-server safety and restore behavior is retained.",
+    "Windows/Apple publisher certificates and notarization remain unavailable.",
+    "Historical Windows 0.4.1-to-0.5.0 native upgrade evidence targets 815f4a7, not this item-image candidate. No public 0.5.0 feed validation exists.",
+    "No merge, tag or public release until a separate owner approval."
+  ]
+}

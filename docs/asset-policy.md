@@ -40,4 +40,13 @@ The disk cache uses containment checks, atomic writes, a 128 MiB / 5,000-file bu
 
 The reproducible private probe checks official clients and exact registries for **1.20.1, 1.21.1, 1.21.4 and 26.3**. Those checks do not imply that every historical release or every special item works. The user owns the 26.3 client installed through Modrinth. Older official clients used by the probe stay in ignored QA storage, with hashes recorded rather than game resources committed. Unit tests use original solid-colour QA art, never copyrighted fixtures. The optional native real-art test requires an owned local client and is explicitly skipped when unavailable.
 
+| Exact Java release | Verified vanilla IDs | Ready images in 24 representative cases | Examples and boundaries                                                                                                               |
+| ------------------ | -------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| 1.20.1             | 1,255                | 14                                      | Sword, pickaxe, apple, ingot, iron boots and real 3D stone/log/crafting table; mace and sulfur absent                                 |
+| 1.21.1             | 1,333                | 15                                      | The same common items plus mace; sulfur absent; uncertain legacy leather/potion/egg tinting remains unavailable                       |
+| 1.21.4             | 1,385                | 15                                      | Common flat/3D models plus layered leather, potion and egg presentations; sulfur absent; dynamic bundle/bow/compass unavailable       |
+| 26.3               | 1,658                | 17                                      | Common flat/3D items, dyed leather, potion and sulfur model; special head/banner/shield/chest and dynamic variants remain unavailable |
+
+These are **61 successful images out of 96 probes**, not an exhaustive registry render pass. Default presentations do not certify every component variant, custom potion effect, map content, use-state or resource pack. [Exact examples and client hashes](validation-records/0.5.0-item-assets-probes.json).
+
 See [current validation](validation.md), [the player guide](player-world-administration.md) and [native screenshot provenance](screenshots/player-world-050/README.md). This remains PR #9 review work; public downloads are 0.4.1. No 0.5.0 merge, tag, release or replacement of published executables is authorized by this enhancement.
