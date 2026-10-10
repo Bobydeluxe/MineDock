@@ -1,12 +1,12 @@
 {
-  "at": "2026-10-09T20:40:58.865Z",
+  "at": "2026-10-10T09:51:55.337Z",
   "version": "0.5.0",
   "publicRelease": false,
   "captures": [
     {
       "file": "players.png",
-      "sha256": "d3d859fd551a1c90ae3849f703c9bcf0be3e14b0c3a6a143ccc2566215d695c0",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "45e78b6b059355e60feb79847fab496d5cb7981e5f1f069160110783cc1f8161",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
@@ -14,8 +14,8 @@
     },
     {
       "file": "player-profile.png",
-      "sha256": "961c1954a293e135ecd96cb3e802338790df75195b8f2d496b54081e39fac771",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "b380e60794346cf537169b685cbeb032bc2d5ea290758412491eaad5b965bdb3",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
@@ -23,8 +23,8 @@
     },
     {
       "file": "inventory-slot.png",
-      "sha256": "9da79177059c62cb87e5a5bab800a6b11ea3fa77b70a7432325f4da0113bfbe1",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "44bddcca30111d65a35b7c235046761add7f5a6fcf4c7f878f44f3c1791cf9c7",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
@@ -32,8 +32,17 @@
     },
     {
       "file": "ender-chest.png",
-      "sha256": "7d5540e0fc6828ef572a6c377d3917c35c9d2c9cf946787e4bc288244f115a93",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "f94e4599031f99307fae63ec99176a840f0e89f0a891327566bc58081c65ebd5",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "item-picker.png",
+      "sha256": "2dd2859954f2bb97574a4263e5a652777339d2048f78261820bea6bae3627bc0",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
@@ -41,8 +50,8 @@
     },
     {
       "file": "group-actions.png",
-      "sha256": "1242c444ef37f0a3f21669112487d0707d25057db92a777dca50006e8e556807",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "5d507087ae94c90757c6814b28826114609fc50864a55dea25a458497e69c965",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
@@ -50,18 +59,17 @@
     },
     {
       "file": "player-profile-light.png",
-      "sha256": "8fdb86739e1a02e458c1ec78e808291869a9459d43fc1431ece57d9aad61a5b6",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "5f36cf7f6d9d419971d22a83e42852f087f9f137270364da98c247ed9e7df860",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 1440,
         "height": 960
-      },
-      "capturedAt": "2026-10-09T20:40:58.865Z"
+      }
     },
     {
       "file": "player-profile-compact.png",
-      "sha256": "a4bf711f991bc9976b8a32c1898c3947a3b359e2305c910f02f64a2b7fb3eb5a",
-      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.",
+      "sha256": "3c6cba368750d48fcb7e14d9f99507dbbeb8554e2894ed699251731d1cf805c6",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.",
       "viewport": {
         "width": 900,
         "height": 760
@@ -69,7 +77,7 @@
     },
     {
       "file": "world-controls.png",
-      "sha256": "3ee989b2dad9f82d8cc4a4278448aea756d053267bcb5791fbf81a606de01255",
+      "sha256": "10a94ba40e02edd2000cb7e03095ade6f6a51fbd6b1d8cf5a2f0bae8d692cb9b",
       "provenance": "Actual Electron and real isolated Paper 1.21.11 build 132, Java 21, personally accepted EULA; native RCON reads, no connected players, no added plugins. Weather cannot be read natively and remains unavailable.",
       "viewport": {
         "width": 1440,

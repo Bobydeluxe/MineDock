@@ -1,0 +1,622 @@
+{
+  "at": "2026-10-10T09:47:06.658Z",
+  "source": "Private official client JARs, verified against Mojang SHA-1; existing owned Modrinth 26.3 installation. No client assets are committed.",
+  "records": [
+    {
+      "edition": "java",
+      "version": "1.20.1",
+      "clientSha1": "0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838",
+      "registry": 1255,
+      "schema": "legacy-model",
+      "elapsedMs": 1096,
+      "examples": [
+        {
+          "id": "minecraft:diamond_sword",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:diamond_pickaxe",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:iron_ingot",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:iron_boots",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:leather_chestplate",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:potion",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:enchanted_book",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:shield",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:mace",
+          "registered": false,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "registered": false,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:cow_spawn_egg",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:player_head",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:bundle",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:bow",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:compass",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:chest",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:water_bucket",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:bread",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        }
+      ]
+    },
+    {
+      "edition": "java",
+      "version": "1.21.1",
+      "clientSha1": "30c73b1c5da787909b2f73340419fdf13b9def88",
+      "registry": 1333,
+      "schema": "legacy-model",
+      "elapsedMs": 1406,
+      "examples": [
+        {
+          "id": "minecraft:diamond_sword",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:diamond_pickaxe",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:iron_ingot",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:iron_boots",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:leather_chestplate",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:potion",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:enchanted_book",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:shield",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:mace",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "registered": false,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:cow_spawn_egg",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:player_head",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:bundle",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:bow",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:compass",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:chest",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:water_bucket",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:bread",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        }
+      ]
+    },
+    {
+      "edition": "java",
+      "version": "1.21.4",
+      "clientSha1": "a7e5a6024bfd3cd614625aa05629adf760020304",
+      "registry": 1385,
+      "schema": "items-presentation",
+      "elapsedMs": 2352,
+      "examples": [
+        {
+          "id": "minecraft:diamond_sword",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:diamond_pickaxe",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:iron_ingot",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:iron_boots",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:leather_chestplate",
+          "registered": true,
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "registered": true,
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:enchanted_book",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:shield",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:mace",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "registered": false,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:cow_spawn_egg",
+          "registered": true,
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:player_head",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:bundle",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:bow",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:compass",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:chest",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:water_bucket",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:bread",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        }
+      ]
+    },
+    {
+      "edition": "java",
+      "version": "26.3",
+      "clientSha1": "e877b6a07acd633fb3bb475002175cec036e7b87",
+      "registry": 1658,
+      "schema": "items-presentation",
+      "elapsedMs": 2167,
+      "examples": [
+        {
+          "id": "minecraft:diamond_sword",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:diamond_pickaxe",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:iron_ingot",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:iron_boots",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:leather_chestplate",
+          "registered": true,
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "registered": true,
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:enchanted_book",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:shield",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:mace",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "registered": true,
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:cow_spawn_egg",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:player_head",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:bundle",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:bow",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:compass",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:chest",
+          "registered": true,
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:water_bucket",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:bread",
+          "registered": true,
+          "status": "ready",
+          "render": "flat"
+        }
+      ]
+    }
+  ],
+  "cold": {
+    "renders": 61,
+    "memoryHits": 0,
+    "diskHits": 0,
+    "metadataRequests": 16,
+    "fallbacks": 31,
+    "peakConcurrent": 1
+  },
+  "repeat200Ms": 121,
+  "metrics": {
+    "renders": 61,
+    "memoryHits": 200,
+    "diskHits": 0,
+    "metadataRequests": 16,
+    "fallbacks": 31,
+    "peakConcurrent": 1
+  },
+  "memory": {
+    "renders": 61,
+    "memoryHits": 200,
+    "diskHits": 0,
+    "metadataRequests": 16,
+    "fallbacks": 31,
+    "peakConcurrent": 1,
+    "visualEntries": 24,
+    "negativeEntries": 35,
+    "registryContexts": 4,
+    "languageContexts": 1,
+    "openClients": 4,
+    "pending": 0
+  },
+  "cache": {
+    "files": 127,
+    "bytes": 180381
+  }
+}

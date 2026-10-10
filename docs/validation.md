@@ -1,8 +1,26 @@
 # MineDock validation
 
-## MineDock 0.5.0 player/world administration — unreleased review
+## Unreleased 0.5.0 item-image enhancement — 10 October 2026
 
-**The public release is still 0.4.1.** The next minor candidate implements [player/world administration](player-world-administration.md); no tag, public 0.5.0 executable or merge is claimed. Exact application/build inputs are `815f4a7c6c713df92fa3158f3c3285e841576b09`. Following documentation, site and validation-helper changes do not alter those packaged inputs. [Machine-readable evidence](validation-records/0.5.0-administration.json) and [candidate SHA-256 sums](validation-records/0.5.0-candidate-SHA256SUMS.txt) identify the actual files and tests.
+Public downloads remain **0.4.1**. The existing [PR #9](https://github.com/Bobydeluxe/MineDock/pull/9) adds exact-version item images and a visual picker. No merge, tag or release is authorized by this enhancement. These results supersede the earlier generic-icon gallery; historical native upgrade and Minecraft command checks below retain their original source hashes.
+
+| Check | Actual result |
+| --- | --- |
+| `pnpm lint`, `pnpm typecheck`, `pnpm build` | Passed locally; the existing large renderer chunk warning remains |
+| `pnpm test` | **265 passed, 5 platform skips**, 270 cases / 44 files; 16 focused item-asset tests included |
+| `pnpm test:ui` | **31 passed**, 7.2 minutes; includes the production Electron resolver with the owner's verified Java 26.3 client and 200% display scaling |
+| Exact-version upstream probes | **1.20.1 / 1.21.1 / 1.21.4 / 26.3**, official client SHA-1 verified; registries **1,255 / 1,333 / 1,385 / 1,658** IDs |
+| Representative visuals | **61 of 96** probes rendered; **35** explicitly unavailable (including items absent from that release); coverage is a sample, not a claim that every registry entry renders |
+| Cold-cache measurements | **16 metadata requests**, zero remote per-texture downloads; 61 renders; **200 repeated requests in 121 ms**; 127 cache files / **180,381 bytes** on this Windows host |
+| Native captures | **Ten** fresh actual Electron PNGs, dark/light/compact views; synthetic saved inventory disclosed, real locally derived Java 26.3 images; separate real Paper 1.21.11 controls |
+
+[Probe results](validation-records/0.5.0-item-assets-probes.json), [gallery and provenance](screenshots/player-world-050/README.md), [before/after review](design/item-assets-050/README.md) and [asset policy](asset-policy.md) describe sources and limitations. Unit tests use original synthetic QA textures; the owned-client Electron test is explicitly skipped when a private client is not supplied. It is not replaced with fake Minecraft icons in CI.
+
+Native package, current source CI and website results are added only after their checks finish. Earlier candidate packages below are not packages of this enhancement.
+
+## Historical 0.5.0 administration baseline before item images
+
+**The public release is still 0.4.1.** The next minor candidate implements [player/world administration](player-world-administration.md); no tag, public 0.5.0 executable or merge is claimed. Exact application/build inputs are `815f4a7c6c713df92fa3158f3c3285e841576b09`. Those historical candidate packages predate the item-image enhancement and must not be treated as packages of the current PR head. New image-service validation is recorded above; the prior updater/world results remain historical evidence. [Machine-readable evidence](validation-records/0.5.0-administration.json) and [candidate SHA-256 sums](validation-records/0.5.0-candidate-SHA256SUMS.txt) identify the actual files and tests.
 
 | Check                                       | Actual result                                                                                                                                                                                           |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

@@ -14,6 +14,8 @@ import type {
 import { inventoryEditSchema, resourceIdSchema } from '../../../../packages/domain/administration';
 import { buildPlayerCommand } from '../../../../packages/domain/admin-commands';
 import { localizeMessage } from '../../../../packages/domain/localization';
+import { ItemThumbnail, ItemAssetSetup, useItemText } from './item-visuals';
+import { itemTextDetails, actualEnchantments } from '../../../../packages/domain/item-presentation';
 const playTime = (ms: number) => `${Math.floor(ms / 3600000)}h ${Math.floor(ms / 60000) % 60}m`;
 export function PlayerProfileDialog({
   server,
@@ -25,7 +27,8 @@ export function PlayerProfileDialog({
   onClose: () => void;
 }) {
   const { api, t, run, busy, snapshot, registerUnsaved, requestNavigation } = useApp(),
-    a = useAdminText();
+    a = useAdminText(),
+    assetText = useItemText();
   const [tab, setTab] = useState('inventory'),
     [note, setNote] = useState<string>(),
     [selection, setSelection] = useState<InventorySlot>(),
@@ -101,10 +104,15 @@ export function PlayerProfileDialog({
     } catch {
       /* Unsupported slot commands remain unavailable. */
     }
-  const grid = (section: InventorySlot['section']) => (
+  const grid = (section: InventorySlot['section'], hotbar = false) => (
     <div className={'inventory-grid ' + section} role="group" aria-label={a(section)}>
       {report?.slots
-        .filter((slot) => slot.section === section)
+        .filter(
+          (slot) =>
+            slot.section === section &&
+            (section !== 'inventory' || (hotbar ? slot.index < 9 : slot.index >= 9)),
+        )
+        .sort((a, b) => (section === 'armor' ? b.index - a.index : a.index - b.index))
         .map((slot) => (
           <button
             key={slot.index}
@@ -113,10 +121,24 @@ export function PlayerProfileDialog({
             onClick={() => choose(slot)}
             aria-label={`${a(section)} ${slot.index + 1} · ${slot.item ? slot.item.id + ' × ' + slot.item.count : a('emptySlot')}`}
             title={slot.item?.id ?? a('emptySlot')}
+            aria-describedby={
+              slot.item ? 'item-' + player.uuid + '-' + section + '-' + slot.index : undefined
+            }
+            aria-pressed={selection?.section === section && selection.index === slot.index}
           >
-            <Box size={23} aria-hidden="true" />
-            <span>{slot.item ? slot.item.id.split(':')[1]?.replaceAll('_', ' ') : ''}</span>
-            {slot.item && <strong>{slot.item.count}</strong>}
+            {slot.item && (
+              <ItemThumbnail
+                server={server}
+                item={slot.item}
+                tooltipId={'item-' + player.uuid + '-' + section + '-' + slot.index}
+              />
+            )}
+            {!slot.item && section === 'armor' && (
+              <span className="equipment-label">
+                {assetText(['boots', 'leggings', 'chestplate', 'helmet'][slot.index]!)}
+              </span>
+            )}
+            {slot.item && slot.item.count > 1 && <strong>{slot.item.count}</strong>}
           </button>
         ))}
     </div>
@@ -239,6 +261,9 @@ export function PlayerProfileDialog({
                   <span className="badge">36 {a('slots')}</span>
                 </div>
                 {grid('inventory')}
+                <h4 className="hotbar-heading">{assetText('hotbar')}</h4>
+                {grid('inventory', true)}
+                <ItemAssetSetup server={server} />
                 <div className="player-equipment">
                   <section>
                     <h3>{a('armor')}</h3>
@@ -405,6 +430,20 @@ export function PlayerProfileDialog({
           onClose={() => setSelection(undefined)}
         >
           <div className="dialog-body">
+            {selection.item && (
+              <div className="item-detail-picture">
+                <ItemThumbnail server={server} item={selection.item} large showName />
+              </div>
+            )}
+            {selection.item && itemTextDetails(selection.item.components).name && (
+              <p>{itemTextDetails(selection.item.components).name}</p>
+            )}
+            {selection.item &&
+              itemTextDetails(selection.item.components).lore.map((line, i) => (
+                <p className="muted" key={i}>
+                  {line}
+                </p>
+              ))}
             <p>
               <strong>{selection.item?.id ?? a('emptySlot')}</strong>
               {selection.item && ' × ' + selection.item.count}
@@ -416,7 +455,11 @@ export function PlayerProfileDialog({
             )}
             {selection.item?.enchantments.length ? (
               <p>
-                {a('enchantments')}: {selection.item.enchantments.join(', ')}
+                {a('enchantments')}:{' '}
+                {(actualEnchantments(selection.item).length
+                  ? actualEnchantments(selection.item)
+                  : selection.item.enchantments
+                ).join(', ')}
               </p>
             ) : null}
             {selection.item && Object.keys(selection.item.components).length > 0 && (
@@ -427,7 +470,15 @@ export function PlayerProfileDialog({
                 </pre>
               </details>
             )}
-            <p className="hint">{a(report?.writable ? 'offlineEditHelp' : 'onlineSlotHelp')}</p>
+            <p className="hint">
+              {a(
+                online
+                  ? 'onlineSlotHelp'
+                  : report?.writable
+                    ? 'offlineEditHelp'
+                    : 'editingUnavailable',
+              )}
+            </p>
             <Field label={t('action')}>
               <select
                 value={editAction}

@@ -9,6 +9,7 @@ import {
   Menu,
   Notification,
   nativeImage,
+  protocol,
 } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -57,6 +58,8 @@ import {
 } from '../../packages/domain/administration';
 import { translator } from './renderer/src/i18n';
 import { moderatePlayerSchema } from '../../packages/domain/players';
+import { visualRequest } from '../../packages/items/assets';
+import { engineDefinition } from '../../packages/domain/engines';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -74,6 +77,9 @@ const consoleFlush = setInterval(() => {
 }, 100);
 consoleFlush.unref();
 app.setName('MineDock');
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'minedock-item', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+]);
 app.setPath(
   'userData',
   process.env.MINEDOCK_DATA_DIR
@@ -409,6 +415,30 @@ function register(core: AppCore): void {
     core.administration.ip(id(value), ipActionSchema.parse(input)),
   );
   handle('itemCatalog', (value) => core.administration.items(id(value)));
+  const itemVersion = (value: unknown) => {
+    const server = core.repo.server(id(value));
+    if (engineDefinition(server.engine).edition !== 'java')
+      throw new Error('Java item assets are unavailable for this edition.');
+    return server.minecraftVersion ?? server.version;
+  };
+  handle('itemAssetContext', (value) => core.itemAssets.context(itemVersion(value)));
+  handle('itemVisual', (value, item) =>
+    core.itemAssets.visual(
+      itemVersion(value),
+      visualRequest.parse(item),
+      core.repo.settings().language,
+    ),
+  );
+  handle('itemAssetImport', async (value) => {
+    const version = itemVersion(value);
+    if (await core.itemAssets.discover(version)) return core.itemAssets.context(version);
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Minecraft Java client JAR', extensions: ['jar'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return null;
+    return core.itemAssets.importClient(version, result.filePaths[0]);
+  });
   handle('worldControls', (value, query) =>
     core.administration.worldState(id(value), z.boolean().optional().parse(query)),
   );
@@ -1030,6 +1060,28 @@ if (single)
             : fallback.decrypt(value.startsWith('aes:') ? value.slice(4) : value),
       };
       core = await AppCore.open(root, secrets);
+      protocol.handle('minedock-item', async (request) => {
+        const url = new URL(request.url);
+        if (
+          request.method !== 'GET' ||
+          url.hostname !== 'cache' ||
+          url.search ||
+          url.hash ||
+          url.username ||
+          url.password
+        )
+          return new Response(null, { status: 404 });
+        const bytes = await core?.itemAssets.image(url.pathname.slice(1));
+        return bytes
+          ? new Response(new Uint8Array(bytes), {
+              headers: {
+                'Content-Type': 'image/png',
+                'Cache-Control': 'private, max-age=86400',
+                'X-Content-Type-Options': 'nosniff',
+              },
+            })
+          : new Response(null, { status: 404 });
+      });
       core.updates.configureHost({
         version: app.getVersion(),
         packaged: app.isPackaged,

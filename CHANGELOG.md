@@ -8,13 +8,16 @@ The public download remains 0.4.1. No existing release executable is replaced.
 
 - A large player profile with Inventory, Actions, History and Notes, official skin fallback, actual saved stats, 36 inventory slots, armor, offhand and 27 Ender Chest slots.
 - Stopped-server inventory quantity removal, exact-slot empty/replace and previewed restoration from real pre-edit copies, with full verified backup, conflict checks, transaction journal and rollback.
-- Validated native player action forms, partial saved-item search, filtered item removal and advanced confirmations for kill and explicit IP bans.
+- Validated native player action forms, filtered item removal and advanced confirmations for kill and explicit IP bans.
+- Real version-correct item images from your own verified local Java client, including supported flat/layered/tinted items and simple 3D blocks. Minecraft assets are not bundled.
+- A 24-item paged visual browser with exact vanilla-release registries, localized-name/ID search, namespace/observed filters and explicit partial/unverified states.
 - Exact selected-player group actions, per-player results and cancellation of remaining targets.
 - World controls in the existing Worlds page: time, weather, difficulty, categorized gamerules, verified save, announcements, player list, seed, border, spawn and structured advanced commands.
 
 ### Improved
 
 - Honest live/saved/unavailable inventory sources, dates and command states; uncertain transport remains not verifiable.
+- Separate 27-slot main inventory and nine-slot hotbar, ordered equipment, crisp thumbnails, accessible ID/source tooltips and large details with actual names/lore, enchantment indication and damage bars only when their metadata is present.
 - Java/Bedrock/PocketMine capability gates, native help checks and Java 1.21.11 rule names; English plus all five existing translations.
 - Local administration history excludes private messages, reasons, IPs, raw commands and replies. SQLite migration 12 preserves existing records.
 
@@ -26,7 +29,7 @@ The public download remains 0.4.1. No existing release executable is replaced.
 
 ### Known issues
 
-- Item search is a partial list from saved player files, not a complete registry. Explicit IDs may still be rejected by the actual server.
+- Item images need your own exact-version Java client; first registration verifies official metadata online. Special/context-dependent models, uncertain legacy tinting, mod/resource-pack overrides and Bedrock images remain unsupported. Missing registry metadata leaves a partial saved-item list. Vanilla metadata is not a live modded-server registry; explicit/native actions can still be refused.
 - New/future Java data versions and unknown custom layouts are read-only; Bedrock/PocketMine native inventory storage is unavailable.
 - No real connected-client inventory manipulation or multiplayer session is claimed. The real Paper world test has zero connected players; Bedrock/PocketMine gameplay and exhaustive mod/version combinations remain unvalidated.
 - Stdio replies remain sent, localized/intercepted replies can remain not verifiable, and current weather cannot be read reliably. Safety copies have no automatic garbage collection.

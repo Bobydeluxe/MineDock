@@ -19,6 +19,7 @@ const child = spawn(
     'tests/ui/desktop.spec.ts',
     'tests/ui/administration-desktop.spec.ts',
     'tests/ui/player-world-desktop.spec.ts',
+    'tests/ui/item-assets-desktop.spec.ts',
     'tests/ui/cleanup-desktop.spec.ts',
     'tests/ui/files-desktop.spec.ts',
     'tests/ui/worlds-desktop.spec.ts',

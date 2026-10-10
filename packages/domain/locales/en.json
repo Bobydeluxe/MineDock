@@ -548,5 +548,14 @@
   "The full player safety backup did not verify.": "The full player safety backup did not verify.",
   "The server did not confirm disabling automatic saving.": "The server did not confirm disabling automatic saving.",
   "The server did not confirm resuming automatic saving.": "The server did not confirm resuming automatic saving.",
-  "Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting.": "Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting."
+  "Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting.": "Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting.",
+  "Select a regular Minecraft client JAR under 150 MB.": "Select a regular Minecraft client JAR under 150 MB.",
+  "Linked client paths are unsupported.": "Linked client paths are unsupported.",
+  "Unsafe client archive": "Unsafe client archive",
+  "Client Minecraft version does not match this server.": "Client Minecraft version does not match this server.",
+  "Official client version unavailable.": "Official client version unavailable.",
+  "Official version mismatch": "Official version mismatch",
+  "Client JAR does not match the official Mojang SHA-1.": "Client JAR does not match the official Mojang SHA-1.",
+  "At most 32 local Minecraft versions can be registered.": "At most 32 local Minecraft versions can be registered.",
+  "Java item assets are unavailable for this edition.": "Java item assets are unavailable for this edition."
 }

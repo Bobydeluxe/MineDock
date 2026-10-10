@@ -58,6 +58,7 @@ import { sha256 } from '../backups/archive';
 import { PackService } from '../marketplace/packs';
 import { HealthService } from './health';
 import { PlayerSkins } from './skins';
+import { ItemAssets } from '../items/assets';
 import { IncrementalBackups } from '../backups/incremental';
 import { MigrationService } from './migration';
 import { ConsoleTools } from './console-tools';
@@ -98,6 +99,7 @@ export class AppCore {
   readonly players: PlayerService;
   readonly playerInventory: PlayerInventoryService;
   readonly administration: AdministrationService;
+  readonly itemAssets: ItemAssets;
   readonly packs: PackService;
   readonly health: HealthService;
   readonly skins: PlayerSkins;
@@ -194,6 +196,7 @@ export class AppCore {
     );
     this.retention = new RetentionService(this.repo, this.jobs, this.logger);
     this.playerInventory = new PlayerInventoryService(this);
+    this.itemAssets = new ItemAssets(path.join(this.root, 'cache', 'item-assets'));
     this.administration = new AdministrationService(this);
     this.marketplace = new ModrinthProvider(this.repo, this.downloads, this.jobs);
     this.mods = new ModManager(
@@ -901,6 +904,7 @@ export class AppCore {
     );
   }
   async close(): Promise<void> {
+    this.itemAssets.close();
     this.closing = true;
     this.health.close();
     await this.performance.close();

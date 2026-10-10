@@ -10,6 +10,8 @@
 - Select specific players for group messages, teleport, game mode, items, effects and whitelist changes. Each player receives an individual result; remaining work can be cancelled.
 - Use world time, weather, difficulty and searchable gamerules in the existing Worlds page. More controls include announcements, safe world backup, player list, seed, border and world spawn; advanced forms expose supported structured commands.
 
+- Inspect real exact-version Java item thumbnails from your own verified local client. Browse a paged visual vanilla registry with saved observations, readable-name/ID search and honest compatibility/image limits. No Minecraft game assets are bundled.
+
 ## Improvements
 
 - Clear live, dated saved-file and unavailable inventory states. A player file is never labeled live just because the server is running.
@@ -32,7 +34,7 @@ Six native build targets prepare Windows x64/ARM64 Setup and Portable, Linux x64
 
 - Actual Paper 1.21.11 world controls and safe live backup were tested with the owner's EULA acceptance, no added plugins and no connected players. Real connected-client inventory edits, multiplayer, Bedrock/PocketMine gameplay and exhaustive mod/version combinations remain unvalidated.
 - Live Java inventory reads require a compatible native entity-data response and a matching online UUID. Localized or intercepted replies can be unverifiable. Saved-file writes are always blocked while any server process is active, including for offline players.
-- The item picker contains IDs observed in saved player files, not a complete vanilla/mod registry. Explicit validated IDs can still be refused by the actual server. Item icons use generic symbols.
+- Item images require an owned matching official Java client and online first registration. Supported common flat/layered/tinted and simple 3D models are not a complete game renderer; special/context/animation/custom resource-pack/modded images remain limited. Missing registry metadata leaves a partial observed list. Exact vanilla registry metadata does not prove current modded-server availability. [Asset policy](asset-policy.md).
 - Future Java data versions and unknown custom layouts are read-only. Bedrock/PocketMine native inventory storage is unavailable. Safety copies have no automatic garbage collection.
 - Current weather cannot be read reliably. Stdio commands remain sent, and a reload acknowledgement does not prove completion. Native help cannot guarantee unchanged plugin/mod semantics.
 - Windows/Apple publisher certificates and macOS notarization remain unavailable. Signed update metadata is a separate integrity check. Linux/macOS/ARM64 OS installation and update lifecycles are not claimed tested by packaged app journeys.

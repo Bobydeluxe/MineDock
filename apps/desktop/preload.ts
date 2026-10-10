@@ -55,6 +55,9 @@ const api: Api = {
   administerPlayers: (id, input) => call('administerPlayers', id, input),
   administerIp: (id, input) => call('administerIp', id, input),
   itemCatalog: (id) => call('itemCatalog', id),
+  itemAssetContext: (id) => call('itemAssetContext', id),
+  itemAssetImport: (id) => call('itemAssetImport', id),
+  itemVisual: (id, item) => call('itemVisual', id, item),
   worldControls: (id, query) => call('worldControls', id, query),
   applyWorldControl: (id, input, confirmation) =>
     call('applyWorldControl', id, input, confirmation),

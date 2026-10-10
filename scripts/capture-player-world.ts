@@ -3,7 +3,9 @@ import { mkdir, writeFile, readFile, cp } from 'node:fs/promises';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { fixture } from '../tests/helpers';
-import { playerData, playerUuid } from '../tests/fixtures/player-data';
+import { playerUuid } from '../tests/fixtures/player-data';
+import { itemPlayerData } from '../tests/fixtures/item-player-data';
+import { ItemAssets } from '../packages/items/assets';
 import { AppCore } from '../packages/core/app';
 import { PRODUCT, type Api } from '../packages/domain/types';
 
@@ -29,6 +31,7 @@ const captures: {
   viewport: { width: number; height: number };
 }[] = [];
 async function capture(page: Page, file: string, provenance: string) {
+  await page.mouse.move(16, 16);
   await page.screenshot({ path: path.join(output, file + '.png'), animations: 'disabled' });
   const size = await page.evaluate(() => ({ width: innerWidth, height: innerHeight }));
   captures.push({
@@ -42,17 +45,33 @@ async function capture(page: Page, file: string, provenance: string) {
   console.log('Captured', file);
 }
 const f = await fixture();
-f.repo.saveServer({ ...f.server, name: 'Player administration QA' });
+f.repo.saveServer({
+  ...f.server,
+  name: 'Player administration QA',
+  version: '26.3',
+  minecraftVersion: '26.3',
+});
 f.repo.saveSettings({ ...f.repo.settings(), onboarded: true, theme: 'dark' });
 await writeFile(
   path.join(f.server.path, 'usercache.json'),
   JSON.stringify([{ name: 'Friend', uuid: playerUuid }]),
 );
-const dataFile = path.join(f.server.path, 'world/playerdata', playerUuid + '.dat');
+const dataFile = path.join(f.server.path, 'world/players/data', playerUuid + '.dat');
 await mkdir(path.dirname(dataFile), { recursive: true });
-await writeFile(dataFile, playerData());
+await writeFile(dataFile, itemPlayerData());
+const ownedClient = process.env.MINEDOCK_ITEM_ASSET_QA_CLIENT;
+if (!ownedClient)
+  throw new Error('An owned exact 26.3 client is required for current icon screenshots.');
+const itemAssets = new ItemAssets(path.join(f.root, 'cache/item-assets'));
+await itemAssets.importClient(
+  '26.3',
+  ownedClient,
+  process.env.APPDATA ? path.join(process.env.APPDATA, 'ModrinthApp/meta/assets') : undefined,
+);
+await itemAssets.registry('26.3');
+itemAssets.close();
 const qa =
-  'Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 4671), not gameplay. Server stopped; no command success or live inventory is fabricated.';
+  'Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.';
 const desktop = await electron.launch({
   args: ['.', '--force-device-scale-factor=1'],
   env: { ...env, MINEDOCK_DATA_DIR: f.root, MINEDOCK_TEST: '1' },
@@ -76,26 +95,50 @@ try {
   const profile = page.locator('.player-profile-dialog');
   await expect(profile.locator('.inventory-grid.inventory button')).toHaveCount(36);
   await expect(profile.locator('.inventory-source')).toContainText('Last saved inventory');
+  await expect(
+    profile.locator('.inventory-grid.inventory').first().locator('img').first(),
+  ).toHaveJSProperty('naturalWidth', 64);
+  await expect(
+    profile.locator('.inventory-grid.inventory').first().locator('button').nth(2).locator('img'),
+  ).toHaveJSProperty('naturalWidth', 64);
   await capture(page, 'player-profile', qa);
   await profile
-    .getByRole('button', { name: 'Inventory 16 · example:custom_apple × 64', exact: true })
+    .getByRole('button', { name: 'Inventory 1 · minecraft:diamond_sword × 1', exact: true })
     .click();
   await expect(
-    page.getByRole('dialog', { name: 'Slot details · Inventory 16', exact: true }),
-  ).toContainText('example:custom_apple');
+    page.getByRole('dialog', { name: 'Slot details · Inventory 1', exact: true }),
+  ).toContainText('minecraft:diamond_sword');
+  await expect(page.locator('.item-visual.large img')).toHaveJSProperty('naturalWidth', 64);
   await capture(page, 'inventory-slot', qa);
   await page
-    .getByRole('dialog', { name: 'Slot details · Inventory 16', exact: true })
+    .getByRole('dialog', { name: 'Slot details · Inventory 1', exact: true })
     .getByRole('button', { name: 'Close', exact: true })
     .click();
   await profile.locator('.inventory-grid.ender').scrollIntoViewIfNeeded();
+  await expect(profile.locator('.inventory-grid.ender img').first()).toHaveJSProperty(
+    'naturalWidth',
+    64,
+  );
   await capture(page, 'ender-chest', qa);
   await profile.getByRole('button', { name: 'Close', exact: true }).click();
   await page.getByRole('checkbox', { name: 'Select player Friend', exact: true }).check();
   await page.getByRole('button', { name: 'Selected player actions', exact: true }).click();
   const group = page.getByRole('dialog');
   await group.getByLabel('Action', { exact: true }).selectOption('give');
-  await group.getByLabel('Item ID', { exact: true }).fill('example:custom_apple');
+  await group.getByText('Browse items', { exact: true }).click();
+  await group.getByLabel('Search items', { exact: true }).fill('diamond');
+  await group
+    .locator('.item-catalog-list button')
+    .filter({ hasText: 'minecraft:diamond_sword' })
+    .click();
+  await group.locator('.selected-item-preview').scrollIntoViewIfNeeded();
+  await expect(group.locator('.selected-item-preview img')).toHaveJSProperty('naturalWidth', 64);
+  await group.locator('.item-catalog-list').evaluate((e) => {
+    e.scrollTop = 0;
+  });
+  await group.locator('.dialog-body').evaluate(e=>{e.scrollTop=0;});
+  await capture(page,'item-picker',qa);
+  await group.getByLabel('Search items',{exact:true}).fill('diamond_sword');
   await expect(group.getByRole('button', { name: 'Review action', exact: true })).toBeDisabled();
   await capture(page, 'group-actions', qa);
   await group.getByRole('button', { name: 'Close', exact: true }).click();
@@ -106,6 +149,9 @@ try {
   });
   await page.getByRole('button', { name: 'Player details', exact: true }).click();
   await expect(page.locator('.inventory-grid.ender button')).toHaveCount(27);
+  await expect(
+    page.locator('.inventory-grid.inventory').first().locator('img').first(),
+  ).toHaveJSProperty('naturalWidth', 64);
   await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
   await page.evaluate(async () => {
     await Promise.all(

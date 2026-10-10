@@ -256,6 +256,15 @@ export function createMockApi(): Api {
       throw new Error('Native player actions require the desktop app.');
     },
     itemCatalog: async () => ({ source: 'unavailable', version: '', complete: false, entries: [] }),
+    itemAssetContext: async () => ({ version: '', available: false, source: 'local-client' }),
+    itemAssetImport: async () => null,
+    itemVisual: async (_id, item) => ({
+      id: item.id,
+      version: '',
+      name: item.id,
+      source: 'local-client',
+      status: 'no-client',
+    }),
     worldControls: async (id) => ({
       source: 'unavailable',
       actions: worldActions(data.servers.find((s) => s.id === id)!),

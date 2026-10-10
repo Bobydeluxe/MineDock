@@ -407,6 +407,12 @@ export interface Api {
     input: import('./administration').IpAction,
   ): Promise<import('./administration').CommandResult>;
   itemCatalog(id: string): Promise<import('./administration').ItemCatalog>;
+  itemAssetContext(id: string): Promise<import('./administration').ItemAssetContext>;
+  itemAssetImport(id: string): Promise<import('./administration').ItemAssetContext | null>;
+  itemVisual(
+    id: string,
+    item: Pick<import('./administration').ItemStack, 'id' | 'components'>,
+  ): Promise<import('./administration').ItemVisual>;
   worldControls(
     id: string,
     query?: boolean,

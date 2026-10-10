@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Box, AlertTriangle } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { localizeMessage } from '../../../../packages/domain/localization';
 import { useApp } from './context';
 import { Button, Field, Dialog, useData } from './ui';
 import type { Key } from './i18n';
 import type { Server } from '../../../../packages/domain/types';
+import { ItemThumbnail, ItemAssetSetup, useItemText } from './item-visuals';
 import {
   playerActionSchema,
   type PlayerAction,
@@ -46,15 +47,30 @@ export function ItemPicker({
   onChange: (value: string) => void;
 }) {
   const a = useAdminText(),
-    { api } = useApp(),
-    data = useData(() => api.itemCatalog(server.id), [server.id]);
+    { api, snapshot } = useApp(),
+    assetText = useItemText(),
+    data = useData(
+      () => api.itemCatalog(server.id),
+      [server.id, server.minecraftVersion, server.version, snapshot.settings.language],
+    );
   const [search, setSearch] = useState(''),
-    [namespace, setNamespace] = useState('');
+    [namespace, setNamespace] = useState(''),
+    [page, setPage] = useState(0),
+    [seen, setSeen] = useState(false);
+  useEffect(() => {
+    const listener = () => data.reload();
+    window.addEventListener('minedock-item-assets', listener);
+    return () => window.removeEventListener('minedock-item-assets', listener);
+  }, [data.reload]);
+  const fold = (s: string) => s.toLocaleLowerCase().normalize('NFKD').replace(/\p{M}/gu, '');
   const entries = (data.data?.entries ?? []).filter(
     (item) =>
       (!namespace || item.namespace === namespace) &&
-      (item.id + ' ' + item.name).includes(search.toLowerCase()),
+      (!seen || item.observed) &&
+      fold(item.id + ' ' + item.name).includes(fold(search)),
   );
+  const pages = Math.max(1, Math.ceil(entries.length / 24)),
+    current = Math.min(page, pages - 1);
   return (
     <div className="item-picker">
       <Field label={a('itemId')}>
@@ -66,14 +82,30 @@ export function ItemPicker({
         />
       </Field>
       <details>
-        <summary>{a('browseItems')}</summary>
-        <p className="hint">{a('catalogHelp')}</p>
+        <summary>{assetText('browse')}</summary>
+        <ItemAssetSetup server={server} />
+        <p className="hint">
+          {assetText(data.data?.complete ? 'registryHelp' : 'partialHelp')} · Minecraft{' '}
+          {server.minecraftVersion ?? server.version}
+        </p>
         <div className="form-grid">
           <Field label={a('searchItems')}>
-            <input value={search} onChange={(e) => setSearch(e.target.value)} />
+            <input
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(0);
+              }}
+            />
           </Field>
           <Field label={a('namespace')}>
-            <select value={namespace} onChange={(e) => setNamespace(e.target.value)}>
+            <select
+              value={namespace}
+              onChange={(e) => {
+                setNamespace(e.target.value);
+                setPage(0);
+              }}
+            >
               <option value="">{a('allNamespaces')}</option>
               {[...new Set((data.data?.entries ?? []).map((i) => i.namespace))].map((n) => (
                 <option key={n}>{n}</option>
@@ -81,23 +113,61 @@ export function ItemPicker({
             </select>
           </Field>
         </div>
+        <label className="checkbox">
+          <input
+            type="checkbox"
+            checked={seen}
+            onChange={(e) => {
+              setSeen(e.target.checked);
+              setPage(0);
+            }}
+          />
+          {assetText('observed')}
+        </label>
         {!data.loading && !entries.length && <p>{a('noCatalogItems')}</p>}
         <div className="item-catalog-list">
-          {entries.slice(0, 100).map((item) => (
+          {entries.slice(current * 24, (current + 1) * 24).map((item) => (
             <Button
               key={item.id}
               onClick={() => onChange(item.id)}
               aria-pressed={value === item.id}
+              disabled={item.compatible === false}
             >
-              <Box size={16} />
+              <ItemThumbnail server={server} item={{ id: item.id, components: {} }} />
               <span>
                 {item.name}
                 <small>{item.id}</small>
+                <small>
+                  {assetText(
+                    item.compatible === false
+                      ? 'incompatible'
+                      : item.registered
+                        ? 'vanilla'
+                        : 'observedUnverified',
+                  )}
+                </small>
               </span>
             </Button>
           ))}
         </div>
+        <div className="item-pagination" aria-label={assetText('pages')}>
+          <Button disabled={current === 0} onClick={() => setPage(current - 1)}>
+            {assetText('previous')}
+          </Button>
+          <span aria-live="polite">
+            {current + 1} / {pages} · {entries.length}
+          </span>
+          <Button disabled={current + 1 >= pages} onClick={() => setPage(current + 1)}>
+            {assetText('next')}
+          </Button>
+        </div>
       </details>
+      {/^[a-z0-9_.-]+:[a-z0-9_]+$/.test(value) && (
+        <div className="selected-item-preview">
+          <ItemThumbnail server={server} item={{ id: value, components: {} }} showName />
+          <code>{value}</code>
+        </div>
+      )}
     </div>
   );
 }

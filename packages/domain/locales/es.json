@@ -548,5 +548,14 @@
   "The full player safety backup did not verify.": "La copia de seguridad completa del jugador no pasó la verificación.",
   "The server did not confirm disabling automatic saving.": "El servidor no confirmó la desactivación del guardado automático.",
   "The server did not confirm resuming automatic saving.": "El servidor no confirmó la reanudación del guardado automático.",
-  "Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting.": "No se pudo verificar el guardado automático. El servidor se detuvo por seguridad; revisa la consola antes de reiniciar."
+  "Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting.": "No se pudo verificar el guardado automático. El servidor se detuvo por seguridad; revisa la consola antes de reiniciar.",
+  "Select a regular Minecraft client JAR under 150 MB.": "Elige un archivo JAR del cliente Minecraft normal de menos de 150 MB.",
+  "Linked client paths are unsupported.": "No se admiten rutas de cliente con enlaces.",
+  "Unsafe client archive": "Archivo del cliente no seguro",
+  "Client Minecraft version does not match this server.": "La versión Minecraft del cliente no coincide con este servidor.",
+  "Official client version unavailable.": "Versión oficial del cliente no disponible.",
+  "Official version mismatch": "La versión oficial no coincide",
+  "Client JAR does not match the official Mojang SHA-1.": "El JAR del cliente no coincide con el SHA-1 oficial de Mojang.",
+  "At most 32 local Minecraft versions can be registered.": "Se pueden registrar como máximo 32 versiones locales de Minecraft.",
+  "Java item assets are unavailable for this edition.": "Las imágenes de objetos Java no están disponibles para esta edición."
 }

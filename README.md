@@ -16,7 +16,7 @@ The current public version is **MineDock 0.4.1** for Windows, Linux and macOS. T
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
 
-**Development preview: 0.5.0** adds a large player profile, real saved/live inventory sources, guarded stopped-server inventory editing/restoration, exact selected-player actions and native world controls. It is not in the public 0.4.1 download. Read the [capabilities and safety guide](docs/player-world-administration.md), [validation](docs/validation.md) and [new native screenshots](docs/screenshots/player-world-050/README.md) before testing the branch.
+**Development preview: 0.5.0** adds a large player profile, real saved/live inventory sources, guarded stopped-server inventory editing/restoration, exact selected-player actions and native world controls. Its final enhancement adds real item thumbnails from your own verified, exact-version Java client, 27 main slots plus a separate hotbar, large item details and a paged vanilla-registry/observed-item browser. [Asset sources, supported rendering and rights](docs/asset-policy.md). It is not in the public 0.4.1 download. Read the [capabilities and safety guide](docs/player-world-administration.md), [validation](docs/validation.md) and [new native screenshots](docs/screenshots/player-world-050/README.md) before testing the branch.
 
 ![Unreleased MineDock 0.5.0 player profile — actual Electron with explicitly identified saved QA data](docs/screenshots/player-world-050/player-profile.png)
 

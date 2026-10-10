@@ -211,7 +211,30 @@ export interface ItemCatalog {
   source: 'registry-report' | 'saved-items' | 'unavailable';
   version: string;
   complete: boolean;
-  entries: { id: string; name: string; namespace: string; category: string }[];
+  provenance?: string;
+  entries: {
+    id: string;
+    name: string;
+    namespace: string;
+    category: string;
+    observed?: boolean;
+    registered?: boolean;
+    compatible?: boolean;
+  }[];
+}
+export interface ItemAssetContext {
+  version: string;
+  available: boolean;
+  source: 'local-client';
+}
+export interface ItemVisual {
+  id: string;
+  version: string;
+  name: string;
+  status: 'ready' | 'no-client' | 'custom' | 'unavailable';
+  source: 'local-client';
+  render?: 'flat' | 'layered' | 'model';
+  url?: string;
 }
 export interface AdministrationCapabilities {
   actions: PlayerAction['action'][];

@@ -366,17 +366,11 @@ export class AdministrationService {
       const report = await this.core.playerInventory.get(id, player.name, false);
       for (const slot of report.slots) if (slot.item) ids.add(slot.item.id);
     }
-    return {
-      source: 'saved-items',
-      version: server.minecraftVersion ?? server.version,
-      complete: false,
-      entries: [...ids].sort().map((id) => ({
-        id,
-        name: id.split(':')[1]!.replaceAll('_', ' '),
-        namespace: id.split(':')[0]!,
-        category: 'saved',
-      })),
-    };
+    return this.core.itemAssets.catalog(
+      server.minecraftVersion ?? server.version,
+      this.core.repo.settings().language,
+      ids,
+    );
   }
   async worldState(id: string, query = false): Promise<WorldControlsState> {
     const server = this.core.repo.server(id),
