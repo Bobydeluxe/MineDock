@@ -1,5 +1,15 @@
 import { it, expect, vi } from 'vitest';
-import { mkdtemp, rm, writeFile, readFile, readdir, utimes, open, stat } from 'node:fs/promises';
+import {
+  mkdtemp,
+  rm,
+  writeFile,
+  readFile,
+  readdir,
+  utimes,
+  open,
+  stat,
+  realpath,
+} from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 import { ClientAssets, ItemAssets, itemMetadata } from '../packages/items/assets';
@@ -13,7 +23,8 @@ import {
 } from '../packages/domain/item-presentation';
 
 async function fixture(version = '1.20.1', modern = false) {
-  const root = await mkdtemp(path.join(os.tmpdir(), 'minedock-items-'));
+  // macOS /var is a system symlink; use a canonical QA root while preserving link rejection.
+  const root = await mkdtemp(path.join(await realpath(os.tmpdir()), 'minedock-items-'));
   const f = await itemAssetFixture(root, version, modern);
   return {
     ...f,
