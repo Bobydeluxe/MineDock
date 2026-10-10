@@ -1,6 +1,6 @@
 # Extension implementation record
 
-This is the historical extension/UI/mod-manager record. The current 0.4.0 evolution and appended migrations 7–11 are in [the survival ledger](survival-evolution.md); public packages are 0.4.0. The earlier Modrinth revision adds migration 6, real hash-verified staged transactions, dependencies, updates, rollback, locks, local collections/favorites, manual identification and startup health checks. Exact revision evidence is in [validation](validation.md).
+This is the historical extension/UI/mod-manager record. The 0.4.0 evolution and appended migrations 7–11 are in [the survival ledger](survival-evolution.md). The current public release is 0.5.0; PR #9 records its player/world and private-resource implementation. The earlier Modrinth revision adds migration 6, real hash-verified staged transactions, dependencies, updates, rollback, locks, local collections/favorites, manual identification and startup health checks. Exact revision evidence is in [validation](validation.md).
 
 Requested on 4 October 2026, building on the inspected 0.2.0 domain, SQLite schema, services, typed Electron bridge and UI. The 0.3.0 source preserves that architecture and English defaults, with all six languages.
 

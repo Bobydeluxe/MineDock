@@ -1,6 +1,10 @@
-# Internal security review — 0.4.0
+# Internal security review — 0.4.0 baseline and 0.5.0 additions
 
 This is a developer review of the implemented boundaries and tests, not an independent audit or a penetration-test certificate. Evidence covers local code/tests and the native Windows flows recorded in [validation](validation.md). Third-party engine/plugin code executes with the current OS account's privileges.
+
+## Item images review (0.5.0, not an independent audit)
+
+Reviewed: exact-context registry envelopes, owned local client verification, bounded ZIP/model/PNG parsing, private cache containment/eviction, fixed metadata HTTPS paths and redirect checks, cancellation, and sender-validated image/import IPC. The new custom protocol permits only hash-addressed PNGs; it does not expose source paths or a general file/network proxy. Unit fault cases and the owned-client native profile/picker test are recorded in [validation](validation.md). Remaining work includes broader hostile PNG/JAR corpora, local file-replacement races, complete special-item rendering and an independent review. The existing NBT transaction/safety gates remain authoritative. [Asset policy](asset-policy.md).
 
 | Surface                          | Protection reviewed                                                                                                                                       | Relevant regression evidence                                                                           | Remaining external-review questions                                                                              |
 | -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- |

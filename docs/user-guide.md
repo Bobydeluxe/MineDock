@@ -1,10 +1,12 @@
 # A survival world with friends
 
-This guide describes the public **MineDock 0.4.1** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
+This guide describes the public **MineDock 0.5.0** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
+
+For **0.5.0 player and world tools**, see [player and world administration](player-world-administration.md): click Player details for actual inventory sources and tabs; stop the server for backed-up file edits/restoration; review exact targets for native actions and groups; use the existing Worlds page for native world controls. For preview pictures, expand **Download official images** and confirm Java ownership/EULA acceptance; no game installation is needed. The exact archive stays private, with optional local-client import, explicit resource-pack override and licensed mod resources. Known incompatible items remain disabled; unsupported pictures keep exact IDs. [Setup and limits](asset-policy.md).
 
 ## Create your first survival
 
-1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.
+1. Download the package matching your computer from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0). Windows offers Setup or portable. Follow the release's checksum and unsigned-package notes.
 2. Open MineDock, choose your language/appearance and keep the proposed folders unless you have a reason to change them.
 3. Choose **Create server**. Vanilla suits an unmodified world; Paper or Purpur supports plugins. Fabric, Forge and NeoForge support their corresponding mods. Your friends must use a matching Minecraft version and, for modded play, matching required client mods.
 4. Choose the version and a reasonable memory allowance. Keep survival and normal difficulty. Review every setting before creating the server.
@@ -14,11 +16,11 @@ On the same computer, a Java client usually connects through `localhost:PORT`. F
 
 ## Upgrade an existing 0.3.x profile
 
-Close MineDock, keep your existing server/storage folders, then open the verified 0.4.1 package under the same OS account. Your profile and SQLite database are reused; a database copy is saved before migration. Servers, preferences, backups, runtimes, player history and scheduled tasks are retained. The old Windows portable launcher can fail before its update helper starts; manually open the new verified portable or Setup package in that case. Never delete your data to upgrade.
+Close MineDock, keep your existing server/storage folders, then open the verified 0.5.0 package under the same OS account. Your profile and SQLite database are reused; a database copy is saved before migration. Servers, preferences, backups, runtimes, player history and scheduled tasks are retained. The old Windows portable launcher can fail before its update helper starts; manually open the new verified portable or Setup package in that case. Never delete your data to upgrade.
 
 ## Application updates
 
-Open **Settings** to check for a MineDock update. The updater verifies the publisher signature and package hash before offering installation. The public Windows x64 portable upgrade from 0.4.0 to 0.4.1 was tested with automatic replacement/restart and preserved data. You can also close the app and open a verified newer package manually under the same OS account. MineDock 0.4.1 displays **Up to date** after a successful check with no newer release. See [the exact public validation](validation.md) for other platforms and the legacy 0.3.0 manual step.
+Open **Settings** to check for a MineDock update. The updater verifies the publisher signature and package hash before offering installation. The Windows x64 portable upgrade uses automatic replacement/restart; exact 0.4.1 → 0.5.0 migration results are recorded in validation. You can also close the app and open a verified newer package manually under the same OS account. MineDock 0.5.0 displays **Up to date** after a successful check with no newer release. See [the exact public validation](validation.md) for other platforms and the legacy 0.3.0 manual step.
 
 ## Add a mod, plugin or pack
 

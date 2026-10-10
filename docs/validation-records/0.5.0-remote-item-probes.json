@@ -1,0 +1,1150 @@
+{
+  "at": "2026-10-10T12:37:36.549Z",
+  "releaseStatus": "NOT RELEASED",
+  "source": "Mojang official exact-version private downloads; no launcher/client registration or game execution",
+  "registrations": [
+    {
+      "version": "1.20.1",
+      "sha1": "0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838",
+      "origin": "official-private"
+    },
+    {
+      "version": "1.21.1",
+      "sha1": "30c73b1c5da787909b2f73340419fdf13b9def88",
+      "origin": "official-private"
+    },
+    {
+      "version": "1.21.4",
+      "sha1": "a7e5a6024bfd3cd614625aa05629adf760020304",
+      "origin": "official-private"
+    },
+    {
+      "version": "26.3",
+      "sha1": "e877b6a07acd633fb3bb475002175cec036e7b87",
+      "origin": "official-private"
+    }
+  ],
+  "cases": [
+    {
+      "version": "1.20.1",
+      "registry": 1255,
+      "elapsedMs": 4807,
+      "images": [
+        {
+          "id": "minecraft:diamond_sword",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:creeper_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:zombie_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:wither_skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:player_head",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Saved head profile has no safe texture"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {
+            "BlockEntityTag": {
+              "Base": 0,
+              "Patterns": [
+                {
+                  "Pattern": "ts",
+                  "Color": 14
+                },
+                {
+                  "Pattern": "bo",
+                  "Color": 11
+                }
+              ]
+            }
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {
+            "BlockEntityTag": {
+              "Base": 14,
+              "Patterns": [
+                {
+                  "Pattern": "cr",
+                  "Color": 0
+                }
+              ]
+            }
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:bow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "ChargedProjectiles": [
+              {
+                "id": "minecraft:arrow",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "ChargedProjectiles": [
+              {
+                "id": "minecraft:firework_rocket",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:compass",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:clock",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Potion effect tint unsupported"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "CustomPotionColor": 52309
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:healing"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Potion effect tint unsupported"
+        },
+        {
+          "id": "minecraft:splash_potion",
+          "components": {
+            "CustomPotionColor": 52309
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:lingering_potion",
+          "components": {
+            "CustomPotionColor": 52309
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:leather_boots",
+          "components": {
+            "display": {
+              "color": 3368669
+            }
+          },
+          "status": "unavailable",
+          "detail": "Legacy predicate unsupported"
+        },
+        {
+          "id": "minecraft:iron_chestplate",
+          "components": {
+            "minecraft:trim": {
+              "material": "minecraft:gold",
+              "pattern": "minecraft:sentry"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Legacy predicate unsupported"
+        },
+        {
+          "id": "minecraft:bundle",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Legacy predicate unsupported"
+        },
+        {
+          "id": "minecraft:red_bundle",
+          "components": {},
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Legacy tint unsupported"
+        },
+        {
+          "id": "minecraft:mace",
+          "components": {},
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "components": {},
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:prismarine",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        }
+      ]
+    },
+    {
+      "version": "1.21.1",
+      "registry": 1333,
+      "elapsedMs": 4125,
+      "images": [
+        {
+          "id": "minecraft:diamond_sword",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:creeper_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:zombie_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:wither_skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:player_head",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Saved head profile has no safe texture"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {
+            "BlockEntityTag": {
+              "Base": 0,
+              "Patterns": [
+                {
+                  "Pattern": "ts",
+                  "Color": 14
+                },
+                {
+                  "Pattern": "bo",
+                  "Color": 11
+                }
+              ]
+            }
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {
+            "BlockEntityTag": {
+              "Base": 14,
+              "Patterns": [
+                {
+                  "Pattern": "cr",
+                  "Color": 0
+                }
+              ]
+            }
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:bow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "ChargedProjectiles": [
+              {
+                "id": "minecraft:arrow",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "ChargedProjectiles": [
+              {
+                "id": "minecraft:firework_rocket",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:compass",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:clock",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Potion effect tint unsupported"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "CustomPotionColor": 52309
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:healing"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Potion effect tint unsupported"
+        },
+        {
+          "id": "minecraft:splash_potion",
+          "components": {
+            "CustomPotionColor": 52309
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:lingering_potion",
+          "components": {
+            "CustomPotionColor": 52309
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:leather_boots",
+          "components": {
+            "display": {
+              "color": 3368669
+            }
+          },
+          "status": "unavailable",
+          "detail": "Legacy predicate unsupported"
+        },
+        {
+          "id": "minecraft:iron_chestplate",
+          "components": {
+            "minecraft:trim": {
+              "material": "minecraft:gold",
+              "pattern": "minecraft:sentry"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Legacy predicate unsupported"
+        },
+        {
+          "id": "minecraft:bundle",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Legacy predicate unsupported"
+        },
+        {
+          "id": "minecraft:red_bundle",
+          "components": {},
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Legacy tint unsupported"
+        },
+        {
+          "id": "minecraft:mace",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "components": {},
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:prismarine",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        }
+      ]
+    },
+    {
+      "version": "1.21.4",
+      "registry": 1385,
+      "elapsedMs": 5749,
+      "images": [
+        {
+          "id": "minecraft:diamond_sword",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:creeper_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:zombie_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:wither_skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:player_head",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Saved head profile has no safe texture"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {
+            "minecraft:banner_patterns": [
+              {
+                "pattern": "minecraft:stripe_top",
+                "color": "red"
+              },
+              {
+                "pattern": "minecraft:border",
+                "color": "blue"
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {
+            "minecraft:base_color": "red",
+            "minecraft:banner_patterns": [
+              {
+                "pattern": "minecraft:cross",
+                "color": "white"
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:bow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "minecraft:charged_projectiles": [
+              {
+                "id": "minecraft:arrow",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "minecraft:charged_projectiles": [
+              {
+                "id": "minecraft:firework_rocket",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:compass",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:clock",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {},
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "custom_color": 52309
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:healing"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Potion effect tint unsupported"
+        },
+        {
+          "id": "minecraft:splash_potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "custom_color": 52309
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:lingering_potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "custom_color": 52309
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:leather_boots",
+          "components": {
+            "minecraft:dyed_color": 3368669
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:iron_chestplate",
+          "components": {
+            "minecraft:trim": {
+              "material": "minecraft:gold",
+              "pattern": "minecraft:sentry"
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:bundle",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:red_bundle",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Tint unsupported"
+        },
+        {
+          "id": "minecraft:mace",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "components": {},
+          "status": "unavailable"
+        },
+        {
+          "id": "minecraft:prismarine",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        }
+      ]
+    },
+    {
+      "version": "26.3",
+      "registry": 1658,
+      "elapsedMs": 10112,
+      "images": [
+        {
+          "id": "minecraft:diamond_sword",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:apple",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:stone",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:oak_log",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:crafting_table",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:creeper_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:zombie_head",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:wither_skeleton_skull",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:player_head",
+          "components": {},
+          "status": "unavailable",
+          "detail": "Saved head profile has no safe texture"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:white_banner",
+          "components": {
+            "minecraft:banner_patterns": [
+              {
+                "pattern": "minecraft:stripe_top",
+                "color": "red"
+              },
+              {
+                "pattern": "minecraft:border",
+                "color": "blue"
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:shield",
+          "components": {
+            "minecraft:base_color": "red",
+            "minecraft:banner_patterns": [
+              {
+                "pattern": "minecraft:cross",
+                "color": "white"
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:bow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "minecraft:charged_projectiles": [
+              {
+                "id": "minecraft:arrow",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:crossbow",
+          "components": {
+            "minecraft:charged_projectiles": [
+              {
+                "id": "minecraft:firework_rocket",
+                "count": 1
+              }
+            ]
+          },
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:compass",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:clock",
+          "components": {},
+          "status": "unavailable",
+          "detail": "World direction/time is not available in saved item data"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {},
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "custom_color": 52309
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "potion": "minecraft:healing"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Potion effect tint unsupported"
+        },
+        {
+          "id": "minecraft:splash_potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "custom_color": 52309
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:lingering_potion",
+          "components": {
+            "minecraft:potion_contents": {
+              "custom_color": 52309
+            }
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:leather_boots",
+          "components": {
+            "minecraft:dyed_color": 3368669
+          },
+          "status": "ready",
+          "render": "layered"
+        },
+        {
+          "id": "minecraft:iron_chestplate",
+          "components": {
+            "minecraft:trim": {
+              "material": "minecraft:gold",
+              "pattern": "minecraft:sentry"
+            }
+          },
+          "status": "unavailable",
+          "detail": "Texture unavailable"
+        },
+        {
+          "id": "minecraft:bundle",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:red_bundle",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:filled_map",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:mace",
+          "components": {},
+          "status": "ready",
+          "render": "flat"
+        },
+        {
+          "id": "minecraft:sulfur",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        },
+        {
+          "id": "minecraft:prismarine",
+          "components": {},
+          "status": "ready",
+          "render": "model"
+        }
+      ]
+    }
+  ],
+  "modSource": {
+    "id": "67OSh58o",
+    "project": "E6FUtRJh",
+    "title": "Adorn",
+    "version": "5.0.1-fabric",
+    "license": "MIT",
+    "size": 4128916,
+    "archiveSha512": "162c9aefb1c1e956be4401a0ac6f2a86578cbc85bd1be998cdf30227c20c4b5295fb8571bcc1bb971237a309e036a9abd8edec2639d078346a4ce012732019f7"
+  },
+  "mods": [
+    {
+      "id": "adorn:oak_table",
+      "version": "1.20.1",
+      "name": "Oak Table",
+      "status": "ready",
+      "source": "mod-resources",
+      "render": "model",
+      "imageSha256": "8073230a2cd44bec002bb99f7d257f99c3f91bd58e9f17acd1373c511c13f965"
+    },
+    {
+      "id": "adorn:oak_chair",
+      "version": "1.20.1",
+      "name": "Oak Chair",
+      "status": "ready",
+      "source": "mod-resources",
+      "render": "model",
+      "imageSha256": "f894d41971c2c8f187af31fe7a8b0bdc37079d5f2427bd33d44488c0dca02766"
+    },
+    {
+      "id": "adorn:stone_torch",
+      "version": "1.20.1",
+      "name": "Stone Torch",
+      "status": "ready",
+      "source": "mod-resources",
+      "render": "flat",
+      "imageSha256": "505af51da960fee91d89ab95ebb12d07311f9dc2e0347969e9abf6359a8e4143"
+    },
+    {
+      "id": "adorn:oak_drawer",
+      "version": "1.20.1",
+      "name": "Oak Drawer",
+      "status": "ready",
+      "source": "mod-resources",
+      "render": "model",
+      "imageSha256": "6f7289c6d86b7eaeb3f1364092e785303aa02fb1676437fc65eaa4d226f9e57d"
+    },
+    {
+      "id": "adorn:stone_platform",
+      "version": "1.20.1",
+      "name": "Stone Platform",
+      "status": "ready",
+      "source": "mod-resources",
+      "render": "model",
+      "imageSha256": "c046def2a87c864792fc9cebe23b6f93df4708f723295402b55d3ae88c07d2b2"
+    },
+    {
+      "id": "adorn:trading_station",
+      "version": "1.20.1",
+      "name": "Trading Station",
+      "status": "ready",
+      "source": "mod-resources",
+      "render": "model",
+      "imageSha256": "c2ab52bac343eeeacfcf74b5f84dee50b319e2a117ca09c7d6148a1b104ede04"
+    }
+  ],
+  "warm200Ms": 130,
+  "coldMs": 24793,
+  "cacheFiles": 223,
+  "cacheBytes": 124261787,
+  "metrics": {
+    "renders": 104,
+    "memoryHits": 0,
+    "diskHits": 1,
+    "metadataRequests": 16,
+    "fallbacks": 28,
+    "peakConcurrent": 1
+  },
+  "codeSource": "aa4f141475ab516205b827daa045da5b2dcbd94b",
+  "probeKind": "Fresh private official downloads; no installed game, launcher import or game execution",
+  "validationSource": "6d5b528a7c194c36ed4aae9cb463629973e29783",
+  "validationSourceNote": "Only native test geometry/transaction waiting changed after aa4f141; packaged application inputs are identical."
+}

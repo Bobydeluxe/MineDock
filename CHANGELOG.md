@@ -1,5 +1,47 @@
 # Changelog
 
+## 0.5.0
+
+Player and world administration, private version-correct item resources and safer native commands. Historical releases retain their original executable files.
+
+### Added
+
+- Prepared free GitHub Pages hosting with English legal-page drafts, project-path navigation and production SEO metadata. Publication remains blocked pending publisher/contact review, owner approval and a verified deployment; the current website remains active; application downloads use 0.5.0.
+
+- A large player profile with Inventory, Actions, History and Notes, official skin fallback, actual saved stats, 36 inventory slots, armor, offhand and 27 Ender Chest slots.
+- Stopped-server inventory quantity removal, exact-slot empty/replace and previewed restoration from real pre-edit copies, with full verified backup, conflict checks, transaction journal and rollback.
+- Validated native player action forms, filtered item removal and advanced confirmations for kill and explicit IP bans.
+- Private official exact-release resources without an installed Minecraft game, with explicit ownership/EULA consent and optional local-client import. No game assets are bundled.
+- Saved custom/mob heads, ordered banner/shield patterns, static animation frames, charged crossbow variants, known dyes/trims, safe mod assets and explicit local resource-pack overrides.
+- Opt-in exact-release/loader Modrinth resource downloads with declared licence, size and SHA-512 checks; no mod installation or execution.
+- A 24-item paged visual browser with exact vanilla-release registries, localized-name/ID search, namespace/observed filters and explicit partial/unverified states.
+- Exact selected-player group actions, per-player results and cancellation of remaining targets.
+- World controls in the existing Worlds page: time, weather, difficulty, categorized gamerules, verified save, announcements, player list, seed, border, spawn and structured advanced commands.
+
+### Improved
+
+- Honest live/saved/unavailable inventory sources, dates and command states; uncertain transport remains not verifiable.
+- Separate 27-slot main inventory and nine-slot hotbar, ordered equipment, crisp thumbnails, accessible ID/source tooltips and large details with actual names/lore, enchantment indication and damage bars only when their metadata is present.
+- Java/Bedrock/PocketMine capability gates, native help checks and Java 1.21.11 rule names; English plus all five existing translations.
+- Local administration history excludes private messages, reasons, IPs, raw commands and replies. SQLite migration 12 preserves existing records.
+
+### Fixed
+
+- Legacy opaque skin hat regions and entity facing no longer hide the actual head face or shield decoration.
+- Missing resources remain text-manageable; image work cancels on server navigation and cache clearing preserves user data.
+
+- Native Minecraft RCON interoperability when adjacent request packets coalesce, while retaining fragmented and bounded response collection.
+- Live backup confirmation accepts the actual concatenated native save reply and verifies save-off/save-on; uncertain resume triggers a reported safety stop.
+- An unrecognized player-list reply no longer invents an empty online list. Group cancellation preserves actual partial results.
+
+### Known issues
+
+- Item images need private exact-version official resources, downloaded with ownership/terms consent or imported from a local client. Rendering covers supported heads, patterns and mod/pack models; complex geometry, world-dependent compass/clock, effect-derived potion colours and Bedrock images remain unsupported. Missing registry metadata leaves a partial saved-item list. Vanilla metadata is not a live modded-server registry; explicit/native actions can still be refused.
+- New/future Java data versions and unknown custom layouts are read-only; Bedrock/PocketMine native inventory storage is unavailable.
+- No real connected-client inventory manipulation or multiplayer session is claimed. The real Paper world test has zero connected players; Bedrock/PocketMine gameplay and exhaustive mod/version combinations remain unvalidated.
+- Stdio replies remain sent, localized/intercepted replies can remain not verifiable, and current weather cannot be read reliably. Safety copies have no automatic garbage collection.
+- Publisher OS signatures/notarization remain unavailable. Updater metadata is signed separately; native OS installer/update coverage remains limited to the recorded tests.
+
 ## 0.4.1
 
 ### Added

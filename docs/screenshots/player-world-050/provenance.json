@@ -1,0 +1,133 @@
+{
+  "at": "2026-10-10T12:38:33.116Z",
+  "version": "0.5.0",
+  "publicRelease": false,
+  "captures": [
+    {
+      "file": "players.png",
+      "sha256": "45e78b6b059355e60feb79847fab496d5cb7981e5f1f069160110783cc1f8161",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "player-profile.png",
+      "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "inventory-slot.png",
+      "sha256": "533e0dfadb6b43814f8f82d395ab8d410049ee79a520495330ea60b74268a287",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "banner.png",
+      "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "shield.png",
+      "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "head.png",
+      "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "ender-chest.png",
+      "sha256": "aa71ebc2c5a7b22b4abeca22a7716bb3e6d2314565b899b7d07ff8243b7aa276",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "item-picker.png",
+      "sha256": "e69119091eb5fa00b78854c3a46bad1a2d1610061611a409e21b8f2faf3bc888",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "group-actions.png",
+      "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "player-profile-light.png",
+      "sha256": "520e480b5574e42e69b732358047d24caf8e7d081290dcfd30bf1f1536e28af2",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "player-profile-compact.png",
+      "sha256": "18a0500783959e688b800f3ee651dbd77e0f20f1c0384fb5350a617f485e4d1b",
+      "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+      "viewport": {
+        "width": 900,
+        "height": 760
+      }
+    },
+    {
+      "file": "mod-item.png",
+      "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab",
+      "provenance": "Actual Electron, synthetic saved 1.20.1 QA NBT, not gameplay. Real Adorn 5.0.1-fabric (Modrinth project E6FUtRJh, version 67OSh58o, MIT) archive is verified, read privately and never executed/installed. The actual adorn:oak_table model/textures render in 3D over exact official Minecraft 1.20.1 resources.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "world-controls.png",
+      "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59",
+      "provenance": "Actual Electron and real isolated Paper 1.21.11 build 132, Java 21, personally accepted EULA; native RCON reads, no connected players, no added plugins. Weather cannot be read natively and remains unavailable.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    },
+    {
+      "file": "gamerules.png",
+      "sha256": "a398658094b9d5ece0b8d4cce983a5eb2d3c18526be317b0945e5341026fcdaa",
+      "provenance": "Actual native Minecraft 1.21.11 gamerule responses from the isolated Paper server; current values read through RCON, not fixtures.",
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      }
+    }
+  ]
+}

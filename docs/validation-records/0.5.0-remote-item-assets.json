@@ -1,0 +1,1746 @@
+{
+  "version": "0.5.0",
+  "state": "NOT RELEASED; PR #9 review; public release remains 0.4.1",
+  "at": "2026-10-10T13:20:14.429Z",
+  "appSource": "aa4f141475ab516205b827daa045da5b2dcbd94b",
+  "buildSource": "6d5b528a7c194c36ed4aae9cb463629973e29783",
+  "applicationInputsUnchangedAfterBuild": true,
+  "local": {
+    "platform": "Windows 11 x64",
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unit": {
+      "passed": 286,
+      "skipped": 5,
+      "total": 291,
+      "files": 45
+    },
+    "focusedItemTests": {
+      "passed": 37
+    },
+    "sourceUI": {
+      "passed": 32,
+      "skipped": 0,
+      "duration": "7.4m",
+      "sources": "Actual Electron; original-art QA HTTP transport without a game installation; separate private owned official game validation; six languages/theme/200% DPI"
+    },
+    "packaged": {
+      "passed": 16,
+      "skipped": 0,
+      "duration": "7.0m",
+      "source": "aa4f141475ab516205b827daa045da5b2dcbd94b"
+    },
+    "testOnlyCorrections": {
+      "source": "ad0696a44ea5a3ead1e1523a7ec9bc8ad6f2cff6",
+      "worldsPackaged": "2 passed (16.9s)",
+      "remoteAssetsUI": "1 passed (24.3s)",
+      "modsUI": "1 passed (1.1m)",
+      "reason": "Fix virtual runner geometry at 200% DPI and await completed mod/world transactions; application inputs unchanged"
+    }
+  },
+  "ci": {
+    "nativeUrl": "https://github.com/Bobydeluxe/MineDock/actions/runs/38053254208",
+    "nativeTests": [
+      {
+        "jobId": 114219465045,
+        "platform": "package (windows-2025, x64, build:windows)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 286,
+          "skipped": 5,
+          "total": 291
+        },
+        "packaged": {
+          "passed": 15,
+          "skipped": 1,
+          "duration": "8.4m"
+        }
+      },
+      {
+        "jobId": 114219465787,
+        "platform": "package (ubuntu-24.04, x64, build:linux)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 286,
+          "skipped": 5,
+          "total": 291
+        },
+        "packaged": {
+          "passed": 15,
+          "skipped": 1,
+          "duration": "7.1m"
+        }
+      },
+      {
+        "jobId": 114219465873,
+        "platform": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 286,
+          "skipped": 5,
+          "total": 291
+        },
+        "packaged": {
+          "passed": 15,
+          "skipped": 1,
+          "duration": "7.0m"
+        }
+      },
+      {
+        "jobId": 114219466160,
+        "platform": "package (macos-15, arm64, build:mac)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 287,
+          "skipped": 4,
+          "total": 291
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 2,
+          "duration": "49.0s"
+        }
+      },
+      {
+        "jobId": 114219466386,
+        "platform": "package (windows-11-arm, arm64, build:windows)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 286,
+          "skipped": 5,
+          "total": 291
+        },
+        "packaged": {
+          "passed": 15,
+          "skipped": 1,
+          "duration": "7.6m"
+        }
+      },
+      {
+        "jobId": 114219488975,
+        "platform": "package (macos-15-intel, x64, build:mac)",
+        "conclusion": "success",
+        "unit": {
+          "passed": 287,
+          "skipped": 4,
+          "total": 291
+        },
+        "packaged": {
+          "passed": 14,
+          "skipped": 2,
+          "duration": "1.2m"
+        }
+      }
+    ],
+    "sourceRuns": [
+      {
+        "id": 38054417292,
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38054417292",
+        "head": "54a81a5145cc42ec68198228a87e01d5df752b5f",
+        "conclusion": "success"
+      },
+      {
+        "id": 38054413437,
+        "url": "https://github.com/Bobydeluxe/MineDock/actions/runs/38054413437",
+        "head": "54a81a5145cc42ec68198228a87e01d5df752b5f",
+        "conclusion": "success"
+      }
+    ],
+    "sourceTests": {
+      "unit": {
+        "passed": 286,
+        "skipped": 5,
+        "total": 291
+      },
+      "ui": {
+        "passed": 31,
+        "skipped": 1,
+        "duration": "8.2m"
+      }
+    },
+    "artifacts": [
+      {
+        "name": "MineDock-0.5.0-Portable-arm64.exe",
+        "size": 107590913,
+        "sha256": "e1eb83fc74cd43c515720aad2ba05c73d2a704e5841db7a5b258386984dc15b2"
+      },
+      {
+        "name": "MineDock-0.5.0-Portable-x64.exe",
+        "size": 113697900,
+        "sha256": "c86a094ec5d5a968427e58bedc3878de421859f1ede69574b09c00d1c90dfd50"
+      },
+      {
+        "name": "MineDock-0.5.0-Setup-arm64.exe",
+        "size": 107879848,
+        "sha256": "a19691fe159594e2b096bab2003d11344d9e60218b128ef596bfa470999f9443"
+      },
+      {
+        "name": "MineDock-0.5.0-Setup-x64.exe",
+        "size": 113987307,
+        "sha256": "828c3fc31d67f153d5bc37d0edc5840c466dd4a744c1954dc7ac1cd87e4fcc1c"
+      },
+      {
+        "name": "MineDock-0.5.0-amd64.deb",
+        "size": 102229856,
+        "sha256": "7fad8c82e7aa98ed73751543b6df48a6866193bc3bae62897ea818570495653c"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.AppImage",
+        "size": 129902185,
+        "sha256": "6b78b004f13c608942157bc8c6cf6543f2677b5624dd1513bde4f3adfbb2e20f"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.deb",
+        "size": 97377588,
+        "sha256": "ff609ac80e232d0210497bf9f39b01069542bbc9033de3c1a3656dfdf2868bb5"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.dmg",
+        "size": 132624793,
+        "sha256": "ad88ab824ffad325b23b7cd595571daeb4b8cc3ffbde175f3d44d4a49cb6ef40"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.zip",
+        "size": 131739986,
+        "sha256": "ae7ccf07a3906e30a92fba4ae214851b634e30ce7c827b3485ba76171eeb36ac"
+      },
+      {
+        "name": "MineDock-0.5.0-x64.dmg",
+        "size": 136492087,
+        "sha256": "8ebaf70874aadd881e9e95e43cc760ceb7bd9a2ad69476b0e17e23c3a7e0e366"
+      },
+      {
+        "name": "MineDock-0.5.0-x64.zip",
+        "size": 135641252,
+        "sha256": "10faa962411d1de32de4a5bd6a267260453c16a450477ee576c44c4cb6cdb970"
+      },
+      {
+        "name": "MineDock-0.5.0-x86_64.AppImage",
+        "size": 128655543,
+        "sha256": "9a54b46fc1b873cceeaf7535f97f4e1d47cdaa982b4d4ded9faa51a2e7205c93"
+      }
+    ],
+    "metadataSignaturesVerified": 6,
+    "artifactArchiveDigestsVerified": 6,
+    "artifactStatus": "GitHub Actions review artifacts only; no release assets published",
+    "initialFailures": "The small virtual screen hid responsive navigation at 200% DPI; a mod test asserted before transaction completion. Test-only geometry/mod fixes at 6d5b528, world safety-backup wait at ad0696a. Native build inputs remain 6d5b528; only Windows x64 is rerun after its old five-second world wait failed. New world wait is separately verified locally and in final source CI."
+  },
+  "upstream": {
+    "at": "2026-10-10T12:37:36.549Z",
+    "releaseStatus": "NOT RELEASED",
+    "source": "Mojang official exact-version private downloads; no launcher/client registration or game execution",
+    "registrations": [
+      {
+        "version": "1.20.1",
+        "sha1": "0c3ec587af28e5a785c0b4a7b8a30f9a8f78f838",
+        "origin": "official-private"
+      },
+      {
+        "version": "1.21.1",
+        "sha1": "30c73b1c5da787909b2f73340419fdf13b9def88",
+        "origin": "official-private"
+      },
+      {
+        "version": "1.21.4",
+        "sha1": "a7e5a6024bfd3cd614625aa05629adf760020304",
+        "origin": "official-private"
+      },
+      {
+        "version": "26.3",
+        "sha1": "e877b6a07acd633fb3bb475002175cec036e7b87",
+        "origin": "official-private"
+      }
+    ],
+    "cases": [
+      {
+        "version": "1.20.1",
+        "registry": 1255,
+        "elapsedMs": 4807,
+        "images": [
+          {
+            "id": "minecraft:diamond_sword",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:apple",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:stone",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:oak_log",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:crafting_table",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:creeper_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:zombie_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:wither_skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:player_head",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Saved head profile has no safe texture"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {
+              "BlockEntityTag": {
+                "Base": 0,
+                "Patterns": [
+                  {
+                    "Pattern": "ts",
+                    "Color": 14
+                  },
+                  {
+                    "Pattern": "bo",
+                    "Color": 11
+                  }
+                ]
+              }
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {
+              "BlockEntityTag": {
+                "Base": 14,
+                "Patterns": [
+                  {
+                    "Pattern": "cr",
+                    "Color": 0
+                  }
+                ]
+              }
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:bow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "ChargedProjectiles": [
+                {
+                  "id": "minecraft:arrow",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "ChargedProjectiles": [
+                {
+                  "id": "minecraft:firework_rocket",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:compass",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:clock",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Potion effect tint unsupported"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "CustomPotionColor": 52309
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:healing"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Potion effect tint unsupported"
+          },
+          {
+            "id": "minecraft:splash_potion",
+            "components": {
+              "CustomPotionColor": 52309
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:lingering_potion",
+            "components": {
+              "CustomPotionColor": 52309
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:leather_boots",
+            "components": {
+              "display": {
+                "color": 3368669
+              }
+            },
+            "status": "unavailable",
+            "detail": "Legacy predicate unsupported"
+          },
+          {
+            "id": "minecraft:iron_chestplate",
+            "components": {
+              "minecraft:trim": {
+                "material": "minecraft:gold",
+                "pattern": "minecraft:sentry"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Legacy predicate unsupported"
+          },
+          {
+            "id": "minecraft:bundle",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Legacy predicate unsupported"
+          },
+          {
+            "id": "minecraft:red_bundle",
+            "components": {},
+            "status": "unavailable"
+          },
+          {
+            "id": "minecraft:filled_map",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Legacy tint unsupported"
+          },
+          {
+            "id": "minecraft:mace",
+            "components": {},
+            "status": "unavailable"
+          },
+          {
+            "id": "minecraft:sulfur",
+            "components": {},
+            "status": "unavailable"
+          },
+          {
+            "id": "minecraft:prismarine",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          }
+        ]
+      },
+      {
+        "version": "1.21.1",
+        "registry": 1333,
+        "elapsedMs": 4125,
+        "images": [
+          {
+            "id": "minecraft:diamond_sword",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:apple",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:stone",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:oak_log",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:crafting_table",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:creeper_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:zombie_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:wither_skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:player_head",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Saved head profile has no safe texture"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {
+              "BlockEntityTag": {
+                "Base": 0,
+                "Patterns": [
+                  {
+                    "Pattern": "ts",
+                    "Color": 14
+                  },
+                  {
+                    "Pattern": "bo",
+                    "Color": 11
+                  }
+                ]
+              }
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {
+              "BlockEntityTag": {
+                "Base": 14,
+                "Patterns": [
+                  {
+                    "Pattern": "cr",
+                    "Color": 0
+                  }
+                ]
+              }
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:bow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "ChargedProjectiles": [
+                {
+                  "id": "minecraft:arrow",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "ChargedProjectiles": [
+                {
+                  "id": "minecraft:firework_rocket",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:compass",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:clock",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Potion effect tint unsupported"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "CustomPotionColor": 52309
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:healing"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Potion effect tint unsupported"
+          },
+          {
+            "id": "minecraft:splash_potion",
+            "components": {
+              "CustomPotionColor": 52309
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:lingering_potion",
+            "components": {
+              "CustomPotionColor": 52309
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:leather_boots",
+            "components": {
+              "display": {
+                "color": 3368669
+              }
+            },
+            "status": "unavailable",
+            "detail": "Legacy predicate unsupported"
+          },
+          {
+            "id": "minecraft:iron_chestplate",
+            "components": {
+              "minecraft:trim": {
+                "material": "minecraft:gold",
+                "pattern": "minecraft:sentry"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Legacy predicate unsupported"
+          },
+          {
+            "id": "minecraft:bundle",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Legacy predicate unsupported"
+          },
+          {
+            "id": "minecraft:red_bundle",
+            "components": {},
+            "status": "unavailable"
+          },
+          {
+            "id": "minecraft:filled_map",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Legacy tint unsupported"
+          },
+          {
+            "id": "minecraft:mace",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:sulfur",
+            "components": {},
+            "status": "unavailable"
+          },
+          {
+            "id": "minecraft:prismarine",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          }
+        ]
+      },
+      {
+        "version": "1.21.4",
+        "registry": 1385,
+        "elapsedMs": 5749,
+        "images": [
+          {
+            "id": "minecraft:diamond_sword",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:apple",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:stone",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:oak_log",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:crafting_table",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:creeper_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:zombie_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:wither_skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:player_head",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Saved head profile has no safe texture"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {
+              "minecraft:banner_patterns": [
+                {
+                  "pattern": "minecraft:stripe_top",
+                  "color": "red"
+                },
+                {
+                  "pattern": "minecraft:border",
+                  "color": "blue"
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {
+              "minecraft:base_color": "red",
+              "minecraft:banner_patterns": [
+                {
+                  "pattern": "minecraft:cross",
+                  "color": "white"
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:bow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "minecraft:charged_projectiles": [
+                {
+                  "id": "minecraft:arrow",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "minecraft:charged_projectiles": [
+                {
+                  "id": "minecraft:firework_rocket",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:compass",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:clock",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {},
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "custom_color": 52309
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:healing"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Potion effect tint unsupported"
+          },
+          {
+            "id": "minecraft:splash_potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "custom_color": 52309
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:lingering_potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "custom_color": 52309
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:leather_boots",
+            "components": {
+              "minecraft:dyed_color": 3368669
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:iron_chestplate",
+            "components": {
+              "minecraft:trim": {
+                "material": "minecraft:gold",
+                "pattern": "minecraft:sentry"
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:bundle",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:red_bundle",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:filled_map",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Tint unsupported"
+          },
+          {
+            "id": "minecraft:mace",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:sulfur",
+            "components": {},
+            "status": "unavailable"
+          },
+          {
+            "id": "minecraft:prismarine",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          }
+        ]
+      },
+      {
+        "version": "26.3",
+        "registry": 1658,
+        "elapsedMs": 10112,
+        "images": [
+          {
+            "id": "minecraft:diamond_sword",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:apple",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:stone",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:oak_log",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:crafting_table",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:creeper_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:zombie_head",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:wither_skeleton_skull",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:player_head",
+            "components": {},
+            "status": "unavailable",
+            "detail": "Saved head profile has no safe texture"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:white_banner",
+            "components": {
+              "minecraft:banner_patterns": [
+                {
+                  "pattern": "minecraft:stripe_top",
+                  "color": "red"
+                },
+                {
+                  "pattern": "minecraft:border",
+                  "color": "blue"
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:shield",
+            "components": {
+              "minecraft:base_color": "red",
+              "minecraft:banner_patterns": [
+                {
+                  "pattern": "minecraft:cross",
+                  "color": "white"
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:bow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "minecraft:charged_projectiles": [
+                {
+                  "id": "minecraft:arrow",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:crossbow",
+            "components": {
+              "minecraft:charged_projectiles": [
+                {
+                  "id": "minecraft:firework_rocket",
+                  "count": 1
+                }
+              ]
+            },
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:compass",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:clock",
+            "components": {},
+            "status": "unavailable",
+            "detail": "World direction/time is not available in saved item data"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {},
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "custom_color": 52309
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "potion": "minecraft:healing"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Potion effect tint unsupported"
+          },
+          {
+            "id": "minecraft:splash_potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "custom_color": 52309
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:lingering_potion",
+            "components": {
+              "minecraft:potion_contents": {
+                "custom_color": 52309
+              }
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:leather_boots",
+            "components": {
+              "minecraft:dyed_color": 3368669
+            },
+            "status": "ready",
+            "render": "layered"
+          },
+          {
+            "id": "minecraft:iron_chestplate",
+            "components": {
+              "minecraft:trim": {
+                "material": "minecraft:gold",
+                "pattern": "minecraft:sentry"
+              }
+            },
+            "status": "unavailable",
+            "detail": "Texture unavailable"
+          },
+          {
+            "id": "minecraft:bundle",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:red_bundle",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:filled_map",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:mace",
+            "components": {},
+            "status": "ready",
+            "render": "flat"
+          },
+          {
+            "id": "minecraft:sulfur",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          },
+          {
+            "id": "minecraft:prismarine",
+            "components": {},
+            "status": "ready",
+            "render": "model"
+          }
+        ]
+      }
+    ],
+    "modSource": {
+      "id": "67OSh58o",
+      "project": "E6FUtRJh",
+      "title": "Adorn",
+      "version": "5.0.1-fabric",
+      "license": "MIT",
+      "size": 4128916,
+      "archiveSha512": "162c9aefb1c1e956be4401a0ac6f2a86578cbc85bd1be998cdf30227c20c4b5295fb8571bcc1bb971237a309e036a9abd8edec2639d078346a4ce012732019f7"
+    },
+    "mods": [
+      {
+        "id": "adorn:oak_table",
+        "version": "1.20.1",
+        "name": "Oak Table",
+        "status": "ready",
+        "source": "mod-resources",
+        "render": "model",
+        "imageSha256": "8073230a2cd44bec002bb99f7d257f99c3f91bd58e9f17acd1373c511c13f965"
+      },
+      {
+        "id": "adorn:oak_chair",
+        "version": "1.20.1",
+        "name": "Oak Chair",
+        "status": "ready",
+        "source": "mod-resources",
+        "render": "model",
+        "imageSha256": "f894d41971c2c8f187af31fe7a8b0bdc37079d5f2427bd33d44488c0dca02766"
+      },
+      {
+        "id": "adorn:stone_torch",
+        "version": "1.20.1",
+        "name": "Stone Torch",
+        "status": "ready",
+        "source": "mod-resources",
+        "render": "flat",
+        "imageSha256": "505af51da960fee91d89ab95ebb12d07311f9dc2e0347969e9abf6359a8e4143"
+      },
+      {
+        "id": "adorn:oak_drawer",
+        "version": "1.20.1",
+        "name": "Oak Drawer",
+        "status": "ready",
+        "source": "mod-resources",
+        "render": "model",
+        "imageSha256": "6f7289c6d86b7eaeb3f1364092e785303aa02fb1676437fc65eaa4d226f9e57d"
+      },
+      {
+        "id": "adorn:stone_platform",
+        "version": "1.20.1",
+        "name": "Stone Platform",
+        "status": "ready",
+        "source": "mod-resources",
+        "render": "model",
+        "imageSha256": "c046def2a87c864792fc9cebe23b6f93df4708f723295402b55d3ae88c07d2b2"
+      },
+      {
+        "id": "adorn:trading_station",
+        "version": "1.20.1",
+        "name": "Trading Station",
+        "status": "ready",
+        "source": "mod-resources",
+        "render": "model",
+        "imageSha256": "c2ab52bac343eeeacfcf74b5f84dee50b319e2a117ca09c7d6148a1b104ede04"
+      }
+    ],
+    "warm200Ms": 130,
+    "coldMs": 24793,
+    "cacheFiles": 223,
+    "cacheBytes": 124261787,
+    "metrics": {
+      "renders": 104,
+      "memoryHits": 0,
+      "diskHits": 1,
+      "metadataRequests": 16,
+      "fallbacks": 28,
+      "peakConcurrent": 1
+    },
+    "codeSource": "aa4f141475ab516205b827daa045da5b2dcbd94b",
+    "probeKind": "Fresh private official downloads; no installed game, launcher import or game execution",
+    "validationSource": "6d5b528a7c194c36ed4aae9cb463629973e29783",
+    "validationSourceNote": "Only native test geometry/transaction waiting changed after aa4f141; packaged application inputs are identical."
+  },
+  "captures": {
+    "at": "2026-10-10T12:38:33.116Z",
+    "version": "0.5.0",
+    "publicRelease": false,
+    "captures": [
+      {
+        "file": "players.png",
+        "sha256": "45e78b6b059355e60feb79847fab496d5cb7981e5f1f069160110783cc1f8161",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile.png",
+        "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "inventory-slot.png",
+        "sha256": "533e0dfadb6b43814f8f82d395ab8d410049ee79a520495330ea60b74268a287",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "banner.png",
+        "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "shield.png",
+        "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "head.png",
+        "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "ender-chest.png",
+        "sha256": "aa71ebc2c5a7b22b4abeca22a7716bb3e6d2314565b899b7d07ff8243b7aa276",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "item-picker.png",
+        "sha256": "e69119091eb5fa00b78854c3a46bad1a2d1610061611a409e21b8f2faf3bc888",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "group-actions.png",
+        "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile-light.png",
+        "sha256": "520e480b5574e42e69b732358047d24caf8e7d081290dcfd30bf1f1536e28af2",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "player-profile-compact.png",
+        "sha256": "18a0500783959e688b800f3ee651dbd77e0f20f1c0384fb5350a617f485e4d1b",
+        "provenance": "Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.",
+        "viewport": {
+          "width": 900,
+          "height": 760
+        }
+      },
+      {
+        "file": "mod-item.png",
+        "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab",
+        "provenance": "Actual Electron, synthetic saved 1.20.1 QA NBT, not gameplay. Real Adorn 5.0.1-fabric (Modrinth project E6FUtRJh, version 67OSh58o, MIT) archive is verified, read privately and never executed/installed. The actual adorn:oak_table model/textures render in 3D over exact official Minecraft 1.20.1 resources.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "world-controls.png",
+        "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59",
+        "provenance": "Actual Electron and real isolated Paper 1.21.11 build 132, Java 21, personally accepted EULA; native RCON reads, no connected players, no added plugins. Weather cannot be read natively and remains unavailable.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      },
+      {
+        "file": "gamerules.png",
+        "sha256": "a398658094b9d5ece0b8d4cce983a5eb2d3c18526be317b0945e5341026fcdaa",
+        "provenance": "Actual native Minecraft 1.21.11 gamerule responses from the isolated Paper server; current values read through RCON, not fixtures.",
+        "viewport": {
+          "width": 1440,
+          "height": 960
+        }
+      }
+    ]
+  },
+  "capturePublication": "Owner explicitly approved public interface screenshots containing small Minecraft item previews on 10 October 2026; 14 refreshed gallery files included, seven deployed on the site; original sources remain private and underlying art is not MIT",
+  "website": {
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "version": 9,
+    "source": "7d92aea3a7cbcc3e05dfa0fbc8780513bc6e4d28",
+    "status": "succeeded",
+    "deployment": "appgdep_6aca3b407e0c8191baf52564dc360ba4",
+    "localWidths": [390, 768, 1280, 1440, 1920],
+    "imageHashes": [
+      {
+        "name": "player-profile.png",
+        "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+      },
+      {
+        "name": "group-actions.png",
+        "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+      },
+      {
+        "name": "world-controls.png",
+        "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+      },
+      {
+        "name": "head.png",
+        "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+      },
+      {
+        "name": "banner.png",
+        "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+      },
+      {
+        "name": "shield.png",
+        "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+      },
+      {
+        "name": "mod-item.png",
+        "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+      }
+    ],
+    "liveWidths": [390, 768, 1280, 1440, 1920],
+    "downloads": [
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-x64.exe",
+        "status": 200,
+        "size": 113772193
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-x64.exe",
+        "status": 200,
+        "size": 113482705
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-arm64.exe",
+        "status": 200,
+        "size": 107664722
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-arm64.exe",
+        "status": 200,
+        "size": 107375758
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x86_64.AppImage",
+        "status": 200,
+        "size": 128347896
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-amd64.deb",
+        "status": 200,
+        "size": 101996516
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.AppImage",
+        "status": 200,
+        "size": 129590415
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.deb",
+        "status": 200,
+        "size": 97143928
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.dmg",
+        "status": 200,
+        "size": 136209972
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.zip",
+        "status": 200,
+        "size": 135342086
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.dmg",
+        "status": 200,
+        "size": 132337272
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.zip",
+        "status": 200,
+        "size": 131440820
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/SHA256SUMS.txt",
+        "status": 200,
+        "size": 1749
+      }
+    ],
+    "publicRelease": {
+      "tag": "v0.4.1",
+      "assets": 20,
+      "assetDigests": [
+        {
+          "name": "MineDock-0.4.1-amd64.deb",
+          "size": 101996516,
+          "digest": "sha256:03d52a07927fa1449f655d91bc422428e2ae725f5008f55a4c29d07af44397ca"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.AppImage",
+          "size": 129590415,
+          "digest": "sha256:4cb93ae19a30ad6c414755b7c11105c808ec17782a6a69777bd105221a9e2fa8"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.deb",
+          "size": 97143928,
+          "digest": "sha256:4c171c6e6ed14ba449c32d23af7236aa28aa1755d458bf4c7e418db6ad33ba4e"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.dmg",
+          "size": 132337272,
+          "digest": "sha256:ba9c5a45b9c3245ee2a7b968d1f5a7ca5086ab83faf0c06c2094d547d62df0a5"
+        },
+        {
+          "name": "MineDock-0.4.1-arm64.zip",
+          "size": 131440820,
+          "digest": "sha256:461b46322e096e5977df2eb338dd938c739c6b1374b01865022df5804aa770cd"
+        },
+        {
+          "name": "MineDock-0.4.1-Portable-arm64.exe",
+          "size": 107375758,
+          "digest": "sha256:40c7b9605e7c471bda6b7b9d1f22f2b76dbc6fccfac3b287a3b7d8c7a052fc5a"
+        },
+        {
+          "name": "MineDock-0.4.1-Portable-x64.exe",
+          "size": 113482705,
+          "digest": "sha256:b3500b19ef6dedba583e855b1921ef9aa7202951749462a76d425922c2f09d87"
+        },
+        {
+          "name": "MineDock-0.4.1-Setup-arm64.exe",
+          "size": 107664722,
+          "digest": "sha256:a2a0644001f8256b62910f9d9fda7e430142f2ca458c7abb3288b48aec61ff9c"
+        },
+        {
+          "name": "MineDock-0.4.1-Setup-x64.exe",
+          "size": 113772193,
+          "digest": "sha256:b40e783b88cf2c3e8fe227619f4762dfd4077e69752687ed81fd13269c9127fc"
+        },
+        {
+          "name": "MineDock-0.4.1-x64.dmg",
+          "size": 136209972,
+          "digest": "sha256:b279ce26434a17ea430e42f628f1857a1fdb7eb3733c091b96a7a0bc85198c73"
+        },
+        {
+          "name": "MineDock-0.4.1-x64.zip",
+          "size": 135342086,
+          "digest": "sha256:4eef83365851c6c4f13b0fed124335e93e0d44be71bddcca0ffbf1b47f4ebf16"
+        },
+        {
+          "name": "MineDock-0.4.1-x86_64.AppImage",
+          "size": 128347896,
+          "digest": "sha256:346e8891ac329c1385768d83b059caa9b94338100f8ca6c39ac196af37c802d4"
+        },
+        {
+          "name": "MineDock-Features.txt",
+          "size": 29672,
+          "digest": "sha256:ed81694132e4c23f9d26579e4e20e5566d265d92abf9b591f84eccc128da8a12"
+        },
+        {
+          "name": "SHA256SUMS.txt",
+          "size": 1749,
+          "digest": "sha256:aa5d5654e0682dff4c115188ecc1765d2af567c2abfc1f3de0d870ae4f161fb1"
+        },
+        {
+          "name": "update-darwin-arm64.json",
+          "size": 1270,
+          "digest": "sha256:eb0621abe1de08a673de91d0871cbb205abd085ab4570c1adc6c54f99a2d2f66"
+        },
+        {
+          "name": "update-darwin-x64.json",
+          "size": 1254,
+          "digest": "sha256:ad4506f5a7b1f5c08606aeb39affdfccd40f659a2e53d544ebbb8059e9d5fa8b"
+        },
+        {
+          "name": "update-linux-arm64.json",
+          "size": 1282,
+          "digest": "sha256:e0ae8e0759fd5c4d05b3737b1f5248952b882e27aadf029885939ba281f8bfee"
+        },
+        {
+          "name": "update-linux-x64.json",
+          "size": 1282,
+          "digest": "sha256:56b65b40bb8914511e094597509280684e5404ddef748c62066a0af81d42ffe1"
+        },
+        {
+          "name": "update-win32-arm64.json",
+          "size": 1314,
+          "digest": "sha256:da001f962f1955776a8f82d6ed47dd24f6750010b391612e70df3e75374f46b6"
+        },
+        {
+          "name": "update-win32-x64.json",
+          "size": 1298,
+          "digest": "sha256:51c6b3b5476cfd4be9c5348ad6634f38ca91af8a171dae6de099fcc7362ff68c"
+        }
+      ]
+    },
+    "publicAssetsUnchanged": 20
+  },
+  "scope": {
+    "minecraftGameAssetsBundled": false,
+    "sources": "Explicit owner-consented official exact-release private archive; optional verified local client; declared licensed installed/opted-in mod assets and explicit local pack",
+    "databaseMigrationAdded": false,
+    "playerNBTArchitectureRewritten": false,
+    "merged": false,
+    "tagCreated": false,
+    "releasePublished": false
+  },
+  "limits": [
+    "First official resources require Internet, Java ownership/terms consent and one archive up to 150 MiB. The private-use legal basis is a project interpretation, not blanket asset rights.",
+    "Saved texture-property heads only; UUID/name-only heads, piglin/dragon geometry, full shield entity geometry, world compass/clock context, effect-derived potion colours and complex executable renderers remain unavailable or partial.",
+    "98/132 representative vanilla/component visuals and 6/6 Adorn visuals are not exhaustive registry/mod/pack coverage.",
+    "Declared mod licences may not cover separately restricted embedded art; preview resource order does not claim the player client pack stack.",
+    "CI skips the private owned-game visual case. macOS also skips the Bedrock directory import because the dedicated server has no macOS distribution; platform-specific unit cases are explicitly skipped.",
+    "Actual connected-client inventory/gameplay, Bedrock/PocketMine gameplay and exhaustive engine/mod/version combinations remain unvalidated.",
+    "Historical Windows upgrade evidence targets administration candidate 815f4a7, not these image binaries. No public 0.5.0 feed or download replay exists.",
+    "Windows/Apple publisher certificates and notarization are unavailable; updater metadata signatures are a separate integrity check.",
+    "No merge, tag or v0.5.0 release until separate owner approval."
+  ]
+}

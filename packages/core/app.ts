@@ -46,6 +46,8 @@ import { engineDefinition } from '../domain/engines';
 import { CrossplayService } from '../server-core/crossplay';
 import { ServerImportService } from './imports';
 import { WorldService } from './worlds';
+import { PlayerInventoryService } from './player-inventory';
+import { AdministrationService } from './administration';
 import { ModpackService } from './modpacks';
 import { StorageService } from './storage';
 import type { PlayerService } from './players';
@@ -56,6 +58,7 @@ import { sha256 } from '../backups/archive';
 import { PackService } from '../marketplace/packs';
 import { HealthService } from './health';
 import { PlayerSkins } from './skins';
+import { ItemAssets } from '../items/assets';
 import { IncrementalBackups } from '../backups/incremental';
 import { MigrationService } from './migration';
 import { ConsoleTools } from './console-tools';
@@ -94,6 +97,9 @@ export class AppCore {
   readonly modpacks: ModpackService;
   readonly storage: StorageService;
   readonly players: PlayerService;
+  readonly playerInventory: PlayerInventoryService;
+  readonly administration: AdministrationService;
+  readonly itemAssets: ItemAssets;
   readonly packs: PackService;
   readonly health: HealthService;
   readonly skins: PlayerSkins;
@@ -167,7 +173,10 @@ export class AppCore {
       this.logger,
       undefined,
       (id) => this.exclusive(id, () => this.supervisor.start(id)),
-      (server) => this.mods.preflight(server),
+      async (server) => {
+        this.playerInventory.assertSafe(server.id);
+        await this.mods.preflight(server);
+      },
     );
     this.players = this.supervisor.playerData;
     this.runtimeMaintenance = new RuntimeMaintenance(
@@ -186,6 +195,9 @@ export class AppCore {
       this.jobs,
     );
     this.retention = new RetentionService(this.repo, this.jobs, this.logger);
+    this.playerInventory = new PlayerInventoryService(this);
+    this.itemAssets = new ItemAssets(path.join(this.root, 'cache', 'item-assets'));
+    this.administration = new AdministrationService(this);
     this.marketplace = new ModrinthProvider(this.repo, this.downloads, this.jobs);
     this.mods = new ModManager(
       this.repo,
@@ -329,6 +341,7 @@ export class AppCore {
     await mkdir(core.repo.settings().backupRoot, { recursive: true });
     await core.jobs.recover();
     await core.retention.recover();
+    await core.playerInventory.reconcile();
     await core.worlds.cleanPreviews();
     await core.modpacks.cleanup(true);
     await core.fileOperations.cleanTemporaryArchives();
@@ -891,6 +904,7 @@ export class AppCore {
     );
   }
   async close(): Promise<void> {
+    this.itemAssets.close();
     this.closing = true;
     this.health.close();
     await this.performance.close();

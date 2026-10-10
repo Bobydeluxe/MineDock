@@ -7,6 +7,11 @@ import type {
   InstalledContent,
 } from '../../../../packages/domain/types';
 import type { WorldSummary } from '../../../../packages/domain/worlds';
+import {
+  administrationCapabilities,
+  gameRules,
+  worldActions,
+} from '../../../../packages/domain/admin-commands';
 export function createMockApi(): Api {
   const listeners = new Set<(event: AppEvent) => void>();
   const emit = (event: AppEvent): void => {
@@ -222,6 +227,61 @@ export function createMockApi(): Api {
     }),
     playerNote: async () => {},
     playerSkin: async () => null,
+    administrationCapabilities: async (id) =>
+      administrationCapabilities(data.servers.find((s) => s.id === id)!),
+    administrationHistory: async () => [],
+    playerInventory: async () => ({
+      source: 'unavailable',
+      writable: false,
+      slots: [],
+      reason: 'Native player data requires the desktop app.',
+    }),
+    editPlayerInventory: async () => {
+      throw new Error('Inventory editing requires the desktop app.');
+    },
+    playerInventorySnapshots: async () => [],
+    previewPlayerInventoryRestore: async () => {
+      throw new Error('Inventory restoration requires the desktop app.');
+    },
+    restorePlayerInventory: async () => {
+      throw new Error('Inventory restoration requires the desktop app.');
+    },
+    administerPlayer: async () => {
+      throw new Error('Native player actions require the desktop app.');
+    },
+    administerPlayers: async () => {
+      throw new Error('Native player actions require the desktop app.');
+    },
+    administerIp: async () => {
+      throw new Error('Native player actions require the desktop app.');
+    },
+    itemCatalog: async () => ({ source: 'unavailable', version: '', complete: false, entries: [] }),
+    itemAssetContext: async () => ({ version: '', available: false, source: 'local-client' }),
+    itemAssetImport: async () => null,
+    itemAssetDownload: async () => {
+      throw new Error('Official resources require the desktop app.');
+    },
+    itemAssetPurge: async () => {},
+    itemAssetScope: async () => {},
+    itemAssetPack: async () => false,
+    itemAssetModChoices: async () => [],
+    itemAssetModDownload: async () => {},
+    itemVisual: async (_id, item) => ({
+      id: item.id,
+      version: '',
+      name: item.id,
+      source: 'local-client',
+      status: 'no-client',
+    }),
+    worldControls: async (id) => ({
+      source: 'unavailable',
+      actions: worldActions(data.servers.find((s) => s.id === id)!),
+      rules: gameRules(data.servers.find((s) => s.id === id)!),
+      warnings: [],
+    }),
+    applyWorldControl: async () => {
+      throw new Error('Native world controls require the desktop app.');
+    },
     setWhitelist: async (id, enabled) => {
       const s = data.servers.find((s) => s.id === id)!;
       s.whitelist = enabled;

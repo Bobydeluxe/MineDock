@@ -29,6 +29,53 @@ summary:focus-visible {
   outline: 3px solid var(--teal);
   outline-offset: 5px;
 }
+.review-notice {
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--copper);
+  background: #29231d;
+  color: var(--text);
+  font-size: 14px;
+}
+.legal-content {
+  max-width: 880px;
+  padding-block: 48px 72px;
+  overflow-wrap: anywhere;
+}
+.legal-content h1 {
+  margin-block: 12px 28px;
+  font-size: clamp(32px, 5vw, 52px);
+}
+.legal-content section {
+  margin-top: 32px;
+}
+.legal-content h2 {
+  margin-bottom: 12px;
+  font-size: 25px;
+}
+.legal-content p + p {
+  margin-top: 14px;
+}
+.legal-content a {
+  color: var(--teal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.legal-status {
+  padding: 20px;
+  border: 1px solid var(--copper);
+  border-radius: 8px;
+  background: #29231d;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 24px;
+  flex-basis: 100%;
+  font-size: 14px;
+}
+.footer-links a:hover {
+  text-decoration: underline;
+}
 p,
 h1,
 h2,

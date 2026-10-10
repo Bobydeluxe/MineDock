@@ -1,6 +1,6 @@
 {
   "name": "minedock",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "private": true,
   "description": "Local-first Minecraft server manager",
   "author": "MineDock contributors",
@@ -25,6 +25,8 @@
     "test:packaged": "node scripts/test-packaged.mjs",
     "screenshots": "node scripts/capture-ui.mjs",
     "build:site": "node scripts/build-site.mjs",
+    "test:site": "node scripts/check-site.mjs",
+    "test:site:browser": "node scripts/check-site-browser.mjs",
     "updates:keygen": "node scripts/create-update-key.mjs",
     "updates:sign": "node scripts/sign-update.mjs",
     "lint": "eslint .",
@@ -48,6 +50,7 @@
     "cronstrue": "^3.27.0",
     "lucide-react": "^0.468.0",
     "pidusage": "^4.0.1",
+    "pngjs": "^7.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "semver": "^7.8.5",
@@ -63,6 +66,7 @@
     "@tailwindcss/vite": "^4.1.0",
     "@types/node": "^24.0.0",
     "@types/pidusage": "^2.0.5",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@types/semver": "^7.8.0",
@@ -90,6 +94,7 @@
     },
     "files": [
       "dist/**",
+      "!dist/site/**",
       "package.json",
       "!node_modules/**"
     ],

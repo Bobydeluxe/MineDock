@@ -1,6 +1,6 @@
 # MineDock 0.4.1 — focused UI cleanup
 
-The owner's annotated review requested simplification, not another redesign. Existing server rows, creation/version selectors, categorized settings, console controls and backup workflows are retained. The current public release is MineDock 0.4.1, implemented in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8).
+The owner's annotated review requested simplification, not another redesign. Existing server rows, creation/version selectors, categorized settings, console controls and backup workflows are retained. This historical release is MineDock 0.4.1, implemented in [PR #8](https://github.com/Bobydeluxe/MineDock/pull/8).
 
 ## Removed from the actual application
 

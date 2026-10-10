@@ -1,0 +1,681 @@
+{
+  "checkedAt": "2026-10-10T14:12:17.104Z",
+  "state": "PREPARED ONLY — NOT DEPLOYED",
+  "application": {
+    "public": "0.4.1",
+    "candidate": "0.5.0 — unreleased",
+    "unchangedApplicationSourceSince": "f604a18f80320216972dae91d86b1da3eafdf0bd",
+    "dependenciesUnchanged": true,
+    "testsUnchanged": true,
+    "packagingChange": "Exclude dist/site/** from desktop package files; no server-management source changed"
+  },
+  "publisher": {
+    "type": "non-professional individual",
+    "anonymityRequested": true,
+    "publicEmail": null,
+    "hostIdentityDisclosureConfirmed": false,
+    "publicationApproved": false
+  },
+  "repositoryAudit": {
+    "checkedAt": "2026-10-10T13:52:13.745Z",
+    "repository": {
+      "status": 200,
+      "visibility": "public",
+      "defaultBranch": "main",
+      "hasPages": false,
+      "permissions": {
+        "admin": true,
+        "maintain": true,
+        "push": true,
+        "triage": true,
+        "pull": true
+      }
+    },
+    "/pages": {
+      "status": 404,
+      "message": "Not Found"
+    },
+    "/environments/github-pages": {
+      "status": 404,
+      "message": "Not Found"
+    },
+    "/actions/permissions": {
+      "status": 200,
+      "enabled": true,
+      "allowed_actions": "all",
+      "sha_pinning_required": false
+    },
+    "/pulls/9": {
+      "status": 200,
+      "state": "open",
+      "head": "f604a18f80320216972dae91d86b1da3eafdf0bd",
+      "branch": "codex/player-world-administration",
+      "base": "main",
+      "url": "https://github.com/Bobydeluxe/MineDock/pull/9"
+    },
+    "/releases/latest": {
+      "status": 200,
+      "tag": "v0.4.1",
+      "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1",
+      "assets": 20
+    },
+    "https://bobydeluxe.github.io/MineDock/": {
+      "status": 404,
+      "finalUrl": "https://bobydeluxe.github.io/MineDock/"
+    },
+    "https://minedock-friends.arcane-rhea-3082.chatgpt.site": {
+      "status": 200,
+      "finalUrl": "https://minedock-friends.arcane-rhea-3082.chatgpt.site/"
+    }
+  },
+  "localChecks": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed; existing Zod annotation/chunk warnings",
+    "unit": {
+      "passed": 286,
+      "skipped": 5,
+      "total": 291,
+      "files": 45
+    },
+    "static": {
+      "checks": 641,
+      "documents": 6,
+      "files": 40,
+      "internalLinks": 136,
+      "publicDownloadUrls": 13,
+      "productionGate": "rejects unapproved drafts"
+    },
+    "browser": {
+      "pageViewportCases": 30,
+      "widths": [390, 768, 1280, 1440, 1920],
+      "overflow": 0,
+      "brokenImages": 0,
+      "runtimeErrors": 0,
+      "externalResourceRequests": 0,
+      "cookiesObserved": 0,
+      "browserStorageEntries": 0,
+      "keyboardSkipAndFocus": "passed on all six pages at five widths",
+      "faqAndCrossPageNavigation": "passed",
+      "previewScreenshotHashes": [
+        {
+          "width": 390,
+          "images": [
+            {
+              "name": "player-profile.png",
+              "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+            },
+            {
+              "name": "group-actions.png",
+              "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+            },
+            {
+              "name": "world-controls.png",
+              "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+            },
+            {
+              "name": "head.png",
+              "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+            },
+            {
+              "name": "banner.png",
+              "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+            },
+            {
+              "name": "shield.png",
+              "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+            },
+            {
+              "name": "mod-item.png",
+              "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+            }
+          ]
+        },
+        {
+          "width": 768,
+          "images": [
+            {
+              "name": "player-profile.png",
+              "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+            },
+            {
+              "name": "group-actions.png",
+              "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+            },
+            {
+              "name": "world-controls.png",
+              "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+            },
+            {
+              "name": "head.png",
+              "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+            },
+            {
+              "name": "banner.png",
+              "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+            },
+            {
+              "name": "shield.png",
+              "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+            },
+            {
+              "name": "mod-item.png",
+              "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+            }
+          ]
+        },
+        {
+          "width": 1280,
+          "images": [
+            {
+              "name": "player-profile.png",
+              "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+            },
+            {
+              "name": "group-actions.png",
+              "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+            },
+            {
+              "name": "world-controls.png",
+              "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+            },
+            {
+              "name": "head.png",
+              "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+            },
+            {
+              "name": "banner.png",
+              "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+            },
+            {
+              "name": "shield.png",
+              "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+            },
+            {
+              "name": "mod-item.png",
+              "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+            }
+          ]
+        },
+        {
+          "width": 1440,
+          "images": [
+            {
+              "name": "player-profile.png",
+              "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+            },
+            {
+              "name": "group-actions.png",
+              "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+            },
+            {
+              "name": "world-controls.png",
+              "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+            },
+            {
+              "name": "head.png",
+              "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+            },
+            {
+              "name": "banner.png",
+              "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+            },
+            {
+              "name": "shield.png",
+              "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+            },
+            {
+              "name": "mod-item.png",
+              "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+            }
+          ]
+        },
+        {
+          "width": 1920,
+          "images": [
+            {
+              "name": "player-profile.png",
+              "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+            },
+            {
+              "name": "group-actions.png",
+              "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+            },
+            {
+              "name": "world-controls.png",
+              "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+            },
+            {
+              "name": "head.png",
+              "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+            },
+            {
+              "name": "banner.png",
+              "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+            },
+            {
+              "name": "shield.png",
+              "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+            },
+            {
+              "name": "mod-item.png",
+              "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+            }
+          ]
+        }
+      ],
+      "contrast": [
+        {
+          "text": "#edf4f3",
+          "background": "#111719",
+          "ratio": 16.231389095747428
+        },
+        {
+          "text": "#edf4f3",
+          "background": "#29231d",
+          "ratio": 13.926993211906526
+        },
+        {
+          "text": "#bccbce",
+          "background": "#111719",
+          "ratio": 10.833823265102593
+        },
+        {
+          "text": "#bccbce",
+          "background": "#29231d",
+          "ratio": 9.295728306556926
+        },
+        {
+          "text": "#43d2cb",
+          "background": "#111719",
+          "ratio": 9.754707119284145
+        },
+        {
+          "text": "#43d2cb",
+          "background": "#29231d",
+          "ratio": 8.369815980198503
+        },
+        {
+          "text": "#efae75",
+          "background": "#111719",
+          "ratio": 9.463247067451567
+        },
+        {
+          "text": "#efae75",
+          "background": "#29231d",
+          "ratio": 8.119734971144403
+        }
+      ],
+      "scope": "Fixed page palette ratios only; not a complete WCAG audit",
+      "nestedUnknownPath": 404,
+      "trailingSlash": 301,
+      "outsideProject": 404
+    },
+    "downloads": [
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-x64.exe",
+        "status": 200,
+        "size": 113772193
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-x64.exe",
+        "status": 200,
+        "size": 113482705
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Setup-arm64.exe",
+        "status": 200,
+        "size": 107664722
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-Portable-arm64.exe",
+        "status": 200,
+        "size": 107375758
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x86_64.AppImage",
+        "status": 200,
+        "size": 128347896
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-amd64.deb",
+        "status": 200,
+        "size": 101996516
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.AppImage",
+        "status": 200,
+        "size": 129590415
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.deb",
+        "status": 200,
+        "size": 97143928
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.dmg",
+        "status": 200,
+        "size": 136209972
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-x64.zip",
+        "status": 200,
+        "size": 135342086
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.dmg",
+        "status": 200,
+        "size": 132337272
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/MineDock-0.4.1-arm64.zip",
+        "status": 200,
+        "size": 131440820
+      },
+      {
+        "url": "https://github.com/Bobydeluxe/MineDock/releases/download/v0.4.1/SHA256SUMS.txt",
+        "status": 200,
+        "size": 1749
+      }
+    ],
+    "desktopWebsiteIsolation": {
+      "at": "2026-10-10T14:15:29.646Z",
+      "actualPackager": "electron-builder app-builder-lib FileMatcher",
+      "websiteFilesExcluded": 40,
+      "existingApplicationFilesWithSameInclusion": 12,
+      "packageJsonRetained": true
+    },
+    "documentation": {
+      "relativeLinksChecked": 296,
+      "missingLinks": 0,
+      "nativeCapturesVerified": 14,
+      "noPrivateGameFilesTracked": true
+    }
+  },
+  "seo": {
+    "productionCanonicalTarget": "https://bobydeluxe.github.io/MineDock/",
+    "targetCurrentlyLive": false,
+    "reviewCanonicalEmitted": false,
+    "reviewRobots": "noindex,follow",
+    "reviewSitemapUrls": 0,
+    "productionSitemapUrls": 5,
+    "jsonLd": "omitted",
+    "searchConsole": "not connected; no verification token supplied",
+    "indexing": "not verified or promised",
+    "robotsFile": "project-scoped informational only; cannot control origin /robots.txt"
+  },
+  "deployment": {
+    "workflow": ".github/workflows/deploy-pages.yml",
+    "output": "dist/site",
+    "productionBranches": ["main"],
+    "autoEnablePages": false,
+    "artifactFiles": [
+      {
+        "path": ".nojekyll",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      {
+        "path": "404.html",
+        "bytes": 1852,
+        "sha256": "a8e99306587479d42cf6e30373210302b27d2a57ea7332cb5cdabd9c96255195"
+      },
+      {
+        "path": "assets/backups.png",
+        "bytes": 72006,
+        "sha256": "4c829bf40cae81ced469cbd1a54be7757c2d77e1f249e8310b26a8d859da5782"
+      },
+      {
+        "path": "assets/brand/apple-touch-icon.png",
+        "bytes": 29418,
+        "sha256": "ccbb3b1348eed3c752857e817165b9fa82ab1b247e31dcc2cb09d240c6032e3e"
+      },
+      {
+        "path": "assets/brand/favicon.svg",
+        "bytes": 23169,
+        "sha256": "48c497886129a1f9cecfe0dd6727017ef5a6c9b7eb34274fb2b1e0e2341e64f0"
+      },
+      {
+        "path": "assets/brand/icon-128.png",
+        "bytes": 17259,
+        "sha256": "aacb18bea0c80950382a31218ce68020f5bf00a6f74425402e9a5eeca84c40bc"
+      },
+      {
+        "path": "assets/brand/icon-256.png",
+        "bytes": 51499,
+        "sha256": "c535d13c69b42a0443c59d727d578f11338e229ca93eda0ac1ad5313179ee38b"
+      },
+      {
+        "path": "assets/brand/icon.ico",
+        "bytes": 82408,
+        "sha256": "ae51f4d03c06d59d04d8ec57c13fdf8789e572db9cbdbeaab70e3d2ba63a3eaf"
+      },
+      {
+        "path": "assets/brand/survival-dusk.webp",
+        "bytes": 191930,
+        "sha256": "1240c464a8d5b6cb0923c293a6761827b10774852c3805d280ef6920664917e1"
+      },
+      {
+        "path": "assets/console.png",
+        "bytes": 54798,
+        "sha256": "3cec9f4508f7021b80391c8ee59420b384998ecc0f7ae171c56d9191adb12305"
+      },
+      {
+        "path": "assets/create-server.png",
+        "bytes": 96190,
+        "sha256": "ebb5cd836bc99d5ae4e0b5f3c0dddb4a1c65778f9d8eb3ca613e9444604a6c87"
+      },
+      {
+        "path": "assets/dashboard-light.png",
+        "bytes": 76103,
+        "sha256": "6ef353578f6d9b6ee5e9fe79ee3b7b27fae6b542d64f21884cac9d4ec05956bb"
+      },
+      {
+        "path": "assets/dashboard.png",
+        "bytes": 74850,
+        "sha256": "219d0e41d301e34d5768e90a8e59df191b9b2802477dacb879c6552dc5a2159c"
+      },
+      {
+        "path": "assets/engines/bedrock.svg",
+        "bytes": 341,
+        "sha256": "a20f4e96d37052b39830048ad86c846504eae0c156ab6df7cc6103047b20aef8"
+      },
+      {
+        "path": "assets/engines/fabric.svg",
+        "bytes": 352,
+        "sha256": "6b6af579a9fc318c95183fbbd5013100ebd2186f173e8694c31ce9f79f658b36"
+      },
+      {
+        "path": "assets/engines/forge.svg",
+        "bytes": 333,
+        "sha256": "9ac4c9aa46361bc0d193c4019441302371c2956f71e117e30d17b4d789dfb992"
+      },
+      {
+        "path": "assets/engines/neoforge.svg",
+        "bytes": 328,
+        "sha256": "7342a4d89679e754759534b2b584e4d8e247bd7f1a97b53b629ea92de302273a"
+      },
+      {
+        "path": "assets/engines/paper.svg",
+        "bytes": 336,
+        "sha256": "c1a2e21f6a96023a8ebb98c71debdd9d521ae8bed4b9fc1289196b6ec9d22ba3"
+      },
+      {
+        "path": "assets/engines/pocketmine.svg",
+        "bytes": 345,
+        "sha256": "2d2f668a369ce3dd34ac808e17a867b24a1c73c1da93a7e0ee6f88a2f307484a"
+      },
+      {
+        "path": "assets/engines/purpur.svg",
+        "bytes": 341,
+        "sha256": "5ba7844ff9a895f90171d87b7618e2241ba383c708c2135e2f09c94d21c4f47c"
+      },
+      {
+        "path": "assets/engines/vanilla.svg",
+        "bytes": 361,
+        "sha256": "b855b1e0877600ed51234eb35b6796de04747dfd60c20ba922639fed3ba33683"
+      },
+      {
+        "path": "assets/fabric-versions.png",
+        "bytes": 96761,
+        "sha256": "9c85fc5907ea883cc0e4163d10e3e28e237fb5225363d3f2c7b0b5d531d4ff98"
+      },
+      {
+        "path": "assets/mods-light.png",
+        "bytes": 72344,
+        "sha256": "0c5ab16aeed6b9be51edb19e110175bfad07db7f73177423ab27a50535ce5eb2"
+      },
+      {
+        "path": "assets/mods.png",
+        "bytes": 71830,
+        "sha256": "caecf420c570e1a39375b1a7606496be7839ba3d111f699d05a33986d947d996"
+      },
+      {
+        "path": "assets/player-world-050/banner.png",
+        "bytes": 72723,
+        "sha256": "228220e1d320c1be74ac4832f02bcb659717f08a49b658ba3af69d465ffd3092"
+      },
+      {
+        "path": "assets/player-world-050/group-actions.png",
+        "bytes": 69786,
+        "sha256": "de4fa8e21039f5d9661f343bd3964f5c8aa9a6790bf4a415c923368ab8b7d819"
+      },
+      {
+        "path": "assets/player-world-050/head.png",
+        "bytes": 71533,
+        "sha256": "bb9b21c60207b90d18c499f5bdcb5d444490a5efa3b901f879362b5b8c4d6393"
+      },
+      {
+        "path": "assets/player-world-050/mod-item.png",
+        "bytes": 88086,
+        "sha256": "4db3d82e65413fa21c81b15bb94ce7c44760d8bfc9b4f468e8527f445f966aab"
+      },
+      {
+        "path": "assets/player-world-050/player-profile.png",
+        "bytes": 70579,
+        "sha256": "5a390828bb98d4bba0f2461a5bb04306f9e9bf2bbca436284c760d8b566e439d"
+      },
+      {
+        "path": "assets/player-world-050/shield.png",
+        "bytes": 71024,
+        "sha256": "f871701357b92b587f38b88a9f5ba2088de594a9f6d981110bd49763e6e2e189"
+      },
+      {
+        "path": "assets/player-world-050/world-controls.png",
+        "bytes": 59770,
+        "sha256": "3a0a2a703250087094f32335dc266d1429e53a0f298315284ccd0b7c89978c59"
+      },
+      {
+        "path": "assets/server-settings.png",
+        "bytes": 85792,
+        "sha256": "ede1dca5e284077bd47935b08ca05da7b285ed3a22d1fb86b8c6927c733e4211"
+      },
+      {
+        "path": "index.html",
+        "bytes": 22898,
+        "sha256": "1d0807720bda0997b79f57e99fa7caa1c329ff056a0528b4c9efc6a161657f44"
+      },
+      {
+        "path": "legal/index.html",
+        "bytes": 5906,
+        "sha256": "73c82b0b3313ebef174697cfe4fb4b73b435a5eb0213fa0c830352d1be6e6525"
+      },
+      {
+        "path": "licenses/index.html",
+        "bytes": 6613,
+        "sha256": "7fca3f41e688a2a6f00dd669dd3dfcc58514c9a5d853382dfc1f1ae3e103111e"
+      },
+      {
+        "path": "privacy/index.html",
+        "bytes": 8040,
+        "sha256": "393583d5e51062446b857f16f4ab844420650821e97fb0ee5ffaac7ec0d2fd31"
+      },
+      {
+        "path": "robots.txt",
+        "bytes": 128,
+        "sha256": "f639aa2abffa766008cfb53bbdfbc4f3514f529489890f96d1001992bbef4ff5"
+      },
+      {
+        "path": "sitemap.xml",
+        "bytes": 111,
+        "sha256": "3a9976f0ed80dc22748bf9809f3dcb7b34c125d8d34fdf70209c0a11b6ccf8aa"
+      },
+      {
+        "path": "styles.css",
+        "bytes": 11882,
+        "sha256": "bc3d4d4f591e7832393de9cdc15d1a2aa53c646884b33223b398992b10bc467b"
+      },
+      {
+        "path": "terms/index.html",
+        "bytes": 6705,
+        "sha256": "84419405c43308e2bc54e349a91d8bf0849dd5d3d3e2cd722a800bd4413414e8"
+      }
+    ],
+    "bytes": 1666730,
+    "publicDeployment": null,
+    "mainMerged": false,
+    "releasePublished": false
+  },
+  "limitations": [
+    "Legal drafts not ready for publication: private contact and hosting identity disclosure require owner confirmation/review.",
+    "GitHub Pages/environment not configured; proposed URL returns 404.",
+    "No real GitHub Pages HTTPS/cookie/header/deployment verification until activation.",
+    "Legacy host exposes no verified redirect/unpublish operation in this session.",
+    "No Search Console ownership, sitemap submission or indexing verification.",
+    "No new native matrix or local Electron UI rerun for this website-only change; prior application evidence remains source-specific."
+  ],
+  "legacyHostingRuntimeAudit": {
+    "at": "2026-10-10T14:20:30.132Z",
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site/",
+    "status": 200,
+    "scripts": [
+      {
+        "src": "",
+        "type": "",
+        "inline": true,
+        "providerChallenge": true
+      }
+    ],
+    "forms": 0,
+    "embeds": [
+      {
+        "tag": "IFRAME",
+        "src": null,
+        "title": null
+      }
+    ],
+    "localStorage": 0,
+    "sessionStorage": 0,
+    "cookie": "",
+    "remoteImages": [],
+    "externalLinks": ["https://github.com"],
+    "externalResourceRequests": [],
+    "cookies": [
+      {
+        "name": "__Host-appgarden-visitor",
+        "domain": "minedock-friends.arcane-rhea-3082.chatgpt.site",
+        "path": "/",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "Lax"
+      },
+      {
+        "name": "cf_clearance",
+        "domain": ".arcane-rhea-3082.chatgpt.site",
+        "path": "/",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+      },
+      {
+        "name": "__cf_bm",
+        "domain": ".chatgpt.site",
+        "path": "/",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+      }
+    ],
+    "errors": []
+  }
+}

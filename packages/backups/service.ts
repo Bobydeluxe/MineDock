@@ -8,7 +8,7 @@ import { parseProperties, serializeProperties } from '../domain/properties';
 import type { SecretStore } from '../security/secrets';
 import { atomicWrite } from '../security/paths';
 import { DomainError } from '../domain/errors';
-import type { Backup } from '../domain/types';
+import type { Backup, Server } from '../domain/types';
 import { z } from 'zod';
 import type { OperationService } from '../core/operations';
 import type { OperationContext } from '../domain/operations';
@@ -19,6 +19,7 @@ import { containedPath } from '../security/paths';
 import { findAvailablePort } from '../networking/network';
 import { packFileSchema } from '../domain/packs';
 import { jvmSchema } from '../domain/performance';
+import { nativeCommand } from '../domain/admin-commands';
 const maximumBackupSize = 64 * 1024 ** 3;
 export interface BackupStorageProvider {
   root(): string;
@@ -82,9 +83,20 @@ export class BackupService {
       if (active) {
         // Set this before awaiting: even a lost reply must lead to save-on in finally.
         savingHeld = true;
-        await this.runner.command(id, 'save-off');
-        const reply = await this.runner.command(id, 'save-all flush');
-        if (/Unknown|Incorrect|Error|failed/i.test(reply))
+        const held = await this.runner.command(id, nativeCommand(server, 'save-off'));
+        if (
+          !/^(?:Automatic saving is now disabled|Saving is already turned off)\.?$/.test(
+            held.trim(),
+          )
+        )
+          throw new Error('The server did not confirm disabling automatic saving.');
+        const reply = await this.runner.command(id, nativeCommand(server, 'save-all flush'));
+        if (
+          !/^(?:Saving the game \(this may take a moment!\)\s*)?Saved the game\.?$/.test(
+            reply.trim(),
+          ) ||
+          /Unknown|Incorrect|Error|failed/i.test(reply)
+        )
           throw new Error('The server did not confirm saving the world.');
       }
       const manifest = JSON.stringify({
@@ -140,20 +152,7 @@ export class BackupService {
       this.repo.audit('backup.failed', String(e), id, false);
       throw e;
     } finally {
-      if (savingHeld) {
-        try {
-          await this.runner.command(id, 'save-on');
-        } catch (e) {
-          this.repo.audit(
-            'backup.save_on_failed',
-            'Failed to resume world saving: safety stop to prevent unsaved world changes. ' +
-              String(e),
-            id,
-            false,
-          );
-          await this.runner.stop(id);
-        }
-      }
+      if (savingHeld) await this.resumeSaving(id, server);
       const latest = this.repo.server(id);
       if (latest.status === 'backing_up') {
         latest.status =
@@ -164,6 +163,27 @@ export class BackupService {
               : 'stopped';
         this.repo.saveServer(latest);
       }
+    }
+  }
+  private async resumeSaving(id: string, server: Server): Promise<void> {
+    try {
+      const resumed = await this.runner.command(id, nativeCommand(server, 'save-on'));
+      if (
+        !/^(?:Automatic saving is now enabled|Saving is already turned on)\.?$/.test(resumed.trim())
+      )
+        throw new Error('The server did not confirm resuming automatic saving.');
+    } catch (error) {
+      this.repo.audit(
+        'backup.save_on_failed',
+        'Failed to resume world saving: safety stop to prevent unsaved world changes. ' +
+          String(error),
+        id,
+        false,
+      );
+      await this.runner.stop(id);
+      throw new Error(
+        'Automatic saving could not be verified. The server was stopped for safety; inspect the console before restarting.',
+      );
     }
   }
   async verify(id: string, signal?: AbortSignal): Promise<boolean> {

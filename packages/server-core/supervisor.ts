@@ -22,6 +22,20 @@ import { containedPath } from '../security/paths';
 import { PlayerService } from '../core/players';
 import { phpRuntimeArguments } from '../runtime-manager/php';
 import { jvmArguments } from '../domain/performance';
+import { nativeCommand } from '../domain/admin-commands';
+export function parseNativePlayerList(output: string): string[] {
+  const match = /^There are (\d+) of a max of (\d+) players online:\s*(.*)$/.exec(output.trim());
+  if (!match)
+    throw new DomainError('UNVERIFIABLE', 'The current player list could not be verified.');
+  const names = match[3]!.trim() ? match[3]!.split(',').map((n) => n.trim()) : [];
+  if (
+    names.length !== Number(match[1]) ||
+    new Set(names).size !== names.length ||
+    names.some((n) => !/^[A-Za-z0-9_]{1,16}$/.test(n))
+  )
+    throw new DomainError('UNVERIFIABLE', 'The current player list could not be verified.');
+  return names;
+}
 export async function startCommand(
   server: Server,
 ): Promise<{ executable: string; args: string[] }> {
@@ -486,17 +500,17 @@ export class ServerProcessSupervisor implements ServerRunner {
     if (!this.instances.get(id)?.ready) return [];
     if (!engineDefinition(this.repo.server(id).engine).capabilities.rcon)
       return this.repo.server(id).players;
-    const output = await this.command(id, 'list');
-    const names = (output.split(':').slice(1).join(':').trim() || '')
-      .split(',')
-      .map((n) => n.trim())
-      .filter((n) => /^[A-Za-z0-9_.]{1,32}$/.test(n));
+    return (await this.playerList(id)).names;
+  }
+  async playerList(id: string): Promise<{ names: string[]; response: string }> {
+    const output = await this.command(id, nativeCommand(this.repo.server(id), 'list'));
+    const names = parseNativePlayerList(output);
     this.playerData.observeOnline(id, names);
     const server = this.repo.server(id);
     server.players = names;
     this.repo.saveServer(server);
     names.forEach((name) => this.repo.seenPlayer(id, name));
-    return names;
+    return { names, response: output };
   }
   private async sample(): Promise<void> {
     if (this.metricsBusy || this.closing || !this.instances.size) return;

@@ -1,5 +1,15 @@
 # Implemented scope and remaining validation
 
+## Included in MineDock 0.5.0
+
+Implemented: exact-version private official resources without an installed game, optional local import, saved heads, ordered banner/shield patterns, static frame selection, supported dynamic/mod/pack previews, a paged generated-registry/observed-item browser, actual player profile/inventory sources, recognized stopped-only Java edits and restore previews, validated native forms, exact group actions, private audit and version-aware world controls/gamerules. [Scope and engine boundaries](player-world-administration.md), [validation](validation.md) and [native captures](screenshots/player-world-050/README.md) distinguish saved QA data from the actual isolated Paper world test. The application release is 0.5.0.
+
+Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gameplay, exhaustive engine/mod/version combinations, live modded-server registries and trustworthy categories, full special-entity geometry, world-dependent compass/clock, effect-derived potion colours, executable client renderers and broader model/pack coverage, validated newer Java NBT formats, player-copy retention/garbage collection and broader power-loss/storage fault testing. No extension is silently installed to fill these gaps. Exact native release artifacts, migration results and remaining limits are recorded in validation.
+
+## Website migration — prepared only
+
+The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation are prepared in PR #9. The owner confirmed non-professional status, anonymity and no public email yet. Legal/contact review, confirmation of required private identity disclosure to the host, explicit merge/publication approval and actual deployment remain outstanding. The legacy site remains primary until the replacement is verified. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
+
 ## Included in MineDock 0.4.1
 
 The existing eight engines, official runtimes, imports/worlds/files, Modrinth mod manager, backups, schedules and recovery remain. The friends survival evolution adds datapacks/resource packs, health/notices/crash evidence, player sessions/notes, incremental snapshots/partial restores, migration/clones, console search/macros, performance/JVM tools, configuration history/maps/reachability and `.minedock` transfer. English is primary; all six app languages remain bundled. See [the exact ledger](survival-evolution.md), [feature list](../MineDock-Features.txt), [user guide](user-guide.md) and [validation](validation.md).
@@ -16,7 +26,7 @@ The static product site, native capture/GIF workflow, user changelog and interna
 
 ## Remaining native validation and publication
 
-- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.4.1 matrix and historical 0.4.0 evidence are recorded in validation.
+- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.5.0 matrix and historical 0.4.x evidence are recorded in validation.
 - Windows x64 lifecycle/updater results are recorded explicitly in validation. Linux/macOS OS installation/upgrades, ARM64 lifecycle, protected install paths and native keychain behavior need their own environments.
 - Actual Minecraft client gameplay, map rendering, historical loader coverage and Bedrock crossplay need real servers/clients and personal EULA acceptance. Capture fixtures are not gameplay.
 - Supply Windows/Apple certificates before claiming Authenticode/notarization; publisher metadata signing is separate.

@@ -2,6 +2,8 @@
 
 MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQLite application. There is one main-process application core and one typed preload contract, with no companion web service or parallel backend. The renderer does not own process, filesystem or download APIs.
 
+The 0.5.0 development branch adds typed administration DTOs/Zod schemas and shared version-aware command builders. `AdministrationService` reuses the existing supervisor, player reports, exclusive server locks, operations and backups. `PlayerInventoryService` uses a bounded lossless NBT/SNBT parser, verified stopped-only transactions and startup journal reconciliation. Migration 12 adds local administration events, player safety copies and transaction journals without rewriting existing server/settings/player/task data. Native help discovery is non-destructive and cached; unrecognized responses never establish success or fabricate current values. [Detailed boundaries](player-world-administration.md).
+
 ## Boundaries
 
 `BrowserWindow` retains `sandbox: true`, `contextIsolation: true` and `nodeIntegration: false`. Main validates the sender, main frame, exact URL and Zod input for every named IPC. Preload unwraps structured results into readable typed errors. Native file/folder choices authorize specific imports/exports; they do not grant the renderer arbitrary filesystem access. Production requires this bridge; demo data is selected only by explicit Vite mock mode.
@@ -14,6 +16,7 @@ MineDock extends the existing Electron/React/strict TypeScript/Vite/Tailwind/SQL
 - `packages/runtime-manager`: official native runtimes, real executable/version/architecture probes, repair and usage guards.
 - `packages/server-core` and `packages/rcon`: actual subprocess streams, engine readiness, lifecycle, metrics, player observations and authenticated RCON where supported.
 - `packages/marketplace`: Modrinth/Hangar catalog providers, Geyser metadata, raster icons and a shared transactional content service.
+- `packages/items`: exact-release generated registry metadata, verified private-official/local-client and licensed mod/pack archive readers, inherited presentation/model resolution, bounded PNG decoding/compositing/software 3D rendering, language lookup and deduplicated private caches.
 - `packages/backups`: verified archives, full-server staged restore and journaled retention batches.
 - `packages/security` and `packages/networking`: path containment, bounded copies/archives/NBT, secrets, allowed hosts, ports and native architecture checks.
 - `packages/updates`: pinned publisher signatures, update state, verified downloads and native installation helpers.
@@ -48,6 +51,10 @@ Migrations 7–11 append notices, player sessions/notes, incremental manifests, 
 Notifications are capped at 400 and grouped over fifteen minutes; sustained process thresholds use thirty seconds. Player sessions retain at most 180 days/20,000 records per server. Performance samples are at most one per thirty seconds with seven-day retention and bounded aggregation; lag context is capped at 200 events. Configuration history retains at most ten versions/file, 200/server, 20 MB/server and 90 days. These limits and unsupported measurements are explained in [the evolution ledger](survival-evolution.md).
 
 The public product site is buildless static HTML/CSS using bundled engine symbols and real native captures. `scripts/build-site.mjs` prepares its separate ignored deployment checkout. It exposes no desktop IPC, backend, analytics or private server data.
+
+## 0.5.0 item presentation
+
+The actual server edition and `minecraftVersion ?? version` select the context; Fabric loader changes do not select game assets. Availability comes from the exact mcmeta generated registry plus separately marked observed IDs. Artwork comes from explicit official private downloads or optional verified local clients, overlaid with safe permitted mod/pack resources. Old models and modern definitions remain separate. `remote`, `layers`, `modrinth`, `profile`, `special` and `animation` modules extend the existing resolver; no game/mod code runs. The renderer owns no asset HTTP/file parsing and receives only bounded names/status and a hash-addressed `minedock-item` URL. Version/component/language/revision-bound caches never substitute a latest release. Native selection alone selects external paths; the image protocol serves only validated cached PNGs. The existing player-inventory reader, transactions, journal and migration 12 remain the data/safety authority; image caches require no SQLite migration. [Asset policy and numerical bounds](asset-policy.md).
 
 ## 0.4.1 catalog, properties and profile paths
 

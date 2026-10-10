@@ -9,6 +9,7 @@ import { AppCore } from '../packages/core/app';
 import { migrations } from '../packages/database/migrations';
 import { sha256 } from '../packages/backups/archive';
 import type { Api } from '../packages/domain/types';
+import { playerData } from '../tests/fixtures/player-data';
 function option(name: string, fallback: string) {
   const index = process.argv.indexOf(name);
   return index < 0 ? fallback : process.argv[index + 1]!;
@@ -84,8 +85,16 @@ const playerFiles = [
   'whitelist.json',
   'ops.json',
   'world/stats/12345678-1234-4234-8234-123456789abc.json',
+  'world/playerdata/12345678-1234-4234-8234-123456789abc.dat',
 ];
 await mkdir(path.join(f.server.path, 'world/stats'), { recursive: true });
+await mkdir(path.join(f.server.path, 'world/playerdata'), { recursive: true });
+await writeFile(path.join(f.server.path, playerFiles[4]!), playerData());
+const playerNote = 'Private isolated migration QA note';
+if (baselineVersion !== '0.3.0')
+  f.repo.db
+    .prepare('INSERT INTO player_notes VALUES(?,?,?)')
+    .run(f.server.id, playerName.toLowerCase(), playerNote);
 await writeFile(
   path.join(f.server.path, playerFiles[0]!),
   JSON.stringify([{ name: playerName, uuid: '12345678-1234-4234-8234-123456789abc' }]),
@@ -361,12 +370,37 @@ try {
     encryptedSecretBefore
   )
     throw Error('Encrypted RCON secret changed');
-  if (evidence.finalSchema !== 11 || evidence.quickCheck !== 'ok')
+  if (evidence.finalSchema !== migrations.length || evidence.quickCheck !== 'ok')
     throw Error('Migration or database integrity failed');
+  if (
+    baselineVersion !== '0.3.0' &&
+    verify
+      .prepare('SELECT note FROM player_notes WHERE server_id=? AND name=?')
+      .get(f.server.id, playerName.toLowerCase())?.note !== playerNote
+  )
+    throw Error('Private player note lost');
   evidence.installAudit = !!verify
     .prepare("SELECT id FROM events WHERE action='app.update.installed'")
     .get();
   verify.close();
+  if (initialSchema === 11 && migrations.length > 11) {
+    const safety = new DatabaseSync(path.join(f.root, 'app.db.before-v12.bak'), { readOnly: true });
+    if (
+      safety.prepare('PRAGMA user_version').get()?.user_version !== 11 ||
+      safety.prepare('PRAGMA quick_check').get()?.quick_check !== 'ok' ||
+      safety.prepare('SELECT count(*) AS n FROM schedules').get()?.n !== 2 ||
+      safety
+        .prepare('SELECT note FROM player_notes WHERE server_id=? AND name=?')
+        .get(f.server.id, playerName.toLowerCase())?.note !== playerNote
+    )
+      throw Error('Schema-11 migration safety copy invalid or incomplete');
+    safety.close();
+    evidence.preMigrationDatabaseBackup = {
+      schema: 11,
+      quickCheck: 'ok',
+      playersNotesAndTasksPreserved: true,
+    };
+  }
   if (initialSchema === 5) {
     const safety = new DatabaseSync(path.join(f.root, 'app.db.before-v6.bak'), { readOnly: true });
     if (
@@ -401,6 +435,8 @@ try {
     playerHistory: true,
     playerObservations: true,
     playerFiles: true,
+    playerInventoryBytes: true,
+    ...(baselineVersion !== '0.3.0' ? { privatePlayerNotes: true } : {}),
     scheduledTasks: true,
     encryptedRconSecret: true,
   };

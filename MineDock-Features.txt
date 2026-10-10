@@ -1,13 +1,49 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Public version: 0.4.1 (clean interface and server customization)
-Updated: 9 October 2026
+Public version: 0.5.0 (player/world administration and private item resources)
+Updated: 10 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
 English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retained.
+Download MineDock 0.5.0 from GitHub Releases. Features added in 0.4.0 are retained.
+
+INCLUDED IN 0.5.0 — PLAYER/WORLD ADMINISTRATION AND ITEM RESOURCES
+- Large player profile: Inventory / Actions / History / Notes; real UUID/skin fallback.
+- Actual 36-slot inventory, armor, offhand and 27-slot Ender Chest; known stats only.
+- Strict live / dated saved / unavailable sources; no simulated live player inventory.
+- Bounded lossless Java NBT, stopped-only edits, full verified backup, player safety
+  copy, journal, conflict checks, staged atomic replacement and safe rollback.
+- Exact slot/quantity changes and restoration previews from real retained copies.
+- Typed native give, filtered clear, replace, message, teleport, game mode,
+  moderation, effects, XP, spawn and title forms with engine/version gates.
+- Advanced kill and explicit IP bans; private payloads excluded from local audit.
+- Up to 50 exact selected names, per-player results and cancel-remaining batches.
+- Real exact-version private official resource downloads without an installed
+  game: explicit ownership/EULA consent; optional verified local client import.
+- Saved custom/mob heads, ordered banners/decorated shields, static animation
+  frames, neutral bow and actual charged crossbow states, known dyes and trims.
+- Safe licensed installed mod assets, opt-in exact Modrinth archives and explicit
+  local resource-pack priority; no Java execution or installation for previews.
+- Exact Java vanilla registries when available, merged with actual observed IDs;
+  localized names, namespace/seen filters, keyboard selection and 24-item pages.
+- 27 main + 9 hotbar slots, helmet-to-boots equipment, large details and actual
+  names/lore/enchantment/durability metadata. Existing NBT safety is preserved.
+- Official/local clients verify Mojang SHA-1; mod archives verify SHA-512. No game
+  asset bundle in Git/installers; purge preserves all servers and user files.
+- Representative coverage: 98/132 vanilla/component probes across four exact
+  releases, plus 6/6 Adorn MIT items. Full category limits: docs/asset-policy.md.
+- Unknown modded IDs stay exact; absent vanilla IDs are disabled in the browser.
+  Missing registry stays partial; explicit validated IDs remain available.
+See docs/asset-policy.md for exact sources, rights, supported models and limits.
+- Native time/weather/difficulty, version-aware gamerules, verified save, player
+  list/seed/border/spawn/locate and collapsed structured advanced world commands.
+- No required plugin/mod/agent. Future/custom formats are read-only; Bedrock and
+  PocketMine storage is not Java NBT. Native sent/unverifiable replies stay honest.
+- Real isolated Paper 1.21.11 / Java 21 world commands and live backup validated;
+  no real connected-client inventory edits or Bedrock/PocketMine gameplay claimed.
+See docs/player-world-administration.md and docs/validation.md for exact limits.
 
 ======================================================================
 1. DESKTOP APPLICATION — IMPLEMENTED
@@ -287,7 +323,7 @@ Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retain
 - Publisher CI secret configured separately from OS-signing certificates.
 - Publisher-signed update metadata verifies each available native package.
 - Real public Windows portable download rechecked against signed size/hash.
-- The current release is 0.4.1; older 0.3.0 Windows users may need a manual first upgrade.
+- The current release is 0.5.0; older 0.3.0 Windows users may need a manual first upgrade.
 - Native updater/install/uninstall evidence and public-0.3.0 launcher limit are
   recorded precisely in docs/validation.md; native OSes are not interchangeable.
 
@@ -421,7 +457,7 @@ Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retain
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
 - Release documentation includes appended schemas, validation and known limits.
-- Public packages and checksum links target v0.4.1.
+- Public packages and checksum links target v0.5.0.
 
 ======================================================================
 27. REFERENCE DESIGN AND CUSTOMIZATION — IMPLEMENTED IN 0.4.1
@@ -443,7 +479,7 @@ Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retain
 - Inherited settings stay unset unless edited; unsaved navigation/close guards.
 - Curated existing Paper scalar paths, advanced discovered scalars and raw YAML.
 - Original dusk website scene, English public release text and real screenshots.
-- Website downloads point to the published 0.4.1 packages and checksums.
+- Website downloads point to the published 0.5.0 packages and checksums.
 
 ======================================================================
 28. FUTURE OPTIONS — NOT IMPLEMENTED

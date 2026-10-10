@@ -9,6 +9,7 @@ import {
   Menu,
   Notification,
   nativeImage,
+  protocol,
 } from 'electron';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -47,7 +48,18 @@ import { healthSettingsSchema } from '../../packages/domain/health';
 import { backupSafetySchema, restoreScopeSchema } from '../../packages/domain/snapshots';
 import { migrationTargetSchema, cloneSchema } from '../../packages/domain/migration';
 import { logSearchSchema, macroSchema } from '../../packages/domain/console';
+import {
+  playerNameSchema,
+  inventoryEditSchema,
+  playerActionInputSchema,
+  playerBatchSchema,
+  worldControlSchema,
+  ipActionSchema,
+} from '../../packages/domain/administration';
 import { translator } from './renderer/src/i18n';
+import { moderatePlayerSchema } from '../../packages/domain/players';
+import { visualRequest } from '../../packages/items/assets';
+import { engineDefinition } from '../../packages/domain/engines';
 
 let core: AppCore | undefined;
 let window: BrowserWindow | undefined;
@@ -65,6 +77,9 @@ const consoleFlush = setInterval(() => {
 }, 100);
 consoleFlush.unref();
 app.setName('MineDock');
+protocol.registerSchemesAsPrivileged([
+  { scheme: 'minedock-item', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+]);
 app.setPath(
   'userData',
   process.env.MINEDOCK_DATA_DIR
@@ -359,6 +374,127 @@ function register(core: AppCore): void {
   handle('playerDetails', (value, name) =>
     core.players.details(id(value), z.string().max(32).parse(name)),
   );
+  handle('administrationCapabilities', (value) => core.administration.capabilities(id(value)));
+  handle('administrationHistory', (value, name) =>
+    core.administration.history(
+      id(value),
+      name === undefined ? undefined : playerNameSchema.parse(name),
+    ),
+  );
+  handle('playerInventory', (value, name, preferLive) =>
+    core.playerInventory.get(
+      id(value),
+      playerNameSchema.parse(name),
+      z.boolean().optional().parse(preferLive),
+    ),
+  );
+  handle('editPlayerInventory', (value, input) =>
+    core.playerInventory.edit(id(value), inventoryEditSchema.parse(input)),
+  );
+  handle('playerInventorySnapshots', (value, uuid) =>
+    core.playerInventory.snapshots(id(value), id(uuid)),
+  );
+  handle('previewPlayerInventoryRestore', (value, name, uuid, snapshot) =>
+    core.playerInventory.previewRestore(
+      id(value),
+      playerNameSchema.parse(name),
+      id(uuid),
+      id(snapshot),
+    ),
+  );
+  handle('restorePlayerInventory', (value, token, confirmation) =>
+    core.playerInventory.restore(id(value), id(token), playerNameSchema.parse(confirmation)),
+  );
+  handle('administerPlayer', (value, input) =>
+    core.administration.player(id(value), playerActionInputSchema.parse(input)),
+  );
+  handle('administerPlayers', (value, input) =>
+    core.administration.batch(id(value), playerBatchSchema.parse(input)),
+  );
+  handle('administerIp', (value, input) =>
+    core.administration.ip(id(value), ipActionSchema.parse(input)),
+  );
+  handle('itemCatalog', (value) => core.administration.items(id(value)));
+  const itemVersion = (value: unknown) => {
+    const server = core.repo.server(id(value));
+    if (engineDefinition(server.engine).edition !== 'java')
+      throw new Error('Java item assets are unavailable for this edition.');
+    return server.minecraftVersion ?? server.version;
+  };
+  handle('itemAssetContext', (value) => core.itemAssets.context(itemVersion(value)));
+  handle('itemAssetDownload', (value, consent) => {
+    z.object({ ownedJava: z.literal(true), acceptedEula: z.literal(true) })
+      .strict()
+      .parse(consent);
+    return core.itemAssets.downloadOfficial(itemVersion(value));
+  });
+  handle('itemAssetPurge', () => core.itemAssets.purge());
+  handle('itemAssetScope', (value) => core.itemAssets.scope(value === null ? null : id(value)));
+  handle('itemVisual', (value, item) =>
+    core.itemAssets.visual(
+      itemVersion(value),
+      visualRequest.parse(item),
+      core.repo.settings().language,
+      core.repo.server(id(value)),
+    ),
+  );
+  handle('itemAssetImport', async (value) => {
+    const version = itemVersion(value);
+    if (await core.itemAssets.discover(version)) return core.itemAssets.context(version);
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Minecraft Java client JAR', extensions: ['jar'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return null;
+    return core.itemAssets.importClient(version, result.filePaths[0]);
+  });
+  handle('itemAssetPack', async (value, consent) => {
+    if (consent !== true) throw new Error('Resource usage consent is required');
+    const version = itemVersion(value),
+      server = core.repo.server(id(value));
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Resource pack ZIP', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return false;
+    await core.itemAssets.importPack(server, version, result.filePaths[0]);
+    return true;
+  });
+  handle('itemAssetModChoices', (value, project) =>
+    core.itemAssets.modChoices(
+      core.repo.server(id(value)),
+      itemVersion(value),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9_-]{1,80}$/)
+        .parse(project),
+    ),
+  );
+  handle('itemAssetModDownload', (value, project, version, consent) => {
+    if (consent !== true) throw new Error('Mod resource consent is required');
+    return core.itemAssets.downloadMod(
+      core.repo.server(id(value)),
+      itemVersion(value),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9_-]{1,80}$/)
+        .parse(project),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9]{8}$/)
+        .parse(version),
+    );
+  });
+  handle('worldControls', (value, query) =>
+    core.administration.worldState(id(value), z.boolean().optional().parse(query)),
+  );
+  handle('applyWorldControl', (value, input, confirmation) =>
+    core.administration.world(
+      id(value),
+      worldControlSchema.parse(input),
+      z.string().max(120).optional().parse(confirmation),
+    ),
+  );
   handle('playerNote', (value, name, note) =>
     core.exclusive(id(value), async () =>
       core.players.note(
@@ -460,11 +596,18 @@ function register(core: AppCore): void {
       await core.packs.import(server, packKind, result.filePaths[0]!, packWorld);
     });
   });
-  handle('moderatePlayer', (value, input) =>
-    core.exclusive(id(value), () =>
-      core.players.moderate(id(value), input as Parameters<typeof core.players.moderate>[1]),
-    ),
-  );
+  handle('moderatePlayer', async (value, raw) => {
+    const input = moderatePlayerSchema.parse(raw);
+    const result = await core.administration.player(id(value), {
+      name: input.name,
+      confirmation: input.confirmation,
+      input:
+        input.action === 'kick' || input.action === 'ban'
+          ? { action: input.action, ...(input.reason ? { reason: input.reason } : {}) }
+          : { action: input.action },
+    });
+    return result.response;
+  });
   handle('writeFile', (value, file, content) =>
     core.configuration.write(
       id(value),
@@ -963,6 +1106,28 @@ if (single)
             : fallback.decrypt(value.startsWith('aes:') ? value.slice(4) : value),
       };
       core = await AppCore.open(root, secrets);
+      protocol.handle('minedock-item', async (request) => {
+        const url = new URL(request.url);
+        if (
+          request.method !== 'GET' ||
+          url.hostname !== 'cache' ||
+          url.search ||
+          url.hash ||
+          url.username ||
+          url.password
+        )
+          return new Response(null, { status: 404 });
+        const bytes = await core?.itemAssets.image(url.pathname.slice(1));
+        return bytes
+          ? new Response(new Uint8Array(bytes), {
+              headers: {
+                'Content-Type': 'image/png',
+                'Cache-Control': 'private, max-age=86400',
+                'X-Content-Type-Options': 'nosniff',
+              },
+            })
+          : new Response(null, { status: 404 });
+      });
       core.updates.configureHost({
         version: app.getVersion(),
         packaged: app.isPackaged,
@@ -1033,6 +1198,8 @@ if (single)
       window.webContents.setWindowOpenHandler(({ url }) => {
         const allowed = [
           'https://www.minecraft.net/eula',
+          'https://www.minecraft.net/en-us/eula',
+          'https://www.minecraft.net/en-us/usage-guidelines',
           'https://docs.papermc.io/',
           'https://modrinth.com/',
         ];

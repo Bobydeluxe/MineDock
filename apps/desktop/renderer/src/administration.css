@@ -1,0 +1,518 @@
+.dialog.player-profile-dialog {
+  width: min(1040px, 96vw);
+  max-width: 1040px;
+}
+.player-profile-body {
+  max-height: calc(100dvh - 160px);
+  overflow: auto;
+}
+.player-profile-header {
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+.player-profile-header p {
+  margin: 8px 0;
+  overflow-wrap: anywhere;
+}
+.player-profile-header .tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.player-profile-header .tags span {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+}
+.player-profile-header .tags .status-online {
+  color: var(--success);
+}
+.player-profile-avatar {
+  width: 104px;
+  height: 104px;
+  flex: 0 0 104px;
+  display: grid;
+  place-items: center;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+.player-skin-head {
+  width: 96px;
+  height: 96px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+}
+.player-skin-head img {
+  position: absolute;
+  width: 768px;
+  height: auto;
+  max-width: none;
+  top: -96px;
+  image-rendering: pixelated;
+}
+.profile-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 28px;
+}
+.profile-tabs button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 8px;
+  border: 0;
+  border-radius: 0;
+  color: var(--text-muted);
+  background: transparent;
+  border-bottom: 2px solid transparent;
+}
+.profile-tabs button.selected {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+  gap: 5px;
+  margin: 14px 0 24px;
+  max-width: 680px;
+}
+.inventory-slot {
+  aspect-ratio: 1;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px;
+  background: var(--surface-card);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: var(--text-muted);
+}
+.inventory-slot:not(.occupied) > svg {
+  opacity: 0;
+}
+.inventory-slot:hover {
+  background: var(--hover);
+}
+.inventory-slot.occupied {
+  color: var(--text);
+}
+.inventory-slot[aria-pressed='true'] {
+  border-color: var(--accent);
+  box-shadow: inset 0 0 0 1px var(--accent);
+}
+.inventory-slot:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  z-index: 2;
+}
+.item-visual {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+  min-width: 0;
+}
+.item-picture {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  position: relative;
+}
+.item-enchanted {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #b49bea;
+  font-size: 13px;
+}
+.item-glint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    130deg,
+    transparent 20%,
+    #bb92ec80 40%,
+    #e6c8ffb0 50%,
+    transparent 65%
+  );
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mix-blend-mode: screen;
+}
+.item-download-consent {
+  flex-basis: 100%;
+  padding: 6px 0;
+}
+.item-download-consent summary {
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+}
+.item-download-consent label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.item-download-consent input[type='checkbox'] {
+  width: auto;
+  flex-shrink: 0;
+}
+.item-download-consent .button {
+  margin: 4px 8px 4px 0;
+}
+.item-durability {
+  position: absolute;
+  left: 10%;
+  bottom: 0;
+  width: 80%;
+  height: 3px;
+  background: var(--border);
+}
+.item-durability span {
+  display: block;
+  height: 100%;
+  background: var(--success);
+}
+.item-picture img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+.inventory-slot .item-picture {
+  width: clamp(22px, 4vw, 48px);
+  height: clamp(22px, 4vw, 48px);
+}
+.item-visual.large .item-picture {
+  width: 112px;
+  height: 112px;
+}
+.item-readable-name {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.item-tooltip {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 100%;
+  width: max-content;
+  max-width: 260px;
+  z-index: 10;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-card);
+  color: var(--text);
+  font-size: 12px;
+  white-space: normal;
+  text-align: left;
+  pointer-events: none;
+}
+button:hover .item-tooltip,
+button:focus-visible .item-tooltip {
+  display: block;
+}
+.item-assets-setup,
+.item-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px 0;
+  flex-wrap: wrap;
+}
+.item-assets-setup .hint {
+  margin: 0;
+  flex: 1;
+}
+.item-picker .checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+.selected-item-preview,
+.item-detail-picture {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 16px 0;
+}
+.selected-item-preview {
+  flex-wrap: wrap;
+}
+.hotbar-heading {
+  margin: 4px 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+.hotbar-heading + .inventory-grid {
+  margin-top: 8px;
+}
+.inventory-slot .equipment-label {
+  font-size: 12px;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+}
+.inventory-slot strong {
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  font-size: 12px;
+  background: var(--surface-card);
+  padding: 0 2px;
+}
+.player-equipment {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+.player-equipment .armor {
+  grid-template-columns: repeat(4, minmax(48px, 82px));
+}
+.player-equipment .offhand {
+  grid-template-columns: 82px;
+}
+.player-vitals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  padding: 16px 0;
+  margin: 10px 0 20px;
+  border-block: 1px solid var(--border);
+}
+.player-vitals > div {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+.player-vitals span {
+  color: var(--text-muted);
+}
+.inventory-source.live,
+.status-online {
+  color: var(--success);
+}
+.inventory-source {
+  font-size: 14px;
+}
+.item-components,
+.command-preview {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  max-height: 250px;
+  overflow: auto;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-console);
+  color: var(--text);
+  line-height: 1.6;
+}
+.item-catalog-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-height: 320px;
+  overflow: auto;
+  gap: 6px;
+}
+.item-catalog-list .button {
+  justify-content: start;
+  text-align: left;
+}
+.item-catalog-list small {
+  display: block;
+  overflow-wrap: anywhere;
+  color: var(--text-muted);
+}
+.player-action-composer > .field,
+.world-command-form > .field {
+  margin-bottom: 18px;
+}
+.coordinates-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+.player-selection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+.player-selection input {
+  width: auto;
+}
+.admin-result {
+  padding: 12px 16px;
+  margin-top: 12px;
+  border-left: 3px solid var(--border);
+  background: var(--surface-card);
+  overflow-wrap: anywhere;
+}
+.admin-result.confirmed {
+  border-left-color: var(--success);
+}
+.admin-result.failed {
+  border-left-color: var(--danger);
+}
+.admin-result p {
+  margin-bottom: 0;
+  white-space: pre-wrap;
+}
+.admin-history-row {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.admin-history-row code {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+.advanced-player-controls,
+.advanced-world-controls,
+.inventory-history,
+.gamerule-controls,
+.useful-world-controls {
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.advanced-player-controls summary {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.world-controls h3 {
+  margin: 24px 0 12px;
+}
+.world-segments {
+  display: flex;
+  gap: 8px;
+}
+.world-segments button {
+  flex: 1;
+  padding: 10px 16px;
+  color: var(--text-muted);
+  border: 0;
+  border-radius: 22px;
+  background: transparent;
+}
+.world-segments button.selected {
+  background: var(--surface-card);
+  color: var(--text);
+}
+.world-primary-controls details {
+  margin-top: 12px;
+}
+.world-difficulty {
+  margin: 24px 0;
+  padding: 0;
+  border: 0;
+}
+.world-difficulty legend {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+.world-difficulty label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+.world-difficulty input {
+  width: 18px;
+  height: 18px;
+}
+.gamerule-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px auto;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 0;
+  border-bottom: 1px solid var(--border);
+}
+.gamerule-row p {
+  margin: 6px 0;
+}
+.gamerule-row code {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+.world-command-form {
+  padding-top: 20px;
+}
+@media (max-width: 700px) {
+  .player-profile-header {
+    gap: 14px;
+    align-items: start;
+  }
+  .player-profile-avatar {
+    width: 72px;
+    height: 72px;
+    flex-basis: 72px;
+    overflow: hidden;
+  }
+  .player-skin-head {
+    transform: scale(0.7);
+  }
+  .inventory-slot .equipment-label {
+    display: none;
+  }
+  .inventory-slot svg {
+    width: 17px;
+  }
+  .inventory-slot strong {
+    right: 2px;
+    bottom: 1px;
+    font-size: 11px;
+  }
+  .inventory-grid {
+    gap: 3px;
+  }
+  .gamerule-row {
+    grid-template-columns: minmax(0, 1fr) 120px;
+    gap: 14px;
+  }
+  .gamerule-row .button {
+    grid-column: 2;
+  }
+  .world-segments {
+    gap: 0;
+  }
+  .world-segments button {
+    padding: 10px 6px;
+  }
+  .item-catalog-list {
+    grid-template-columns: 1fr;
+  }
+}

@@ -2,25 +2,31 @@
 
 **Run your Minecraft servers from one desktop app.** Create or import a server, open its console, manage worlds and keep verified backups on your computer.
 
-[![Latest release](https://img.shields.io/github/v/release/Bobydeluxe/MineDock)](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1)
+[![Latest release](https://img.shields.io/github/v/release/Bobydeluxe/MineDock)](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0)
 [![Validation](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-[**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
+[**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
-![MineDock 0.4.1 — actual Electron dashboard](docs/screenshots/dashboard.png)
+The free GitHub Pages website migration is **prepared, not deployed**. The current Website link remains active until the replacement is verified. See the [website deployment and SEO guide](docs/website-seo.md) and [legal publication checklist](docs/website-legal-checklist.md). The current application release is **0.5.0**. Website publication is a separate, pending step.
+
+![Dashboard design retained from 0.4.1 — actual Electron capture](docs/screenshots/dashboard.png)
 
 ## Project status
 
-The current public version is **MineDock 0.4.1** for Windows, Linux and macOS. This release focuses on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes warm light and neutral charcoal dark themes. See the [release notes](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1), [complete features and limits](docs/survival-evolution.md) and [validation record](docs/validation.md).
+The current public version is **MineDock 0.5.0** for Windows, Linux and macOS. This release focuses on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes warm light and neutral charcoal dark themes. See the [release notes](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0), [complete features and limits](docs/survival-evolution.md) and [validation record](docs/validation.md).
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
+
+**New in 0.5.0:** adds a large player profile, real saved/live inventory sources, guarded stopped-server inventory editing/restoration, exact selected-player actions and native world controls. Its final enhancement adds private official item-resource downloads without an installed game, saved custom/mob heads, ordered banner/shield patterns and supported dynamic/mod/pack previews. Ownership/terms consent is required; one exact-release archive is verified and cached privately. The profile keeps 27 main slots plus hotbar and large details; the paged browser separates registry compatibility from art. [Asset sources, supported rendering and rights](docs/asset-policy.md). These tools are included in 0.5.0; rendering and engine limits remain explicit. Read the [capabilities and safety guide](docs/player-world-administration.md), [validation](docs/validation.md) and [native screenshot gallery](docs/screenshots/player-world-050/README.md) for usage and exact coverage.
+
+![MineDock 0.5.0 player profile — actual Electron with explicitly identified saved QA data](docs/screenshots/player-world-050/player-profile.png)
 
 **New in 0.4.1:** the approved cube icon, full engine build lists, independently pinned Fabric choices, reviewed engine-specific properties and local profile images. The cleaned interface uses neutral black surfaces and direct Dashboard/Backups/Servers/Settings navigation. Notification preferences/history and recovery tools live inside Settings; the global breadcrumb/search strip and decorative ribbons are removed. [UI cleanup](docs/design/cleanup-041/README.md) and [validation](docs/validation.md) document the released interface and exact test coverage.
 
 ## Start using MineDock
 
-1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1) for your OS and architecture.
+1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) for your OS and architecture.
 2. Open MineDock and choose your language, appearance and storage folders.
 3. Create a server or import an existing folder. Choose an engine, version and resources, then review the settings.
 4. Personally accept the Minecraft EULA when required. Start the server and wait for its ready message before connecting your client.
@@ -37,7 +43,7 @@ MineDock must stay open to supervise servers and run scheduled tasks. It stops s
 
 ### Upgrade from 0.3.x
 
-Close MineDock first, keep your existing storage folders, and open the verified 0.4.1 package using the same OS account. Servers, settings, backups, Java/PHP runtimes, player records and scheduled tasks stay in your existing profile; SQLite is backed up before its schema changes. On Windows, the old 0.3.0 automatic launcher can fail before its helper runs: download and open the new portable or Setup package manually instead. Do not delete your old data. See [the migration evidence](docs/validation.md).
+Close MineDock first, keep your existing storage folders, and open the verified 0.5.0 package using the same OS account. Servers, settings, backups, Java/PHP runtimes, player records and scheduled tasks stay in your existing profile; SQLite is backed up before its schema changes. On Windows, the old 0.3.0 automatic launcher can fail before its helper runs: download and open the new portable or Setup package manually instead. Do not delete your old data. See [the migration evidence](docs/validation.md).
 
 ## What you can do
 
@@ -71,7 +77,7 @@ Capabilities control the available actions. A native engine does not show Java m
 
 ## Interface
 
-These are actual MineDock 0.4.1 native Electron captures, refreshed on 9 October 2026 using isolated local profiles and the real preload/core/SQLite services. The mod files are actual verified Modrinth downloads; world/player/administration records are QA fixtures. Active process and console views use an inert external Node child, which is never shipped. They are interface evidence, not Minecraft gameplay. A fresh installation starts empty. See [capture provenance and every current screen](docs/screenshots/README.md).
+These are actual native Electron captures from isolated profiles and the real preload/core/SQLite services. Players, the player profile and Worlds have been refreshed for the **0.5.0 release**; other views retain the documented 0.4.1 baseline interface. Player inventories use explicitly identified saved QA files; the new world controls use actual RCON values from an authorized isolated Paper 1.21.11 world, without connected clients. Existing active process/console views use an inert external Node child. They are interface evidence, not multiplayer gameplay. See [capture provenance](docs/screenshots/README.md).
 
 | Create a server                                                                             | Manage a server                                                          |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |

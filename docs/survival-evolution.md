@@ -2,7 +2,7 @@
 
 This ledger records the survival features introduced in 0.4.0 and retained in the current **MineDock 0.4.1** release. The current gallery and controls include the [0.4.1 interface and customization](design/reference-041/README.md).
 
-MineDock 0.4.0 extends the existing core. It preserves eight engines, migrations 1–6, Electron sandbox/context isolation, strict TypeScript, warm light/neutral charcoal dark and bundled EN/FR/DE/ES/PT/IT. English remains the project/default language. The current public release is [0.4.1](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records implementation and review.
+MineDock 0.4.0 extends the existing core. It preserves eight engines, migrations 1–6, Electron sandbox/context isolation, strict TypeScript, warm light/neutral charcoal dark and bundled EN/FR/DE/ES/PT/IT. English remains the project/default language. The current public release is [0.5.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records implementation and review.
 
 ## Implementation ledger
 

@@ -18,9 +18,13 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm lint
       - run: pnpm typecheck
+      - name: Build website for review (no deployment)
+        run: pnpm build:site && pnpm test:site
       - run: pnpm test
       - run: pnpm build
       - run: pnpm exec playwright install --with-deps chromium
+      - name: Check website layouts, links and keyboard navigation
+        run: pnpm test:site:browser
       - run: node node_modules/electron/install.js
       - run: sudo chown root:root node_modules/electron/dist/chrome-sandbox && sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
       - run: xvfb-run --auto-servernum pnpm test:ui

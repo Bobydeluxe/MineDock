@@ -110,11 +110,13 @@ test('native survival journey: configuration history, local packs, partial resto
 
     await tabs.getByRole('button', { name: 'Players', exact: true }).click();
     await page.getByRole('button', { name: 'Player details', exact: true }).click();
+    await page.getByRole('navigation', { name: 'Player profile tabs' }).getByRole('button', { name: 'Notes', exact: true }).click();
     await page.getByLabel('Private notes', { exact: true }).fill('Building the village');
     await page.getByRole('dialog').getByRole('button', { name: 'Save', exact: true }).click();
     await page.getByRole('dialog').getByRole('button', { name: 'Close', exact: true }).click();
     await expect(page.getByRole('dialog')).toHaveCount(0);
     await page.getByRole('button', { name: 'Player details', exact: true }).click();
+    await page.getByRole('navigation', { name: 'Player profile tabs' }).getByRole('button', { name: 'Notes', exact: true }).click();
     await expect(page.getByLabel('Private notes', { exact: true })).toHaveValue(
       'Building the village',
     );
