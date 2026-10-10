@@ -183,7 +183,7 @@ check(
   'Twelve documented network feature groups',
 );
 for (const text of [
-  'bobydeluxe18@gmail.com',
+  'minedockapp@gmail.com',
   'Automatic checks default off',
   'online UUID',
   'SHA-512',

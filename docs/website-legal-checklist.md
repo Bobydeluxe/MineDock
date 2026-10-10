@@ -1,6 +1,6 @@
 # Website legal publication checklist
 
-**BLOCKED — awaiting hosting disclosure confirmation and final review, 10 October 2026.** The owner confirmed a **non-professional individual** publisher, requested **anonymity**, and designated **bobydeluxe18@gmail.com** as the public privacy/contact address. Four English legal source pages exist for local review, including a combined desktop/website Privacy Policy. They are not completed legal notices or proof of compliance. The production build refuses unapproved statuses, missing contact/review fields, unconfirmed anonymous-host disclosure and TODO/DRAFT content. Do not publish the review export as production. See [specific owner actions](website-owner-actions.md).
+**BLOCKED — awaiting hosting disclosure confirmation and final review, 10 October 2026.** The owner confirmed a **non-professional individual** publisher, requested **anonymity**, and designated **minedockapp@gmail.com** as the public privacy/contact address. Four English legal source pages exist for local review, including a combined desktop/website Privacy Policy. They are not completed legal notices or proof of compliance. The production build refuses unapproved statuses, missing contact/review fields, unconfirmed anonymous-host disclosure and TODO/DRAFT content. Do not publish the review export as production. See [specific owner actions](website-owner-actions.md).
 
 ## Publisher information required
 

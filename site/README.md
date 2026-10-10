@@ -4,7 +4,7 @@
 
 The existing English home design, icon, original landscape and real Electron screenshots are retained. Downloads point to public **0.5.0** packages. The seven administration/item screenshots are labeled **MineDock 0.5.0**, with their existing provenance captions. No game-resource archives are exported.
 
-The combined desktop/website Privacy Policy, [source network audit](../docs/privacy-audit.md) and [Code signing policy](../docs/code-signing-policy.md) are prepared. The public email **bobydeluxe18@gmail.com** is confirmed. The owner has not yet arranged confidential identity disclosure with GitHub; correspondence handling and final legal review remain pending. Follow [secure owner actions](../docs/website-owner-actions.md). The planned privacy URL is not live or ready for SignPath submission.
+The combined desktop/website Privacy Policy, [source network audit](../docs/privacy-audit.md) and [Code signing policy](../docs/code-signing-policy.md) are prepared. The public email **minedockapp@gmail.com** is confirmed. The owner has not yet arranged confidential identity disclosure with GitHub; correspondence handling and final legal review remain pending. Follow [secure owner actions](../docs/website-owner-actions.md). The planned privacy URL is not live or ready for SignPath submission.
 
 ## Local review
 

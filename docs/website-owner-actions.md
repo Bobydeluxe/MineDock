@@ -4,7 +4,7 @@
 
 The desktop application remains **0.5.0** with twenty unchanged release assets. GitHub Pages is not enabled and home, privacy, legal, terms, licenses and sitemap return **404**. The existing homepage remains the active website until Pages has actually deployed and passed public verification. A nonexistent privacy URL must not be submitted to SignPath.
 
-Confirmed by the owner: private non-professional publisher, public anonymity preferred, public contact **bobydeluxe18@gmail.com**, and **no GitHub identity-disclosure confirmation yet**. Only that explicitly designated public email is included in the proposed notices. The owner has not supplied private residential information here.
+Confirmed by the owner: private non-professional publisher, public anonymity preferred, public contact **minedockapp@gmail.com**, and **no GitHub identity-disclosure confirmation yet**. Only that explicitly designated public email is included in the proposed notices. The owner has not supplied private residential information here.
 
 ## 1. Resolve anonymous publication privately with GitHub
 

@@ -30,7 +30,7 @@ The following attribution is **conditional wording for use only after acceptance
 
 ## Privacy, licenses and eligibility review
 
-Intended combined website/application Privacy Policy URL: **https://bobydeluxe.github.io/MineDock/privacy/**. **Not live; do not submit this URL yet.** Review the [privacy source](../site/privacy/index.html) and [completed application network audit](privacy-audit.md). Contact: `bobydeluxe18@gmail.com`. Website publication is gated on the owner's anonymous-publisher arrangements and review of publisher-controlled processing.
+Intended combined website/application Privacy Policy URL: **https://bobydeluxe.github.io/MineDock/privacy/**. **Not live; do not submit this URL yet.** Review the [privacy source](../site/privacy/index.html) and [completed application network audit](privacy-audit.md). Contact: `minedockapp@gmail.com`. Website publication is gated on the owner's anonymous-publisher arrangements and review of publisher-controlled processing.
 
 MineDock has online update/download/catalog, skin and optional observer features. There is no blanket promise of zero network traffic. Automatic update checks default off, but opening some views triggers provider requests. The released installer does not display the newly prepared policy and no global network-disable option exists. Ask the Foundation to assess these facts against its installation/privacy requirements; do not claim eligibility is established by this document.
 

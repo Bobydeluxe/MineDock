@@ -2,7 +2,7 @@
 
 Audited on **10 October 2026**, against released application inputs at `36f7cd12ad8832773377a8b92cd7da3fd616efef` (documentation-only follow-up `8563274cee6bd129f0a820772d4e03a5b2c8f021`). This is a source audit of MineDock's own code, not a packet capture of every dependency, server, plugin or operating-system service. No desktop binaries are changed by this website work.
 
-The proposed combined website/application notice is [the privacy page source](../site/privacy/index.html). Its intended URL is **https://bobydeluxe.github.io/MineDock/privacy/**. It is **not live or ready to submit to SignPath** while the publication gate is closed. The owner supplied `bobydeluxe18@gmail.com` as the public contact and confirmed that private identity disclosure to GitHub has not yet been arranged. No residential information is collected in this repository.
+The proposed combined website/application notice is [the privacy page source](../site/privacy/index.html). Its intended URL is **https://bobydeluxe.github.io/MineDock/privacy/**. It is **not live or ready to submit to SignPath** while the publication gate is closed. The owner supplied `minedockapp@gmail.com` as the public contact and confirmed that private identity disclosure to GitHub has not yet been arranged. No residential information is collected in this repository.
 
 ## Local processing and recipients
 
