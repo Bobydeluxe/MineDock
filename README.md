@@ -8,6 +8,8 @@
 
 [**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
+The free GitHub Pages website migration is **prepared, not deployed**. The current Website link remains active until the replacement is verified. See the [website deployment and SEO guide](docs/website-seo.md) and [legal publication checklist](docs/website-legal-checklist.md). Public downloads remain **0.4.1**; the **0.5.0** branch is unreleased.
+
 ![MineDock 0.4.1 — actual Electron dashboard](docs/screenshots/dashboard.png)
 
 ## Project status

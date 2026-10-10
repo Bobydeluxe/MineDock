@@ -6,6 +6,8 @@ The public download remains 0.4.1. No existing release executable is replaced.
 
 ### Added
 
+- Prepared free GitHub Pages hosting with English legal-page drafts, project-path navigation and production SEO metadata. Publication remains blocked pending publisher/contact review, owner approval and a verified deployment; the current website and 0.4.1 downloads remain active.
+
 - A large player profile with Inventory, Actions, History and Notes, official skin fallback, actual saved stats, 36 inventory slots, armor, offhand and 27 Ender Chest slots.
 - Stopped-server inventory quantity removal, exact-slot empty/replace and previewed restoration from real pre-edit copies, with full verified backup, conflict checks, transaction journal and rollback.
 - Validated native player action forms, filtered item removal and advanced confirmations for kill and explicit IP bans.

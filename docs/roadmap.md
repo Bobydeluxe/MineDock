@@ -6,6 +6,10 @@ Implemented: exact-version private official resources without an installed game,
 
 Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gameplay, exhaustive engine/mod/version combinations, live modded-server registries and trustworthy categories, full special-entity geometry, world-dependent compass/clock, effect-derived potion colours, executable client renderers and broader model/pack coverage, validated newer Java NBT formats, player-copy retention/garbage collection and broader power-loss/storage fault testing. No extension is silently installed to fill these gaps. Merge/publication requires review of the completed PR and exact native release artifacts.
 
+## Website migration — prepared only
+
+The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation are prepared in PR #9. The owner confirmed non-professional status, anonymity and no public email yet. Legal/contact review, confirmation of required private identity disclosure to the host, explicit merge/publication approval and actual deployment remain outstanding. The legacy site remains primary until the replacement is verified. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
+
 ## Included in MineDock 0.4.1
 
 The existing eight engines, official runtimes, imports/worlds/files, Modrinth mod manager, backups, schedules and recovery remain. The friends survival evolution adds datapacks/resource packs, health/notices/crash evidence, player sessions/notes, incremental snapshots/partial restores, migration/clones, console search/macros, performance/JVM tools, configuration history/maps/reachability and `.minedock` transfer. English is primary; all six app languages remain bundled. See [the exact ledger](survival-evolution.md), [feature list](../MineDock-Features.txt), [user guide](user-guide.md) and [validation](validation.md).

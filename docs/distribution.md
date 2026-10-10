@@ -1,5 +1,9 @@
 # Native distribution and signing
 
+## Website distribution is separate
+
+The GitHub Pages migration is [prepared only](website-seo.md), with static output in `dist/site` and a dedicated `main`-only workflow. It does not package or publish the application. Publisher/privacy review and explicit owner approval remain required; the current legacy website link stays active until the replacement is deployed and verified. Public binaries remain 0.4.1; 0.5.0 native packages remain review artifacts. See the [legal checklist](website-legal-checklist.md).
+
 Use Node 24+, pinned pnpm and the lockfile. `pnpm build` compiles main/preload/renderer and includes dependency notices. The packaging script uses the installed electron-builder **v26** schema and requires the requested OS to equal the host OS. It builds the actual `process.arch` (x64 or ARM64); it never silently packages x64 for an ARM64 host.
 
 | Native host                 | Targets         | Example names for public 0.4.1                                      |

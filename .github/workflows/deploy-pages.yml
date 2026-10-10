@@ -1,0 +1,62 @@
+name: Deploy website to GitHub Pages
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'scripts/build-site.mjs'
+      - 'scripts/check-site.mjs'
+      - 'assets/brand/**'
+      - 'apps/desktop/assets/icon.ico'
+      - 'apps/desktop/renderer/src/assets/engines/**'
+      - 'docs/screenshots/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    if: github.ref == 'refs/heads/main' && github.repository == 'Bobydeluxe/MineDock'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Read configured Pages URL
+        id: pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: false
+      - name: Build approved production website
+        env:
+          SITE_URL: ${{ steps.pages.outputs.base_url }}/
+        run: node scripts/build-site.mjs --production
+      - name: Check exported files and project paths
+        run: node scripts/check-site.mjs --production
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/site
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.repository == 'Bobydeluxe/MineDock'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy approved artifact
+        id: deployment
+        uses: actions/deploy-pages@v4

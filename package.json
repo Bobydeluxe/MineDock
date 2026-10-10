@@ -25,6 +25,8 @@
     "test:packaged": "node scripts/test-packaged.mjs",
     "screenshots": "node scripts/capture-ui.mjs",
     "build:site": "node scripts/build-site.mjs",
+    "test:site": "node scripts/check-site.mjs",
+    "test:site:browser": "node scripts/check-site-browser.mjs",
     "updates:keygen": "node scripts/create-update-key.mjs",
     "updates:sign": "node scripts/sign-update.mjs",
     "lint": "eslint .",
@@ -92,6 +94,7 @@
     },
     "files": [
       "dist/**",
+      "!dist/site/**",
       "package.json",
       "!node_modules/**"
     ],

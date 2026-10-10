@@ -32,6 +32,10 @@
 
 Six native build targets prepare Windows x64/ARM64 Setup and Portable, Linux x64/ARM64 AppImage and Debian, and macOS Intel/Apple Silicon ZIP and DMG. These are CI review artifacts, **not public release downloads**. See [validation](validation.md) for the exact successful runs, checksums and publisher metadata signatures. Existing 0.4.1 executables are unchanged.
 
+## Website migration (prepared, not deployed)
+
+Free GitHub Pages hosting, four English legal pages and project-path SEO are prepared in PR #9. Production remains blocked on real publisher/contact details, legal review, explicit owner merge/publication approval and a successful verified deployment. The existing website and 0.4.1 downloads remain active. Search Console ownership and Google indexing have not been performed. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md). This preparation is not a 0.5.0 release announcement.
+
 ## Known limits
 
 - Actual Paper 1.21.11 world controls and safe live backup were tested with the owner's EULA acceptance, no added plugins and no connected players. Real connected-client inventory edits, multiplayer, Bedrock/PocketMine gameplay and exhaustive mod/version combinations remain unvalidated.
