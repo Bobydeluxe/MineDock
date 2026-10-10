@@ -1,6 +1,6 @@
 # Legacy website retirement and rollback
 
-The active website is still `https://minedock-friends.arcane-rhea-3082.chatgpt.site/`. Its last verified deployment was Sites version 9 on 10 October 2026; the existing administration validation record retains that historical evidence. The `hosting.json` in this folder preserves its opaque project identity. It is not consumed by the new GitHub Pages build and contains no credential.
+The active website is still `https://minedock-friends.arcane-rhea-3082.chatgpt.site/`. Its last verified deployment was Sites version **10** on 10 October 2026 at 17:33 UTC, source `7d0dae596f6cbd2665b1aef10499ab18cca9b0d2`, with 0.5.0 downloads. The [release record](../validation-records/0.5.0-release.json) retains its deployment identifier; the earlier administration record's version 9 remains historical evidence. The `hosting.json` in this folder preserves its opaque project identity. It is not consumed by the new GitHub Pages build and contains no credential.
 
 ## What can actually be done
 

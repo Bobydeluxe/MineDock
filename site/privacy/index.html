@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Website privacy and cookies — MineDock</title>
+    <title>Privacy Policy — MineDock website and desktop app</title>
     <meta
       name="description"
-      content="What the static MineDock website loads, GitHub Pages security logs, external links and the distinction from local desktop application data."
+      content="How MineDock 0.5.0 stores local server data, contacts download and skin providers, handles privacy choices, and uses static GitHub Pages hosting."
     />
     <meta name="theme-color" content="#111719" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -29,114 +29,445 @@
       </nav>
     </header>
     <main id="main" class="wrap legal-content">
-      <p class="eyebrow">MINEDOCK · WEBSITE INFORMATION</p>
-      <h1>Privacy and cookies</h1>
+      <p class="eyebrow">MINEDOCK · WEBSITE AND DESKTOP APPLICATION</p>
+      <h1>Privacy Policy</h1>
       <aside class="legal-status">
-        <strong>DRAFT — publication blocked.</strong> The owner confirmed non-professional status
-        and requested anonymity. The applicable controller/contact arrangements and hosting identity
-        disclosure condition still need review; no public email is available yet.
+        <strong>DRAFT — publication blocked.</strong> Technical audit: 10 October 2026, MineDock
+        0.5.0. The public contact is confirmed. Anonymous-publisher arrangements and
+        publisher-controlled legal bases/contact retention still need approval. This notice is not
+        effective, publicly deployed or ready to submit to SignPath.
       </aside>
-      <section>
-        <h2>Scope and responsibility</h2>
+      <nav class="policy-contents" aria-label="Privacy Policy contents">
+        <a href="#responsibility">Responsibility</a> · <a href="#local-data">Local data</a> ·
+        <a href="#network">Network requests</a> · <a href="#telemetry">Telemetry</a> ·
+        <a href="#retention">Deletion</a> · <a href="#website">Website</a> ·
+        <a href="#rights">Your rights</a>
+      </nav>
+      <section id="responsibility">
+        <h2>1. Scope, responsibility and contact</h2>
         <p>
-          This page describes the proposed GitHub Pages website. It does not describe the legacy
-          ChatGPT Sites host. The identity of the website publisher and, where applicable,
-          controller is TODO — awaiting owner information in the
-          <a href="../legal/">legal notice</a>.
+          This notice covers the independent MineDock website proposed for GitHub Pages and the
+          released MineDock 0.5.0 desktop application, including Windows. It does not describe the
+          previous hosting service. MineDock is a local Minecraft server manager, not a cloud
+          hosting or account service.
         </p>
         <p>
-          The static site contains no account system, contact form, advertising, embedded video,
-          remote image service or analytics script. Its styles, icons and screenshot files are
-          served from the same site. It uses system fonts.
+          The project is published by a private non-professional individual using the repository
+          account Bobydeluxe. Public anonymity is requested; the applicable host disclosure
+          arrangement is still being confirmed in the <a href="../legal/">legal notice</a>. Public
+          contact: <a href="mailto:bobydeluxe18@gmail.com">bobydeluxe18@gmail.com</a>. Do not send
+          passwords, full player databases or identity documents without an agreed secure process.
+        </p>
+        <p>
+          The server operator controls the player information held on their own machine and server,
+          including any applicable notices, legal basis and retention. Installing MineDock does not
+          send those local files to its developer. GitHub and download/API providers receive the
+          specific requests below and describe their own processing. A provider is not automatically
+          represented as the publisher's processor.
+        </p>
+        <p>
+          <strong>Pending legal review:</strong> confirm the publisher/controller arrangements for
+          the website and correspondence. Proposed bases, where applicable, are legitimate interests
+          for proportionate delivery, support and corrections, and legal obligations for statutory
+          requests. Operators must assess their own player processing. Ownership/EULA confirmation
+          in the app is not blanket consent to personal-data processing.
         </p>
       </section>
-      <section>
-        <h2>Hosting requests and security logs</h2>
+      <section id="local-data">
+        <h2>2. What the application stores locally</h2>
+        <ul>
+          <li>
+            Server profiles, engine and game versions, local paths, configuration, preferences and
+            scheduled tasks.
+          </li>
+          <li>
+            A local SQLite database, including player usernames/UUIDs, observations, sessions,
+            administrative history and private operator notes.
+          </li>
+          <li>
+            Minecraft world, inventory, statistics, whitelist, operator and ban files; those files
+            and native server logs can contain personal information.
+          </li>
+          <li>
+            Backups, restore previews and safety copies, configuration history, database migration
+            copies and retained trash.
+          </li>
+          <li>
+            Application/error logs, local crash evidence, console output and local
+            process/player-count performance measurements.
+          </li>
+          <li>
+            RCON credentials, cached catalogs/icons/skins, private verified game resources, selected
+            mod/pack resources and downloaded application updates.
+          </li>
+        </ul>
         <p>
-          Your browser sends network information to the host to retrieve pages and files.
+          These are stored in the app's user-data directory and the server/backup folders you
+          select. MineDock implements no automatic upload of worlds, inventories, SQLite, private
+          notes or backups. A shared folder, OS cloud backup, plugin or deliberate export can move
+          files elsewhere independently. An export is not necessarily anonymous.
+        </p>
+      </section>
+      <section id="network">
+        <h2>3. Network requests and your choices</h2>
+        <p>
+          MineDock makes Internet requests for online features. Each recipient can see your public
+          IP address, requested URL/resource, time and normal connection/HTTP metadata. HTTPS
+          protects transport to the recipient; it does not hide the request from that service. DNS
+          resolvers, proxies and the operating system can also process connection metadata. Provider
+          requests use a product User-Agent, not a unique publisher device ID.
+        </p>
+        <p>
+          The listed public API/download flows do not sign you into GitHub, Microsoft or Modrinth,
+          and do not send your Minecraft password. RCON authentication is a separate local-server
+          operation. Some requests happen as a result of opening a view; there is
+          <strong>no universal offline switch or per-feature network opt-out</strong> in 0.5.0.
+          Avoid the relevant online feature or restrict application network access through your OS
+          if required. Existing cache may reduce requests, but does not guarantee none.
+        </p>
+        <div
+          class="policy-table-wrap"
+          role="region"
+          aria-label="Application network requests and controls"
+          tabindex="0"
+        >
+          <table class="policy-table">
+            <caption>
+              Verified MineDock 0.5.0 application requests
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Feature and service</th>
+                <th scope="col">Information requested or sent</th>
+                <th scope="col">When it connects / choice</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">GitHub application updates</th>
+                <td>
+                  Latest release, OS/architecture-specific signed metadata and chosen
+                  package/version; download range headers when resuming. GitHub and its approved
+                  content/CDNs receive requests.
+                </td>
+                <td>
+                  Manual check/download/install. Automatic checks default off; when enabled they run
+                  at startup and every six hours. Disable automatic checks in Settings.
+                  Downloads/installation remain separate actions.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Minecraft/Mojang/Microsoft catalogs and resources</th>
+                <td>
+                  Game release, server/client artifacts and asset identifiers at official
+                  metadata/download hosts, including piston-meta.mojang.com, piston-data.mojang.com
+                  and Minecraft Services.
+                </td>
+                <td>
+                  Engine/version views and requested create/import/install/repair/migration
+                  operations. Avoid those online actions; compatible installed resources and cached
+                  catalogs can be reused.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Paper, Purpur, Fabric, Forge and NeoForge</th>
+                <td>
+                  Requested engine, game/build/loader/installer version and artifact at their
+                  API/Maven/download hosts.
+                </td>
+                <td>
+                  Browsing/selecting engines, refreshing and installing/migrating. Executed upstream
+                  installers can make their own dependency requests. Their own behavior is not
+                  controlled by this notice.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Java and PHP runtimes</th>
+                <td>
+                  Adoptium receives OS/architecture, Java major and JRE selection. GitHub/approved
+                  release hosts serve runtime and PocketMine/PHP build metadata/files.
+                </td>
+                <td>
+                  Requested runtime installation or a required part of server installation. Reuse an
+                  existing compatible runtime to avoid downloading one.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Modrinth API/CDN</th>
+                <td>
+                  Search terms, filters, game version/loader, project/version IDs and selected
+                  files. Identification/update requests can send SHA-512 hashes of local mod files,
+                  not the local JAR contents.
+                </td>
+                <td>
+                  Opening/searching content views, update/compatibility/identification checks and
+                  chosen mod/plugin/datapack/resource-pack/mrpack downloads. Default searches and
+                  icons can load with a view. Avoid online browsing/checks to avoid those calls.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Hangar and Geyser/Floodgate</th>
+                <td>
+                  Plugin searches, project/version/build and platform compatibility at
+                  Hangar/PaperMC and download.geysermc.org; selected files/icons from approved CDNs.
+                </td>
+                <td>
+                  Provider/crossplay browsing and requested downloads. No provider account
+                  authentication is implemented. Avoid these online views/actions.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Player skins and saved head textures</th>
+                <td>
+                  Mojang's sessionserver receives a player's online UUID; textures.minecraft.net
+                  receives a texture URL/digest. A saved head uses its safe stored texture URL; a
+                  name-only head is not resolved through a username tracking service.
+                </td>
+                <td>
+                  Opening a known online player's profile automatically requests its uncached skin.
+                  Displaying a supported saved head can request its texture. There is no separate
+                  skin-disable switch; avoid that view/network access to avoid it.
+                  Offline/conflicting identities use a fallback.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Item registry, private official art and translations</th>
+                <td>
+                  GitHub raw content serves exact-version misode/mcmeta registry metadata. Official
+                  Mojang hosts serve the chosen client/archive/object hashes and language assets.
+                  Local client paths and JAR bytes are not uploaded for verification.
+                </td>
+                <td>
+                  Registry browsing can request metadata independently of official-art setup. A
+                  private client download requires explicit ownership/EULA confirmation. Optional
+                  local import still checks official metadata. Missing translated-item objects can
+                  download after setup; use cached resources or avoid the feature.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Optional mod/pack item previews</th>
+                <td>
+                  Modrinth receives selected project/version/loader queries and archive downloads.
+                  Explicit local packs/mods are read locally.
+                </td>
+                <td>
+                  Separate opt-in resource acquisition; license and archive hashes are checked.
+                  These preview archives are not installed or executed. Avoid that action; purge the
+                  app-owned art cache when desired.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Native server commands and RCON</th>
+                <td>
+                  Password and exact commands/targets, potentially including player names, messages,
+                  moderation reasons or an explicit IP-ban target.
+                </td>
+                <td>
+                  Sent to the operator's supervised local server via process stdin or TCP RCON at
+                  127.0.0.1. Native RCON is not TLS. MineDock 0.5.0 has no remote-server RCON
+                  endpoint; the local server/plugins may log or act on commands.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Connection test</th>
+                <td>
+                  A local loopback TCP test; with external consent, api.mcstatus.io receives the
+                  entered public hostname/IP, port and Java/Bedrock edition. The observer may query
+                  the server and receive its publicly exposed status/player information.
+                </td>
+                <td>
+                  External observer only after explicit consent. Leave it disabled to keep the test
+                  local. No API token is sent by 0.5.0; the app uses only selected status fields
+                  from the response.
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Browser links and local maps</th>
+                <td>
+                  Your browser receives the selected documentation/EULA/provider URL or verified
+                  loopback map address, with its own network/session behavior.
+                </td>
+                <td>
+                  Opened by user action. External websites and map plugins may load further
+                  resources or cookies under their own policies.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>
+          Minecraft servers, Java/PHP, loaders, mods/plugins, local map servers, antivirus and the
+          OS are separate programs. They may authenticate players, download dependencies or use
+          their own telemetry. This source audit does not promise that every program started on your
+          computer makes no other requests. Operators should review their configuration and notices.
+        </p>
+      </section>
+      <section id="telemetry">
+        <h2>4. Analytics, crash reporting and publisher access</h2>
+        <p>
+          The audited MineDock code has no publisher analytics SDK, automatic crash-report upload,
+          advertising identifier, remote persistent device identifier or publisher-operated
+          telemetry endpoint. The local performance screen measures your server processes; it does
+          not send usage statistics to the MineDock publisher.
+        </p>
+        <p>
+          The publisher receives information you deliberately provide by email or a GitHub
+          issue/report. GitHub issues are public and disclose your account and submitted content.
+          Review and minimize logs before sharing; do not upload complete player files, passwords or
+          private worlds. Third-party APIs may keep their own access/download statistics.
+        </p>
+      </section>
+      <section id="retention">
+        <h2>5. Retention, deletion and uninstalling</h2>
+        <p>
+          You control local storage. Removing a server keeps a recovery copy in app-owned trash;
+          backups and an imported external original can remain. Player-edit safety copies,
+          database/configuration backups and incremental objects can survive a change. Removing a
+          record or clearing a cache does not erase all other copies.
+        </p>
+        <p>
+          Configured backup retention is previewed before deletion. Local metrics have a seven-day
+          maintenance limit. Player detail retrieval prunes ended sessions older than 180 days and
+          caps ended sessions at 20,000 per server; administration history is also capped at 20,000
+          per server. These are application rules, not promises to purge native logs, notes,
+          original player files or all backups. Application logs rotate around 5 MiB; the console
+          memory buffer holds up to 5,000 lines per server. Other local records can persist until
+          deliberately removed.
+        </p>
+        <p>
+          On Windows, uninstall a Setup build through Installed apps. For Portable, close MineDock
+          and remove its executable. The Windows uninstaller is configured to retain application
+          data; deleting the program does not delete your worlds, SQLite or chosen storage folders.
+          To remove all data, stop servers, close the app, review independent backups/external
+          originals, then deliberately remove the actual profile and all chosen storage/recovery
+          locations you intend to erase. Deletion is not certified secure erasure, and OS/cloud
+          backups can retain copies.
+        </p>
+        <p>
+          Art-cache purge removes app-owned cached resources and registrations without deleting the
+          original installed Minecraft client. Browser cookies/storage, provider records and
+          third-party server files have separate deletion controls.
+        </p>
+      </section>
+      <section id="security">
+        <h2>6. Security measures and limits</h2>
+        <p>
+          MineDock validates HTTPS download destinations and redirects, bounds response/archive
+          sizes, compares expected hashes and verifies updater metadata using a pinned Ed25519 key.
+          It uses renderer isolation/sandboxing, typed IPC, path checks and guarded inventory writes
+          with verified backups. These controls do not guarantee error-free software or trustworthy
+          third-party programs.
+        </p>
+        <p>
+          Stored RCON secrets use Electron OS protection where available, with a local AES-256-GCM
+          key fallback. The full SQLite database/world files are not encrypted by MineDock, and the
+          native server requires plaintext RCON configuration. Local redaction is best effort; other
+          server/plugin secrets can remain in files or shared backups. Protect your OS account,
+          filesystem and backup locations. Current unsigned Windows/macOS packages and signed
+          updater metadata are different matters; see
+          <a href="/MineDock/#code-signing-policy">Code signing policy</a>.
+        </p>
+      </section>
+      <section id="website">
+        <h2>7. Website hosting, cookies and external providers</h2>
+        <p>
+          The prepared GitHub Pages site serves static HTML/CSS, same-site images and system fonts.
+          It has no account, contact form, ad, embedded video, analytics script, tracking pixel or
+          source-set cookie/browser storage. No Google Analytics or Tag Manager is installed.
+        </p>
+        <p>
           <a
             href="https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages"
-            >GitHub states that Pages visitors' IP addresses are logged and stored for security</a
-          >, including visitors who are not signed in. MineDock does not receive a visitor-log
-          dashboard from this static export.
+            >GitHub states that Pages visitor IP addresses are logged for security</a
+          >, including signed-out visitors. The publisher has no visitor-log dashboard in this
+          static export. GitHub's own notice explains its purposes, retention criteria, rights
+          contacts and international processing; no exact Pages log lifetime or publisher deletion
+          power over GitHub logs is claimed. Cookies/headers on the actual Pages host remain to be
+          checked after deployment; local source inspection cannot establish production cookie
+          behavior.
         </p>
         <p>
+          External services are contacted only as described above or when following links. Relevant
+          provider information:
           <a
             href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement"
-            >GitHub's privacy statement</a
+            >GitHub</a
+          >,
+          <a href="https://www.microsoft.com/en-us/privacy/privacystatement">Microsoft/Minecraft</a
+          >, <a href="https://modrinth.com/legal/privacy">Modrinth</a>,
+          <a href="https://hangar.papermc.io/privacy/">Hangar</a>,
+          <a href="https://forums.papermc.io/help/privacy-policy/">PaperMC's linked notice</a>,
+          <a href="https://www.eclipse.org/legal/privacy/">Eclipse/Adoptium</a>, and
+          <a href="https://policies.google.com/privacy">Google/Gmail</a>.
+        </p>
+        <p>
+          Official projects also include <a href="https://purpurmc.org/">Purpur</a>,
+          <a href="https://fabricmc.net/">Fabric</a>,
+          <a href="https://files.minecraftforge.net/">Forge</a>,
+          <a href="https://neoforged.net/">NeoForge</a>,
+          <a href="https://geysermc.org/">Geyser</a> and
+          <a href="https://mcstatus.io/docs">mcstatus.io</a>. A current API-specific privacy notice
+          has not been established for each smaller provider; no common retention/location guarantee
+          or unrelated privacy notice is assigned to them.
+        </p>
+        <p>
+          Providers and the designated Gmail service can process information internationally,
+          including outside your country/EEA, under their own arrangements. Consult their current
+          notices for applicable transfers and safeguards. MineDock does not promise exclusively EU
+          storage or invent a processor agreement. Search Console ownership/indexing is not
+          established; planned static verification does not add visitor analytics.
+        </p>
+      </section>
+      <section id="rights">
+        <h2>8. Correspondence, rights and complaints</h2>
+        <p>
+          Contact the publisher at
+          <a href="mailto:bobydeluxe18@gmail.com">bobydeluxe18@gmail.com</a> for privacy questions
+          and corrections. Gmail/Google and your own mail provider process the sender address,
+          message content/attachments and delivery metadata. The proposed purpose is responding to
+          requests, not marketing.
+        </p>
+        <p>
+          <strong>TODO — owner review before publication:</strong> confirm who accesses that
+          mailbox, the applicable roles/bases and an actual deletion practice. Proposed retention is
+          only as long as needed to resolve the request and any applicable legal obligation/dispute,
+          followed by deletion or anonymization of unnecessary content. No fixed retention period,
+          processor contract or operational guarantee is invented.
+        </p>
+        <p>
+          Where applicable, you can request access, correction, erasure, restriction, portability or
+          object to processing; rights depend on their legal conditions. Contact your server
+          operator for local player records, the publisher for information you sent directly, and
+          the relevant provider for its own data. The publisher cannot erase another person's local
+          server or GitHub's infrastructure logs. Do not send a private rights request through a
+          public issue.
+        </p>
+        <p>
+          You can raise a complaint with the
+          <a href="https://www.cnil.fr/fr/adresser-une-plainte">CNIL</a> or your competent
+          supervisory authority. This draft is not a certification of GDPR compliance; qualified
+          legal review is recommended for unresolved roles and bases.
+        </p>
+      </section>
+      <section id="updates">
+        <h2>9. Policy updates and effective date</h2>
+        <p>
+          Technical audit date: 10 October 2026, released application 0.5.0. The effective date will
+          be recorded after the remaining owner/host arrangements are reviewed and the completed
+          notice is published. Future material data-flow changes require an updated dated notice. No
+          unpublished policy is presented as already in force.
+        </p>
+        <p>
+          See the
+          <a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/privacy-audit.md"
+            >source-level audit</a
+          >,
+          <a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/code-signing-policy.md"
+            >Code signing policy</a
           >
-          explains its processing, retention criteria, rights contacts and international transfers,
-          including processing in the United States. An exact Pages log retention period has not
-          been verified. MineDock cannot promise to delete infrastructure logs controlled by GitHub.
+          and <a href="../licenses/">licenses and credits</a>. Minecraft resources are not
+          relicensed by this notice.
         </p>
-        <p>
-          TODO — owner to review the publisher's applicable legal bases, roles and arrangements for
-          site delivery/security. GitHub's processing must not be described as zero collection or
-          assigned an invented retention period.
-        </p>
-      </section>
-      <section id="cookies">
-        <h2>Cookies and browser storage</h2>
-        <p>
-          The site source sets no cookies and uses no local storage, advertising identifiers,
-          fingerprinting or tracking pixels. No consent banner is added for technologies the site
-          does not use. Host response behavior must also be checked on the live GitHub Pages
-          deployment before launch.
-        </p>
-        <p>
-          Cookies used by external services after you follow a link belong to those services. If
-          optional tracking is introduced later, this page and any required consent controls must be
-          updated before it loads.
-        </p>
-      </section>
-      <section>
-        <h2>Links, reports and search engines</h2>
-        <p>
-          GitHub documentation, issues and downloads open only when you follow links. Public issue
-          reports can expose your username and what you submit. Avoid posting private logs, player
-          data or credentials. Consult GitHub's own policy before using its services.
-        </p>
-        <p>
-          Search Console is not connected yet. Planned ownership verification uses a static HTML
-          file or meta tag, not a visitor analytics script. Search engines may crawl public pages
-          independently. No Google Analytics or Tag Manager is included.
-        </p>
-        <p>
-          TODO — before adding an email contact, confirm who receives messages, their purpose,
-          lawful basis where required, and retention period or criteria. No mailbox or email
-          processing is claimed to exist yet.
-        </p>
-      </section>
-      <section>
-        <h2>Your rights and contact</h2>
-        <p>
-          Where applicable, you may request access, correction, erasure, restriction, portability or
-          object to processing; rights depend on the processing and legal conditions. You may
-          complain to the <a href="https://www.cnil.fr/fr/adresser-une-plainte">CNIL</a> or your
-          competent supervisory authority.
-        </p>
-        <p>
-          TODO — owner to provide a private contact for publisher-controlled processing. Do not send
-          a rights request through a public issue. For GitHub-controlled data, use GitHub's privacy
-          contacts; MineDock cannot exercise your account rights for you.
-        </p>
-      </section>
-      <section>
-        <h2>The desktop application is separate</h2>
-        <p>
-          MineDock stores application data locally, but optional downloads and integrations contact
-          their respective providers. This website cannot read your local servers, SQLite database,
-          worlds, backups or inventories. See the
-          <a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/security.md"
-            >application security documentation</a
-          >
-          and
-          <a href="https://github.com/Bobydeluxe/MineDock/blob/main/docs/asset-policy.md"
-            >private game-resource policy</a
-          >
-          for those distinct flows.
-        </p>
-        <p>Prepared on 10 October 2026. This draft is not a certification of GDPR compliance.</p>
       </section>
     </main>
     <!-- SITE_FOOTER -->

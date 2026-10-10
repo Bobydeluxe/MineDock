@@ -39,6 +39,12 @@ English is the default. French, German, Spanish, Portuguese and Italian are bund
 
 Packages include Electron and its runtime; end users do not install Node or pnpm. Portable builds still store persistent data in your user profile. Current Windows/macOS packages are unsigned. Check the release notes and `SHA256SUMS.txt` for the package you download.
 
+### Code signing policy
+
+MineDock 0.5.0 Windows downloads are **unsigned**; the project has not been accepted by SignPath Foundation. [Code signing policy](docs/code-signing-policy.md) documents the public source, GitHub Actions builds, release provenance and maintainer roles. Bobydeluxe is the sole verified write/admin collaborator and proposed future signing approver. Each future signing release requires explicit human approval after enrollment; it is not automatically authorized by a workflow.
+
+The [desktop and website privacy audit](docs/privacy-audit.md) covers local player/server data, online providers, controls, deletion and security limits. The combined policy is prepared for `https://bobydeluxe.github.io/MineDock/privacy/`, **not yet live or suitable to submit as a working URL**. Public privacy contact: **bobydeluxe18@gmail.com**. Anonymous-publisher arrangements and publisher-controlled processing still require owner review; see [owner actions](docs/website-owner-actions.md). MIT covers original code, not Minecraft resources or other [third-party materials](docs/THIRD_PARTY_NOTICES.md).
+
 MineDock must stay open to supervise servers and run scheduled tasks. It stops servers gracefully when you close it. Downloads need Internet access; installed local servers can be administered offline. MineDock does not open firewall or router ports.
 
 ### Upgrade from 0.3.x

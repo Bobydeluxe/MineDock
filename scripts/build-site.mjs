@@ -7,6 +7,38 @@ const root = path.join(repository, 'dist/site');
 export const siteUrl = 'https://bobydeluxe.github.io/MineDock/';
 export const routes = ['', 'legal/', 'terms/', 'privacy/', 'licenses/'];
 
+export function validatePublication(publication, documents) {
+  const date = publication.reviewedOn;
+  const validDate =
+    typeof date === 'string' &&
+    /^\d{4}-\d{2}-\d{2}$/.test(date) &&
+    Number.isFinite(Date.parse(date)) &&
+    new Date(date).toISOString().slice(0, 10) === date;
+  const anonymousIndividual =
+    publication.publisherType === 'private-nonprofessional' &&
+    publication.identityPreference === 'anonymity';
+  if (
+    publication.approved !== true ||
+    !validDate ||
+    !['private-nonprofessional', 'professional-individual', 'company'].includes(
+      publication.publisherType,
+    ) ||
+    !['anonymity', 'public'].includes(publication.identityPreference) ||
+    (publication.identityPreference === 'anonymity' && !anonymousIndividual) ||
+    typeof publication.publicEmail !== 'string' ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(publication.publicEmail) ||
+    ['publisherStatus', 'privacyStatus', 'hostContactStatus'].some(
+      (key) => publication[key] !== 'approved',
+    ) ||
+    (anonymousIndividual && publication.hostIdentityDisclosureConfirmed !== true) ||
+    documents.some(({ html }) => /TODO|DRAFT|awaiting owner/i.test(html))
+  ) {
+    throw Error(
+      'PUBLICATION BLOCKED: publisher identity, privacy terms and host contacts need owner review. See docs/website-legal-checklist.md.',
+    );
+  }
+}
+
 export function metadata(html, route, production) {
   if (!production || route === '404.html') return '<meta name="robots" content="noindex,follow" />';
   const title = html.match(/<title>(.*?)<\/title>/s)?.[1];
@@ -47,18 +79,7 @@ export async function buildSite(production = false) {
       throw Error(
         'Production requires the exact GitHub configure-pages base_url + trailing slash; no custom domain is allowed.',
       );
-    if (
-      !publication.approved ||
-      !publication.reviewedOn ||
-      ['publisherStatus', 'privacyStatus', 'hostContactStatus'].some(
-        (key) => publication[key] !== 'approved',
-      ) ||
-      documents.some(({ html }) => /TODO|DRAFT|awaiting owner/i.test(html))
-    ) {
-      throw Error(
-        'PUBLICATION BLOCKED: publisher identity, privacy terms and host contacts need owner review. See docs/website-legal-checklist.md.',
-      );
-    }
+    validatePublication(publication, documents);
   }
   // Fixed disposable output, verified inside the workspace before recursive cleanup.
   if (root !== path.join(repository, 'dist', 'site')) throw Error('Unsafe site output');

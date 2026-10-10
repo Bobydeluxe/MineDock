@@ -3,7 +3,7 @@ import { readFile, readdir, lstat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { metadata, routes, siteUrl } from './build-site.mjs';
+import { metadata, routes, siteUrl, validatePublication } from './build-site.mjs';
 
 const repository = fileURLToPath(new URL('../', import.meta.url));
 const root = path.join(repository, 'dist/site');
@@ -12,6 +12,47 @@ const packageConfig = JSON.parse(await readFile(path.join(repository, 'package.j
 let checks = 0;
 function check(condition, message) {
   assert.ok(condition, message);
+  checks++;
+}
+// Exercise the production gate in memory; never approve the actual source or export a fake launch.
+const reviewedFixture = {
+  approved: true,
+  reviewedOn: '2026-10-10',
+  publicEmail: 'review@example.org',
+  publisherType: 'private-nonprofessional',
+  identityPreference: 'anonymity',
+  hostIdentityDisclosureConfirmed: true,
+  publisherStatus: 'approved',
+  privacyStatus: 'approved',
+  hostContactStatus: 'approved',
+};
+validatePublication(reviewedFixture, [{ html: '<h1>Reviewed fixture</h1>' }]);
+checks++;
+for (const override of [
+  { approved: false },
+  { approved: 'true' },
+  { publicEmail: null },
+  { publicEmail: 'invalid-email' },
+  { publisherType: undefined },
+  { identityPreference: undefined },
+  { publisherType: 'company' },
+  { reviewedOn: null },
+  { reviewedOn: '2026-02-30' },
+  { reviewedOn: '10 October 2026' },
+  { hostIdentityDisclosureConfirmed: false },
+  { hostIdentityDisclosureConfirmed: 'true' },
+  { publisherStatus: 'awaiting-owner' },
+  { privacyStatus: 'awaiting-owner' },
+  { hostContactStatus: 'awaiting-verification' },
+]) {
+  assert.throws(
+    () => validatePublication({ ...reviewedFixture, ...override }, [{ html: '<h1>Fixture</h1>' }]),
+    /PUBLICATION BLOCKED/,
+  );
+  checks++;
+}
+for (const html of ['TODO: required field', 'DRAFT notice', 'awaiting owner']) {
+  assert.throws(() => validatePublication(reviewedFixture, [{ html }]), /PUBLICATION BLOCKED/);
   checks++;
 }
 check(
@@ -67,6 +108,7 @@ for (const [file, html] of documents) {
   descriptions.add(description);
   for (const legal of ['legal', 'terms', 'privacy', 'licenses'])
     check(html.includes(`href="/MineDock/${legal}/"`), 'Shared legal footer');
+  check(html.includes('href="/MineDock/#code-signing-policy"'), 'Shared Code signing policy link');
   for (const image of html.matchAll(/<img\b[^>]*>/g))
     check(/\balt="[^"]*"/.test(image[0]), 'Every image has an alt attribute');
   if (production && route !== '404.html') {
@@ -122,6 +164,52 @@ check(
   home.includes('NEW IN MINEDOCK 0.5.0') && !home.includes('unreleased'),
   'Released application version label',
 );
+check(home.includes('id="code-signing-policy"'), 'Homepage Code signing policy section');
+const privacy = documents.get(path.join(root, 'privacy/index.html'));
+for (const id of [
+  'responsibility',
+  'local-data',
+  'network',
+  'telemetry',
+  'retention',
+  'security',
+  'website',
+  'rights',
+  'updates',
+])
+  check(privacy.includes(`id="${id}"`), 'Combined privacy section: ' + id);
+check(
+  (privacy.match(/scope="row"/g) ?? []).length === 12,
+  'Twelve documented network feature groups',
+);
+for (const text of [
+  'bobydeluxe18@gmail.com',
+  'Automatic checks default off',
+  'online UUID',
+  'SHA-512',
+  'api.mcstatus.io',
+  '127.0.0.1',
+  'not TLS',
+  'no universal offline switch',
+  'uninstaller is configured to retain',
+  'not encrypted by MineDock',
+])
+  check(privacy.includes(text), 'Audited privacy fact: ' + text);
+check(
+  /role="region"[^>]*aria-label="Application network requests and controls"[^>]*tabindex="0"/.test(
+    privacy,
+  ),
+  'Network table has a named keyboard-focusable scroll region',
+);
+for (const route of ['terms', 'licenses']) {
+  const html = documents.get(path.join(root, route, 'index.html'));
+  check(
+    !/unreleased 0\.5\.0|0\.5\.0 unreleased|currently public application is version 0\.4\.1/i.test(
+      html,
+    ),
+    'Legal page does not mislabel released version: ' + route,
+  );
+}
 const sitemap = await readFile(path.join(root, 'sitemap.xml'), 'utf8');
 const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 check(
