@@ -199,11 +199,25 @@ export async function specialGeometry(
         faces: faces(texture, pole, image.width, image.height),
       });
     }
+    const presentation = frontDisplay(display, {
+      gui: { rotation: [15, -25, 0], scale: shield ? [0.65, 0.65, 0.65] : [0.3, 0.3, 0.3] },
+    });
+    if (!shield) {
+      // Entity banner dimensions are larger than a block. Fit the entire static cloth/pole
+      // in the preview instead of cropping it with block-sized GUI transforms.
+      const gui = obj(presentation.gui),
+        scale = Array.isArray(gui.scale) ? gui.scale : [1, 1, 1];
+      const largest = Math.max(...scale.map((n) => Math.abs(Number(n))));
+      if (!Number.isFinite(largest) || largest === 0) throw new Error('Invalid banner scale');
+      presentation.gui = {
+        ...gui,
+        scale: scale.map((n) => Number(n) * Math.min(1, 0.3 / largest)),
+        translation: [0, 0, 0],
+      };
+    }
     return {
       model: {
-        display: frontDisplay(display, {
-          gui: { rotation: [15, -25, 0], scale: shield ? [0.65, 0.65, 0.65] : [0.3, 0.3, 0.3] },
-        }),
+        display: presentation,
         gui_light: 'front',
         elements,
       },

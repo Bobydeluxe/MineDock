@@ -885,7 +885,7 @@ export class ItemAssets {
     const resources = await this.resources(context, version, language);
     const key = hash(
       JSON.stringify([
-        'renderer-8',
+        'renderer-9',
         'java',
         version,
         id,
