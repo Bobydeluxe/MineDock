@@ -1,6 +1,30 @@
 # MineDock validation
 
-## Unreleased 0.5.0 item-image enhancement — 10 October 2026
+## Current unreleased 0.5.0 private resources — 10 October 2026
+
+Application inputs: `aa4f141475ab516205b827daa045da5b2dcbd94b`; native build/test source: `6d5b528a7c194c36ed4aae9cb463629973e29783`; later world-test wait: `ad0696a44ea5a3ead1e1523a7ec9bc8ad6f2cff6`. Packaged application inputs remain identical. **NOT RELEASED, pending owner approval. Public downloads remain 0.4.1.** No merge, tag or executable replacement. The sections below retain historical source-specific evidence.
+
+- `pnpm lint`, `pnpm typecheck`, `pnpm build`: passed; existing renderer chunk warning remains.
+- `pnpm test`: **286 passed, 5 platform skips**, 291 cases / 45 files. Focused image tests: **37 passed**.
+- `pnpm test:ui`: **32 passed** locally, including actual Electron main/preload/core, no installed game, explicit download via original-art QA HTTP transport, private offline cache, a licensed installed QA mod, six languages, dark/light and 200% DPI. The owned real-art test also passes locally.
+- Private real-resource probes: Java **1.20.1 / 1.21.1 / 1.21.4 / 26.3**, registries **1,255 / 1,333 / 1,385 / 1,658**; ready **21/33 / 22/33 / 27/33 / 28/33**, total **98/132**. **Six actual Adorn MIT models pass**. This is not exhaustive registry coverage.
+- Final Windows packaged: **16 passed**, no skips (7.0m). Later world-test waiting also passes both packaged world journeys (16.9s), retaining backup/file/journal checks.
+- Private real-resource cache: **223 files / 124,261,787 bytes (~118.5 MiB)** including four official source archives and Adorn; **200 warm requests in 130 ms**. Purge/offline/navigation tests pass.
+- Website: **version 9 deployed**, source `7d92aea3a7cbcc3e05dfa0fbc8780513bc6e4d28`, deployment `appgdep_6aca3b407e0c8191baf52564dc360ba4`. Local and public checks pass at five widths, seven native image hashes match and 13 download URLs return HTTP 200/nonzero size. All 20 public 0.4.1 assets retain their prior sizes/digests.
+- Fourteen refreshed native captures: disclosed saved NBT, private verified official images, actual stored head profile, separate Adorn MIT item; real isolated authorized Paper world controls. The owner explicitly approved public interface screenshots on 10 October 2026; original game resources remain private and are not relicensed. No multiplayer gameplay is claimed.
+
+[Source validation](https://github.com/Bobydeluxe/MineDock/actions/runs/38054417292) and [all six native targets](https://github.com/Bobydeluxe/MineDock/actions/runs/38053254208) pass. Native Windows x64 required one retry after the old five-second world-dialog assertion expired; its retry passes. The longer world-test wait is independently verified locally and in subsequent source CI. Earlier high-DPI virtual-runner geometry and mod-transaction timing failures were corrected in tests without changing application inputs.
+
+| Current CI evidence                           | Actual result                                                                                                                                                                    |
+| --------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Source checks, both branch/PR runs at 54a81a5 | Lint, types, unit, build pass; **286 unit passes / 5 OS skips**, **31 UI passes / 1 private owned-game skip** (8.2m)                                                             |
+| Windows and Linux, x64 and ARM64              | Each: **286 unit passes / 5 OS skips**, **15 packaged passes / 1 private owned-game skip**                                                                                       |
+| macOS Intel and Apple Silicon                 | Each: **287 unit passes / 4 OS skips**, **14 packaged passes / 2 explicit skips** (private game resources and Bedrock directory import; no native dedicated server distribution) |
+| Review artifacts                              | **12 native packages**, GitHub archive digests/package SHA-256/sizes verified; **six pinned-publisher updater metadata signatures** verified                                     |
+
+[Machine-readable evidence](validation-records/0.5.0-remote-item-assets.json), [18 package/metadata SHA-256 sums](validation-records/0.5.0-remote-item-assets-SHA256SUMS.txt), [resource/rights coverage matrix](asset-policy.md), [native gallery](screenshots/player-world-050/README.md), [before/after](design/remote-item-assets-050/README.md), [exact real probes](validation-records/0.5.0-remote-item-probes.json). OS publisher signing/notarization remains unavailable; updater metadata signatures are a separate integrity check. No SQLite migration was added by this image enhancement. Earlier Windows upgrade evidence still targets the recorded older administration candidate, not these current image binaries. No public 0.5.0 update/feed replay is claimed.
+
+## Historical local-client-only enhancement — superseded by private remote resources
 
 Public downloads remain **0.4.1**. The existing [PR #9](https://github.com/Bobydeluxe/MineDock/pull/9) adds exact-version item images and a visual picker. No merge, tag or release is authorized by this enhancement. These results supersede the earlier generic-icon gallery; historical native upgrade and Minecraft command checks below retain their original source hashes.
 
@@ -24,7 +48,7 @@ The [current six-platform native matrix](https://github.com/Bobydeluxe/MineDock/
 | ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | [Source validation](https://github.com/Bobydeluxe/MineDock/actions/runs/38043502264) | 265 unit passes / 5 platform skips; **30 UI passes / 1 owned-client skip** (7.5m); branch and PR checks both succeed                                                           |
 | Windows x64 / ARM64, Linux x64 / ARM64                                               | Each: **265 unit passes / 5 platform skips**, **14 packaged passes / 1 owned-client skip**                                                                                     |
-| macOS Intel / Apple Silicon                                                          | Each: **266 unit passes / 4 platform skips**, **13 packaged passes / 2 explicit skips** (owned client and existing unsupported directory import)                               |
+| macOS Intel / Apple Silicon                                                          | Each: **266 unit passes / 4 platform skips**, **13 packaged passes / 2 explicit skips** (owned client and Bedrock directory import; no macOS dedicated-server distribution)    |
 | Native artifacts                                                                     | **12 packages**, downloaded with verified archive digest, package sizes/SHA-256 and **six pinned-publisher updater metadata signatures**; GitHub Actions review artifacts only |
 
 [Current machine-readable evidence](validation-records/0.5.0-item-assets.json) and [current candidate SHA-256 sums](validation-records/0.5.0-item-assets-SHA256SUMS.txt) identify every package. The initial macOS run exposed a QA-root issue: `/var` is a system symlink. The test now canonicalizes its temporary root with `realpath`, retaining production rejection of linked client paths. The 16 focused tests pass after correction, and all six corrected jobs pass. The owned-client case passes locally in source and packaged Electron; CI deliberately supplies no private game assets.

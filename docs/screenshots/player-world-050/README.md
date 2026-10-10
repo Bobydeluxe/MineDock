@@ -1,22 +1,28 @@
 # Native administration gallery — unreleased 0.5.0
 
-These ten PNGs come from the actual compiled Electron application, real preload/core/SQLite and real local files. **They are a development preview, not the public 0.4.1 download or multiplayer gameplay.** [Hashes and per-image provenance](provenance.json).
+Fourteen captures use the actual compiled Electron app, preload/core/SQLite and local files. **Development preview, not the public 0.4.1 app or multiplayer gameplay.** [Per-image SHA-256 and provenance](provenance.json).
 
-| View                                           | Source                                                                                                                                                         |
-| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [Players](players.png)                         | Isolated stopped QA profile; actual usercache/NBT files                                                                                                        |
-| [Player inventory profile](player-profile.png) | Synthetic saved Java DataVersion 5023 read by the production parser; 27 main + 9 hotbar, armor, offhand and Ender Chest slots; verified local Java 26.3 images |
-| [Slot inspection](inventory-slot.png)          | Actual fixture item ID/count/components and guarded offline controls                                                                                           |
-| [Ender Chest](ender-chest.png)                 | Actual 27-slot saved NBT section                                                                                                                               |
-| [Selected-player actions](group-actions.png)   | Exact QA selection/preview; execution unavailable while stopped                                                                                                |
-| [Visual item picker](item-picker.png)          | Exact Java 26.3 vanilla registry, localized names and real local client images; search and selected-item preview                                               |
-| [Light profile](player-profile-light.png)      | Same real saved fixture; light appearance                                                                                                                      |
-| [Compact profile](player-profile-compact.png)  | Native 900 × 760 viewport; internally scrolling profile without grid overflow                                                                                  |
-| [World controls](world-controls.png)           | Real isolated Paper 1.21.11 build 132 / Java 21, personally accepted EULA, actual RCON reads, no added plugins or connected players                            |
-| [Gamerules](gamerules.png)                     | Actual native 1.21.11 renamed rule values read from that server                                                                                                |
+| View                                    | Actual source                                                                                                              |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| [Players](players.png)                  | Isolated stopped QA profile, actual usercache/NBT                                                                          |
+| [Inventory profile](player-profile.png) | Synthetic saved DataVersion 5023, 27+9 slots, armor/offhand/Ender Chest; private official Java 26.3 images                 |
+| [Item details](inventory-slot.png)      | Actual saved fixture ID/count/components and guarded controls                                                              |
+| [Head](head.png)                        | Actual stored official texture property for a fixed QA UUID, never the viewer's skin; legacy skin normalized               |
+| [Banner](banner.png)                    | Saved white base, red top stripe and blue border in order                                                                  |
+| [Shield](shield.png)                    | Saved red base and ordered patterns; front panel preview                                                                   |
+| [Mod item](mod-item.png)                | Actual Adorn 5.0.1-fabric MIT oak-table model, exact Java 1.20.1 private resources; observed ID in synthetic NBT           |
+| [Picker](item-picker.png)               | Exact Java 26.3 registry and localized/private images, paged selection                                                     |
+| [Ender Chest](ender-chest.png)          | Actual saved 27-slot section                                                                                               |
+| [Group preview](group-actions.png)      | Exact QA selection, execution disabled while stopped                                                                       |
+| [Light](player-profile-light.png)       | Same disclosed saved fixture, light appearance                                                                             |
+| [Compact](player-profile-compact.png)   | Native 900×760 viewport, internal scrolling                                                                                |
+| [World controls](world-controls.png)    | Real isolated Paper 1.21.11 build 132 / Java 21, personally accepted EULA, actual RCON reads, no connected players/plugins |
+| [Gamerules](gamerules.png)              | Actual native renamed 1.21.11 rule values                                                                                  |
 
-Most captures use a native 1440 × 960 content viewport. Minecraft item images are derived locally from the owner's Modrinth Java 26.3 client, whose complete SHA-1 matches official Mojang metadata. Unknown/custom items retain an explicitly unavailable image and their exact IDs. No extracted source textures or client JARs are distributed. These screenshots document the application's interface; they do not license the underlying game artwork under MIT. See the [asset policy](../../asset-policy.md).
+Most views use 1440×960 native content; the Adorn detail uses 1800×1200. Downloaded sources are private, exact-version/hash verified and neither installed nor executed. No raw texture/JAR is distributed. Game thumbnails are not MIT assets; see [rights and coverage](../../asset-policy.md).
 
-Saved health/items/session values are explicitly synthetic QA data, never evidence of a live client. DataVersion 5023 is deliberately read-only for file edits. Existing supported-version edit/restore tests run separately. Current weather remains unreadable and no toggle is inferred from invented state.
+The owner explicitly approved publication of these whole-interface captures on GitHub and the existing MineDock site on 10 October 2026. MineDock 0.5.0 itself remains unreleased.
 
-Reproduce with `pnpm build`, set `MINEDOCK_ITEM_ASSET_QA_CLIENT` to your owned Java 26.3 client JAR, then run `node scripts/capture-player-world.mjs --eula-accepted --world-profile <owned-isolated-validation-profile>`. The world profile is produced by `scripts/validate-player-world.mjs` using an already personally accepted EULA and verified Paper/Java inputs. No EULA is accepted implicitly. The helper stops its own world and removes only its own temporary player fixture. Before/after review images are isolated in [clearly labeled design evidence](../../design/item-assets-050/README.md).
+Saved health/items/session values are synthetic QA, not live player evidence. Future DataVersion 5023 remains read-only; supported-version edit/restore transactions are tested separately. Current weather is unavailable rather than inferred.
+
+Reproduce after build with node scripts/capture-player-world.mjs --official-private --eula-accepted --world-profile <owned-isolated-profile>. This requires actual Java ownership and personally accepted terms, not implicit EULA acceptance. Optional local-client capture remains available. The helper stops only its own server and removes only its temporary fixture. [Historical before/after](../../design/item-assets-050/README.md).

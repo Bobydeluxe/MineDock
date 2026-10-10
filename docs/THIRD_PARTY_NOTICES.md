@@ -1,7 +1,5 @@
 # Third-party notices
 
-Minecraft textures/models and private downloaded mod/pack art are not bundled dependencies and are not relicensed under MIT. Review screenshots retain underlying rights. [Sources and rights](asset-policy.md).
-
 Dependencies bundled into MineDock. Electron and Chromium license files are also included by the Electron distribution.
 
 ## @codemirror/autocomplete 6.20.3
