@@ -41,7 +41,8 @@ test('real Electron world journey: filesystem metadata, safety backup, atomic du
     await page.getByLabel('New world folder name', { exact: true }).fill('duplicate');
     await page.getByLabel('World name', { exact: true }).fill('world');
     await page.getByRole('dialog').getByRole('button', { name: 'Continue', exact: true }).click();
-    await expect(page.getByRole('dialog')).toHaveCount(0);
+    // Verified safety backups can exceed five seconds on busy native CI disks.
+    await expect(page.getByRole('dialog')).toHaveCount(0, { timeout: 30_000 });
     expect(
       await readFile(path.join(f.server.path, 'duplicate', 'region', 'r.0.0.mca'), 'utf8'),
     ).toBe('preserve this payload');
@@ -52,7 +53,7 @@ test('real Electron world journey: filesystem metadata, safety backup, atomic du
     await copy.getByRole('button', { name: 'Use this world', exact: true }).click();
     await page.getByLabel('World name', { exact: true }).fill('duplicate');
     await page.getByRole('dialog').getByRole('button', { name: 'Continue', exact: true }).click();
-    await expect(page.getByRole('dialog')).toHaveCount(0);
+    await expect(page.getByRole('dialog')).toHaveCount(0, { timeout: 30_000 });
     await expect(copy).toContainText('Active world');
     expect(await readFile(path.join(f.server.path, 'server.properties'), 'utf8')).toContain(
       'level-name=duplicate',
