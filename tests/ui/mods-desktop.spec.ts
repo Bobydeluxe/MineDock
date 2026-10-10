@@ -102,6 +102,7 @@ test('real Electron mods: search, dependency installation, updates, rollback, pi
     await expect(review).toContainText('Test dependency');
     await expect(review).toContainText('Optional — not installed');
     await review.getByRole('button', { name: 'Apply mods and required dependencies' }).click();
+    await expect(review).toBeHidden({ timeout: 30000 });
     await expect(mods.getByRole('tab', { name: 'Installed', exact: true })).toHaveAttribute(
       'aria-selected',
       'true',

@@ -109,6 +109,13 @@ test('Electron: no installed game, explicit official download through QA transpo
         native(base + '/?resource=' + encodeURIComponent(String(input)), init);
     }, base);
     const page = await desktop.firstWindow();
+    // Xvfb's default screen becomes a very small logical desktop at 200% scaling.
+    // Pin content geometry independently of that screen while retaining real devicePixelRatio=2.
+    await desktop.evaluate(({ BrowserWindow }) => {
+      BrowserWindow.getAllWindows()[0]!.setContentSize(1440, 960);
+    });
+    await expect(page.locator('#root')).not.toBeEmpty();
+    expect(await page.evaluate(() => devicePixelRatio)).toBe(2);
     await page
       .getByRole('navigation', { name: 'Servers', exact: true })
       .getByRole('button', { name: /Integration/ })
