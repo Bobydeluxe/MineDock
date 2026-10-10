@@ -141,6 +141,45 @@
   color: #b49bea;
   font-size: 13px;
 }
+.item-glint {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    130deg,
+    transparent 20%,
+    #bb92ec80 40%,
+    #e6c8ffb0 50%,
+    transparent 65%
+  );
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mix-blend-mode: screen;
+}
+.item-download-consent {
+  flex-basis: 100%;
+  padding: 6px 0;
+}
+.item-download-consent summary {
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 12px;
+}
+.item-download-consent label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 10px 0;
+  font-size: 12px;
+}
+.item-download-consent input[type='checkbox'] {
+  width: auto;
+  flex-shrink: 0;
+}
+.item-download-consent .button {
+  margin: 4px 8px 4px 0;
+}
 .item-durability {
   position: absolute;
   left: 10%;

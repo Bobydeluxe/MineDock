@@ -1,7 +1,9 @@
 import { playerData } from './player-data';
 import { readPlayerNbt, writePlayerNbt, type NbtTag } from '../../packages/security/player-nbt';
 /** Synthetic saved inventory for UI QA, not gameplay. Item images are resolved separately. */
-export function itemPlayerData(): Buffer {
+export function itemPlayerData(specials?: {
+  headProperties?: { name: string; value: string }[];
+}): Buffer {
   const root = readPlayerNbt(playerData(5023)),
     children = root.value as NbtTag[];
   const inventory = children.find((t) => t.name === 'Inventory')!.value as NbtTag[];
@@ -34,6 +36,80 @@ export function itemPlayerData(): Buffer {
     ]),
   );
   const ender = children.find((t) => t.name === 'EnderItems')!.value as NbtTag[];
+  if (specials) {
+    const patterns: NbtTag = {
+      type: 9,
+      name: 'minecraft:banner_patterns',
+      subtype: 10,
+      value: [
+        ['minecraft:stripe_top', 'red'],
+        ['minecraft:border', 'blue'],
+      ].map(([pattern, color]) => ({
+        type: 10,
+        value: [
+          { type: 8, name: 'pattern', value: pattern! },
+          { type: 8, name: 'color', value: color! },
+        ],
+      })),
+    };
+    inventory.push(
+      stack('white_banner', 1, 13, [patterns]),
+      stack('shield', 1, 14, [{ type: 8, name: 'minecraft:base_color', value: 'red' }, patterns]),
+      stack('skeleton_skull', 1, 16),
+      stack(
+        'player_head',
+        1,
+        17,
+        specials.headProperties
+          ? [
+              {
+                type: 10,
+                name: 'minecraft:profile',
+                value: [
+                  {
+                    type: 9,
+                    name: 'properties',
+                    subtype: 10,
+                    value: specials.headProperties.map((p) => ({
+                      type: 10,
+                      value: [
+                        { type: 8, name: 'name', value: p.name },
+                        { type: 8, name: 'value', value: p.value },
+                      ],
+                    })),
+                  },
+                ],
+              },
+            ]
+          : [],
+      ),
+      stack('crossbow', 1, 18, [
+        {
+          type: 9,
+          name: 'minecraft:charged_projectiles',
+          subtype: 10,
+          value: [
+            {
+              type: 10,
+              value: [
+                { type: 8, name: 'id', value: 'minecraft:firework_rocket' },
+                { type: 3, name: 'count', value: 1 },
+              ],
+            },
+          ],
+        },
+      ]),
+      stack('potion', 1, 19, [
+        {
+          type: 10,
+          name: 'minecraft:potion_contents',
+          value: [{ type: 3, name: 'custom_color', value: 0x00cc55 }],
+        },
+      ]),
+      stack('bow', 1, 20),
+      stack('bundle', 1, 21),
+    );
+  }
   ender.push(stack('diamond', 12, 0), stack('oak_log', 32, 1));
   return writePlayerNbt(root);
 }

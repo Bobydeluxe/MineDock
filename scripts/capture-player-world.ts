@@ -8,6 +8,9 @@ import { itemPlayerData } from '../tests/fixtures/item-player-data';
 import { ItemAssets } from '../packages/items/assets';
 import { AppCore } from '../packages/core/app';
 import { PRODUCT, type Api } from '../packages/domain/types';
+import { fetchApproved } from '../packages/minecraft/downloads';
+import { playerData } from '../tests/fixtures/player-data';
+import { readPlayerNbt, writePlayerNbt, type NbtTag } from '../packages/security/player-nbt';
 
 const outputIndex = process.argv.indexOf('--output');
 const output = path.resolve(
@@ -58,20 +61,41 @@ await writeFile(
 );
 const dataFile = path.join(f.server.path, 'world/players/data', playerUuid + '.dat');
 await mkdir(path.dirname(dataFile), { recursive: true });
-await writeFile(dataFile, itemPlayerData());
+let headProperties: { name: string; value: string }[] | undefined;
+if (process.argv.includes('--official-private')) {
+  const response = await fetchApproved(
+    'https://sessionserver.mojang.com/session/minecraft/profile/069a79f444e94726a5befca90e38aaf5',
+    AbortSignal.timeout(15000),
+    {},
+    [],
+    (u) => u.hostname === 'sessionserver.mojang.com',
+  );
+  const profile = (await response.json()) as {
+    id: string;
+    properties: { name: string; value: string }[];
+  };
+  if (profile.id !== '069a79f444e94726a5befca90e38aaf5')
+    throw new Error('Official QA head profile mismatch');
+  headProperties = profile.properties.filter(
+    (p) => p.name === 'textures' && p.value.length <= 12000,
+  );
+}
+await writeFile(dataFile, itemPlayerData({ headProperties }));
 const ownedClient = process.env.MINEDOCK_ITEM_ASSET_QA_CLIENT;
-if (!ownedClient)
+if (!ownedClient && !process.argv.includes('--official-private'))
   throw new Error('An owned exact 26.3 client is required for current icon screenshots.');
 const itemAssets = new ItemAssets(path.join(f.root, 'cache/item-assets'));
-await itemAssets.importClient(
-  '26.3',
-  ownedClient,
-  process.env.APPDATA ? path.join(process.env.APPDATA, 'ModrinthApp/meta/assets') : undefined,
-);
+if (process.argv.includes('--official-private')) await itemAssets.downloadOfficial('26.3');
+else
+  await itemAssets.importClient(
+    '26.3',
+    ownedClient!,
+    process.env.APPDATA ? path.join(process.env.APPDATA, 'ModrinthApp/meta/assets') : undefined,
+  );
 await itemAssets.registry('26.3');
 itemAssets.close();
 const qa =
-  'Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Exact Java 26.3 client from the owner’s Modrinth installation, verified against official Mojang SHA-1, supplies local images. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated.';
+  'Actual Electron, preload, SQLite and bounded Java NBT reader; synthetic saved player-data fixture (DataVersion 5023), not gameplay. Private exact Java 26.3 resources verified against official Mojang SHA-1 supply images. No game/launcher installation or execution. Future NBT stays read-only. Server stopped; no command success or live inventory is fabricated. Head item includes the actual texture property returned by the official session server for fixed QA UUID 069a79f444e94726a5befca90e38aaf5, never the viewer’s skin.';
 const desktop = await electron.launch({
   args: ['.', '--force-device-scale-factor=1'],
   env: { ...env, MINEDOCK_DATA_DIR: f.root, MINEDOCK_TEST: '1' },
@@ -114,6 +138,20 @@ try {
     .getByRole('dialog', { name: 'Slot details · Inventory 1', exact: true })
     .getByRole('button', { name: 'Close', exact: true })
     .click();
+  for (const [slot, name] of [
+    [14, 'banner'],
+    [15, 'shield'],
+    [18, 'head'],
+  ] as const) {
+    await profile.getByRole('button', { name: new RegExp('^Inventory ' + slot + ' ·') }).click();
+    const detail = page.getByRole('dialog', {
+      name: 'Slot details · Inventory ' + slot,
+      exact: true,
+    });
+    await expect(detail.locator('.item-visual.large img')).toHaveJSProperty('naturalWidth', 64);
+    await capture(page, name, qa);
+    await detail.getByRole('button', { name: 'Close', exact: true }).click();
+  }
   await profile.locator('.inventory-grid.ender').scrollIntoViewIfNeeded();
   await expect(profile.locator('.inventory-grid.ender img').first()).toHaveJSProperty(
     'naturalWidth',
@@ -136,9 +174,11 @@ try {
   await group.locator('.item-catalog-list').evaluate((e) => {
     e.scrollTop = 0;
   });
-  await group.locator('.dialog-body').evaluate(e=>{e.scrollTop=0;});
-  await capture(page,'item-picker',qa);
-  await group.getByLabel('Search items',{exact:true}).fill('diamond_sword');
+  await group.locator('.dialog-body').evaluate((e) => {
+    e.scrollTop = 0;
+  });
+  await capture(page, 'item-picker', qa);
+  await group.getByLabel('Search items', { exact: true }).fill('diamond_sword');
   await expect(group.getByRole('button', { name: 'Review action', exact: true })).toBeDisabled();
   await capture(page, 'group-actions', qa);
   await group.getByRole('button', { name: 'Close', exact: true }).click();
@@ -180,6 +220,74 @@ try {
 } finally {
   await desktop.close();
   await f.cleanup();
+}
+
+if (process.argv.includes('--official-private')) {
+  const modFixture = await fixture();
+  const modServer = {
+    ...modFixture.server,
+    name: 'Mod resource preview QA',
+    engine: 'fabric' as const,
+    version: '1.20.1',
+    minecraftVersion: '1.20.1',
+  };
+  modFixture.repo.saveServer(modServer);
+  modFixture.repo.saveSettings({ ...modFixture.repo.settings(), onboarded: true, theme: 'dark' });
+  await writeFile(
+    path.join(modServer.path, 'usercache.json'),
+    JSON.stringify([{ name: 'Friend', uuid: playerUuid }]),
+  );
+  const nbt = readPlayerNbt(playerData(3465, false)),
+    inventory = (nbt.value as NbtTag[]).find((t) => t.name === 'Inventory')!.value as NbtTag[];
+  inventory.push({
+    type: 10,
+    value: [
+      { type: 8, name: 'id', value: 'adorn:oak_table' },
+      { type: 1, name: 'Count', value: 1 },
+      { type: 1, name: 'Slot', value: 9 },
+      { type: 10, name: 'tag', value: [] },
+    ],
+  });
+  const file = path.join(modServer.path, 'world/playerdata', playerUuid + '.dat');
+  await mkdir(path.dirname(file), { recursive: true });
+  await writeFile(file, writePlayerNbt(nbt));
+  const service = new ItemAssets(path.join(modFixture.root, 'cache/item-assets'));
+  await service.downloadOfficial('1.20.1');
+  await service.downloadMod(modServer, '1.20.1', 'E6FUtRJh', '67OSh58o');
+  await service.registry('1.20.1');
+  service.close();
+  const desktop = await electron.launch({
+    args: ['.'],
+    env: { ...env, MINEDOCK_DATA_DIR: modFixture.root, MINEDOCK_TEST: '1' },
+  });
+  try {
+    const page = await desktop.firstWindow();
+    await desktop.evaluate(({ BrowserWindow }) =>
+      BrowserWindow.getAllWindows()[0]!.setContentSize(1440, 960),
+    );
+    await page
+      .getByRole('navigation', { name: 'Servers', exact: true })
+      .getByRole('button', { name: /Mod resource preview QA/ })
+      .click();
+    await page
+      .getByRole('navigation', { name: 'Server details' })
+      .getByRole('button', { name: 'Players', exact: true })
+      .click();
+    await page.getByRole('button', { name: 'Player details', exact: true }).click();
+    await page
+      .getByRole('button', { name: 'Inventory 10 · adorn:oak_table × 1', exact: true })
+      .click();
+    const detail = page.getByRole('dialog', { name: 'Slot details · Inventory 10', exact: true });
+    await expect(detail.locator('.item-visual.large img')).toHaveJSProperty('naturalWidth', 64);
+    await capture(
+      page,
+      'mod-item',
+      'Actual Electron, synthetic saved 1.20.1 QA NBT, not gameplay. Real Adorn 5.0.1-fabric (Modrinth project E6FUtRJh, version 67OSh58o, MIT) archive is verified, read privately and never executed/installed. The actual adorn:oak_table model/textures render in 3D over exact official Minecraft 1.20.1 resources.',
+    );
+  } finally {
+    await desktop.close();
+    await modFixture.cleanup();
+  }
 }
 
 const index = process.argv.indexOf('--world-profile');

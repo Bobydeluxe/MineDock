@@ -225,14 +225,15 @@ export interface ItemCatalog {
 export interface ItemAssetContext {
   version: string;
   available: boolean;
-  source: 'local-client';
+  source: 'local-client' | 'official-private';
 }
 export interface ItemVisual {
   id: string;
   version: string;
   name: string;
   status: 'ready' | 'no-client' | 'custom' | 'unavailable';
-  source: 'local-client';
+  source: 'local-client' | 'official-private' | 'mod-resources' | 'resource-pack';
+  detail?: string;
   render?: 'flat' | 'layered' | 'model';
   url?: string;
 }

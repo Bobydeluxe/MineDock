@@ -258,6 +258,14 @@ export function createMockApi(): Api {
     itemCatalog: async () => ({ source: 'unavailable', version: '', complete: false, entries: [] }),
     itemAssetContext: async () => ({ version: '', available: false, source: 'local-client' }),
     itemAssetImport: async () => null,
+    itemAssetDownload: async () => {
+      throw new Error('Official resources require the desktop app.');
+    },
+    itemAssetPurge: async () => {},
+    itemAssetScope: async () => {},
+    itemAssetPack: async () => false,
+    itemAssetModChoices: async () => [],
+    itemAssetModDownload: async () => {},
     itemVisual: async (_id, item) => ({
       id: item.id,
       version: '',

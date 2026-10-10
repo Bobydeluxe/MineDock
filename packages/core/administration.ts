@@ -370,6 +370,7 @@ export class AdministrationService {
       server.minecraftVersion ?? server.version,
       this.core.repo.settings().language,
       ids,
+      server,
     );
   }
   async worldState(id: string, query = false): Promise<WorldControlsState> {

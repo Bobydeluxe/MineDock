@@ -137,6 +137,9 @@ export function ItemPicker({
               <span>
                 {item.name}
                 <small>{item.id}</small>
+                {item.namespace !== 'minecraft' && (
+                  <small className="item-mod-badge">{assetText('modded')}</small>
+                )}
                 <small>
                   {assetText(
                     item.compatible === false

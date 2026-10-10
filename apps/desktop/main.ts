@@ -422,11 +422,20 @@ function register(core: AppCore): void {
     return server.minecraftVersion ?? server.version;
   };
   handle('itemAssetContext', (value) => core.itemAssets.context(itemVersion(value)));
+  handle('itemAssetDownload', (value, consent) => {
+    z.object({ ownedJava: z.literal(true), acceptedEula: z.literal(true) })
+      .strict()
+      .parse(consent);
+    return core.itemAssets.downloadOfficial(itemVersion(value));
+  });
+  handle('itemAssetPurge', () => core.itemAssets.purge());
+  handle('itemAssetScope', (value) => core.itemAssets.scope(value === null ? null : id(value)));
   handle('itemVisual', (value, item) =>
     core.itemAssets.visual(
       itemVersion(value),
       visualRequest.parse(item),
       core.repo.settings().language,
+      core.repo.server(id(value)),
     ),
   );
   handle('itemAssetImport', async (value) => {
@@ -438,6 +447,43 @@ function register(core: AppCore): void {
     });
     if (result.canceled || !result.filePaths[0]) return null;
     return core.itemAssets.importClient(version, result.filePaths[0]);
+  });
+  handle('itemAssetPack', async (value, consent) => {
+    if (consent !== true) throw new Error('Resource usage consent is required');
+    const version = itemVersion(value),
+      server = core.repo.server(id(value));
+    const result = await dialog.showOpenDialog(window!, {
+      properties: ['openFile'],
+      filters: [{ name: 'Resource pack ZIP', extensions: ['zip'] }],
+    });
+    if (result.canceled || !result.filePaths[0]) return false;
+    await core.itemAssets.importPack(server, version, result.filePaths[0]);
+    return true;
+  });
+  handle('itemAssetModChoices', (value, project) =>
+    core.itemAssets.modChoices(
+      core.repo.server(id(value)),
+      itemVersion(value),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9_-]{1,80}$/)
+        .parse(project),
+    ),
+  );
+  handle('itemAssetModDownload', (value, project, version, consent) => {
+    if (consent !== true) throw new Error('Mod resource consent is required');
+    return core.itemAssets.downloadMod(
+      core.repo.server(id(value)),
+      itemVersion(value),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9_-]{1,80}$/)
+        .parse(project),
+      z
+        .string()
+        .regex(/^[a-zA-Z0-9]{8}$/)
+        .parse(version),
+    );
   });
   handle('worldControls', (value, query) =>
     core.administration.worldState(id(value), z.boolean().optional().parse(query)),
@@ -1152,6 +1198,8 @@ if (single)
       window.webContents.setWindowOpenHandler(({ url }) => {
         const allowed = [
           'https://www.minecraft.net/eula',
+          'https://www.minecraft.net/en-us/eula',
+          'https://www.minecraft.net/en-us/usage-guidelines',
           'https://docs.papermc.io/',
           'https://modrinth.com/',
         ];

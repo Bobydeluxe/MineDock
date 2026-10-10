@@ -94,6 +94,12 @@ const tabIcons = {
 };
 export function ServerPage({ server, onRemoved }: { server: Server; onRemoved: () => void }) {
   const { t, api, snapshot, run, busy, requestNavigation } = useApp();
+  useEffect(() => {
+    void api.itemAssetScope(server.id).catch(() => {});
+    return () => {
+      void api.itemAssetScope(null).catch(() => {});
+    };
+  }, [api, server.id, server.minecraftVersion, server.version]);
   const [tab, setTab] = useState<(typeof tabs)[number]>('overview');
   const [remove, setRemove] = useState(false);
   const diagnostic = useData(() => api.diagnostic(), []);

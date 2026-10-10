@@ -6,7 +6,12 @@ import { PNG } from 'pngjs';
 import { ItemAssets } from '../../packages/items/assets';
 
 /** Original solid-color QA artwork, deliberately not Minecraft game textures. */
-export async function itemAssetFixture(root: string, version = '1.20.1', modern = false) {
+export async function itemAssetFixture(
+  root: string,
+  version = '1.20.1',
+  modern = false,
+  extra: { files?: Record<string, unknown | Buffer>; ids?: string[] } = {},
+) {
   await mkdir(root, { recursive: true });
   const png = new PNG({ width: 16, height: 16 });
   for (let i = 0; i < png.data.length; i += 4) {
@@ -61,6 +66,8 @@ export async function itemAssetFixture(root: string, version = '1.20.1', modern 
   }
   zip.addBuffer(PNG.sync.write(png), 'assets/minecraft/textures/item/qa.png');
   zip.addBuffer(PNG.sync.write(png), 'assets/minecraft/textures/block/qa.png');
+  for (const [name, value] of Object.entries(extra.files ?? {}))
+    zip.addBuffer(Buffer.isBuffer(value) ? value : Buffer.from(JSON.stringify(value)), name);
   zip.end();
   const bytes = await done,
     filename = path.join(root, version + '.jar');
@@ -71,6 +78,7 @@ export async function itemAssetFixture(root: string, version = '1.20.1', modern 
     'diamond_sword',
     'apple',
     'stone',
+    ...(extra.ids ?? []),
     ...Array.from({ length: 110 }, (_, i) => 'qa_' + i),
   ];
   const fetcher = async (url: string) => {

@@ -57,6 +57,13 @@ const api: Api = {
   itemCatalog: (id) => call('itemCatalog', id),
   itemAssetContext: (id) => call('itemAssetContext', id),
   itemAssetImport: (id) => call('itemAssetImport', id),
+  itemAssetDownload: (id, consent) => call('itemAssetDownload', id, consent),
+  itemAssetPurge: () => call('itemAssetPurge'),
+  itemAssetScope: (id) => call('itemAssetScope', id),
+  itemAssetPack: (id, consent) => call('itemAssetPack', id, consent),
+  itemAssetModChoices: (id, project) => call('itemAssetModChoices', id, project),
+  itemAssetModDownload: (id, project, version, consent) =>
+    call('itemAssetModDownload', id, project, version, consent),
   itemVisual: (id, item) => call('itemVisual', id, item),
   worldControls: (id, query) => call('worldControls', id, query),
   applyWorldControl: (id, input, confirmation) =>

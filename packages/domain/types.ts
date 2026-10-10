@@ -409,6 +409,18 @@ export interface Api {
   itemCatalog(id: string): Promise<import('./administration').ItemCatalog>;
   itemAssetContext(id: string): Promise<import('./administration').ItemAssetContext>;
   itemAssetImport(id: string): Promise<import('./administration').ItemAssetContext | null>;
+  itemAssetDownload(
+    id: string,
+    consent: { ownedJava: true; acceptedEula: true },
+  ): Promise<import('./administration').ItemAssetContext>;
+  itemAssetPurge(): Promise<void>;
+  itemAssetScope(id: string | null): Promise<void>;
+  itemAssetPack(id: string, permittedUse: true): Promise<boolean>;
+  itemAssetModChoices(
+    id: string,
+    project: string,
+  ): Promise<import('../items/modrinth').ModResourceChoice[]>;
+  itemAssetModDownload(id: string, project: string, version: string, consent: true): Promise<void>;
   itemVisual(
     id: string,
     item: Pick<import('./administration').ItemStack, 'id' | 'components'>,

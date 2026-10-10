@@ -1,4 +1,5 @@
 import { blank, blend, layer, sample, type Raster } from './raster';
+import { specialGeometry } from './special';
 
 type Json = Record<string, unknown>;
 const object = (v: unknown): Json =>
@@ -45,15 +46,18 @@ export async function renderItem(
   modern: boolean,
   state: Json,
 ): Promise<Rendered> {
-  // Component overrides require their own validated presentation, never guess from a filename.
   if (
-    state['minecraft:item_model'] ||
-    state['minecraft:custom_model_data'] ||
-    state.CustomModelData
+    state['minecraft:custom_model_data'] !== undefined &&
+    (!modern || typeof state['minecraft:custom_model_data'] !== 'object')
   )
-    throw new Error('Custom presentation unsupported');
+    throw new Error('Custom presentation unsupported for this schema');
+  // Component overrides require their own validated presentation, never guess from a filename.
+  if (/^minecraft:(?:compass|recovery_compass|clock)$/.test(id))
+    throw new Error('World direction/time is not available in saved item data');
   const out = blank();
   let kind: Rendered['kind'] = 'flat';
+  const derived = new Map<string, Raster>();
+  const readTexture = async (id: string) => derived.get(id) ?? reader.texture(id);
   async function model(name: string): Promise<Json> {
     const seen = new Set<string>();
     async function resolve(current: string): Promise<Json> {
@@ -62,6 +66,8 @@ export async function renderItem(
       seen.add(current);
       if (current === 'minecraft:builtin/generated') return { generated: true };
       const child = await reader.json(assetPath('models', current));
+      if (!child && ['minecraft:item/generated', 'minecraft:item/handheld'].includes(current))
+        return { generated: true };
       if (!child) throw new Error('Model unavailable');
       const parent = child.parent ? await resolve(assetId(child.parent)) : {};
       return {
@@ -92,8 +98,8 @@ export async function renderItem(
     }
     throw new Error('Tint unsupported');
   }
-  async function draw(name: string, tints: unknown[] = []) {
-    const m = await model(name),
+  async function draw(name: string, tints: unknown[] = [], geometry?: Json) {
+    const m = geometry ?? (await model(name)),
       textures = object(m.textures);
     function texture(ref: unknown): string {
       const seen = new Set<string>();
@@ -110,15 +116,25 @@ export async function renderItem(
         .sort();
       if (!layers.length) throw new Error('No generated layers');
       // Old models encode tinting outside their JSON. Never show untinted leather/potion art.
-      if (!modern && /(?:leather_|potion|spawn_egg|firework_star|tipped_arrow|filled_map)/.test(id))
+      if (!modern && /(?:spawn_egg|firework_star|tipped_arrow|filled_map)/.test(id))
         throw new Error('Legacy tint unsupported');
       for (const key of layers) {
         const i = Number(key.slice(5));
-        layer(
-          out,
-          await reader.texture(texture(textures[key])),
-          tints[i] === undefined ? undefined : tint(tints[i]),
-        );
+        let color = tints[i] === undefined ? undefined : tint(tints[i]);
+        if (!modern && i === 0 && id.includes('leather_'))
+          color = Number(
+            object(state.display).color ??
+              object(state['minecraft:dyed_color']).rgb ??
+              state['minecraft:dyed_color'] ??
+              0xa06540,
+          );
+        if (!modern && i === 0 && id.includes('potion')) {
+          const custom =
+            state.CustomPotionColor ?? object(state['minecraft:potion_contents']).custom_color;
+          if (typeof custom !== 'number') throw new Error('Potion effect tint unsupported');
+          color = custom;
+        }
+        layer(out, await readTexture(texture(textures[key])), color);
       }
       if (layers.length > 1) kind = 'layered';
       return;
@@ -213,7 +229,7 @@ export async function renderItem(
             [uv[2] / 16, uv[3] / 16],
             [uv[0] / 16, uv[3] / 16],
           ],
-          tex = await reader.texture(texture(f.texture)),
+          tex = await readTexture(texture(f.texture)),
           color = f.tintindex === undefined ? undefined : tint(tints[Number(f.tintindex)]);
         for (const triangle of [
           [0, 1, 2],
@@ -278,29 +294,126 @@ export async function renderItem(
       for (const m of p.models) await presentation(m, depth + 1);
       return;
     }
+    if (p.type === 'minecraft:condition') {
+      let value: boolean;
+      if (
+        p.property === 'minecraft:using_item' ||
+        p.property === 'minecraft:bundle/has_selected_item'
+      )
+        value = false; // static inventory has no active use/hover selection
+      else if (p.property === 'minecraft:has_component')
+        value = state[String(p.component)] !== undefined;
+      else if (p.property === 'minecraft:custom_model_data') {
+        const flags = object(state['minecraft:custom_model_data']).flags;
+        value = Array.isArray(flags) && flags[Number(p.index ?? 0)] === true;
+      } else throw new Error('Unknown conditional state');
+      return presentation(value ? p.on_true : p.on_false, depth + 1);
+    }
     if (
-      p.type === 'minecraft:select' &&
-      p.property === 'minecraft:trim_material' &&
-      Array.isArray(p.cases)
+      p.type === 'minecraft:range_dispatch' &&
+      p.property === 'minecraft:custom_model_data' &&
+      Array.isArray(p.entries)
     ) {
-      const trim = object(state['minecraft:trim']).material;
+      const floats = object(state['minecraft:custom_model_data']).floats;
+      const v = Array.isArray(floats) ? floats[Number(p.index ?? 0)] : 0;
+      if (typeof v !== 'number' || !Number.isFinite(v) || p.entries.length > 128)
+        throw new Error('Invalid model range');
+      const scale = p.scale ?? 1;
+      if (typeof scale !== 'number' || !Number.isFinite(scale))
+        throw new Error('Invalid model scale');
+      const match = p.entries
+        .map(object)
+        .filter((e) => typeof e.threshold === 'number' && e.threshold <= v * scale)
+        .sort((a, b) => Number(a.threshold) - Number(b.threshold))
+        .pop();
+      return presentation(match?.model ?? p.fallback, depth + 1);
+    }
+    if (p.type === 'minecraft:special') {
+      if (typeof p.base !== 'string' || !p.model)
+        throw new Error('Special presentation unsupported');
+      const base = await model(assetId(p.base));
+      const special = await specialGeometry(reader, id, state, object(p.model), base.display);
+      for (const [k, v] of special.textures) derived.set(k, v);
+      return draw('minedock:private/special', [], special.model);
+    }
+    if (p.type === 'minecraft:select' && Array.isArray(p.cases)) {
+      let selected: unknown;
+      if (p.property === 'minecraft:trim_material')
+        selected = object(state['minecraft:trim']).material;
+      else if (p.property === 'minecraft:display_context') selected = 'gui';
+      else if (p.property === 'minecraft:charge_type') {
+        const projectiles = state['minecraft:charged_projectiles'] ?? state.ChargedProjectiles;
+        if (Array.isArray(projectiles) && projectiles.length)
+          selected = object(projectiles[0]).id === 'minecraft:firework_rocket' ? 'rocket' : 'arrow';
+        else selected = 'none';
+      } else if (p.property === 'minecraft:custom_model_data') {
+        const values = object(state['minecraft:custom_model_data']).strings;
+        selected = Array.isArray(values) ? values[Number(p.index ?? 0)] : '';
+      } else throw new Error('Unknown model selection state');
       const match = p.cases
         .map(object)
-        .find((c) => c.when === trim || (Array.isArray(c.when) && c.when.includes(trim)));
+        .find((c) => c.when === selected || (Array.isArray(c.when) && c.when.includes(selected)));
       return presentation(match?.model ?? p.fallback, depth + 1);
     }
     // Context (held/use state, compass target, special entities) is deliberately not invented.
     throw new Error('Dynamic or special presentation unsupported');
   }
   if (modern) {
-    const definition = await reader.json(assetPath('items', id));
+    const definition = await reader.json(
+      assetPath('items', assetId(state['minecraft:item_model'] ?? id)),
+    );
     if (!definition) throw new Error('Presentation unavailable');
     await presentation(definition.model);
   } else {
+    const headKind: Record<string, string> = {
+      player_head: 'player',
+      skeleton_skull: 'skeleton',
+      wither_skeleton_skull: 'wither_skeleton',
+      zombie_head: 'zombie',
+      creeper_head: 'creeper',
+    };
+    const name = id.replace('minecraft:', '');
+    if (headKind[name] || name.endsWith('_banner') || name === 'shield') {
+      const spec = headKind[name]
+        ? { type: 'minecraft:head', kind: headKind[name] }
+        : {
+            type: name === 'shield' ? 'minecraft:shield' : 'minecraft:banner',
+            color: name.replace('_banner', ''),
+          };
+      const special = await specialGeometry(reader, id, state, spec, undefined);
+      for (const [k, v] of special.textures) derived.set(k, v);
+      await draw('minedock:private/special', [], special.model);
+      return { image: out, kind };
+    }
     const definition = await reader.json(assetPath('models', id.replace(':', ':item/')));
-    if (definition?.overrides && Object.keys(state).length)
-      throw new Error('Legacy component override unsupported');
-    await draw(id.replace(':', ':item/'));
+    let chosen = id.replace(':', ':item/');
+    if (Array.isArray(definition?.overrides)) {
+      if (definition.overrides.length > 128) throw new Error('Override limit');
+      for (const raw of definition.overrides) {
+        const entry = object(raw),
+          predicates = object(entry.predicate);
+        const matches = Object.entries(predicates).every(([k, v]) => {
+          const prop = k.replace('minecraft:', '');
+          let actual = 0;
+          if (prop === 'charged')
+            actual =
+              Array.isArray(state.ChargedProjectiles) && state.ChargedProjectiles.length ? 1 : 0;
+          else if (prop === 'firework')
+            actual =
+              Array.isArray(state.ChargedProjectiles) &&
+              object(state.ChargedProjectiles[0]).id === 'minecraft:firework_rocket'
+                ? 1
+                : 0;
+          else if (prop === 'custom_model_data') actual = Number(state.CustomModelData ?? 0);
+          else if (!['pulling', 'pull', 'blocking'].includes(prop))
+            throw new Error('Legacy predicate unsupported');
+          return typeof v === 'number' && actual >= v;
+        });
+        if (matches) chosen = assetId(entry.model);
+      }
+    }
+    if (state['minecraft:trim'] || state.Trim) throw new Error('Legacy trim atlas unsupported');
+    await draw(chosen);
   }
   if (!out.data.some((v, i) => i % 4 === 3 && v)) throw new Error('Empty rendering');
   return { image: out, kind };
