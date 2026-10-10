@@ -8,7 +8,7 @@ Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gamepl
 
 ## Website migration — prepared only
 
-The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation are prepared in the merged PR #9. The owner confirmed non-professional status, anonymity and no public email yet. Legal/contact review, confirmation of required private identity disclosure to the host, explicit Pages publication approval and actual deployment remain outstanding. The existing public site now uses 0.5.0 downloads and remains primary until the replacement is verified. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
+The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation were prepared in merged PR #9. The follow-up adds a combined desktop/website Privacy Policy, [fourteen-flow network audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and stricter publication checks. The owner confirmed non-professional status, anonymity and public contact **minedockapp@gmail.com**. GitHub private identity disclosure has not been arranged. Contact/legal review, disclosure confirmation, final Pages approval and actual deployment remain outstanding. The existing public site uses 0.5.0 downloads and remains primary until the replacement is verified. See [owner actions](website-owner-actions.md), the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
 
 ## Included in MineDock 0.4.1
 

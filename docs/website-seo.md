@@ -6,6 +6,8 @@ Public application version is **0.5.0**. The merged [PR #9](https://github.com/B
 
 ## Activate only after legal review and owner approval
 
+The public contact **minedockapp@gmail.com** is now confirmed. The [application/website audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and [secure owner steps](website-owner-actions.md) complete the verifiable preparation. The owner has not contacted GitHub about private identity disclosure yet; publication remains blocked. The prepared privacy URL must not be submitted as live to SignPath.
+
 1. Complete the [legal checklist](website-legal-checklist.md), replace source TODO/DRAFT text with verified details, and record approved publisher/privacy/host statuses plus a review date in `site/publication.json`. Review the concrete pages locally. Do not invent a publisher identity or set approval merely to bypass the build.
 2. Obtain explicit approval for the reviewed legal changes and GitHub Pages publication. PR #9 is already merged for the application release; its merge did not approve Pages. No PR deployment is configured. The workflow's build and deploy jobs also reject manual runs from branches other than `main`.
 3. On GitHub open **Bobydeluxe/MineDock → Settings → Pages → Build and deployment → Source → GitHub Actions**. This is the free public repository project site; do not enter a custom domain or create CNAME/DNS records.

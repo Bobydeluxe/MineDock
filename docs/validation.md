@@ -1,5 +1,13 @@
 # MineDock validation
 
+## Website/privacy and SignPath preparation — 10 October 2026
+
+**PREPARED ONLY, publication blocked.** The owner designated **minedockapp@gmail.com** publicly and confirmed GitHub's confidential identity-disclosure arrangement is not yet resolved. The [combined Privacy Policy source](../site/privacy/index.html), [fourteen-flow application network audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and [specific secure owner actions](website-owner-actions.md) are ready for review. Publisher-controlled correspondence roles/bases/deletion practice and final legal approval remain pending. No private residential information is published.
+
+[Machine-readable evidence](validation-records/0.5.0-website-privacy-signpath.json) records passing lint, review export and **752 static assertions**, including **19 in-memory publication-gate cases**. Six pages at five widths pass **30 browser cases**: keyboard navigation and the mobile network table, fourteen unchanged native capture hashes (seven featured images checked at each width), thirteen public download/checksum links returning 200, no broken images or document overflow, and no external resource requests or cookies in local browser contexts. The production build correctly refuses the real unapproved configuration. Prepared production canonical/OG metadata and sitemap routes remain separate from the noindex review export.
+
+The Pages API/environment and all six planned public URLs return **404**. No deployment, merge, automatic legacy redirect or primary-link switch is claimed. Search Console is not verified; no analytics was added. The existing site returns 200 and remains primary. All twenty 0.5.0 release assets retain their recorded sizes/digests, and desktop inputs/dependencies/workflows are unchanged. No desktop release build, signing request or executable replacement was performed. The new policy is not yet a working URL for SignPath; the Foundation must also assess the released installer's policy display and feature-level network controls before signing eligibility is claimed.
+
 ## MineDock 0.5.0 public release — 10 October 2026
 
 [MineDock 0.5.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) is the current stable release. [Machine-readable release evidence](validation-records/0.5.0-release.json) records the exact artifacts, checks and migration bytes. Historical sections below describe their own earlier checkpoints.

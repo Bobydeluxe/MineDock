@@ -1,5 +1,7 @@
 # Security boundaries
 
+The [desktop/website privacy audit](privacy-audit.md) documents actual network recipients, local retention, credential protection and deletion limits for released 0.5.0. See [Code signing policy](code-signing-policy.md) for current unsigned status, source/build provenance and proposed future human signing approvals. Preparing these notices does not change application behavior or replace existing binaries.
+
 MineDock is local and runs with the current OS account permissions. It exposes no public administration API, tunnel or web panel. Its isolated renderer uses only validated named preload methods; main verifies the sender/frame/origin and validates all input. Server/installer processes use argument arrays and `shell: false`. The updater uses fixed native helper scripts only for operations requiring the OS installation flow.
 
 The 0.5.0 development administration bridge accepts structured actions rather than arbitrary command fragments. Names, UUIDs, resource IDs, quantities, exact slots, coordinates, text/control characters and explicit IP inputs are validated; batches use at most 50 distinct exact names, never `@a`. Paper/Purpur requests use native namespaced roots, but native help/acknowledgements do not prove universal plugin semantics. Local audit omits private bodies/reasons/IPs/raw replies. Native Minecraft logs can retain their own output; private player notes/safety files still need OS profile protection.
