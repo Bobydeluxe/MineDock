@@ -16,7 +16,7 @@ The 0.5.0 development branch adds typed administration DTOs/Zod schemas and shar
 - `packages/runtime-manager`: official native runtimes, real executable/version/architecture probes, repair and usage guards.
 - `packages/server-core` and `packages/rcon`: actual subprocess streams, engine readiness, lifecycle, metrics, player observations and authenticated RCON where supported.
 - `packages/marketplace`: Modrinth/Hangar catalog providers, Geyser metadata, raster icons and a shared transactional content service.
-- `packages/items`: exact-release generated registry metadata, verified local-client JAR readers, inherited presentation/model resolution, bounded PNG decoding/compositing/software 3D rendering, language lookup and deduplicated private caches.
+- `packages/items`: exact-release generated registry metadata, verified private-official/local-client and licensed mod/pack archive readers, inherited presentation/model resolution, bounded PNG decoding/compositing/software 3D rendering, language lookup and deduplicated private caches.
 - `packages/backups`: verified archives, full-server staged restore and journaled retention batches.
 - `packages/security` and `packages/networking`: path containment, bounded copies/archives/NBT, secrets, allowed hosts, ports and native architecture checks.
 - `packages/updates`: pinned publisher signatures, update state, verified downloads and native installation helpers.
@@ -54,7 +54,7 @@ The public product site is buildless static HTML/CSS using bundled engine symbol
 
 ## Unreleased 0.5.0 item presentation
 
-The actual server edition and `minecraftVersion ?? version` select the context; Fabric loader changes do not select game assets. Availability comes from the exact mcmeta generated registry plus separately marked observed IDs. Artwork comes from an official-hash-verified local client, through old model or new presentation schemas. The renderer owns no asset HTTP/file parsing and receives only bounded names/status and a hash-addressed `minedock-item` URL. Version/component/language/revision-bound caches never substitute a latest release. Native import alone selects external paths; the image protocol serves only validated cached PNGs. The existing player-inventory reader, transactions, journal and migration 12 remain the data/safety authority; image caches require no SQLite migration. [Asset policy and numerical bounds](asset-policy.md).
+The actual server edition and `minecraftVersion ?? version` select the context; Fabric loader changes do not select game assets. Availability comes from the exact mcmeta generated registry plus separately marked observed IDs. Artwork comes from explicit official private downloads or optional verified local clients, overlaid with safe permitted mod/pack resources. Old models and modern definitions remain separate. `remote`, `layers`, `modrinth`, `profile`, `special` and `animation` modules extend the existing resolver; no game/mod code runs. The renderer owns no asset HTTP/file parsing and receives only bounded names/status and a hash-addressed `minedock-item` URL. Version/component/language/revision-bound caches never substitute a latest release. Native selection alone selects external paths; the image protocol serves only validated cached PNGs. The existing player-inventory reader, transactions, journal and migration 12 remain the data/safety authority; image caches require no SQLite migration. [Asset policy and numerical bounds](asset-policy.md).
 
 ## 0.4.1 catalog, properties and profile paths
 

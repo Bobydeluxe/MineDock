@@ -20,14 +20,20 @@ DEVELOPMENT PREVIEW — 0.5.0 (UNRELEASED; NOT IN THE 0.4.1 DOWNLOAD)
   moderation, effects, XP, spawn and title forms with engine/version gates.
 - Advanced kill and explicit IP bans; private payloads excluded from local audit.
 - Up to 50 exact selected names, per-player results and cancel-remaining batches.
-- Real exact-version local-client item images: flat/layered/tinted presentations
-  and simple 3D block models; honest special/modded/missing-image fallbacks.
+- Real exact-version private official resource downloads without an installed
+  game: explicit ownership/EULA consent; optional verified local client import.
+- Saved custom/mob heads, ordered banners/decorated shields, static animation
+  frames, neutral bow and actual charged crossbow states, known dyes and trims.
+- Safe licensed installed mod assets, opt-in exact Modrinth archives and explicit
+  local resource-pack priority; no Java execution or installation for previews.
 - Exact Java vanilla registries when available, merged with actual observed IDs;
   localized names, namespace/seen filters, keyboard selection and 24-item pages.
 - 27 main + 9 hotbar slots, helmet-to-boots equipment, large details and actual
   names/lore/enchantment/durability metadata. Existing NBT safety is preserved.
-- Client import verifies official Mojang SHA-1; Modrinth is recognized. No game
-  asset bundle in Git/installers; bounded private cache and narrow image protocol.
+- Official/local clients verify Mojang SHA-1; mod archives verify SHA-512. No game
+  asset bundle in Git/installers; purge preserves all servers and user files.
+- Representative coverage: 98/132 vanilla/component probes across four exact
+  releases, plus 6/6 Adorn MIT items. Full category limits: docs/asset-policy.md.
 - Unknown modded IDs stay exact; absent vanilla IDs are disabled in the browser.
   Missing registry stays partial; explicit validated IDs remain available.
 See docs/asset-policy.md for exact sources, rights, supported models and limits.
