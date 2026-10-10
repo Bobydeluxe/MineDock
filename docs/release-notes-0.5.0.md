@@ -20,7 +20,7 @@ Player and world administration, private version-correct item resources and safe
 - Version and engine capability checks across Java, Bedrock Dedicated Server and PocketMine. Java 1.21.11 gamerule names and value types are handled explicitly.
 - English, French, German, Spanish, Portuguese and Italian interface translations, with the existing neutral dark and light themes.
 - Local administration history omits message contents, reasons, IP addresses and raw commands/replies.
-- SQLite migration 12 preserves existing servers, settings, player records, notes and tasks. The earlier administration candidate passed a real isolated Windows 0.4.1 → CI 0.5.0 replacement/relaunch and data migration with controlled update transport. That evidence identifies its original source hash; the item-image enhancement adds no database migration.
+- SQLite migration 12 preserves existing servers, settings, player records, notes and tasks. The exact public Windows 0.4.1 → 0.5.0 replacement/relaunch and SQLite 11 → 12 migration pass with all checked data preserved. Public 0.3.0 → 0.5.0 migration also passes with its documented manual first-upgrade step. The item-image enhancement adds no further database migration.
 
 ## Fixes
 
