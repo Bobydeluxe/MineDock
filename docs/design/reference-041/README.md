@@ -1,8 +1,8 @@
 # Reference assets — released 0.4.1 cleanup build
 
-This records the released 0.4.1 design review. Linked Players/Worlds gallery files are now refreshed for the clearly labeled [unreleased 0.5.0 administration preview](../../screenshots/player-world-050/README.md); those additions are not in the public 0.4.1 package.
+This records the released 0.4.1 design review. Linked Players/Worlds gallery files are now refreshed for the [0.5.0 administration gallery](../../screenshots/player-world-050/README.md); those additions are included in 0.5.0 and were absent from 0.4.1.
 
-The owner's [original collage](reference.png) remains art direction. The subsequent annotated cleanup request removes its noisy shell elements and tinted base surfaces. The [focused cleanup review](../cleanup-041/README.md) documents the current implementation. Every current image is captured from actual compiled Electron controls and core/SQLite services; no reference panel is embedded in the app. **The current public version and gallery are MineDock 0.4.1.**
+The owner's [original collage](reference.png) remains art direction. The subsequent annotated cleanup request removes its noisy shell elements and tinted base surfaces. The [focused cleanup review](../cleanup-041/README.md) documents the current implementation. Every current image is captured from actual compiled Electron controls and core/SQLite services; no reference panel is embedded in the app. **This historical review describes MineDock 0.4.1; the current release is 0.5.0.**
 
 | View       | Current actual capture                                   | Behavior                                                                          |
 | ---------- | -------------------------------------------------------- | --------------------------------------------------------------------------------- |

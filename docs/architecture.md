@@ -52,7 +52,7 @@ Notifications are capped at 400 and grouped over fifteen minutes; sustained proc
 
 The public product site is buildless static HTML/CSS using bundled engine symbols and real native captures. `scripts/build-site.mjs` prepares its separate ignored deployment checkout. It exposes no desktop IPC, backend, analytics or private server data.
 
-## Unreleased 0.5.0 item presentation
+## 0.5.0 item presentation
 
 The actual server edition and `minecraftVersion ?? version` select the context; Fabric loader changes do not select game assets. Availability comes from the exact mcmeta generated registry plus separately marked observed IDs. Artwork comes from explicit official private downloads or optional verified local clients, overlaid with safe permitted mod/pack resources. Old models and modern definitions remain separate. `remote`, `layers`, `modrinth`, `profile`, `special` and `animation` modules extend the existing resolver; no game/mod code runs. The renderer owns no asset HTTP/file parsing and receives only bounded names/status and a hash-addressed `minedock-item` URL. Version/component/language/revision-bound caches never substitute a latest release. Native selection alone selects external paths; the image protocol serves only validated cached PNGs. The existing player-inventory reader, transactions, journal and migration 12 remain the data/safety authority; image caches require no SQLite migration. [Asset policy and numerical bounds](asset-policy.md).
 

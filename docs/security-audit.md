@@ -1,4 +1,4 @@
-# Internal security review — 0.4.0 baseline and unreleased 0.5.0 additions
+# Internal security review — 0.4.0 baseline and 0.5.0 additions
 
 This is a developer review of the implemented boundaries and tests, not an independent audit or a penetration-test certificate. Evidence covers local code/tests and the native Windows flows recorded in [validation](validation.md). Third-party engine/plugin code executes with the current OS account's privileges.
 

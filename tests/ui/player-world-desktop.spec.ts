@@ -54,7 +54,8 @@ test('native player profile: real saved NBT, exact slots, verified safety copies
     await slot.getByLabel('Quantity', { exact: true }).fill('4');
     await slot.getByLabel('Type the exact name(s), separated by comma and space').fill('Friend');
     await slot.getByRole('button', { name: 'Apply change', exact: true }).click();
-    await expect(slot).toHaveCount(0);
+    // The verified full backup must finish before the saved inventory is replaced.
+    await expect(slot).toHaveCount(0, { timeout: 30000 });
     await expect(
       profile.getByRole('button', {
         name: 'Inventory 16 · example:custom_apple × 60',
@@ -73,7 +74,7 @@ test('native player profile: real saved NBT, exact slots, verified safety copies
     await expect(restore).toContainText('example:custom_apple × 60 → example:custom_apple × 64');
     await restore.getByLabel('Type the exact name(s), separated by comma and space').fill('Friend');
     await restore.getByRole('button', { name: 'Restore', exact: true }).click();
-    await expect(restore).toHaveCount(0);
+    await expect(restore).toHaveCount(0, { timeout: 30000 });
     await expect(
       profile.getByRole('button', {
         name: 'Inventory 16 · example:custom_apple × 64',

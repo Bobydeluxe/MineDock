@@ -1,6 +1,6 @@
 # Engine and runtime guide
 
-The unreleased 0.5.0 [player/world administration guide](player-world-administration.md#engine-and-version-boundaries) describes native command availability and inventory boundaries separately from installation support. All eight engines remain available; Java NBT storage is never assumed for Bedrock or PocketMine.
+The 0.5.0 [player/world administration guide](player-world-administration.md#engine-and-version-boundaries) describes native command availability and inventory boundaries separately from installation support. All eight engines remain available; Java NBT storage is never assumed for Bedrock or PocketMine.
 
 | Engine                   | Edition / runtime          | Managed content                                 | Important limits                                                              |
 | ------------------------ | -------------------------- | ----------------------------------------------- | ----------------------------------------------------------------------------- |

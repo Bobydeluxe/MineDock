@@ -1,6 +1,6 @@
 # Administration preview website review
 
-The existing MineDock site keeps public 0.4.1 downloads and a clearly separate unreleased 0.5.0 preview. The refreshed section has seven actual native views: saved profile/actions, isolated world controls, saved head/banner/shield and actual Adorn MIT table. Captions disclose synthetic NBT and private official resources; no game/launcher installation, game-asset library or new public executable is offered.
+At this historical pre-release checkpoint, the existing MineDock site kept public 0.4.1 downloads and a clearly separate unreleased 0.5.0 preview. The refreshed section has seven actual native views: saved profile/actions, isolated world controls, saved head/banner/shield and actual Adorn MIT table. Captions disclose synthetic NBT and private official resources; no game/launcher installation, game-asset library or new public executable is offered.
 
 Local and deployed browser checks pass at 390, 768, 1280, 1440 and 1920 pixels: no overflow, broken image/anchor, runtime error or failed resource. Seven image SHA-256 values match the native gallery; all 13 public download URLs return HTTP 200/nonzero size and stay on 0.4.1. All 20 published release assets retain their previous sizes/digests.
 

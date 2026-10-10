@@ -1,6 +1,6 @@
-# Native desktop gallery
+# Native application screenshots
 
-Actual compiled Electron captures; administration views refreshed on 10 October 2026. **Players, Player details and Worlds show the unreleased 0.5.0 development preview; other baseline views and the historical GIF show public 0.4.1.** The [fourteen current administration captures](player-world-050/README.md) record exact hashes and provenance: saved player files are synthetic QA, with real exact-version Java 26.3 images derived privately from verified official downloads without an installed game, plus actual licensed Adorn resources. World values come from a personally authorized real isolated Paper 1.21.11 server with no connected clients or added plugins. The public download remains 0.4.1. Dark surfaces stay neutral black and notifications stay in Settings. Baseline active process views use an inert Node child, not Minecraft gameplay.
+Actual compiled Electron captures; administration views refreshed on 10 October 2026. **Players, Player details and Worlds show the 0.5.0 release; other baseline views and the historical GIF retain their original 0.4.1 provenance.** The [fourteen current administration captures](player-world-050/README.md) record exact hashes and provenance: saved player files are synthetic QA, with real exact-version Java 26.3 images derived privately from verified official downloads without an installed game, plus actual licensed Adorn resources. World values come from a personally authorized real isolated Paper 1.21.11 server with no connected clients or added plugins. The public application release is 0.5.0. Dark surfaces stay neutral black and notifications stay in Settings. Baseline active process views use an inert Node child, not Minecraft gameplay.
 
 | View            | Dark                                                | Light / other state                                                                      |
 | --------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -32,6 +32,8 @@ Actual compiled Electron captures; administration views refreshed on 10 October 
 Normal captures share a 1440 × 960 native content viewport. Settings may use a full-page image to include the existing lower sections. Older comparison images are retired from the current tree and remain available in immutable Git history. No secrets are displayed.
 
 Additional real 0.4.1 views: [Fabric lists](fabric-versions.png), [Paper](paper-builds.png), [Purpur](purpur-builds.png), [Forge](forge-builds.png), [NeoForge](neoforge-builds.png), [general properties](server-settings.png), [light properties](server-settings-light.png), [gameplay](properties-gameplay.png), [network](properties-network.png), [world](properties-world.png). [Reference and current UI review](../design/reference-041/README.md).
+
+The baseline captures retain their recorded 0.4.1 provenance. The [fourteen 0.5.0 player/world captures](player-world-050/README.md) show the new interface; baseline screens remain applicable where the interface is unchanged. No screenshot is presented as a Minecraft gameplay session.
 
 ## Reproduce the assets
 

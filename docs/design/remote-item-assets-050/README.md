@@ -1,4 +1,4 @@
-# Private resource enhancement — unreleased 0.5.0
+# Private resource enhancement — 0.5.0 implementation review
 
 Before images are the historical local-client-only interface at f1aa95b. The current native gallery comes from commit aa4f141, using private official downloads without an installed game. These are saved QA fixtures, not gameplay.
 

@@ -323,7 +323,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Publisher CI secret configured separately from OS-signing certificates.
 - Publisher-signed update metadata verifies each available native package.
 - Real public Windows portable download rechecked against signed size/hash.
-- The current release is 0.4.1; older 0.3.0 Windows users may need a manual first upgrade.
+- The current release is 0.5.0; older 0.3.0 Windows users may need a manual first upgrade.
 - Native updater/install/uninstall evidence and public-0.3.0 launcher limit are
   recorded precisely in docs/validation.md; native OSes are not interchangeable.
 
@@ -457,7 +457,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
 - Release documentation includes appended schemas, validation and known limits.
-- Public packages and checksum links target v0.4.1.
+- Public packages and checksum links target v0.5.0.
 
 ======================================================================
 27. REFERENCE DESIGN AND CUSTOMIZATION — IMPLEMENTED IN 0.4.1
@@ -479,7 +479,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Inherited settings stay unset unless edited; unsaved navigation/close guards.
 - Curated existing Paper scalar paths, advanced discovered scalars and raw YAML.
 - Original dusk website scene, English public release text and real screenshots.
-- Website downloads point to the published 0.4.1 packages and checksums.
+- Website downloads point to the published 0.5.0 packages and checksums.
 
 ======================================================================
 28. FUTURE OPTIONS — NOT IMPLEMENTED

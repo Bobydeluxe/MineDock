@@ -1,4 +1,4 @@
-# Item images — unreleased 0.5.0 review
+# Item images — historical local-client 0.5.0 review
 
 The three images in [before/](before/) show the **historical generic-symbol interface from commit 6d210f9**, retained solely for before/after review. They are not current product screenshots.
 

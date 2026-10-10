@@ -1,12 +1,12 @@
 # MineDock validation
 
-## Website migration preparation — 10 October 2026
+## Historical website migration preparation — 10 October 2026
 
 GitHub Pages is **PREPARED ONLY**: the authenticated Pages/environment endpoints and proposed public project URL returned 404; the existing legacy site returns 200. The owner confirmed a non-professional individual publisher, anonymity and no public email yet. Production is deliberately blocked on required contact/host-disclosure review and explicit merge/publication approval. No release, merge or primary-site switch was performed.
 
 Local export checks validate six HTML documents, forty allowlisted static files, 136 internal links and thirteen stable 0.4.1 download URLs. Browser verification covers six pages at 390/768/1280/1440/1920 px, visible keyboard skip/focus, cross-page links, FAQ, unchanged hashes of all seven preview screenshots, nested custom 404 and trailing slash handling. No overflow, broken images, executable scripts, third-party resource requests or local cookies/storage were observed. Host cookies/log behavior remains a separate live-deployment check. See the [website evidence](validation-records/0.5.0-website-pages.json), [review captures](design/github-pages-050/README.md), [activation guide](website-seo.md) and [legal checklist](website-legal-checklist.md). These website checks do not rerun or replace the source-specific application/native evidence below.
 
-## Current unreleased 0.5.0 private resources — 10 October 2026
+## Historical 0.5.0 private-resource candidate — 10 October 2026
 
 Application inputs: `aa4f141475ab516205b827daa045da5b2dcbd94b`; native build/test source: `6d5b528a7c194c36ed4aae9cb463629973e29783`; later world-test wait: `ad0696a44ea5a3ead1e1523a7ec9bc8ad6f2cff6`. Packaged application inputs remain identical. **NOT RELEASED, pending owner approval. Public downloads remain 0.4.1.** No merge, tag or executable replacement. The sections below retain historical source-specific evidence.
 
@@ -32,7 +32,7 @@ Application inputs: `aa4f141475ab516205b827daa045da5b2dcbd94b`; native build/tes
 
 ## Historical local-client-only enhancement — superseded by private remote resources
 
-Public downloads remain **0.4.1**. The existing [PR #9](https://github.com/Bobydeluxe/MineDock/pull/9) adds exact-version item images and a visual picker. No merge, tag or release is authorized by this enhancement. These results supersede the earlier generic-icon gallery; historical native upgrade and Minecraft command checks below retain their original source hashes.
+At this checkpoint, public downloads remained **0.4.1**. The existing [PR #9](https://github.com/Bobydeluxe/MineDock/pull/9) adds exact-version item images and a visual picker. No merge, tag or release is authorized by this enhancement. These results supersede the earlier generic-icon gallery; historical native upgrade and Minecraft command checks below retain their original source hashes.
 
 | Check                                       | Actual result                                                                                                                                                                                                                                                        |
 | ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |

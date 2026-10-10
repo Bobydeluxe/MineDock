@@ -1,6 +1,6 @@
 # GitHub Pages migration — local review captures
 
-These are actual browser captures of the built `dist/site` export mounted at `/MineDock/`, not a public deployment. The visible banner identifies the review-only build. Existing homepage artwork, real Electron screenshots and 0.4.1/unreleased 0.5.0 labels are retained. The legal notice remains a draft: the owner selected non-professional publication and anonymity and has no public email yet.
+These historical pre-release images are actual browser captures of the built `dist/site` export mounted at `/MineDock/`, not a public deployment. The visible banner identifies the review-only build. Existing homepage artwork, real Electron screenshots and 0.4.1/unreleased 0.5.0 labels are retained. The legal notice remains a draft: the owner selected non-professional publication and anonymity and has no public email yet.
 
 - [Desktop home, 1440 px](home-1440.png)
 - [Mobile legal notice, 390 px](legal-390.png)

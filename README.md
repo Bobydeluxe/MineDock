@@ -77,7 +77,7 @@ Capabilities control the available actions. A native engine does not show Java m
 
 ## Interface
 
-These are actual native Electron captures from isolated profiles and the real preload/core/SQLite services. Players, the player profile and Worlds have been refreshed for the **unreleased 0.5.0 preview**; other views show the public 0.4.1 interface. Player inventories use explicitly identified saved QA files; the new world controls use actual RCON values from an authorized isolated Paper 1.21.11 world, without connected clients. Existing active process/console views use an inert external Node child. They are interface evidence, not multiplayer gameplay. See [capture provenance](docs/screenshots/README.md).
+These are actual native Electron captures from isolated profiles and the real preload/core/SQLite services. Players, the player profile and Worlds have been refreshed for the **0.5.0 release**; other views retain the documented 0.4.1 baseline interface. Player inventories use explicitly identified saved QA files; the new world controls use actual RCON values from an authorized isolated Paper 1.21.11 world, without connected clients. Existing active process/console views use an inert external Node child. They are interface evidence, not multiplayer gameplay. See [capture provenance](docs/screenshots/README.md).
 
 | Create a server                                                                             | Manage a server                                                          |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |

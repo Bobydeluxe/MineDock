@@ -2,7 +2,7 @@
 
 **10 October 2026 — PREPARED ONLY.** Authenticated GitHub API checks confirmed public repository `Bobydeluxe/MineDock`, default branch `main`, administrator/push access and enabled Actions. `GET /pages` and the `github-pages` environment both returned 404; `has_pages` was false. The proposed `https://bobydeluxe.github.io/MineDock/` returned 404. The legacy site returned 200. These are observations, not a completed deployment.
 
-Public application version remains **0.4.1**. The open development PR is [#9](https://github.com/Bobydeluxe/MineDock/pull/9), branch `codex/player-world-administration`; 0.5.0 is unreleased. This website task does not change Minecraft/server-management behavior or publish application binaries.
+Public application version is **0.5.0**. [PR #9](https://github.com/Bobydeluxe/MineDock/pull/9) includes website preparation alongside the application work. Application publication does not authorize legal drafts: Pages remains gated separately, and the existing website remains primary.
 
 ## Activate only after legal review and owner approval
 
