@@ -1,6 +1,6 @@
-# MineDock 0.5.0 — release draft
+# MineDock 0.5.0
 
-**Unreleased review candidate. Public downloads still use 0.4.1.** These notes describe the development branch and are prepared for review before a separately approved publication.
+Player and world administration, private version-correct item resources and safer native commands. English is the default; French, German, Spanish, Portuguese and Italian are included.
 
 ## New features
 
@@ -28,13 +28,28 @@
 - Live backups verify native save-off, save-all and save-on responses. Uncertain saving restoration reports a failure and stops the owned server for safety.
 - Unrecognized player-list responses no longer fabricate an empty online list. Cancelling group work retains completed individual results.
 
-## Candidate packages
+## Download
 
-Six native build targets prepare Windows x64/ARM64 Setup and Portable, Linux x64/ARM64 AppImage and Debian, and macOS Intel/Apple Silicon ZIP and DMG. These are CI review artifacts, **not public release downloads**. See [validation](validation.md) for the exact successful runs, checksums and publisher metadata signatures. Existing 0.4.1 executables are unchanged.
+Choose the package matching your computer. No Node.js or pnpm installation is needed.
+
+| Platform            | Packages                                                                                                                                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Windows x64         | [Setup-x64.exe](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Setup-x64.exe) · [Portable-x64.exe](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Portable-x64.exe)         |
+| Windows ARM64       | [Setup-arm64.exe](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Setup-arm64.exe) · [Portable-arm64.exe](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Portable-arm64.exe) |
+| Linux x64           | [x86_64.AppImage](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-x86_64.AppImage) · [amd64.deb](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-amd64.deb)                   |
+| Linux ARM64         | [arm64.AppImage](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-arm64.AppImage) · [arm64.deb](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-arm64.deb)                     |
+| macOS Intel         | [x64.dmg](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-x64.dmg) · [x64.zip](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-x64.zip)                                       |
+| macOS Apple Silicon | [arm64.dmg](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-arm64.dmg) · [arm64.zip](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-arm64.zip)                               |
+
+[SHA-256 checksums](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/SHA256SUMS.txt) · [Complete feature list](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-Features.txt). Twelve packages are built and tested on their native OS/architecture; six signed updater files verify package integrity.
+
+### Upgrading
+
+Close MineDock, retain your storage folders and use the same OS account. Servers, settings, backups, runtimes, SQLite, player data and tasks stay in the existing profile. SQLite migrates from schema 11 to 12 with a safety copy. Windows 0.3.0 may require manually opening the verified new package for its first upgrade. Keep a data backup; see [validation](validation.md) for exact evidence and other-platform limits.
 
 ## Website migration (prepared, not deployed)
 
-Free GitHub Pages hosting, four English legal pages and project-path SEO are prepared in PR #9. Production remains blocked on real publisher/contact details, legal review, explicit owner merge/publication approval and a successful verified deployment. The existing website and 0.4.1 downloads remain active. Search Console ownership and Google indexing have not been performed. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md). This preparation is not a 0.5.0 release announcement.
+Free GitHub Pages hosting, four English legal pages and project-path SEO are prepared in PR #9. Production remains blocked on publisher/contact details, host identity-disclosure confirmation, legal review and a successful verified deployment. The application release does not approve publishing legal drafts; the existing website remains active. Search Console ownership and Google indexing have not been performed. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md). Application release downloads are available on GitHub.
 
 ## Known limits
 

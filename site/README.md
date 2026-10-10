@@ -2,7 +2,7 @@
 
 **Status: PREPARED ONLY, 10 October 2026.** The active website remains [the legacy site](https://minedock-friends.arcane-rhea-3082.chatgpt.site/). The proposed free project URL `https://bobydeluxe.github.io/MineDock/` returned HTTP 404 during the authenticated repository audit: Pages is not configured. Do not advertise that address as live yet.
 
-The existing English home design, icon, original landscape and real Electron screenshots are retained. Downloads point to public **0.4.1** packages. The seven administration/item screenshots are visibly labeled **unreleased 0.5.0**, with their existing provenance captions. No game-resource archives are exported.
+The existing English home design, icon, original landscape and real Electron screenshots are retained. Downloads point to public **0.5.0** packages. The seven administration/item screenshots are labeled **MineDock 0.5.0**, with their existing provenance captions. No game-resource archives are exported.
 
 ## Local review
 

@@ -115,10 +115,13 @@ const downloads = [
   ),
 ];
 check(
-  downloads.length === 13 && downloads.every((url) => url.includes('/v0.4.1/')),
-  'Only actual public 0.4.1 downloads',
+  downloads.length === 13 && downloads.every((url) => url.includes('/v0.5.0/')),
+  'Only intended 0.5.0 release downloads',
 );
-check(home.includes('unreleased') && home.includes('0.5.0'), 'Honest candidate version label');
+check(
+  home.includes('NEW IN MINEDOCK 0.5.0') && !home.includes('unreleased'),
+  'Released application version label',
+);
 const sitemap = await readFile(path.join(root, 'sitemap.xml'), 'utf8');
 const locations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
 check(

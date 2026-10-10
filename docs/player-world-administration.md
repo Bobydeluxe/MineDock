@@ -1,6 +1,6 @@
 # Player and world administration — 0.5.0 development preview
 
-This work is on the development branch. **The public download remains 0.4.1.** No server extension is installed for administration. Actual native command replies and actual player files determine what MineDock can display or change. See [validation](validation.md) and [native capture provenance](screenshots/player-world-050/provenance.json).
+These tools are included in **MineDock 0.5.0**. No server extension is installed for administration. Actual native command replies and actual player files determine what MineDock can display or change. See [validation](validation.md) and [native capture provenance](screenshots/player-world-050/provenance.json).
 
 ## Player profile and inventory
 

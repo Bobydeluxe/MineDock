@@ -1,5 +1,5 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Public version: 0.4.1 (clean interface and server customization)
+Public version: 0.5.0 (player/world administration and private item resources)
 Updated: 10 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
@@ -7,9 +7,9 @@ English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Download MineDock 0.4.1 from GitHub Releases. Features added in 0.4.0 are retained.
+Download MineDock 0.5.0 from GitHub Releases. Features added in 0.4.0 are retained.
 
-DEVELOPMENT PREVIEW — 0.5.0 (UNRELEASED; NOT IN THE 0.4.1 DOWNLOAD)
+INCLUDED IN 0.5.0 — PLAYER/WORLD ADMINISTRATION AND ITEM RESOURCES
 - Large player profile: Inventory / Actions / History / Notes; real UUID/skin fallback.
 - Actual 36-slot inventory, armor, offhand and 27-slot Ender Chest; known stats only.
 - Strict live / dated saved / unavailable sources; no simulated live player inventory.

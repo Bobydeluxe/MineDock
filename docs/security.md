@@ -8,7 +8,7 @@ Saved Java inventory writes require a fully stopped, non-orphaned server, matchi
 
 The historical 0.4.1 visual review adds local CSS tokens and edits original bundled SVG symbols; fonts use the native/system stack. It introduces no new renderer capabilities, remote font/CDN dependency, telemetry, credential setting or executable runtime library. Screenshot tooling uses ignored private QA storage and a test-only external child; it is not part of the packaged application. See [capture provenance](design/visual-review.md).
 
-## Unreleased 0.5.0 item image boundary
+## 0.5.0 item image boundary
 
 The item service exposes only named context/download/import/pack/mod/scope/purge/visual IPC and a hash-addressed PNG protocol. Renderer inputs cannot supply arbitrary paths or URLs. Explicit ownership/EULA confirmation gates official downloads; native file selection gates external packs. Exact Mojang SHA-1, Modrinth SHA-512 and skin SHA-256 bind private sources. HTTPS hosts/paths/redirects, byte/time limits, ZIP traversal/link/encryption/bomb rejection, CRC/dimension checks and model/frame caps are enforced. Mod archives are resources only, never executed or installed. Deduplication, four render workers, serial transfers, bounded queues, navigation/shutdown cancellation and separate derived/archive quotas bound work. Licence metadata is checked but is not proof of every embedded asset’s rights. Source/provenance hashes prevent stale cross-server images. Purging only app-owned cache files preserves servers, backups, SQLite and external resources. No launcher account files are read; image failure cannot mutate NBT or relax safety gates. [Full bounds, precedence, rights and residual limits](asset-policy.md).
 

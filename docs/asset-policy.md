@@ -1,4 +1,4 @@
-# Minecraft item resources — unreleased MineDock 0.5.0
+# Minecraft item resources — MineDock 0.5.0
 
 MineDock's code is MIT; Minecraft art is not. This independent tool is not approved by Mojang or Microsoft. No client JAR, raw game texture/model/language bundle or pre-rendered icon library is shipped in Git, installers or releases. Screenshots document the interface with disclosed saved-data fixtures; they do not relicense game artwork.
 
@@ -67,4 +67,4 @@ Derived PNG/registry/language/skin files use contained atomic writes, hash-bound
 
 **98/132** representative vanilla/component cases render, plus **6/6** real Adorn items. This is a sample, not exhaustive registry coverage. Fresh private official downloads prove no installed game is required. Unit/native UI fixtures use original QA art. Real screenshots separately use private official resources and disclosed saved NBT, not gameplay. See [validation](validation.md), [guide](player-world-administration.md) and [gallery](screenshots/player-world-050/README.md).
 
-**NOT RELEASED — pending owner approval.** PR #9 remains open; public downloads remain 0.4.1. No merge, v0.5.0 tag, release or public-binary replacement is part of this task.
+Included in MineDock 0.5.0. The owner authorized application publication on 10 October 2026. See [release validation](validation.md) for exact package sources, migration evidence and public integrity checks. Website legal drafts remain separately blocked.

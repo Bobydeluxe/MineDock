@@ -27,28 +27,49 @@ jobs:
     permissions:
       contents: read
       pages: read
+    outputs:
+      approved: ${{ steps.publication.outputs.approved }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+      - name: Check separate website publication approval
+        id: publication
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, appendFileSync } from 'node:fs';
+          const publication = JSON.parse(readFileSync('site/publication.json', 'utf8'));
+          const approved = publication.approved === true;
+          appendFileSync(process.env.GITHUB_OUTPUT, `approved=${approved}\n`);
+          if (!approved) console.log('Website remains in review; application releases do not publish legal drafts.');
+          NODE
+      - name: Validate review website while publication is pending
+        if: steps.publication.outputs.approved != 'true'
+        run: |
+          node scripts/build-site.mjs
+          node scripts/check-site.mjs
       - name: Read configured Pages URL
+        if: steps.publication.outputs.approved == 'true'
         id: pages
         uses: actions/configure-pages@v5
         with:
           enablement: false
       - name: Build approved production website
+        if: steps.publication.outputs.approved == 'true'
         env:
           SITE_URL: ${{ steps.pages.outputs.base_url }}/
         run: node scripts/build-site.mjs --production
       - name: Check exported files and project paths
+        if: steps.publication.outputs.approved == 'true'
         run: node scripts/check-site.mjs --production
       - uses: actions/upload-pages-artifact@v4
+        if: steps.publication.outputs.approved == 'true'
         with:
           path: dist/site
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/main' && github.repository == 'Bobydeluxe/MineDock'
+    if: github.ref == 'refs/heads/main' && github.repository == 'Bobydeluxe/MineDock' && needs.build.outputs.approved == 'true'
     runs-on: ubuntu-24.04
     permissions:
       pages: write

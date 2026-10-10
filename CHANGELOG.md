@@ -1,12 +1,12 @@
 # Changelog
 
-## 0.5.0 — Unreleased development preview
+## 0.5.0
 
-The public download remains 0.4.1. No existing release executable is replaced.
+Player and world administration, private version-correct item resources and safer native commands. Historical releases retain their original executable files.
 
 ### Added
 
-- Prepared free GitHub Pages hosting with English legal-page drafts, project-path navigation and production SEO metadata. Publication remains blocked pending publisher/contact review, owner approval and a verified deployment; the current website and 0.4.1 downloads remain active.
+- Prepared free GitHub Pages hosting with English legal-page drafts, project-path navigation and production SEO metadata. Publication remains blocked pending publisher/contact review, owner approval and a verified deployment; the current website remains active; application downloads use 0.5.0.
 
 - A large player profile with Inventory, Actions, History and Notes, official skin fallback, actual saved stats, 36 inventory slots, armor, offhand and 27 Ender Chest slots.
 - Stopped-server inventory quantity removal, exact-slot empty/replace and previewed restoration from real pre-edit copies, with full verified backup, conflict checks, transaction journal and rollback.
@@ -36,11 +36,11 @@ The public download remains 0.4.1. No existing release executable is replaced.
 
 ### Known issues
 
-- Item images need your own exact-version Java client; first registration verifies official metadata online. Special/context-dependent models, uncertain legacy tinting, mod/resource-pack overrides and Bedrock images remain unsupported. Missing registry metadata leaves a partial saved-item list. Vanilla metadata is not a live modded-server registry; explicit/native actions can still be refused.
+- Item images need private exact-version official resources, downloaded with ownership/terms consent or imported from a local client. Rendering covers supported heads, patterns and mod/pack models; complex geometry, world-dependent compass/clock, effect-derived potion colours and Bedrock images remain unsupported. Missing registry metadata leaves a partial saved-item list. Vanilla metadata is not a live modded-server registry; explicit/native actions can still be refused.
 - New/future Java data versions and unknown custom layouts are read-only; Bedrock/PocketMine native inventory storage is unavailable.
 - No real connected-client inventory manipulation or multiplayer session is claimed. The real Paper world test has zero connected players; Bedrock/PocketMine gameplay and exhaustive mod/version combinations remain unvalidated.
 - Stdio replies remain sent, localized/intercepted replies can remain not verifiable, and current weather cannot be read reliably. Safety copies have no automatic garbage collection.
-- Publisher OS signatures/notarization remain unavailable. Publication requires a separate reviewed release, exact native packages/checksums and signed updater metadata.
+- Publisher OS signatures/notarization remain unavailable. Updater metadata is signed separately; native OS installer/update coverage remains limited to the recorded tests.
 
 ## 0.4.1
 

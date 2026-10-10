@@ -1,6 +1,6 @@
-# Native administration gallery — unreleased 0.5.0
+# Native administration gallery — 0.5.0
 
-Fourteen captures use the actual compiled Electron app, preload/core/SQLite and local files. **Development preview, not the public 0.4.1 app or multiplayer gameplay.** [Per-image SHA-256 and provenance](provenance.json).
+Fourteen captures use the actual compiled Electron app, preload/core/SQLite and local files. **MineDock 0.5.0 interface with explicitly disclosed saved QA data; these captures do not demonstrate multiplayer gameplay.** [Per-image SHA-256 and provenance](provenance.json).
 
 | View                                    | Actual source                                                                                                              |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
@@ -21,7 +21,7 @@ Fourteen captures use the actual compiled Electron app, preload/core/SQLite and 
 
 Most views use 1440×960 native content; the Adorn detail uses 1800×1200. Downloaded sources are private, exact-version/hash verified and neither installed nor executed. No raw texture/JAR is distributed. Game thumbnails are not MIT assets; see [rights and coverage](../../asset-policy.md).
 
-The owner explicitly approved publication of these whole-interface captures on GitHub and the existing MineDock site on 10 October 2026. MineDock 0.5.0 itself remains unreleased.
+The owner explicitly approved publication of these whole-interface captures on GitHub and the existing MineDock site on 10 October 2026. These interface features are included in MineDock 0.5.0.
 
 Saved health/items/session values are synthetic QA, not live player evidence. Future DataVersion 5023 remains read-only; supported-version edit/restore transactions are tested separately. Current weather is unavailable rather than inferred.
 
