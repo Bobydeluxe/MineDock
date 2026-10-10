@@ -15,3 +15,5 @@ The exposed Sites connector offers access controls, slug changes, versions and d
 5. If needed, recover the old source from Git commit `f604a18f80320216972dae91d86b1da3eafdf0bd`, which includes the original Sites build script and hosting file. Use an isolated checkout and the existing site identity; do not overwrite the current Pages source or create a new hosting project. The ignored `data/website-publish` checkout has not been removed.
 
 No new domain, CNAME, DNS record, paid hosting or GitHub release is part of this migration.
+
+An anonymous runtime audit observed hosting cookies and a challenge script outside the static source; see the [website audit](../website-legal-checklist.md#legacy-hosting-runtime-observation). The old host must not be described as cookie-free merely because MineDock's HTML sets none. This audit did not change the legacy deployment.

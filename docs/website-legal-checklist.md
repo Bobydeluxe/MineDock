@@ -35,6 +35,12 @@ GitHub Pages is not yet active for this repo. The new notice does not purport to
 
 No optional tracking means there is no reason to add a consent banner to the present export. If future nonessential trackers are introduced, review and implement applicable consent before loading them: [CNIL cookie guidance](https://www.cnil.fr/fr/cookies-et-autres-traceurs/regles/cookies/comment-mettre-mon-site-web-en-conformite). The desktop application's local files and optional provider calls are a separate scope.
 
+### Legacy hosting runtime observation
+
+An anonymous browser visit to the current legacy site on 10 October 2026 returned 200 and observed three HttpOnly/Secure cookies: `__Host-appgarden-visitor`, `cf_clearance` and `__cf_bm`, plus a provider-injected inline challenge script and an iframe without a source URL. No remote images, contact forms, browser storage or third-party resource origins were observed in that visit. Source-only inspection would not reveal these host additions; `document.cookie` also does not expose HttpOnly cookies. Cookie values are deliberately excluded from the committed audit.
+
+[Cloudflare's documentation](https://developers.cloudflare.com/fundamentals/reference/policies-compliances/cloudflare-cookies/) identifies `__cf_bm` with bot protection and `cf_clearance` with challenge/JavaScript detection state. The purpose and processing/retention terms of `__Host-appgarden-visitor` were not established and must not be invented. This observation is about the existing host, not the prepared GitHub Pages export. No Cloudflare account, DNS, custom domain or new hosting service was configured. Host-level cookie behavior for the replacement remains pending real deployment; the lack of cookies in a local export does not prove a cookie-free public host.
+
 ## IP and final approval
 
 Keep the MIT code license distinct from the supplied icon's provenance, dependencies, Minecraft textures/skins and mod licenses. Captures have existing explicit owner permission for public website/GitHub use, while original game/client/cache files remain excluded. Keep synthetic-data/version disclosures and links to [asset policy](asset-policy.md), [brand provenance](../assets/brand/README.md) and [dependency notices](THIRD_PARTY_NOTICES.md). Owner permission is not a legal certification of third-party rights.

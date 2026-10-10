@@ -88,13 +88,7 @@
     },
     "browser": {
       "pageViewportCases": 30,
-      "widths": [
-        390,
-        768,
-        1280,
-        1440,
-        1920
-      ],
+      "widths": [390, 768, 1280, 1440, 1920],
       "overflow": 0,
       "brokenImages": 0,
       "runtimeErrors": 0,
@@ -383,7 +377,20 @@
         "status": 200,
         "size": 1749
       }
-    ]
+    ],
+    "desktopWebsiteIsolation": {
+      "at": "2026-10-10T14:15:29.646Z",
+      "actualPackager": "electron-builder app-builder-lib FileMatcher",
+      "websiteFilesExcluded": 40,
+      "existingApplicationFilesWithSameInclusion": 12,
+      "packageJsonRetained": true
+    },
+    "documentation": {
+      "relativeLinksChecked": 296,
+      "missingLinks": 0,
+      "nativeCapturesVerified": 14,
+      "noPrivateGameFilesTracked": true
+    }
   },
   "seo": {
     "productionCanonicalTarget": "https://bobydeluxe.github.io/MineDock/",
@@ -400,9 +407,7 @@
   "deployment": {
     "workflow": ".github/workflows/deploy-pages.yml",
     "output": "dist/site",
-    "productionBranches": [
-      "main"
-    ],
+    "productionBranches": ["main"],
     "autoEnablePages": false,
     "artifactFiles": [
       {
@@ -618,5 +623,59 @@
     "Legacy host exposes no verified redirect/unpublish operation in this session.",
     "No Search Console ownership, sitemap submission or indexing verification.",
     "No new native matrix or local Electron UI rerun for this website-only change; prior application evidence remains source-specific."
-  ]
+  ],
+  "legacyHostingRuntimeAudit": {
+    "at": "2026-10-10T14:20:30.132Z",
+    "url": "https://minedock-friends.arcane-rhea-3082.chatgpt.site/",
+    "status": 200,
+    "scripts": [
+      {
+        "src": "",
+        "type": "",
+        "inline": true,
+        "providerChallenge": true
+      }
+    ],
+    "forms": 0,
+    "embeds": [
+      {
+        "tag": "IFRAME",
+        "src": null,
+        "title": null
+      }
+    ],
+    "localStorage": 0,
+    "sessionStorage": 0,
+    "cookie": "",
+    "remoteImages": [],
+    "externalLinks": ["https://github.com"],
+    "externalResourceRequests": [],
+    "cookies": [
+      {
+        "name": "__Host-appgarden-visitor",
+        "domain": "minedock-friends.arcane-rhea-3082.chatgpt.site",
+        "path": "/",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "Lax"
+      },
+      {
+        "name": "cf_clearance",
+        "domain": ".arcane-rhea-3082.chatgpt.site",
+        "path": "/",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+      },
+      {
+        "name": "__cf_bm",
+        "domain": ".chatgpt.site",
+        "path": "/",
+        "httpOnly": true,
+        "secure": true,
+        "sameSite": "None"
+      }
+    ],
+    "errors": []
+  }
 }
