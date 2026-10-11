@@ -9,7 +9,9 @@ const relative =
     : process.platform === 'darwin'
       ? `mac${suffix}/MineDock.app/Contents/MacOS/MineDock`
       : `linux${suffix}-unpacked/minedock`;
-const binary = path.resolve('release', relative);
+const binary = process.env.MINEDOCK_TEST_BINARY
+  ? path.resolve(process.env.MINEDOCK_TEST_BINARY)
+  : path.resolve('release', relative);
 await stat(binary);
 const child = spawn(
   process.execPath,

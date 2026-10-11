@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-11",
+  "scope": "Future Windows signing infrastructure only; no published release changes",
+  "ownerProductionIdentityConfigured": false,
+  "publishedVersion": "0.5.0",
+  "localWindowsX64": {
+    "nativeIntegrationChecksPassed": 11,
+    "unitTestsPassed": 296,
+    "unitTestsSkipped": 5,
+    "lint": "passed",
+    "typecheck": "passed",
+    "privateCandidateSignatures": {
+      "app": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "setup": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "portable": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "windowsStatus": "UnknownError",
+      "trustedByThisWindowsInstallation": false,
+      "identity": "Disposable local QA only, never a release certificate"
+    }
+  },
+  "pending": [
+    "Final source/UI/package checks",
+    "Native ARM64 and Linux/macOS CI",
+    "Public v0.5.0 immutability recheck"
+  ],
+  "limitations": [
+    "No owner production PFX or CI signing secrets configured by this work",
+    "Self-signed certificates do not establish public Windows trust or remove SmartScreen/Unknown Publisher warnings",
+    "The custom verifier checks RFC3161 attribute presence, not independent TSA chain validation or long-term expiry semantics",
+    "No new application release, tag or real end-user version upgrade is part of this infrastructure PR"
+  ]
+}

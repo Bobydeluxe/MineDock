@@ -6,8 +6,32 @@ export function distributionConfig(platform, env = process.env) {
       env.WIN_CSC_KEY_PASSWORD || env.WINDOWS_CERTIFICATE_PASSWORD || env.CSC_KEY_PASSWORD;
     if (certificate && !password)
       throw new Error('A Windows certificate was configured without its password.');
+    if (env.MINEDOCK_WINDOWS_SIGNING_REQUIRED === 'true' && !certificate)
+      throw new Error('Windows signing was requested but its certificate is missing.');
+    if (certificate && !/^[a-fA-F0-9]{64}$/.test(env.MINEDOCK_WINDOWS_CERT_SHA256 ?? ''))
+      throw new Error(
+        'Windows signing requires MINEDOCK_WINDOWS_CERT_SHA256 (public certificate fingerprint).',
+      );
+    const timestampServer = env.MINEDOCK_WINDOWS_TIMESTAMP_URL || 'http://timestamp.digicert.com';
+    if (certificate && !/^https?:\/\/[^\s]+$/.test(timestampServer))
+      throw new Error('The RFC 3161 timestamp server must be an HTTP(S) URL.');
+    if (certificate && env.ELECTRON_BUILDER_OFFLINE === 'true')
+      throw new Error('Signed distribution builds require online RFC 3161 timestamping.');
     return {
-      config: { forceCodeSigning: !!certificate },
+      config: {
+        forceCodeSigning: !!certificate,
+        ...(certificate
+          ? {
+              win: {
+                signtoolOptions: {
+                  signingHashAlgorithms: ['sha256'],
+                  publisherName: 'MineDock',
+                  rfc3161TimeStampServer: timestampServer,
+                },
+              },
+            }
+          : {}),
+      },
       signing: !!certificate,
       notarizing: false,
       environment: certificate

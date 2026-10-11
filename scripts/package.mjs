@@ -1,5 +1,6 @@
 import { build, Platform, Arch } from 'electron-builder';
 import { distributionConfig } from './distribution-config.mjs';
+import { validateWindowsCertificate, verifyWindowsDistribution } from './windows-signing.mjs';
 const targets = {
   windows: { platform: 'win32', builder: Platform.WINDOWS, formats: ['nsis', 'portable'] },
   linux: { platform: 'linux', builder: Platform.LINUX, formats: ['AppImage', 'deb'] },
@@ -15,6 +16,7 @@ if (!['x64', 'arm64'].includes(arch) || arch !== process.arch)
   );
 const options = distributionConfig(target.platform);
 Object.assign(process.env, options.environment);
+if (options.signing && target.platform === 'win32') validateWindowsCertificate();
 if (!options.signing && target.platform !== 'linux')
   console.warn('No publisher certificate configured: this distribution is unsigned.');
 if (options.signing && target.platform === 'darwin' && !options.notarizing)
@@ -26,3 +28,6 @@ await build({
   targets: target.builder.createTarget(target.formats, Arch[arch]),
   config: options.config,
 });
+// Signing finishes before packaged tests, final checksums and Ed25519 update metadata.
+if (options.signing && target.platform === 'win32')
+  await verifyWindowsDistribution('release', arch);

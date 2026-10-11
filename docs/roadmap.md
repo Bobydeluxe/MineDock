@@ -8,7 +8,7 @@ Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gamepl
 
 ## GitHub distribution and privacy review
 
-The GitHub README is MineDock's official homepage and GitHub Releases distributes 0.5.0. The desktop [Privacy Policy](PRIVACY_POLICY.md), [fourteen-flow network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain public repository documents. Public privacy contact: **minedockapp@gmail.com**. Remaining work is maintainer confirmation of correspondence access/roles/bases/deletion, SignPath assessment of the released installer and online controls, MFA verification and actual Foundation approval. No signing acceptance is claimed.
+The GitHub README is MineDock's official homepage and GitHub Releases distributes 0.5.0. The desktop [Privacy Policy](PRIVACY_POLICY.md), [fourteen-flow network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain public repository documents. Public privacy contact: **minedockapp@gmail.com**. The owner has chosen free self-signed Windows signing for future builds; the [implementation and setup](windows-signing.md) need owner certificate/secret configuration before production use. Correspondence practices, installer/privacy controls and MFA still require maintainer review. Public CA trust and SmartScreen reputation are not established by self-signing.
 
 ## Included in MineDock 0.4.1
 
@@ -29,7 +29,7 @@ The native capture/GIF workflow, user changelog and internal security review wer
 - Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.5.0 matrix and historical 0.4.x evidence are recorded in validation.
 - Windows x64 lifecycle/updater results are recorded explicitly in validation. Linux/macOS OS installation/upgrades, ARM64 lifecycle, protected install paths and native keychain behavior need their own environments.
 - Actual Minecraft client gameplay, map rendering, historical loader coverage and Bedrock crossplay need real servers/clients and personal EULA acceptance. Capture fixtures are not gameplay.
-- Supply Windows/Apple certificates before claiming Authenticode/notarization; publisher metadata signing is separate.
+- Configure and back up the stable owner Windows self-signed identity before future signed releases; announce its public fingerprint and trust limits. Apple signing/notarization needs owner credentials. Publisher metadata signing remains separate.
 - Commission an independent security review and expand disk-full, network-disconnect, power-loss and long-duration/load fault injection.
 
 Docker, remote accounts/RBAC, tunnels, cloud synchronization/providers, optional AI and universal world conversion remain future scope. None appears as a working button. MineDock must remain open to supervise servers/tasks and does not configure routers/firewalls.
