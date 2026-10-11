@@ -1,0 +1,181 @@
+{
+  "date": "2026-10-11",
+  "verifiedAt": "2026-10-11T16:56:26.211Z",
+  "scope": "Real owner Windows signing secrets and native CI verification for future builds; no application release",
+  "sourceRevision": "8ae15c186ac326be12fdb4fcb538e27f8e8af8e6",
+  "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+  "ownerProductionIdentityConfigured": true,
+  "configuration": {
+    "windowsSecrets": [
+      {
+        "name": "WINDOWS_CERTIFICATE",
+        "updatedAt": "2026-10-11T16:36:20Z"
+      },
+      {
+        "name": "WINDOWS_CERTIFICATE_PASSWORD",
+        "updatedAt": "2026-10-11T16:36:21Z"
+      }
+    ],
+    "publicPinVerified": true,
+    "automaticFutureVersionTagSigning": true,
+    "localPfxPasswordAndPrivateKeyValidated": true,
+    "passwordEnteredInMaskedLocalWindow": true,
+    "secretsSealedToGitHubRepositoryPublicKey": true,
+    "localDisposableSetupTestsPassed": 7,
+    "noPasswordPfxTokenOrPrivateKeyInRepositoryFiles": true,
+    "privateBackupRestoreNotVerified": true
+  },
+  "github": {
+    "run": "https://github.com/Bobydeluxe/MineDock/actions/runs/38156282426",
+    "status": "passed",
+    "matrices": [
+      {
+        "job": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "jobId": 114519825409,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1,
+        "updateMetadataStepPassed": true
+      },
+      {
+        "job": "package (windows-2025, x64, build:windows)",
+        "jobId": 114519825607,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1,
+        "updateMetadataStepPassed": true,
+        "ownerPfxPreflight": "passed",
+        "temporaryPfxCleanup": "passed",
+        "signedFilesVerified": [
+          {
+            "file": "MineDock.exe",
+            "sha256": "6e4a4b65f4f77edbfb6e4d3874e609123099ed0c7cb7974d944951b5dc1b9fc0",
+            "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+            "algorithm": "SHA256",
+            "cryptographicIntegrity": true,
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Setup-x64.exe",
+            "sha256": "32e2e7dfd7f3e770f0318d2cba040bebb73687abbfeb906b5917e6776443a41c",
+            "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+            "algorithm": "SHA256",
+            "cryptographicIntegrity": true,
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Portable-x64.exe",
+            "sha256": "d88fae2423a74e4c96c988e7d3545754b8690a928e59b95bf79ae2bdab5cb78c",
+            "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+            "algorithm": "SHA256",
+            "cryptographicIntegrity": true,
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          }
+        ]
+      },
+      {
+        "job": "package (macos-15-intel, x64, build:mac)",
+        "jobId": 114519825653,
+        "status": "passed",
+        "unitPassed": 297,
+        "unitSkipped": 4,
+        "packagedPassed": 14,
+        "packagedSkipped": 2,
+        "updateMetadataStepPassed": true
+      },
+      {
+        "job": "package (windows-11-arm, arm64, build:windows)",
+        "jobId": 114519825664,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1,
+        "updateMetadataStepPassed": true,
+        "ownerPfxPreflight": "passed",
+        "temporaryPfxCleanup": "passed",
+        "signedFilesVerified": [
+          {
+            "file": "MineDock.exe",
+            "sha256": "cce4f37ad47c455b3cb790e5d25a8dfc4c1c4e10af8e1ee7e2d7e1852a5c7044",
+            "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+            "algorithm": "SHA256",
+            "cryptographicIntegrity": true,
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Setup-arm64.exe",
+            "sha256": "a0c2865b194003156a8509402294a848f056dba724d5c28b6a2b5a297303b330",
+            "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+            "algorithm": "SHA256",
+            "cryptographicIntegrity": true,
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Portable-arm64.exe",
+            "sha256": "f2a4ea4bbf7f90c0558737b7bb386f1b5670db3a9a7eca1b954935a1e77065d3",
+            "certificateSha256": "0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395",
+            "algorithm": "SHA256",
+            "cryptographicIntegrity": true,
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          }
+        ]
+      },
+      {
+        "job": "package (macos-15, arm64, build:mac)",
+        "jobId": 114519825673,
+        "status": "passed",
+        "unitPassed": 297,
+        "unitSkipped": 4,
+        "packagedPassed": 14,
+        "packagedSkipped": 2,
+        "updateMetadataStepPassed": true
+      },
+      {
+        "job": "package (ubuntu-24.04, x64, build:linux)",
+        "jobId": 114519825723,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1,
+        "updateMetadataStepPassed": true
+      }
+    ],
+    "logInspection": "Raw owner logs were not saved or printed; only allowlisted public signature/test evidence was retained"
+  },
+  "publishedRelease": {
+    "version": "0.5.0",
+    "windowsDownloadsRemainUnsigned": true,
+    "unchangedAssetNamesSizesDigests": 20,
+    "unchangedTagObject": "a6f823d45e746abfe6357d5059d4b5799a76a966",
+    "newReleaseOrTagCreated": false,
+    "CIArtifactsAreNotPublicReleaseDownloads": true
+  },
+  "applicationAndUpdaterTrustUnchanged": true,
+  "limitations": [
+    "The owner-certificate workflow was dispatched manually from main; automatic future-tag signing is configured but no new version tag was created to exercise that trigger",
+    "Self-signed does not establish public Windows CA trust, Microsoft certification or removal of SmartScreen/Unknown Publisher warnings",
+    "Owner-certificate CI covers native unpacked application journeys and final app/Setup/Portable signatures; installed Setup/uninstall/Portable-wrapper lifecycle remains the earlier disposable-key x64 check",
+    "RFC3161 presence is checked; independent TSA chain and long-term expiry validation remain outside the custom verifier",
+    "The owner must maintain and test an encrypted offline PFX backup; no backup target was provided or modified",
+    "Private owned-game test remains skipped; macOS also skips Bedrock directory import; Apple signing/notarization is not configured",
+    "Signed update metadata generation passed in CI; no new public-release download or end-user upgrade was performed for these private verification artifacts"
+  ]
+}

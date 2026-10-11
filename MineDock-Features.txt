@@ -1,6 +1,6 @@
 MINEDOCK — COMPLETE FEATURE LIST
 Public version: 0.5.0 (player/world administration and private item resources)
-Updated: 10 October 2026
+Updated: 11 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
 English is the primary project language and default application language.
@@ -345,7 +345,13 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Conditional Windows signing with real certificate/password.
 - Conditional macOS hardened signing/JIT entitlement and Apple notarization.
 - Usable unsigned packages when certificates are missing.
-- Owner currently has no Windows/Apple signing certificates.
+- Published 0.5.0 Windows/macOS packages remain unsigned and unchanged.
+- Future Windows builds use the stable CN=MineDock RSA3072/SHA256 self-signed
+  certificate, encrypted GitHub Actions secrets and pinned public fingerprint.
+- Automatic Windows signing is enabled for future v* version tags; manual
+  signed builds select main and windows_signing. No release is published by CI.
+- Self-signed does not establish public Windows trust or remove SmartScreen
+  and Unknown Publisher warnings. Apple signing credentials are unavailable.
 - Publisher metadata signatures do not imply Authenticode/Apple notarization.
 - License and third-party notices included in artifacts.
 
@@ -355,7 +361,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Tests cover migration preservation, paths/archives, resumable HTTP, dependency
   conflicts, imports, worlds, file operations, players/storage, schedules,
   runtimes, retention/recovery and signed-update tampering/refusal.
-- Twenty-six source UI cases include actual Electron/main/preload/SQLite journeys and
+- Source UI cases include actual Electron/main/preload/SQLite journeys and
   explicit isolated demo scenarios; fixtures never become production data.
 - Packaged suite includes actual Electron journeys and native dialog resizing.
 - Six-language preference/reload/restart tested.
@@ -366,7 +372,8 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Opt-in real Paper bootstrap uses eula=false; no playable world created.
 - Real Minecraft clients/gameplay/crossplay/historical-engine compatibility
   unvalidated without owner consent and clients.
-- OS signing/notarization require missing certificates/credentials.
+- Published 0.5.0 OS packages remain unsigned. Future Windows self-signing is
+  configured; Apple signing/notarization still needs owner credentials.
 - Windows x64 NSIS lifecycle is validated separately; Linux/macOS installation,
   keychain behavior, large-server load,
   disk-full and extended power-loss testing remain separate validation work.

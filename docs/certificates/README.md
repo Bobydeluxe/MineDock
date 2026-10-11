@@ -21,7 +21,7 @@ Public certificate DER SHA-256 fingerprint:
 0f8c09238269ccf126182ec3efad795ce745d3e00f18ca03142d1557b8175395
 ```
 
-The GitHub Actions repository variable `MINEDOCK_WINDOWS_CERT_SHA256` is pinned to this value. As checked on 11 October 2026, the owner still needs to configure the two encrypted Windows signing secrets before owner-signed CI builds can run. Automatic future-tag signing is not enabled. No password, encrypted PFX or private key is published in this repository.
+The GitHub Actions repository variable `MINEDOCK_WINDOWS_CERT_SHA256` is pinned to this value. As verified on 11 October 2026, both encrypted Windows signing secrets are configured and automatic signing is enabled for future `v*` version tags. The [owner-certificate native build](https://github.com/Bobydeluxe/MineDock/actions/runs/38156282426) records actual verification; no application release is published by that workflow. No password, encrypted PFX or private key is published in repository files or release assets.
 
 ## Inspect without installing trust
 
