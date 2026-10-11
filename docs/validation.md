@@ -1,5 +1,13 @@
 # MineDock validation
 
+## Future Windows signing and public certificate — 11 October 2026
+
+Optional self-signed Windows Authenticode is implemented for future reviewed builds. The [executed signing record](validation-records/windows-self-signing.json) covers source revision `4acb329fd3b1bcce24b9a8b4d46aaadd0312455c`: lint/typecheck/build, **296 unit passes / 5 skips**, **31 UI passes / 1 skip**, **15 local signed-packaged passes / 1 skip**, **11 native signing checks** and **19 download-statistics tests**. [All six native distribution jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/38149888950) passed. Windows x64/ARM64 each additionally passed 12 disposable signing checks and 15 signed-app journeys, with SHA-256/RFC 3161 app/Setup/Portable signatures and chain trust reported separately. Actual installed Setup/uninstall/Portable-wrapper lifecycle and isolated data preservation were tested on x64. These disposable test keys are not the owner identity.
+
+The owner subsequently generated the stable production identity locally. Its [public DER certificate and fingerprint](certificates/README.md) were independently inspected: exact `CN=MineDock` subject/issuer, RSA 3072, SHA256-with-RSA, code-signing EKU/digital-signature usage and validity through 11 October 2028. The published CER contains **no private key**. The public GitHub Actions pin matches. The two private Windows secrets remain unconfigured; a real owner-secret CI build, ARM64 installed lifecycle and independent TSA/long-term expiry validation are still pending. Historical records below describe their own earlier states.
+
+The repository update publishes only the public CER and documentation. Published 0.5.0's 20 assets/tag, production Ed25519 updater trust, application source and version remain unchanged; no new release/tag is created. Publishing a certificate does not sign those existing downloads or establish Microsoft/CA certification.
+
 ## GitHub-only repository preparation — 11 October 2026
 
 The owner permanently abandoned separate hosting and requested a focused, unmerged pull request. The GitHub README is the official homepage, Releases remains the distribution channel, and the desktop [Privacy Policy](PRIVACY_POLICY.md), [network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain repository documents. Application version 0.5.0 and its published assets are unchanged.

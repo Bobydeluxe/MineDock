@@ -45,7 +45,9 @@ For removal, use Installed apps for Windows Setup, or close MineDock and remove 
 
 ### Code signing policy
 
-MineDock 0.5.0 Windows downloads remain **unsigned**. Optional free [self-signed Windows signing](docs/windows-signing.md) is prepared for future reviewed builds; the owner must configure a stable certificate first. Self-signed signatures do **not** automatically remove SmartScreen or Unknown Publisher warnings. No public certificate-authority trust is claimed. The [Code signing policy](docs/code-signing-policy.md) explains release provenance and owner controls.
+MineDock 0.5.0 Windows downloads remain **unsigned**. Free [self-signed Windows signing](docs/windows-signing.md) is prepared for future reviewed builds. The owner has created a stable **CN=MineDock, RSA 3072 / SHA-256** certificate, valid until **11 October 2028**. [Public certificate, fingerprint and verification](docs/certificates/README.md). Private CI credentials still need owner configuration before automated signing can run.
+
+Self-signed signatures do **not** automatically remove SmartScreen or Unknown Publisher warnings. This is not Microsoft certification or public certificate-authority validation. The [Code signing policy](docs/code-signing-policy.md) explains release provenance and owner controls; the updater's separate Ed25519 signatures remain in place.
 
 The [desktop Privacy Policy](docs/PRIVACY_POLICY.md) and [verified network audit](docs/privacy-audit.md) describe local server/player data, online providers, controls, deletion and security limits. Privacy contact: **[minedockapp@gmail.com](mailto:minedockapp@gmail.com)**. Correspondence handling still needs maintainer review; the released installer does not display this new policy and some online features have no separate opt-out. Signing does not certify privacy compliance. MIT covers original code, not Minecraft resources or other [third-party materials](docs/THIRD_PARTY_NOTICES.md).
 
