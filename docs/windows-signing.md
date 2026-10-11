@@ -9,10 +9,10 @@ Optional infrastructure for **future builds**. Published 0.5.0 stays unsigned an
 Open **Windows PowerShell 5.1** in a reviewed checkout. Administrator rights are not required:
 
 ```powershell
-.\scripts\windows\New-MineDockSigningCertificate.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\windows\New-MineDockSigningCertificate.ps1
 ```
 
-Enter a strong password of at least 16 characters at the hidden prompt; save it in a password manager. The script creates a fresh, restricted `%LOCALAPPDATA%\MineDock\private-signing` directory, accessible to the current account and SYSTEM, with:
+The execution-policy option applies only to this reviewed script process; it does not change the machine policy or disable SmartScreen/Defender. Enter a strong password of at least 16 characters at the hidden prompt; save it in a password manager. The script creates a fresh, restricted `%LOCALAPPDATA%\MineDock\private-signing` directory, accessible to the current account and SYSTEM, with:
 
 - `MineDock-signing.pfx`: encrypted private key, AES256/SHA256 export protection; keep private.
 - `MineDock-signing.cer`: public certificate, safe to inspect/publish deliberately.
