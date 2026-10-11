@@ -8,7 +8,7 @@ The exposed Sites connector offers access controls, slug changes, versions and d
 
 ## Controlled switch after approval
 
-1. Complete publisher/privacy review, get explicit approval to merge/publish the website, and deploy from `main` through GitHub Pages.
+1. Complete publisher/privacy review, get approval for the final pages and their website deployment, and deploy from `main` through GitHub Pages. The separately authorized merge of prepared sources with `approved: false` does not activate this switch.
 2. Open the actual public project URL, verify all five pages, favicon, images and styles over HTTPS, the custom 404, sitemap/canonical metadata and the thirteen current 0.5.0 download links. Repeat browser and cookie checks on the real host. Preserve the successful Actions/deployment identifiers and output hashes.
 3. Only after these checks pass, update README's primary Website link, the repository About/homepage setting, active website instructions and future release notes to the verified GitHub Pages URL. Keep old URLs in historical evidence explicitly labeled historical. Search for `chatgpt.site` to distinguish live references from records.
 4. Ask the owner before retiring the legacy deployment. If the host has no supported redirect, an owner-approved static move notice linking to the verified replacement is an option; it is not an HTTP redirect. Keep the previous version available for rollback until the replacement is accepted. Avoid serving two fully indexable copies indefinitely.

@@ -1,10 +1,12 @@
 # Owner actions before GitHub Pages and SignPath
 
-## Current status — 10 October 2026
+## Current status — 11 October 2026
 
 The desktop application remains **0.5.0** with twenty unchanged release assets. GitHub Pages is not enabled and home, privacy, legal, terms, licenses and sitemap return **404**. The existing homepage remains the active website until Pages has actually deployed and passed public verification. A nonexistent privacy URL must not be submitted to SignPath.
 
 Confirmed by the owner: private non-professional publisher, public anonymity preferred, public contact **minedockapp@gmail.com**, and **no GitHub identity-disclosure confirmation yet**. Only that explicitly designated public email is included in the proposed notices. The owner has not supplied private residential information here.
+
+The owner authorized publishing the prepared sources and documentation to `main` while awaiting GitHub's reply. That merge keeps `site/publication.json` at `approved: false`, skips website deployment and announces no replacement URL. The steps below apply to the later website launch.
 
 ## 1. Resolve anonymous publication privately with GitHub
 
@@ -37,18 +39,18 @@ Repository admin access was verified, so activation can be performed through Git
 1. Open **Bobydeluxe/MineDock → Settings → Pages**.
 2. Under **Build and deployment → Source**, select **GitHub Actions**. Keep the default `github.io` project address; add no custom domain, CNAME, DNS or subscription.
 3. In **Settings → Environments → github-pages**, configure deployment branches to permit only `main`; verify the environment before dispatch. Use owner approval protection if available on the account.
-4. Merge only the reviewed website/privacy PR after the real publication fields are approved. Do not set `approved: true` or invent disclosure merely to get a successful build.
+4. Prepared sources may already be merged with `approved: false`. Use a separate reviewed change to finalize the legal pages and real publication fields after the pending arrangements are resolved; obtain owner approval for that website launch. Do not set `approved: true` or invent disclosure merely to get a successful build.
 5. Run **Actions → Deploy website to GitHub Pages → Run workflow → main**. The existing workflow exports `dist/site` and reads the configured project URL.
 6. Require successful deployment and actual HTTP 200 for home, `/privacy/`, `/legal/`, `/terms/`, `/licenses/` and `/sitemap.xml`, then inspect images, mobile widths, navigation, cookies and thirteen release/checksum links. Check 404 behavior as well.
 
-Only after those checks replace active legacy links and the repository About/homepage with **https://bobydeluxe.github.io/MineDock/**. Historical evidence keeps its original URLs. Do not delete the old site or claim a redirect without a supported, tested redirect capability. No automatic redirect has been established; [legacy retirement](legacy-site/README.md) documents this limit.
+Only after those checks replace active legacy links and the repository About/homepage with the verified GitHub Pages project URL. Historical evidence keeps its original URLs. Do not delete the old site or claim a redirect without a supported, tested redirect capability. No automatic redirect has been established; [legacy retirement](legacy-site/README.md) documents this limit.
 
 ## 4. SignPath submission after publication
 
-Use **https://bobydeluxe.github.io/MineDock/privacy/** as the single Privacy Policy URL only once it is live, reviewed and complete. Include the [Code signing policy](code-signing-policy.md). Confirm the owner as signing approver and MFA before provisioning signing access. Acceptance is the Foundation's decision.
+Use the published project's `/privacy/` route as the single Privacy Policy URL only once it is live, reviewed and complete. No live policy URL is announced yet. Include the [Code signing policy](code-signing-policy.md). Confirm the owner as signing approver and MFA before provisioning signing access. Acceptance is the Foundation's decision.
 
 Ask SignPath to assess the disclosed 0.5.0 network behavior and installer against its current requirements. The existing installer does not display this new policy, and some view-triggered requests have no per-feature opt-out. Any required installer/application change needs a separately reviewed future application release; this website task does not rebuild or replace 0.5.0. No signing request, acceptance or certificate is claimed.
 
 ## 5. Search Console after the site is live
 
-Follow [the SEO guide](website-seo.md): add the exact **URL-prefix** property `https://bobydeluxe.github.io/MineDock/` in the owner's Google account, obtain Google's real meta verification tag, commit/deploy it, verify with Google and submit the sitemap. No Google token has been invented, no analytics is added and indexing/ranking are not promised.
+Follow [the SEO guide](website-seo.md): add the exact verified project URL as a **URL-prefix** property in the owner's Google account, obtain Google's real meta verification tag, commit/deploy it, verify with Google and submit the sitemap. No Google token has been invented, no analytics is added and indexing/ranking are not promised.

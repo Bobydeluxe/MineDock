@@ -1,5 +1,13 @@
 # MineDock validation
 
+## Source publication while awaiting GitHub — 11 October 2026
+
+The owner authorized publishing the prepared privacy/site sources and documentation to `main` without announcing the planned website URL. The current website remains primary, the public contact is **minedockapp@gmail.com**, and `site/publication.json` retains `approved: false` with unresolved publisher/privacy/host review. The website workflow therefore builds for review and skips deployment. Approval for the final legal pages and their later website launch remains separate.
+
+At the start of this update, both GitHub source-validation runs for `8ca1a99b289af9c244c174f121b27d94ef936024` passed. The authenticated Pages endpoint still returned 404 and `has_pages` remained false; the current release was still 0.5.0 with twenty assets. The update removes the planned URL from current Markdown guides and presentation text; technical configuration and dated machine-readable audit evidence retain their original target for reproducibility. No application inputs, release assets or website approval fields are changed. The earlier sections below retain their historical checkpoint results.
+
+Local checks for this documentation update pass: lint, review export, **752 static assertions**, **30 browser cases** across six pages and five widths, **13 public download/checksum links**, **224 relative documentation links**, and **14 unchanged native capture hashes**. The browser reports no external resources, cookies, overflow or broken images. Production remains blocked by the real unapproved configuration.
+
 ## Website/privacy and SignPath preparation — 10 October 2026
 
 **PREPARED ONLY, publication blocked.** The owner designated **minedockapp@gmail.com** publicly and confirmed GitHub's confidential identity-disclosure arrangement is not yet resolved. The [combined Privacy Policy source](../site/privacy/index.html), [fourteen-flow application network audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and [specific secure owner actions](website-owner-actions.md) are ready for review. Publisher-controlled correspondence roles/bases/deletion practice and final legal approval remain pending. No private residential information is published.
