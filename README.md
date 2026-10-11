@@ -10,19 +10,6 @@
 
 **GitHub is MineDock's only official home.** This README is the project homepage; documentation, support and downloads are available here. The current public application release is **0.5.0**.
 
-## Download Statistics
-
-<!-- download-statistics:start -->
-| Platform | Downloads |
-| -------- | --------: |
-| Windows | 94 |
-| Linux | 83 |
-| macOS | 81 |
-| **Total** | **258** |
-<!-- download-statistics:end -->
-
-Package download events across **all published releases**, including prereleases; these are not unique users or confirmed installations. Refreshed approximately daily by [GitHub Actions](https://github.com/Bobydeluxe/MineDock/actions/workflows/download-statistics.yml). [Counting rules and limitations](docs/download-statistics.md).
-
 ![Dashboard design retained from 0.4.1 — actual Electron capture](docs/screenshots/dashboard.png)
 
 ## Project status
@@ -210,3 +197,16 @@ Use [GitHub Issues](https://github.com/Bobydeluxe/MineDock/issues/new/choose) fo
 ## License
 
 Original code and engine symbols: [MIT](LICENSE). Packages include dependency license notices. MineDock is independent of Mojang, Microsoft and engine/content providers.
+
+## Download Statistics
+
+<!-- download-statistics:start -->
+| Platform | Downloads |
+| -------- | --------: |
+| Windows | 94 |
+| Linux | 83 |
+| macOS | 81 |
+| **Total** | **258** |
+<!-- download-statistics:end -->
+
+Package download events across **all published releases**, including prereleases; these are not unique users or confirmed installations. Refreshed approximately daily by [GitHub Actions](https://github.com/Bobydeluxe/MineDock/actions/workflows/download-statistics.yml). [Counting rules and limitations](docs/download-statistics.md).
