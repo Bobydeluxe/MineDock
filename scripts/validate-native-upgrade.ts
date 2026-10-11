@@ -148,7 +148,9 @@ await writeFile(
 );
 const db = new DatabaseSync(path.join(f.root, 'app.db'));
 db.exec('PRAGMA foreign_keys=OFF');
-const initialSchema = baselineVersion === '0.3.0' ? 5 : 11;
+const initialSchema = Number(option('--baseline-schema', baselineVersion === '0.3.0' ? '5' : '11'));
+if (!Number.isInteger(initialSchema) || initialSchema < 1 || initialSchema > migrations.length)
+  throw Error('Invalid baseline database schema');
 for (const migration of migrations.slice(initialSchema).reverse())
   for (const match of migration.sql.matchAll(/CREATE TABLE ([a-z_]+)/g))
     db.exec('DROP TABLE IF EXISTS ' + match[1]);
