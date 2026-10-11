@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.5.1
+
+Windows signing and distribution maintenance. Application features and the SQLite schema are unchanged from 0.5.0.
+
+### Added
+
+- Self-signed Windows Authenticode signatures for the x64 and ARM64 application, Setup installer and Portable executable, using MineDock's stable public certificate.
+- SHA-256 signatures with RFC 3161 timestamps, verified before generating release checksums and signed updater metadata.
+
+### Improved
+
+- Automatic owner-certificate signing for reviewed version tags; native CI checks the expected certificate and removes temporary private signing files before uploading artifacts.
+- GitHub-only downloads, current privacy/signing documentation and distribution packaging that excludes unrelated build outputs.
+
+### Fixed
+
+- Windows release packages now carry the configured MineDock signature; configuring CI alone did not sign the previously published 0.5.0 files.
+
+### Known issues
+
+- This is a self-signed certificate, not public certificate-authority or Microsoft certification. SmartScreen or Unknown Publisher warnings can remain; no trust root is installed.
+- macOS packages are not Apple Developer ID signed or notarized. Linux and macOS installation/update lifecycles and Windows ARM64 installed lifecycle retain their documented validation limits.
+- Gameplay, inventory/rendering, privacy-control and older 0.3.0 launcher limits from 0.5.0 remain applicable. Existing release files are preserved.
+
 ## Unreleased — repository documentation and tooling
 
 - Use the GitHub README as the official homepage, with Releases downloads, support and application documentation.
