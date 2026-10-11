@@ -15,10 +15,10 @@
 <!-- download-statistics:start -->
 | Platform | Downloads |
 | -------- | --------: |
-| Windows | 93 |
+| Windows | 94 |
 | Linux | 83 |
 | macOS | 81 |
-| **Total** | **257** |
+| **Total** | **258** |
 <!-- download-statistics:end -->
 
 Package download events across **all published releases**, including prereleases; these are not unique users or confirmed installations. Refreshed approximately daily by [GitHub Actions](https://github.com/Bobydeluxe/MineDock/actions/workflows/download-statistics.yml). [Counting rules and limitations](docs/download-statistics.md).
