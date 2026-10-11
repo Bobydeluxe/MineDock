@@ -25,7 +25,8 @@ a {
   text-decoration: none;
 }
 a:focus-visible,
-summary:focus-visible {
+summary:focus-visible,
+.policy-table-wrap:focus-visible {
   outline: 3px solid var(--teal);
   outline-offset: 5px;
 }
@@ -72,6 +73,45 @@ summary:focus-visible {
   gap: 10px 24px;
   flex-basis: 100%;
   font-size: 14px;
+}
+.policy-contents {
+  margin-top: 24px;
+  line-height: 2;
+}
+.policy-table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  margin-block: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.policy-table {
+  width: 100%;
+  min-width: 720px;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+}
+.policy-table caption {
+  padding: 16px;
+  text-align: left;
+  font-weight: 700;
+}
+.policy-table th,
+.policy-table td {
+  padding: 14px;
+  text-align: left;
+  vertical-align: top;
+  border-top: 1px solid var(--line);
+}
+.policy-table thead {
+  background: var(--panel);
+}
+.policy-table th:first-child {
+  width: 24%;
+}
+.policy-table td {
+  color: var(--muted);
 }
 .footer-links a:hover {
   text-decoration: underline;

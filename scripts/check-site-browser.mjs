@@ -85,7 +85,7 @@ const contrastChecks = ['#edf4f3', '#bccbce', '#43d2cb', '#efae75'].flatMap((tex
 );
 if (contrastChecks.some((c) => c.ratio < 4.5))
   throw Error('Fixed page palette fails normal-text contrast');
-if (capture) await fs.mkdir('docs/design/github-pages-050', { recursive: true });
+if (capture) await fs.mkdir('test-results/website-review', { recursive: true });
 try {
   for (const width of [390, 768, 1280, 1440, 1920]) {
     for (const route of ['', 'legal/', 'terms/', 'privacy/', 'licenses/', '404.html']) {
@@ -165,7 +165,36 @@ try {
         await page.getByRole('link', { name: 'Download', exact: true }).click();
         await page.waitForURL('**/MineDock/#download');
       }
-      if (capture && ((width === 1440 && route === '') || (width === 390 && route === 'legal/'))) {
+      if (route === 'privacy/') {
+        const table = page.getByRole('region', {
+          name: 'Application network requests and controls',
+        });
+        await table.focus();
+        const scroll = await table.evaluate((el) => ({
+          focus: el === document.activeElement,
+          outline: getComputedStyle(el).outlineStyle,
+          width: el.clientWidth,
+          scrollWidth: el.scrollWidth,
+        }));
+        if (
+          !scroll.focus ||
+          scroll.outline === 'none' ||
+          (width === 390 && scroll.scrollWidth <= scroll.width)
+        )
+          throw Error('Privacy table must scroll within its keyboard-focusable region on mobile');
+        if (width === 390) {
+          await page.keyboard.press('ArrowRight');
+          await page.waitForFunction(
+            () => document.querySelector('.policy-table-wrap').scrollLeft > 0,
+          );
+        }
+      }
+      if (
+        capture &&
+        ((width === 1440 && route === '') ||
+          (width === 390 && route === 'legal/') ||
+          ([390, 1440].includes(width) && route === 'privacy/'))
+      ) {
         await page.goto(new URL(route, base).href, { waitUntil: 'networkidle' });
         await page.evaluate(async () =>
           Promise.all(
@@ -176,9 +205,17 @@ try {
           ),
         );
         await page.screenshot({
-          path: `docs/design/github-pages-050/${route ? 'legal-390' : 'home-1440'}.png`,
+          path: `test-results/website-review/${route ? route.replace('/', '') : 'home'}-${width}.png`,
           fullPage: true,
         });
+        if (route === 'privacy/')
+          await page.screenshot({
+            path: `test-results/website-review/privacy-top-${width}.png`,
+          });
+        if (route === 'privacy/' && width === 1440)
+          await page
+            .locator('.policy-table-wrap')
+            .screenshot({ path: 'test-results/website-review/privacy-network-1440.png' });
       }
       results.push({
         width,

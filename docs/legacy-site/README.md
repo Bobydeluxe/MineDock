@@ -1,6 +1,6 @@
 # Legacy website retirement and rollback
 
-The active website is still `https://minedock-friends.arcane-rhea-3082.chatgpt.site/`. Its last verified deployment was Sites version 9 on 10 October 2026; the existing administration validation record retains that historical evidence. The `hosting.json` in this folder preserves its opaque project identity. It is not consumed by the new GitHub Pages build and contains no credential.
+The active website is still `https://minedock-friends.arcane-rhea-3082.chatgpt.site/`. Its last verified deployment was Sites version **10** on 10 October 2026 at 17:33 UTC, source `7d0dae596f6cbd2665b1aef10499ab18cca9b0d2`, with 0.5.0 downloads. The [release record](../validation-records/0.5.0-release.json) retains its deployment identifier; the earlier administration record's version 9 remains historical evidence. The `hosting.json` in this folder preserves its opaque project identity. It is not consumed by the new GitHub Pages build and contains no credential.
 
 ## What can actually be done
 
@@ -8,7 +8,7 @@ The exposed Sites connector offers access controls, slug changes, versions and d
 
 ## Controlled switch after approval
 
-1. Complete publisher/privacy review, get explicit approval to merge/publish the website, and deploy from `main` through GitHub Pages.
+1. Complete publisher/privacy review, get approval for the final pages and their website deployment, and deploy from `main` through GitHub Pages. The separately authorized merge of prepared sources with `approved: false` does not activate this switch.
 2. Open the actual public project URL, verify all five pages, favicon, images and styles over HTTPS, the custom 404, sitemap/canonical metadata and the thirteen current 0.5.0 download links. Repeat browser and cookie checks on the real host. Preserve the successful Actions/deployment identifiers and output hashes.
 3. Only after these checks pass, update README's primary Website link, the repository About/homepage setting, active website instructions and future release notes to the verified GitHub Pages URL. Keep old URLs in historical evidence explicitly labeled historical. Search for `chatgpt.site` to distinguish live references from records.
 4. Ask the owner before retiring the legacy deployment. If the host has no supported redirect, an owner-approved static move notice linking to the verified replacement is an option; it is not an HTTP redirect. Keep the previous version available for rollback until the replacement is accepted. Avoid serving two fully indexable copies indefinitely.

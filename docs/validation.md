@@ -1,5 +1,21 @@
 # MineDock validation
 
+## Source publication while awaiting GitHub — 11 October 2026
+
+The owner authorized publishing the prepared privacy/site sources and documentation to `main` without announcing the planned website URL. The current website remains primary, the public contact is **minedockapp@gmail.com**, and `site/publication.json` retains `approved: false` with unresolved publisher/privacy/host review. The website workflow therefore builds for review and skips deployment. Approval for the final legal pages and their later website launch remains separate.
+
+At the start of this update, both GitHub source-validation runs for `8ca1a99b289af9c244c174f121b27d94ef936024` passed. The authenticated Pages endpoint still returned 404 and `has_pages` remained false; the current release was still 0.5.0 with twenty assets. The update removes the planned URL from current Markdown guides and presentation text; technical configuration and dated machine-readable audit evidence retain their original target for reproducibility. No application inputs, release assets or website approval fields are changed. The earlier sections below retain their historical checkpoint results.
+
+Local checks for this documentation update pass: lint, review export, **752 static assertions**, **30 browser cases** across six pages and five widths, **13 public download/checksum links**, **224 relative documentation links**, and **14 unchanged native capture hashes**. The browser reports no external resources, cookies, overflow or broken images. Production remains blocked by the real unapproved configuration.
+
+## Website/privacy and SignPath preparation — 10 October 2026
+
+**PREPARED ONLY, publication blocked.** The owner designated **minedockapp@gmail.com** publicly and confirmed GitHub's confidential identity-disclosure arrangement is not yet resolved. The [combined Privacy Policy source](../site/privacy/index.html), [fourteen-flow application network audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and [specific secure owner actions](website-owner-actions.md) are ready for review. Publisher-controlled correspondence roles/bases/deletion practice and final legal approval remain pending. No private residential information is published.
+
+[Machine-readable evidence](validation-records/0.5.0-website-privacy-signpath.json) records passing lint, review export and **752 static assertions**, including **19 in-memory publication-gate cases**. Six pages at five widths pass **30 browser cases**: keyboard navigation and the mobile network table, fourteen unchanged native capture hashes (seven featured images checked at each width), thirteen public download/checksum links returning 200, no broken images or document overflow, and no external resource requests or cookies in local browser contexts. The production build correctly refuses the real unapproved configuration. Prepared production canonical/OG metadata and sitemap routes remain separate from the noindex review export.
+
+The Pages API/environment and all six planned public URLs return **404**. No deployment, merge, automatic legacy redirect or primary-link switch is claimed. Search Console is not verified; no analytics was added. The existing site returns 200 and remains primary. All twenty 0.5.0 release assets retain their recorded sizes/digests, and desktop inputs/dependencies/workflows are unchanged. No desktop release build, signing request or executable replacement was performed. The new policy is not yet a working URL for SignPath; the Foundation must also assess the released installer's policy display and feature-level network controls before signing eligibility is claimed.
+
 ## MineDock 0.5.0 public release — 10 October 2026
 
 [MineDock 0.5.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) is the current stable release. [Machine-readable release evidence](validation-records/0.5.0-release.json) records the exact artifacts, checks and migration bytes. Historical sections below describe their own earlier checkpoints.

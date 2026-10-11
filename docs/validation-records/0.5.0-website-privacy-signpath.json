@@ -1,0 +1,230 @@
+{
+  "checkedAt": "2026-10-10T19:10:05.739Z",
+  "state": "PREPARED ONLY — PUBLICATION BLOCKED",
+  "applicationVersion": "0.5.0",
+  "baseCommit": "8563274cee6bd129f0a820772d4e03a5b2c8f021",
+  "ownerConfirmed": {
+    "publisherType": "private-nonprofessional",
+    "identityPreference": "anonymity",
+    "publicEmail": "minedockapp@gmail.com",
+    "githubIdentityArrangement": "not yet contacted/confirmed"
+  },
+  "publication": {
+    "approved": false,
+    "publisherType": "private-nonprofessional",
+    "identityPreference": "anonymity",
+    "publicEmail": "minedockapp@gmail.com",
+    "hostIdentityDisclosureConfirmed": false,
+    "publisherStatus": "awaiting-owner",
+    "privacyStatus": "awaiting-owner",
+    "hostContactStatus": "awaiting-verification",
+    "reviewedOn": null
+  },
+  "pages": {
+    "enabled": false,
+    "apiStatus": 404,
+    "environmentStatus": 404,
+    "deployedByThisTask": false,
+    "publicResponses": [
+      {
+        "url": "https://bobydeluxe.github.io/MineDock/",
+        "status": 404
+      },
+      {
+        "url": "https://bobydeluxe.github.io/MineDock/privacy/",
+        "status": 404
+      },
+      {
+        "url": "https://bobydeluxe.github.io/MineDock/legal/",
+        "status": 404
+      },
+      {
+        "url": "https://bobydeluxe.github.io/MineDock/terms/",
+        "status": 404
+      },
+      {
+        "url": "https://bobydeluxe.github.io/MineDock/licenses/",
+        "status": 404
+      },
+      {
+        "url": "https://bobydeluxe.github.io/MineDock/sitemap.xml",
+        "status": 404
+      }
+    ]
+  },
+  "legacyWebsite": {
+    "primaryUrl": "https://minedock-friends.arcane-rhea-3082.chatgpt.site",
+    "status": 200,
+    "linksRetainedUntilVerifiedReplacement": true,
+    "automaticRedirectEstablished": false
+  },
+  "checks": {
+    "lint": "pass",
+    "reviewBuild": "pass",
+    "staticAssertions": 752,
+    "htmlDocuments": 6,
+    "exportedFiles": 40,
+    "internalLinks": 152,
+    "productionAttempt": "PUBLICATION BLOCKED",
+    "publicationGateCases": 19,
+    "browser": {
+      "pageWidthCases": 30,
+      "widths": [390, 768, 1280, 1440, 1920],
+      "downloadLinks200": 13,
+      "nativeScreenshotHashesPerWidth": 7,
+      "sourceCaptureHashes": 14,
+      "privacyKeyboardScrollRegionCases": 5,
+      "remoteResourceRequests": 0,
+      "cookies": 0,
+      "overflow": 0,
+      "brokenImages": 0,
+      "nested404": 404,
+      "trailingSlash": 301
+    },
+    "changedMarkdownDocuments": 12,
+    "relativeLinksChecked": 223,
+    "desktopInputsAndWorkflowsUnchanged": true,
+    "privateGameDataTracked": false
+  },
+  "release": {
+    "tag": "v0.5.0",
+    "assetCount": 20,
+    "sizesAndDigestsUnchangedSincePreflight": true,
+    "binariesRebuiltOrReplacedByThisTask": false,
+    "assets": [
+      {
+        "name": "MineDock-0.5.0-amd64.deb",
+        "size": 102230068,
+        "digest": "sha256:1d09f3d2adcc6928bf296cc1cf1a87dec6e52bb07b72909be1f11585e8e646ec"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.AppImage",
+        "size": 129902202,
+        "digest": "sha256:04778aff5356570bb2258add221c9bb0fb78c76f43537454cefb58c4de9cac19"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.deb",
+        "size": 97377608,
+        "digest": "sha256:7158dcbc8128a428a38ab3b30f8e95967212537dfec056adc9374feed347ba22"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.dmg",
+        "size": 132624734,
+        "digest": "sha256:c710811b4fd8794837e71f1fe55c549b94c6516e6cc3b943baeba277373eeff8"
+      },
+      {
+        "name": "MineDock-0.5.0-arm64.zip",
+        "size": 131739986,
+        "digest": "sha256:6799c645173c7200307ec8b168369b47622aa98c6dd979158c173a062b533c78"
+      },
+      {
+        "name": "MineDock-0.5.0-Portable-arm64.exe",
+        "size": 107590911,
+        "digest": "sha256:68bca6609e256739480aeaa4db0145f23672941556ca5488f50471bb4436f9fd"
+      },
+      {
+        "name": "MineDock-0.5.0-Portable-x64.exe",
+        "size": 113697903,
+        "digest": "sha256:2a3700250d10b0ab5565b1f9ef7029a9c53836f478b034b60a525e4324e2ae06"
+      },
+      {
+        "name": "MineDock-0.5.0-Setup-arm64.exe",
+        "size": 107879847,
+        "digest": "sha256:732bc3dc4d93d6a03835b97a41db2d5d9902997678869d012eff306b5b007105"
+      },
+      {
+        "name": "MineDock-0.5.0-Setup-x64.exe",
+        "size": 113987387,
+        "digest": "sha256:9bb0547ae7096fa69542e23e8d65d523854186a64edc2843f990e3c959ce7305"
+      },
+      {
+        "name": "MineDock-0.5.0-x64.dmg",
+        "size": 136492238,
+        "digest": "sha256:a8197ad81f19655b1a5718bafc7a32af75331c5aef0dccc2f878a60e384150e7"
+      },
+      {
+        "name": "MineDock-0.5.0-x64.zip",
+        "size": 135641252,
+        "digest": "sha256:0d464483a16a69e3f57132cef30fa2cd25605efeef936af3ffcd6491fa6b9aed"
+      },
+      {
+        "name": "MineDock-0.5.0-x86_64.AppImage",
+        "size": 128655525,
+        "digest": "sha256:6fcb6fe755bfbcb36ec4b8b60d7724834596e26848b3f706f9e22355629c8bbf"
+      },
+      {
+        "name": "MineDock-Features.txt",
+        "size": 32511,
+        "digest": "sha256:f188d42263c870264a076185a7f2f626a41081e9b50cad8e598e971e742066d7"
+      },
+      {
+        "name": "SHA256SUMS.txt",
+        "size": 1749,
+        "digest": "sha256:dc26443a6b29c2b1a07fd8123f7dfdd6aa4df898a8e83439407231e49c21667e"
+      },
+      {
+        "name": "update-darwin-arm64.json",
+        "size": 1270,
+        "digest": "sha256:045a2ea6db733aac09b64ca65a73f290cc4def9f5b41a4a7917349b3b017035a"
+      },
+      {
+        "name": "update-darwin-x64.json",
+        "size": 1254,
+        "digest": "sha256:d214215e3e8f72adf2eff50c896297c3084a444618c1c52442710f6005f6694f"
+      },
+      {
+        "name": "update-linux-arm64.json",
+        "size": 1282,
+        "digest": "sha256:5365a231733a453f0bcd6d479940383cd3e39c69704777a55baf0d3be9cd9cb0"
+      },
+      {
+        "name": "update-linux-x64.json",
+        "size": 1282,
+        "digest": "sha256:880af510cfbdd45f581bd5d37d7a1715c3fbe1afb63d8489ea2da9d29ecaccba"
+      },
+      {
+        "name": "update-win32-arm64.json",
+        "size": 1314,
+        "digest": "sha256:9323117a8d147dd2662814051a7d2d98192f2b3b02ec13b00b4c59b73f4eaf9f"
+      },
+      {
+        "name": "update-win32-x64.json",
+        "size": 1298,
+        "digest": "sha256:ad415d327157d627575b956ac90e14eddf2f3bb199aeb1444b291cc3d87bfa45"
+      }
+    ]
+  },
+  "networkAudit": {
+    "source": "docs/privacy-audit.md",
+    "flowRows": 14,
+    "publicPolicyFeatureRows": 12,
+    "publisherTelemetryFound": false,
+    "noUniversalNetworkOptOut": true,
+    "scope": "MineDock source; not exhaustive runtime/dependency packet capture"
+  },
+  "signing": {
+    "source": "docs/code-signing-policy.md",
+    "status": "unsigned; no SignPath acceptance or service provisioned",
+    "verifiedWriteAdminMembers": ["Bobydeluxe"],
+    "proposedApprover": "Bobydeluxe after acceptance/enrollment",
+    "mfaVerified": false,
+    "manualApprovalRequiredForEachRelease": true,
+    "installerDoesNotShowPreparedPolicy": true
+  },
+  "seo": {
+    "canonicalAndOgBasePrepared": "https://bobydeluxe.github.io/MineDock/",
+    "productionSitemapRoutes": 5,
+    "reviewNoindex": true,
+    "searchConsoleVerified": false,
+    "googleIndexingClaimed": false,
+    "analyticsAdded": false
+  },
+  "outstanding": [
+    "GitHub confidential identity-disclosure arrangement and actual receipt",
+    "Owner review of correspondence recipients/bases/actual deletion practice and anonymous publisher roles",
+    "Final dated legal approval, remove draft text and approve publication fields",
+    "Merge approved PR, enable Pages/environment and deploy from main",
+    "Verify public URLs/resources/host cookies and then switch active legacy links",
+    "Submit only a live complete privacy URL; Foundation decides installer/network eligibility and MFA/approver enrollment"
+  ]
+}
