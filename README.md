@@ -45,9 +45,11 @@ For removal, use Installed apps for Windows Setup, or close MineDock and remove 
 
 ### Code signing policy
 
-MineDock 0.5.0 Windows downloads are **unsigned**; the project has not been accepted by SignPath Foundation. [Code signing policy](docs/code-signing-policy.md) documents the public source, GitHub Actions builds, release provenance and maintainer roles. Bobydeluxe is the sole verified write/admin collaborator and proposed future signing approver. Each future signing release requires explicit human approval after enrollment; it is not automatically authorized by a workflow.
+MineDock 0.5.0 Windows downloads remain **unsigned**. Free [self-signed Windows signing](docs/windows-signing.md) is prepared for future reviewed builds. The owner has created a stable **CN=MineDock, RSA 3072 / SHA-256** certificate, valid until **11 October 2028**. [Public certificate, fingerprint and verification](docs/certificates/README.md). Private CI credentials still need owner configuration before automated signing can run.
 
-The [desktop Privacy Policy](docs/PRIVACY_POLICY.md) and [verified network audit](docs/privacy-audit.md) describe local server/player data, online providers, controls, deletion and security limits. Privacy contact: **[minedockapp@gmail.com](mailto:minedockapp@gmail.com)**. Correspondence handling still needs maintainer review; the released installer does not display this new policy and some online features have no separate opt-out. SignPath must assess these facts before approval; no signing service or endorsement is claimed. MIT covers original code, not Minecraft resources or other [third-party materials](docs/THIRD_PARTY_NOTICES.md).
+Self-signed signatures do **not** automatically remove SmartScreen or Unknown Publisher warnings. This is not Microsoft certification or public certificate-authority validation. The [Code signing policy](docs/code-signing-policy.md) explains release provenance and owner controls; the updater's separate Ed25519 signatures remain in place.
+
+The [desktop Privacy Policy](docs/PRIVACY_POLICY.md) and [verified network audit](docs/privacy-audit.md) describe local server/player data, online providers, controls, deletion and security limits. Privacy contact: **[minedockapp@gmail.com](mailto:minedockapp@gmail.com)**. Correspondence handling still needs maintainer review; the released installer does not display this new policy and some online features have no separate opt-out. Signing does not certify privacy compliance. MIT covers original code, not Minecraft resources or other [third-party materials](docs/THIRD_PARTY_NOTICES.md).
 
 MineDock must stay open to supervise servers and run scheduled tasks. It stops servers gracefully when you close it. Downloads need Internet access; installed local servers can be administered offline. MineDock does not open firewall or router ports.
 
@@ -184,7 +186,7 @@ React renders the interface. A narrow typed preload connects it to one Electron 
 
 - Real client gameplay, historical engine coverage and Bedrock crossplay connectivity still need live validation after personal consent.
 - BDS has no official macOS/ARM64 distribution. Some native PHP ARM64 packages are unavailable. PocketMine releases may not support current Bedrock clients.
-- Windows Authenticode and Apple signing/notarization need real certificates. Publisher update signatures do not imply OS signing.
+- Published Windows packages are unsigned. Future optional self-signed Authenticode provides integrity/identity continuity, not public Windows trust; Apple signing/notarization still needs owner credentials. Publisher update signatures are separate.
 - Windows x64 installation/uninstallation and real packaged updater results are recorded in [validation](docs/validation.md). Other native OS installation/upgrades and extended disk-full/power-loss/load tests remain separate work.
 - Incremental objects have no automatic garbage collector; partial restoration currently uses incremental snapshots. Unknown migration compatibility blocks changes, and changed pack releases require an explicit update/removal first.
 

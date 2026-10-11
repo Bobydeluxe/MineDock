@@ -1,0 +1,186 @@
+{
+  "date": "2026-10-11",
+  "scope": "Future optional Windows signing infrastructure only; no release publication",
+  "sourceRevision": "4acb329fd3b1bcce24b9a8b4d46aaadd0312455c",
+  "ownerProductionIdentityConfigured": false,
+  "publishedVersion": "0.5.0",
+  "localWindowsX64": {
+    "lint": "passed",
+    "typecheck": "passed",
+    "build": "passed",
+    "unitTestsPassed": 296,
+    "unitTestsSkipped": 5,
+    "uiTestsPassed": 31,
+    "uiTestsSkipped": 1,
+    "signedPackagedTestsPassed": 15,
+    "signedPackagedTestsSkipped": 1,
+    "nativeIntegrationChecksPassed": 11,
+    "readmeStatisticsTestsPassed": 19,
+    "privateCandidateSignatures": {
+      "app": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "setup": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "portable": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "installedAppAndUninstaller": "SHA256 CMS and native SIP digest verified; RFC3161 present",
+      "windowsStatus": "UnknownError",
+      "trustedByThisWindowsInstallation": false,
+      "identity": "Disposable local QA only, never a production certificate"
+    },
+    "nativeLifecycle": {
+      "setupInstallExitCode": 0,
+      "uninstallExitCode": 0,
+      "installedApplicationLaunch": true,
+      "actualPortableWrapperLaunch": true,
+      "settingsRetained": true,
+      "serverBackupRuntimePlayerTaskDataRetained": true,
+      "uninstallPreservedIsolatedData": true,
+      "applicationRegistryShortcutsRemoved": true,
+      "ownerInstallationModified": false
+    },
+    "currentCompiledApplicationBytesMatch": true,
+    "noPrivateKeyOrDeveloperSigningFilesBundled": true,
+    "qaPrivateKeyPfxPasswordRemoved": true
+  },
+  "updateSystem": {
+    "actualUnmodifiedSignUpdateScript": true,
+    "isolatedDisposableEd25519Identity": true,
+    "productionUpdateKeyNeverReadByLocalQa": true,
+    "finalSignedInstallerHashesMatch": 2,
+    "metadataSignatureVerified": true,
+    "productionUpdaterPinAndSigningScriptUnchanged": true
+  },
+  "github": {
+    "distributionRun": "https://github.com/Bobydeluxe/MineDock/actions/runs/38149888950",
+    "sourceValidationRun": "https://github.com/Bobydeluxe/MineDock/actions/runs/38149889216",
+    "matrices": [
+      {
+        "job": "package (ubuntu-24.04, x64, build:linux)",
+        "jobId": 114500954350,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1
+      },
+      {
+        "job": "package (windows-11-arm, arm64, build:windows)",
+        "jobId": 114500954448,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1,
+        "disposableSignedPackagedPassed": 15,
+        "disposableSignedPackagedSkipped": 1,
+        "nativeSigningChecksPassed": 12,
+        "signedFilesVerified": [
+          {
+            "file": "MineDock.exe",
+            "sha256": "8fb1bf5cafe243ed185cbfb8226faee5bab70135cee07a25c5a3257b66bc4a3f",
+            "algorithm": "SHA256",
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Setup-arm64.exe",
+            "sha256": "f50b180b0b74fc519a06e8fba3320c5d73c37833fb27ad20ce6f56e3e5e0b13f",
+            "algorithm": "SHA256",
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Portable-arm64.exe",
+            "sha256": "36953e31ee7fe75db0d15de110f88adbc9bb764e0e4fa837cb57d85a5db47a8d",
+            "algorithm": "SHA256",
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          }
+        ],
+        "disposablePrivateKeyCleanup": "passed"
+      },
+      {
+        "job": "package (macos-15-intel, x64, build:mac)",
+        "jobId": 114500954455,
+        "status": "passed",
+        "unitPassed": 297,
+        "unitSkipped": 4,
+        "packagedPassed": 14,
+        "packagedSkipped": 2
+      },
+      {
+        "job": "package (macos-15, arm64, build:mac)",
+        "jobId": 114500954513,
+        "status": "passed",
+        "unitPassed": 297,
+        "unitSkipped": 4,
+        "packagedPassed": 14,
+        "packagedSkipped": 2
+      },
+      {
+        "job": "package (windows-2025, x64, build:windows)",
+        "jobId": 114500954535,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1,
+        "disposableSignedPackagedPassed": 15,
+        "disposableSignedPackagedSkipped": 1,
+        "nativeSigningChecksPassed": 12,
+        "signedFilesVerified": [
+          {
+            "file": "MineDock.exe",
+            "sha256": "f186cd051190381d99371d84c8671894d4dc8da633036a82a25f746d8380bb35",
+            "algorithm": "SHA256",
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Setup-x64.exe",
+            "sha256": "d56b38d2b23d2ed7765cfa1d650836b7a272d8869f48fa9f1d25eae65178d3d0",
+            "algorithm": "SHA256",
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          },
+          {
+            "file": "MineDock-0.5.0-Portable-x64.exe",
+            "sha256": "dc76218ff08209d7266e3b0a867a2580a36891c6f4dd9bc9c451bd40741f0316",
+            "algorithm": "SHA256",
+            "rfc3161Present": true,
+            "windowsStatus": "UnknownError",
+            "trustedByThisWindowsInstallation": false
+          }
+        ],
+        "disposablePrivateKeyCleanup": "passed"
+      },
+      {
+        "job": "package (ubuntu-24.04-arm, arm64, build:linux)",
+        "jobId": 114500954540,
+        "status": "passed",
+        "unitPassed": 296,
+        "unitSkipped": 5,
+        "packagedPassed": 15,
+        "packagedSkipped": 1
+      }
+    ],
+    "logInspection": "No PEM private key or long PFX base64 content found; no owner Windows signing secrets configured/read during disposable QA"
+  },
+  "publishedRelease": {
+    "url": "https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0",
+    "assetNamesSizesDigestsUnchanged": 20,
+    "tagObjectUnchanged": "a6f823d45e746abfe6357d5059d4b5799a76a966",
+    "noNewTagOrRelease": true
+  },
+  "limitations": [
+    "Owner must generate/back up the stable production PFX and configure its two CI secrets/public fingerprint; the real owner-secret workflow path has not been executed",
+    "Self-signed signatures do not establish public Windows trust or remove SmartScreen/Unknown Publisher warnings",
+    "RFC3161 presence is checked; independent TSA chain validation and long-term expiry semantics are not established by the custom verifier",
+    "Actual installed Setup/uninstall/Portable-wrapper lifecycle was tested on Windows x64 only; ARM64 signed application journeys and final package signatures passed on the native runner",
+    "No new-version end-user upgrade or Linux/macOS OS-installed lifecycle is part of this infrastructure PR",
+    "Private owned-game assets case remains skipped; macOS also skips Bedrock directory import"
+  ]
+}

@@ -22,5 +22,10 @@ playwright-report/
 *.p12
 *.pem
 *.key
+*.pfx.b64
+*.pfx.base64
+*.p12.b64
+*.p12.base64
+private-signing/
 Thumbs.db
 .DS_Store

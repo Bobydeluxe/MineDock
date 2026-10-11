@@ -49,7 +49,7 @@ Close MineDock, retain your storage folders and use the same OS account. Servers
 
 ## GitHub documentation and privacy
 
-The GitHub repository is MineDock's official homepage, with downloads through [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases). The post-release documentation update of 11 October 2026 preserves the desktop [Privacy Policy](PRIVACY_POLICY.md), [network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md). This documentation update changes no published binary or update metadata; the released installer does not display the new notice. Correspondence practice and SignPath eligibility still need review.
+The GitHub repository is MineDock's official homepage, with downloads through [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases). The post-release documentation update of 11 October 2026 preserves the desktop [Privacy Policy](PRIVACY_POLICY.md), [network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md). This documentation update changes no published binary or update metadata; the released installer does not display the new notice. Correspondence practice still needs maintainer review. The later optional self-signed Windows signing implementation is for future builds only; 0.5.0 stays unsigned.
 
 ## Known limits
 
