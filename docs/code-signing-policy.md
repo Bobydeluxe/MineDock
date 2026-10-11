@@ -2,9 +2,9 @@
 
 ## Published status and future signing
 
-MineDock **0.5.0 Windows downloads remain unsigned**. Existing releases, tags, checksums and Ed25519 metadata are never replaced. The repository is the official homepage and [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases) distributes packages.
+MineDock **0.5.1 Windows x64/ARM64 app, Setup and Portable downloads are self-signed and timestamped** with the stable MineDock identity. Historical **0.5.0 downloads remain unsigned**; macOS is not Apple Developer ID signed or notarized. Existing releases, tags, checksums and Ed25519 metadata are never replaced. The repository is the official homepage and [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases) distributes packages.
 
-The owner has chosen free **self-signed Windows Authenticode** for future reviewed builds. No SignPath, paid service, Microsoft Store publication or certificate-authority endorsement is used. The stable owner certificate was created on 11 October 2026; its [public CER and DER SHA-256 fingerprint](certificates/README.md) are published for inspection. The public CI pin and two encrypted signing secrets are configured; future `v*` version tags automatically opt into Windows signing. [Owner setup and native validation](validation-records/windows-owner-signing.json). Disposable QA certificates are never release identities.
+The owner has chosen free **self-signed Windows Authenticode** for reviewed Windows releases, beginning with 0.5.1. No SignPath, paid service, Microsoft Store publication or certificate-authority endorsement is used. The stable owner certificate was created on 11 October 2026; its [public CER and DER SHA-256 fingerprint](certificates/README.md) are published for inspection. The public CI pin and two encrypted signing secrets are configured; future `v*` version tags automatically opt into Windows signing. [Owner setup and native validation](validation-records/windows-owner-signing.json). Disposable QA certificates are never release identities.
 
 **Self-signed signing does not automatically prevent SmartScreen warnings or remove Unknown Publisher warnings on untrusted computers.** CN=MineDock is self-asserted, not a validated legal identity. A pinned certificate proves continuity with a known key; it does not establish public Windows trust or malware safety. See [Microsoft's explanation](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation). Do not disable SmartScreen/Defender or install a root merely to run MineDock. No script or installer installs a trust root.
 
@@ -16,7 +16,7 @@ Review source, dependencies, build changes, commit and workflow provenance befor
 
 ## Certificate, verification and release controls
 
-The [Windows signing guide](windows-signing.md) documents native certificate generation, encrypted PFX export, owner secret setup, backup and rotation. Reuse the owner identity across releases; independently verify its public DER SHA-256 fingerprint. Never publish PFX/base64/private keys/passwords. The public CER/fingerprint identifies the intended future signer; publishing it does not sign an existing release. Link it from release notes only with an accurate statement of that release's actual signing status.
+The [Windows signing guide](windows-signing.md) documents native certificate generation, encrypted PFX export, owner secret setup, backup and rotation. Reuse the owner identity across releases; independently verify its public DER SHA-256 fingerprint. Never publish PFX/base64/private keys/passwords. The public CER/fingerprint identifies the 0.5.1 signer and intended future signer; publishing it does not sign an existing release. Link it from release notes only with an accurate statement of that release's actual signing status.
 
 Electron-builder uses native Microsoft SignTool, SHA-256 only and RFC 3161 timestamping. The packaged app, final NSIS Setup and Portable are verified on native x64/ARM64. Installer helpers can also receive a signature through electron-builder; third-party resources retain their licenses and are not represented as MineDock-authored code.
 

@@ -2,21 +2,23 @@
 
 **Run your Minecraft servers from one desktop app.** Create or import a server, open its console, manage worlds and keep verified backups on your computer.
 
-[![Latest release](https://img.shields.io/github/v/release/Bobydeluxe/MineDock)](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0)
+[![Latest release](https://img.shields.io/github/v/release/Bobydeluxe/MineDock)](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.1)
 [![Validation](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
 [**Downloads**](https://github.com/Bobydeluxe/MineDock/releases) · [Homepage and source](https://github.com/Bobydeluxe/MineDock) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Privacy Policy](docs/PRIVACY_POLICY.md) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
-**GitHub is MineDock's only official home.** This README is the project homepage; documentation, support and downloads are available here. The current public application release is **0.5.0**.
+**GitHub is MineDock's only official home.** This README is the project homepage; documentation, support and downloads are available here. The current public application release is **0.5.1**.
 
-![Dashboard design retained from 0.4.1 — actual Electron capture](docs/screenshots/dashboard.png)
+![MineDock 0.5.1 — actual signed Electron application](docs/screenshots/release-051/dashboard.png)
 
 ## Project status
 
-The current public version is **MineDock 0.5.0** for Windows, Linux and macOS. This release focuses on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes warm light and neutral charcoal dark themes. See the [release notes](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0), [complete features and limits](docs/survival-evolution.md) and [validation record](docs/validation.md).
+The current public version is **MineDock 0.5.1** for Windows, Linux and macOS. This release focuses on a survival world with friends: Modrinth mods/plugins/packs, player records, incremental backups, reviewed migrations, performance and configuration tools. It includes warm light and neutral charcoal dark themes. See the [release notes](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.1), [complete features and limits](docs/survival-evolution.md) and [validation record](docs/validation.md).
 
 English is the default. French, German, Spanish, Portuguese and Italian are bundled and available offline. Existing language preferences survive upgrades.
+
+**New in 0.5.1:** Windows x64 and ARM64 application, Setup and Portable executables carry MineDock's stable self-signed SHA-256 signatures and RFC 3161 timestamps. Native verification precedes checksums and the separate Ed25519 update manifests. The 0.5.0 features, interface and SQLite schema 12 are retained. [Release notes](docs/release-notes-0.5.1.md) and [release validation](docs/validation.md) describe exact coverage.
 
 **New in 0.5.0:** adds a large player profile, real saved/live inventory sources, guarded stopped-server inventory editing/restoration, exact selected-player actions and native world controls. Its final enhancement adds private official item-resource downloads without an installed game, saved custom/mob heads, ordered banner/shield patterns and supported dynamic/mod/pack previews. Ownership/terms consent is required; one exact-release archive is verified and cached privately. The profile keeps 27 main slots plus hotbar and large details; the paged browser separates registry compatibility from art. [Asset sources, supported rendering and rights](docs/asset-policy.md). These tools are included in 0.5.0; rendering and engine limits remain explicit. Read the [capabilities and safety guide](docs/player-world-administration.md), [validation](docs/validation.md) and [native screenshot gallery](docs/screenshots/player-world-050/README.md) for usage and exact coverage.
 
@@ -26,7 +28,7 @@ English is the default. French, German, Spanish, Portuguese and Italian are bund
 
 ## Download and installation
 
-1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) for your OS and architecture.
+1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.1) for your OS and architecture.
 2. Open MineDock and choose your language, appearance and storage folders.
 3. Create a server or import an existing folder. Choose an engine, version and resources, then review the settings.
 4. Personally accept the Minecraft EULA when required. Start the server and wait for its ready message before connecting your client.
@@ -37,15 +39,15 @@ English is the default. French, German, Spanish, Portuguese and Italian are bund
 | Linux   | AppImage or deb                        | x64, ARM64                     |
 | macOS   | dmg or zip                             | Intel x64, Apple Silicon ARM64 |
 
-Packages include Electron and its runtime; end users do not install Node or pnpm. Portable builds still store persistent data in your user profile. Current Windows/macOS packages are unsigned. Check the release notes and `SHA256SUMS.txt` for the package you download.
+Packages include Electron and its runtime; end users do not install Node or pnpm. Portable builds still store persistent data in your user profile. Windows 0.5.1 packages are self-signed; macOS packages are not Apple Developer ID signed or notarized. Windows warnings may remain. Check the release notes and `SHA256SUMS.txt` for the package you download.
 
-[Windows x64 Portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Portable-x64.exe) · [All downloads](https://github.com/Bobydeluxe/MineDock/releases) · [0.5.0 checksums](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/SHA256SUMS.txt) · [Privacy Policy](docs/PRIVACY_POLICY.md) · [Code signing policy](docs/code-signing-policy.md)
+[Windows x64 Portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.1/MineDock-0.5.1-Portable-x64.exe) · [All downloads](https://github.com/Bobydeluxe/MineDock/releases) · [0.5.1 checksums](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.1/SHA256SUMS.txt) · [Privacy Policy](docs/PRIVACY_POLICY.md) · [Code signing policy](docs/code-signing-policy.md)
 
 For removal, use Installed apps for Windows Setup, or close MineDock and remove the portable executable. On Linux/macOS, remove the package/application through the usual OS tools. Removing the application retains your profiles and chosen server/backup folders; review [data deletion](docs/PRIVACY_POLICY.md#retention-deletion-and-uninstalling) before deleting them deliberately. MineDock does not automatically change router or firewall settings.
 
 ### Code signing policy
 
-MineDock 0.5.0 Windows downloads remain **unsigned**. Free [self-signed Windows signing](docs/windows-signing.md) is configured for future reviewed builds. The owner has created a stable **CN=MineDock, RSA 3072 / SHA-256** certificate, valid until **11 October 2028**. [Public certificate, fingerprint and verification](docs/certificates/README.md). The encrypted GitHub Actions credentials and public fingerprint are configured; automatic Windows signing is enabled for future `v*` version tags.
+MineDock 0.5.1 Windows x64/ARM64 app, Setup and Portable downloads are **self-signed** and timestamped. Previous 0.5.0 downloads remain unsigned and unchanged. [Windows signing and verification](docs/windows-signing.md) documents the release checks. The owner has created a stable **CN=MineDock, RSA 3072 / SHA-256** certificate, valid until **11 October 2028**. [Public certificate, fingerprint and verification](docs/certificates/README.md). The encrypted GitHub Actions credentials and public fingerprint are configured; automatic Windows signing is enabled for future `v*` version tags.
 
 Self-signed signatures do **not** automatically remove SmartScreen or Unknown Publisher warnings. This is not Microsoft certification or public certificate-authority validation. The [Code signing policy](docs/code-signing-policy.md) explains release provenance and owner controls; the updater's separate Ed25519 signatures remain in place.
 
@@ -55,7 +57,9 @@ MineDock must stay open to supervise servers and run scheduled tasks. It stops s
 
 ### Upgrade from 0.3.x
 
-Close MineDock first, keep your existing storage folders, and open the verified 0.5.0 package using the same OS account. Servers, settings, backups, Java/PHP runtimes, player records and scheduled tasks stay in your existing profile; SQLite is backed up before its schema changes. On Windows, the old 0.3.0 automatic launcher can fail before its helper runs: download and open the new portable or Setup package manually instead. Do not delete your old data. See [the migration evidence](docs/validation.md).
+Close MineDock first, keep your existing storage folders, and open the verified 0.5.1 package using the same OS account. Servers, settings, backups, Java/PHP runtimes, player records and scheduled tasks stay in your existing profile; SQLite is backed up before its schema changes. On Windows, the old 0.3.0 automatic launcher can fail before its helper runs: download and open the new portable or Setup package manually instead. Do not delete your old data. See [the migration evidence](docs/validation.md).
+
+The actual Windows 0.5.0 → 0.5.1 portable upgrade verifies the production signature/download, replaces and relaunches the application, and preserves isolated server/settings/backup/runtime/player/task data with SQLite schema 12 unchanged. Other platform OS upgrade lifecycles retain their documented limits.
 
 ## What you can do
 
@@ -89,7 +93,9 @@ Capabilities control the available actions. A native engine does not show Java m
 
 ## Interface
 
-These are actual native Electron captures from isolated profiles and the real preload/core/SQLite services. Players, the player profile and Worlds have been refreshed for the **0.5.0 release**; other views retain the documented 0.4.1 baseline interface. Player inventories use explicitly identified saved QA files; the new world controls use actual RCON values from an authorized isolated Paper 1.21.11 world, without connected clients. Existing active process/console views use an inert external Node child. They are interface evidence, not multiplayer gameplay. See [capture provenance](docs/screenshots/README.md).
+The [0.5.1 native captures](docs/screenshots/release-051/README.md) show the actual signed application dashboard and its **Up to date** result from the public GitHub feed.
+
+These are actual native Electron captures from isolated profiles and the real preload/core/SQLite services. Version 0.5.1 retains the same interface. Players, the player profile and Worlds were refreshed for the **0.5.0 release**; other views retain the documented 0.4.1 baseline interface. Player inventories use explicitly identified saved QA files; the new world controls use actual RCON values from an authorized isolated Paper 1.21.11 world, without connected clients. Existing active process/console views use an inert external Node child. They are interface evidence, not multiplayer gameplay. See [capture provenance](docs/screenshots/README.md).
 
 | Create a server                                                                             | Manage a server                                                          |
 | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
@@ -172,7 +178,7 @@ React renders the interface. A narrow typed preload connects it to one Electron 
 | [Architecture](docs/architecture.md)               | Components, service boundaries and persistence           |
 | [Security](docs/security.md)                       | IPC, paths, archives, secrets and trust limits           |
 | [Privacy Policy](docs/PRIVACY_POLICY.md)           | Local data, network requests, deletion and contact       |
-| [Code signing policy](docs/code-signing-policy.md) | Unsigned status, maintainer roles and release provenance |
+| [Code signing policy](docs/code-signing-policy.md) | Signing status, maintainer roles and release provenance |
 | [Validation](docs/validation.md)                   | Tests, native builds and unvalidated conditions          |
 | [UI design](docs/ui.md)                            | Dialog behavior, creation flow, symbols and captures     |
 | [Features](MineDock-Features.txt)                  | Complete implemented scope                               |

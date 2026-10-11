@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Application:** MineDock 0.5.0 desktop application. **Technical audit:** 10 October 2026. **Notice updated:** 11 October 2026.
+**Application:** MineDock 0.5.0 and 0.5.1 desktop application (same data flows). **Technical audit:** 10 October 2026. **Notice updated:** 11 October 2026.
 
 MineDock is a local Minecraft server manager maintained by [Bobydeluxe](https://github.com/Bobydeluxe). Its official home and source are [the GitHub repository](https://github.com/Bobydeluxe/MineDock); packages are distributed through [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases). This notice describes the desktop application, its online features and information deliberately sent to the maintainer. It is based on the [verified source-code audit](privacy-audit.md), not a packet capture of every dependency or program started by MineDock.
 
@@ -74,7 +74,7 @@ MineDock validates HTTPS download hosts and redirects, bounds responses/archive 
 
 Stored RCON secrets use Electron OS protection where available, with a local AES-256-GCM key fallback. The complete SQLite database and world files are not encrypted by MineDock. Native server configuration requires a plaintext RCON password, and native loopback RCON is not TLS. Protect your OS account, filesystem and backup locations.
 
-Known RCON properties are excluded in relevant backup/export paths, but other secrets and player data can remain. Signed updater metadata is an integrity control separate from operating-system signing: current Windows/macOS downloads are unsigned. See [Security](security.md), [export privacy](package-format.md) and [Code signing policy](code-signing-policy.md).
+Known RCON properties are excluded in relevant backup/export paths, but other secrets and player data can remain. Signed updater metadata is an integrity control separate from operating-system signing: Windows 0.5.1 downloads are self-signed and timestamped; macOS remains unsigned/not notarized. Previous 0.5.0 files remain unsigned. See [Security](security.md), [export privacy](package-format.md) and [Code signing policy](code-signing-policy.md).
 
 ## External services
 
@@ -94,6 +94,6 @@ Where applicable, rights can include access, correction, erasure, restriction, p
 
 ## Policy updates and signing review
 
-This factual notice describes the released 0.5.0 behavior as audited on 10 October 2026; its GitHub-only documentation update is dated 11 October 2026. Material changes to application data flows or confirmed correspondence practices require a dated update. This notice and future self-signed code signing do not certify legal compliance.
+This factual notice describes 0.5.0 behavior as audited on 10 October 2026, retained by the 0.5.1 signing/distribution maintenance release; its GitHub-only documentation update is dated 11 October 2026. Material changes to application data flows or confirmed correspondence practices require a dated update. This notice and self-signed code signing do not certify legal compliance.
 
-The released installer does not display this newly prepared notice, and some automatic view-triggered requests have no separate opt-out. These remain maintainer review items independent of the owner's future self-signing plan. Any application/installer change needs a future reviewed release; this documentation change does not replace existing binaries. See [Code signing policy](code-signing-policy.md) and [third-party notices](THIRD_PARTY_NOTICES.md). Minecraft resources are not relicensed by this notice.
+The released installer does not display this newly prepared notice, and some automatic view-triggered requests have no separate opt-out. These remain maintainer review items independent of the owner's self-signing configuration. Any application/installer change needs a future reviewed release; this documentation change does not replace existing binaries. See [Code signing policy](code-signing-policy.md) and [third-party notices](THIRD_PARTY_NOTICES.md). Minecraft resources are not relicensed by this notice.

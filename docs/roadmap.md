@@ -1,14 +1,14 @@
 # Implemented scope and remaining validation
 
-## Included in MineDock 0.5.0
+## Included in MineDock 0.5.1
 
-Implemented: exact-version private official resources without an installed game, optional local import, saved heads, ordered banner/shield patterns, static frame selection, supported dynamic/mod/pack previews, a paged generated-registry/observed-item browser, actual player profile/inventory sources, recognized stopped-only Java edits and restore previews, validated native forms, exact group actions, private audit and version-aware world controls/gamerules. [Scope and engine boundaries](player-world-administration.md), [validation](validation.md) and [native captures](screenshots/player-world-050/README.md) distinguish saved QA data from the actual isolated Paper world test. The application release is 0.5.0.
+Implemented: exact-version private official resources without an installed game, optional local import, saved heads, ordered banner/shield patterns, static frame selection, supported dynamic/mod/pack previews, a paged generated-registry/observed-item browser, actual player profile/inventory sources, recognized stopped-only Java edits and restore previews, validated native forms, exact group actions, private audit and version-aware world controls/gamerules. [Scope and engine boundaries](player-world-administration.md), [validation](validation.md) and [native captures](screenshots/player-world-050/README.md) distinguish saved QA data from the actual isolated Paper world test. The current application release is 0.5.1. It retains the 0.5.0 features/schema and adds self-signed, timestamped Windows x64/ARM64 app/Setup/Portable packages.
 
 Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gameplay, exhaustive engine/mod/version combinations, live modded-server registries and trustworthy categories, full special-entity geometry, world-dependent compass/clock, effect-derived potion colours, executable client renderers and broader model/pack coverage, validated newer Java NBT formats, player-copy retention/garbage collection and broader power-loss/storage fault testing. No extension is silently installed to fill these gaps. Exact native release artifacts, migration results and remaining limits are recorded in validation.
 
 ## GitHub distribution and privacy review
 
-The GitHub README is MineDock's official homepage and GitHub Releases distributes 0.5.0. The desktop [Privacy Policy](PRIVACY_POLICY.md), [fourteen-flow network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain public repository documents. Public privacy contact: **minedockapp@gmail.com**. The owner's stable [self-signed Windows certificate](certificates/README.md), public CI pin and two encrypted CI secrets are configured; the [implementation and setup](windows-signing.md) enable automatic signing for future `v*` version tags. Existing downloads remain unchanged. Correspondence practices, installer/privacy controls and MFA still require maintainer review. Public CA trust and SmartScreen reputation are not established by self-signing.
+The GitHub README is MineDock's official homepage and GitHub Releases distributes 0.5.1. The desktop [Privacy Policy](PRIVACY_POLICY.md), [fourteen-flow network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain public repository documents. Public privacy contact: **minedockapp@gmail.com**. The owner's stable [self-signed Windows certificate](certificates/README.md), public CI pin and two encrypted CI secrets are configured; the [implementation and setup](windows-signing.md) enable automatic signing for future `v*` version tags. Existing downloads remain unchanged. Correspondence practices, installer/privacy controls and MFA still require maintainer review. Public CA trust and SmartScreen reputation are not established by self-signing.
 
 ## Included in MineDock 0.4.1
 
@@ -26,7 +26,7 @@ The native capture/GIF workflow, user changelog and internal security review wer
 
 ## Remaining native validation and publication
 
-- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.5.0 matrix and historical 0.4.x evidence are recorded in validation.
+- Future releases must repeat the native distribution matrix and verify every uploaded package/checksum. The 0.5.1 native matrix, actual Windows 0.5.0 → 0.5.1 upgrade and historical 0.5.0/0.4.x evidence are recorded in validation.
 - Windows x64 lifecycle/updater results are recorded explicitly in validation. Linux/macOS OS installation/upgrades, ARM64 lifecycle, protected install paths and native keychain behavior need their own environments.
 - Actual Minecraft client gameplay, map rendering, historical loader coverage and Bedrock crossplay need real servers/clients and personal EULA acceptance. Capture fixtures are not gameplay.
 - Maintain an encrypted backup of the existing stable owner Windows self-signed identity and keep its password separately; the public CER/fingerprint, CI pin and two encrypted secrets are configured. Repeat native owner-signed checks before future releases. Apple signing/notarization needs owner credentials. Publisher metadata signing remains separate.
@@ -36,6 +36,6 @@ Docker, remote accounts/RBAC, tunnels, cloud synchronization/providers, optional
 
 ## Added in 0.4.1
 
-Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The GitHub homepage links 0.5.0 downloads and discloses retained baseline captures. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
+Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The GitHub homepage links 0.5.1 downloads and discloses retained baseline captures. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
 
 The owner authorized merging and publishing the validated 0.4.1 changes. All six native jobs and artifact checks pass for the recorded app source; changed app inputs require repeating them. GitHub's social preview is installed and verified. Direct visual confirmation of an existing pinned Windows shortcut remains a manual check where the connected tools cannot observe it.

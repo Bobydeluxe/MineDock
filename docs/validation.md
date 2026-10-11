@@ -1,6 +1,18 @@
 # MineDock validation
 
-## Future Windows signing and public certificate — 11 October 2026
+## MineDock 0.5.1 signed Windows release — 11 October 2026
+
+[MineDock 0.5.1](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.1) is the current stable release. [Machine-readable evidence](validation-records/0.5.1-release.json) records the exact tagged native build, all twelve packages, six signed updater manifests, owner-certificate checks and public downloads. Windows x64/ARM64 app, Setup and Portable use the stable self-signed certificate with SHA-256/RFC 3161 timestamps; Windows public chain trust remains unestablished. macOS remains unsigned/not notarized.
+
+Local lint/typecheck/build passed with **296 unit tests / 5 skips** and **31 UI tests / 1 skip**. All six tagged native jobs passed: Windows/Linux each **296 unit / 5 skips** and **15 packaged / 1 skip**; macOS each **297 unit / 4 skips** and **14 packaged / 2 skips**. Six owner signatures passed native certificate/CMS/PE-digest checks, and temporary CI PFX cleanup succeeded before uploads. Automatic signing was exercised by the actual `v0.5.1` push trigger.
+
+The actual old public Windows 0.5.0 → exact final signed 0.5.1 Portable upgrade verifies the production metadata/download, replaces the executable and automatically relaunches. SQLite stays **12 → 12**, quick-check is **ok**, and settings, servers, worlds/properties, backup records/bytes, actual Java runtime, encrypted RCON value, player history/observations/NBT/notes and schedules are preserved. The public replay uses real GitHub endpoints; the pre-publication replay alone uses controlled transport. Every public asset/checksum and all twelve updater targets are verified; the public Windows x64 Portable is downloaded and its native signature/hash checked. Actual packaged 0.5.1 checks the public feed and displays **Up to date**.
+
+No application behavior, dependency, updater public key or schema change is introduced. Historical 0.5.0 assets/tag remain unchanged. [Fresh 0.5.1 dashboard and Settings captures](screenshots/release-051/README.md) show the exact signed native app; unchanged administration views retain their documented historical provenance. Self-signed warnings, Apple signing, other OS/ARM64 installation lifecycles, independent TSA/expiry verification, offline PFX backup restore and existing gameplay/privacy limits remain explicit.
+
+The initial Windows x64 packaged run timed out after five seconds while waiting for the local datapack inventory row. A targeted rerun on a fresh hosted runner passed with the same source and assertions. The release record retains the original failure and retry rather than reporting first-attempt success.
+
+## Historical Windows signing setup and public certificate — 11 October 2026
 
 Optional self-signed Windows Authenticode is implemented for future reviewed builds. The [executed signing record](validation-records/windows-self-signing.json) covers source revision `4acb329fd3b1bcce24b9a8b4d46aaadd0312455c`: lint/typecheck/build, **296 unit passes / 5 skips**, **31 UI passes / 1 skip**, **15 local signed-packaged passes / 1 skip**, **11 native signing checks** and **19 download-statistics tests**. [All six native distribution jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/38149888950) passed. Windows x64/ARM64 each additionally passed 12 disposable signing checks and 15 signed-app journeys, with SHA-256/RFC 3161 app/Setup/Portable signatures and chain trust reported separately. Actual installed Setup/uninstall/Portable-wrapper lifecycle and isolated data preservation were tested on x64. These disposable test keys are not the owner identity.
 
@@ -24,7 +36,7 @@ The repository homepage setting now points to GitHub. The authenticated Pages en
 
 ## MineDock 0.5.0 public release — 10 October 2026
 
-[MineDock 0.5.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) is the current stable release. [Machine-readable release evidence](validation-records/0.5.0-release.json) records the exact artifacts, checks and migration bytes. Historical sections below describe their own earlier checkpoints.
+[MineDock 0.5.0](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) was the stable release at this historical checkpoint. [Machine-readable release evidence](validation-records/0.5.0-release.json) records the exact artifacts, checks and migration bytes. Historical sections below describe their own earlier checkpoints.
 
 - Lint, typecheck and build pass. **286 unit tests pass / 5 OS skips** (291 cases, 45 files). Source Electron UI: **31 passes / 1 private-resource skip**, plus the owned local-client case passes separately: all **32 UI cases** are validated locally.
 - Local Windows packaged: **16 passes / no skips**. [Six native jobs](https://github.com/Bobydeluxe/MineDock/actions/runs/38060927812) pass: Windows/Linux each **15 packaged passes / 1 private-resource skip**; macOS each **14 passes / 2 skips** (private resources and native Bedrock directory import). Native Windows x64 needed one retry after a five-second inventory-backup wait expired. The reviewed 30-second wait keeps every backup, saved-byte, restore and snapshot assertion; application inputs are unchanged.

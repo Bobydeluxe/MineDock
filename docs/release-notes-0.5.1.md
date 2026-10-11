@@ -1,6 +1,6 @@
 # MineDock 0.5.1
 
-Release preparation: packages are published only after the native build, signature, checksum and upgrade checks pass. The public release remains 0.5.0 until publication.
+[MineDock 0.5.1 is published on GitHub](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.1). All six native jobs passed; the release evidence records exact signature/checksum coverage and the actual Windows 0.5.0 → 0.5.1 update. [Validation](validation.md).
 
 ## Added
 
@@ -19,7 +19,9 @@ Release preparation: packages are published only after the native build, signatu
 
 ## Downloads
 
-The validated release will provide Windows x64/ARM64 (Setup and Portable), Linux x64/ARM64 (AppImage and deb), and macOS Intel/Apple Silicon (dmg and zip), with `SHA256SUMS.txt` and six signed updater manifests. Check the published assets for actual availability.
+The validated release provides Windows x64/ARM64 (Setup and Portable), Linux x64/ARM64 (AppImage and deb), and macOS Intel/Apple Silicon (dmg and zip), with `SHA256SUMS.txt` and six signed updater manifests. Check the published assets for actual availability.
+
+[Actual signed 0.5.1 dashboard and public update check](screenshots/release-051/README.md).
 
 ## Upgrade
 
