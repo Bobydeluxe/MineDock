@@ -47,9 +47,9 @@ Choose the package matching your computer. No Node.js or pnpm installation is ne
 
 Close MineDock, retain your storage folders and use the same OS account. Servers, settings, backups, runtimes, SQLite, player data and tasks stay in the existing profile. SQLite migrates from schema 11 to 12 with a safety copy. Windows 0.3.0 may require manually opening the verified new package for its first upgrade. Keep a data backup; see [validation](validation.md) for exact evidence and other-platform limits.
 
-## Website migration (prepared, not deployed)
+## GitHub documentation and privacy
 
-Free GitHub Pages hosting, four English legal pages and project-path SEO are prepared in PR #9. Production remains blocked on publisher/contact details, host identity-disclosure confirmation, legal review and a successful verified deployment. The application release does not approve publishing legal drafts; the existing website remains active. Search Console ownership and Google indexing have not been performed. See the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md). Application release downloads are available on GitHub.
+The GitHub repository is MineDock's official homepage, with downloads through [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases). The post-release documentation update of 11 October 2026 preserves the desktop [Privacy Policy](PRIVACY_POLICY.md), [network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md). This documentation update changes no published binary or update metadata; the released installer does not display the new notice. Correspondence practice and SignPath eligibility still need review.
 
 ## Known limits
 

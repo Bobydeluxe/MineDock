@@ -1,8 +1,8 @@
 # Native distribution and signing
 
-## Website distribution is separate
+## GitHub distribution
 
-The GitHub Pages migration is [prepared only](website-seo.md), with static output in `dist/site` and a dedicated `main`-only workflow. It does not package or publish the application. Publisher/privacy review and explicit owner approval remain required; the current legacy website link stays active until the replacement is deployed and verified. Application binaries use 0.5.0. The workflow validates the website review export and skips Pages deployment while website approval is false. See the [legal checklist](website-legal-checklist.md).
+The [GitHub repository](https://github.com/Bobydeluxe/MineDock) is the official homepage and source. [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases) distributes the current **0.5.0** packages and checksums. The README includes installation/removal instructions, [Privacy Policy](PRIVACY_POLICY.md) and [Code signing policy](code-signing-policy.md). Existing unsigned files and cryptographic metadata remain unchanged. Future release descriptions must link both policies and state the actual signing status.
 
 Use Node 24+, pinned pnpm and the lockfile. `pnpm build` compiles main/preload/renderer and includes dependency notices. The packaging script uses the installed electron-builder **v26** schema and requires the requested OS to equal the host OS. It builds the actual `process.arch` (x64 or ARM64); it never silently packages x64 for an ARM64 host.
 
@@ -38,4 +38,4 @@ Primary configuration references: [electron-builder v26 macOS options](https://w
 
 ## 0.4.1 branding
 
-The canonical owner-supplied PNG generates Windows ICO sizes 16/24/32/48/64/128/256, macOS ICNS, Linux PNG sizes, SVG/ICO/PNG favicon and Apple touch icon. Packaging refers to these assets; the desktop build includes ICO and PNG and chooses the native Windows window icon. Run python scripts/build-brand-assets.py to reproduce technical derivatives. The 0.4.1 release has separate assets and leaves historical 0.4.0 bytes unchanged. Social-preview configuration and any unobserved native icon/pinning checks are distinguished in the design/validation records.
+The canonical owner-supplied PNG generates Windows ICO sizes 16/24/32/48/64/128/256, macOS ICNS, Linux PNG sizes and the desktop SVG logo. Packaging refers to these assets; the desktop build includes ICO and PNG and chooses the native Windows window icon. Run `python scripts/build-brand-assets.py` to reproduce technical derivatives. The historical 0.4.1 release leaves 0.4.0 bytes unchanged. GitHub social-preview configuration and any unobserved native icon/pinning checks are distinguished in the design/validation records.

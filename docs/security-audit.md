@@ -17,7 +17,7 @@ Reviewed: exact-context registry envelopes, owned local client verification, bou
 | `.minedock` transfer             | Validated manifest/profile, per-file SHA-256, bounded archive, native pickers, explicit plugin-config opt-in, fresh paths/ports/RCON/runtime              | `packages.test.ts` and native export/preview journey                                                   | Unknown third-party secret filenames, absolute plugin paths, cross-OS real-world server transfers                |
 | Configurations / maps / observer | Stale-hash edits, encrypted bounded history, YAML bounds; backend validated loopback map URL; consent before fixed external observer                      | Configuration, maps and reachability tests                                                             | Malicious YAML/JSON corpus, external observer privacy, actual plugin binding/rendering                           |
 
-Published migrations 1–6 are unchanged; new migrations are appended. Recovery preserves ambiguous files instead of silently deleting them. No cloud login, inbound administration API, router/firewall modification or analytics was added. The public website is static and uses bundled screenshots/icons.
+Published migrations 1–6 are unchanged; new migrations are appended. Recovery preserves ambiguous files instead of silently deleting them. No cloud login, inbound administration API, router/firewall modification or analytics was added. The official GitHub repository provides documentation and captures; distribution uses GitHub Releases.
 
 ## Risks and follow-up
 

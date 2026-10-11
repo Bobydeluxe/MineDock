@@ -1,20 +1,16 @@
 # MineDock validation
 
-## Source publication while awaiting GitHub — 11 October 2026
+## GitHub-only repository preparation — 11 October 2026
 
-The owner authorized publishing the prepared privacy/site sources and documentation to `main` without announcing the planned website URL. The current website remains primary, the public contact is **minedockapp@gmail.com**, and `site/publication.json` retains `approved: false` with unresolved publisher/privacy/host review. The website workflow therefore builds for review and skips deployment. Approval for the final legal pages and their later website launch remains separate.
+The owner permanently abandoned separate hosting and requested a focused, unmerged pull request. The GitHub README is the official homepage, Releases remains the distribution channel, and the desktop [Privacy Policy](PRIVACY_POLICY.md), [network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain repository documents. Application version 0.5.0 and its published assets are unchanged.
 
-At the start of this update, both GitHub source-validation runs for `8ca1a99b289af9c244c174f121b27d94ef936024` passed. The authenticated Pages endpoint still returned 404 and `has_pages` remained false; the current release was still 0.5.0 with twenty assets. The update removes the planned URL from current Markdown guides and presentation text; technical configuration and dated machine-readable audit evidence retain their original target for reproducibility. No application inputs, release assets or website approval fields are changed. The earlier sections below retain their historical checkpoint results.
+The change removes the dedicated hosting sources, deployment workflow, build/browser checks, approval/SEO/legal machinery and web-only artwork/captures. Desktop icons, application captures, capture tooling, dependency notices and release/updater services are retained. Packaging uses an explicit application-output allowlist so unrelated old build outputs cannot enter future packages. Desktop source contains no links to the abandoned hosts; no application navigation change or new app release is needed.
 
-Local checks for this documentation update pass: lint, review export, **752 static assertions**, **30 browser cases** across six pages and five widths, **13 public download/checksum links**, **224 relative documentation links**, and **14 unchanged native capture hashes**. The browser reports no external resources, cookies, overflow or broken images. Production remains blocked by the real unapproved configuration.
+Dated machine-readable records are [historical evidence](validation-records/README.md), not instructions to reactivate retired infrastructure. Earlier source-publication checkpoints are preserved in [the immutable pre-cleanup record](https://github.com/Bobydeluxe/MineDock/blob/aad68d41bb2d1d890ec802c9a9905756636cfbb5/docs/validation.md). The desktop/support review items remain explicit in the policy.
 
-## Website/privacy and SignPath preparation — 10 October 2026
+Local lint, typecheck, **286 unit tests / 5 platform skips** and desktop build pass. The documentation check covers **426 relative links**, with no broken targets or active abandoned-host URLs; all **63 application captures** and desktop source/updater files retain their bytes. A Windows x64 unpacked validation build succeeds with the new output allowlist and contains the required renderer/main/preload, icons and license notices, without hosting or private game files.
 
-**PREPARED ONLY, publication blocked.** The owner designated **minedockapp@gmail.com** publicly and confirmed GitHub's confidential identity-disclosure arrangement is not yet resolved. The [combined Privacy Policy source](../site/privacy/index.html), [fourteen-flow application network audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and [specific secure owner actions](website-owner-actions.md) are ready for review. Publisher-controlled correspondence roles/bases/deletion practice and final legal approval remain pending. No private residential information is published.
-
-[Machine-readable evidence](validation-records/0.5.0-website-privacy-signpath.json) records passing lint, review export and **752 static assertions**, including **19 in-memory publication-gate cases**. Six pages at five widths pass **30 browser cases**: keyboard navigation and the mobile network table, fourteen unchanged native capture hashes (seven featured images checked at each width), thirteen public download/checksum links returning 200, no broken images or document overflow, and no external resource requests or cookies in local browser contexts. The production build correctly refuses the real unapproved configuration. Prepared production canonical/OG metadata and sitemap routes remain separate from the noindex review export.
-
-The Pages API/environment and all six planned public URLs return **404**. No deployment, merge, automatic legacy redirect or primary-link switch is claimed. Search Console is not verified; no analytics was added. The existing site returns 200 and remains primary. All twenty 0.5.0 release assets retain their recorded sizes/digests, and desktop inputs/dependencies/workflows are unchanged. No desktop release build, signing request or executable replacement was performed. The new policy is not yet a working URL for SignPath; the Foundation must also assess the released installer's policy display and feature-level network controls before signing eligibility is claimed.
+The repository homepage setting now points to GitHub. The authenticated Pages endpoint returns 404, `has_pages` is false and the former deployment workflow is disabled manually while this deletion PR awaits review. The external legacy deployment has not been deleted; the owner must remove it separately through its original hosting account. No PR merge or new application release is authorized by this cleanup request.
 
 ## MineDock 0.5.0 public release — 10 October 2026
 
@@ -27,15 +23,13 @@ The Pages API/environment and all six planned public URLs return **404**. No dep
 - Real public **0.3.0 → 0.5.0** also passes SQLite **5 → 12** and data preservation with the documented manual native-helper recovery after its legacy launcher fails. Normal 0.3.0 users should close it and open the verified new package manually; this is not described as seamless automatic upgrading.
 - Production updater selection verifies all **12 platform/package targets**. The actual public packaged **0.5.0** checks GitHub and visibly shows **Up to date**.
 - The [official v0.5.0 tag workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/38063115196) passes all six native jobs with the reviewed waits. Main source validation passes; the Pages review build passes and its deployment is skipped. All twenty older 0.4.1 assets retain their recorded sizes and hashes.
-- Existing public website **version 10** uses 0.5.0 downloads; five widths pass, seven native screenshot hashes match per width, and thirteen distinct download URLs are valid. The Pages review export passes **641 static assertions / 30 browser cases**, and its deployment is skipped while legal approval is false. Website export and game archives are absent from the checked desktop package.
+- Historical hosting evidence at release: **version 10** uses 0.5.0 downloads; five widths pass, seven native screenshot hashes match per width, and thirteen distinct download URLs are valid. The Pages review export passes **641 static assertions / 30 browser cases**, and its deployment is skipped while legal approval is false. Website export and game archives are absent from the checked desktop package.
 
-Fourteen new native interface captures and source-specific real Paper/item probes remain documented with honest provenance. OS signing/notarization, Linux/macOS/ARM64 OS upgrade lifecycles, connected-client multiplayer/inventory, exhaustive rendering and the legally gated Pages migration remain limitations. See [release notes](release-notes-0.5.0.md), [asset policy](asset-policy.md), [security](security.md) and [roadmap](roadmap.md).
+Fourteen new native interface captures and source-specific real Paper/item probes remain documented with honest provenance. OS signing/notarization, Linux/macOS/ARM64 OS upgrade lifecycles, connected-client multiplayer/inventory, exhaustive rendering and broader privacy-control and signing eligibility review remain limitations. See [release notes](release-notes-0.5.0.md), [asset policy](asset-policy.md), [security](security.md) and [roadmap](roadmap.md).
 
-## Historical website migration preparation — 10 October 2026
+## Archived hosting evidence
 
-GitHub Pages is **PREPARED ONLY**: the authenticated Pages/environment endpoints and proposed public project URL returned 404; the existing legacy site returns 200. The owner confirmed a non-professional individual publisher, anonymity and no public email yet. Production is deliberately blocked on required contact/host-disclosure review and explicit merge/publication approval. No release, merge or primary-site switch was performed.
-
-Local export checks validate six HTML documents, forty allowlisted static files, 136 internal links and thirteen stable 0.4.1 download URLs. Browser verification covers six pages at 390/768/1280/1440/1920 px, visible keyboard skip/focus, cross-page links, FAQ, unchanged hashes of all seven preview screenshots, nested custom 404 and trailing slash handling. No overflow, broken images, executable scripts, third-party resource requests or local cookies/storage were observed. Host cookies/log behavior remains a separate live-deployment check. See the [website evidence](validation-records/0.5.0-website-pages.json), [review captures](design/github-pages-050/README.md), [activation guide](website-seo.md) and [legal checklist](website-legal-checklist.md). These website checks do not rerun or replace the source-specific application/native evidence below.
+The [former export audit](validation-records/0.5.0-website-pages.json) and [privacy/source audit checkpoint](validation-records/0.5.0-website-privacy-signpath.json) retain their original observations, URLs and command names solely for traceability. Those tools and launch plans have been removed; their historical blockers do not govern the desktop policy. No external legacy-site deletion is claimed.
 
 ## Historical 0.5.0 private-resource candidate — 10 October 2026
 
@@ -119,11 +113,11 @@ Saved-file tests exercise actual NBT variants, unknown fields/components, all 68
 
 The genuine old public Windows Portable automatically updates to the exact verified GitHub Actions candidate, SHA-256 `3ee562bf984fa17ef00aa7f3ceb91c89bea37a80327acdc942cbdb26676a62ee`. The real production signature verifier, helper and application run; only release transport is controlled. The preserved actual OpenJDK 21.0.12.1 runtime is probed successfully after relaunch. An earlier replay also passes with the separately packaged local Portable (`44b55a44b1824c70cdf4162a693187d6f90dcc50091189e65f66d7abdad11ffd`); both exact byte sets have distinct evidence. The final packaged 0.5.0 also checks the real public GitHub feed without interception and displays **Up to date**. A public 0.5.0 download/feed replay can only happen after approved publication. Historical 0.3.x first-upgrade limitations below remain applicable.
 
-The [new native gallery](screenshots/player-world-050/README.md) explicitly labels saved-player QA files and real Paper world values. Unaffected baseline images and the historical GIF remain identified as 0.4.1. The [deployed website preview](design/administration-050/README.md) preserves existing release downloads and audience. Five deployed widths (390/768/1280/1440/1920) show no overflow, broken image/anchor or runtime/network error. The standard Sites archive wrapper needs unavailable WSL on this Windows host; Sites' shared static-build preparation plus Windows tar packages the exact verified pushed source successfully.
+The [new native gallery](screenshots/player-world-050/README.md) explicitly labels saved-player QA files and real Paper world values. Unaffected baseline images and the historical GIF remain identified as 0.4.1. The [historical deployed preview](https://github.com/Bobydeluxe/MineDock/blob/aad68d41bb2d1d890ec802c9a9905756636cfbb5/docs/design/administration-050/README.md) preserves existing release downloads and audience. Five deployed widths (390/768/1280/1440/1920) show no overflow, broken image/anchor or runtime/network error. The standard Sites archive wrapper needs unavailable WSL on this Windows host; Sites' shared static-build preparation plus Windows tar packages the exact verified pushed source successfully.
 
 Remaining limits include partial saved-item search rather than a complete registry; future/custom NBT read-only; no Bedrock/PocketMine inventory storage or gameplay validation; no exhaustive mod/version/client combinations; no reliable current-weather query; localized/intercepted results may remain unverifiable; stdio remains sent; player safety copies have no automatic cleanup. Linux/macOS/ARM64 native installer/update lifecycles are not established by app journeys. See [release draft](release-notes-0.5.0.md), [security](security.md) and [roadmap](roadmap.md).
 
-## MineDock 0.4.1 release validation
+## Historical MineDock 0.4.1 release validation
 
 The current release contains the cleaned black interface and server customization described in [the release notes](release-notes-0.4.1.md). Its exact application/build inputs are `5492f9757477f87be1fd7d0bb90423e38ba95349`; later documentation, website and capture-helper changes do not alter the packaged application. The owner authorized publication on 9 October 2026.
 
@@ -209,7 +203,7 @@ The unchanged executable extracted from the real public 0.4.0 portable verifies 
 
 The visible state of an existing pinned Windows/taskbar shortcut is not claimed observed. Linux/macOS/ARM64 OS installer/update lifecycles and actual multiplayer/map behavior remain unvalidated. See [the current design comparison](design/reference-041/README.md), [candidate notes](release-notes-0.4.1.md), [security](security.md) and [roadmap](roadmap.md). Public download links still use 0.4.0.
 
-## Release validation — 9 October 2026
+## Historical release validation — 9 October 2026
 
 MineDock **0.4.0** is the current public version. Release app/build inputs were validated at source `ad876c2b52f2a0b55120a66495ba6f34e5ddb9bc`; later release-documentation commits leave those inputs identical. [Machine-readable release evidence](validation-records/0.4.0-release.json) separates the following results from historical checkpoints below.
 
@@ -262,7 +256,7 @@ After the final restore/console dialog padding correction, production compilatio
 
 The new native survival journey runs production main/preload/core/SQLite/files: commented YAML edit/history restoration, native local datapack import, persisted player note, hash-verified incremental world-only restore preserving unrelated configuration with a safety ZIP, native `.minedock` export/preview and read-all notices. Existing creation/dialogs/six-language preferences, content plans/updates/rollback, files/worlds/imports/recovery/retention and updater rejection stay covered. External API/CDN fixtures are explicitly controlled; no Minecraft process/client is started by these UI tests.
 
-The [public website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) is deployed from saved Sites version 1, source `d0f39cfd373e663c8022d638b5a0a56105097bc9`. The actual production URL also passes the same 1440/390-pixel image/anchor/overflow/error and FAQ/download checks.
+At that historical checkpoint, the [former website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) was deployed from saved Sites version 1, source `d0f39cfd373e663c8022d638b5a0a56105097bc9`. The actual production URL also passes the same 1440/390-pixel image/anchor/overflow/error and FAQ/download checks.
 
 ### Actual Windows lifecycle and upgrade
 
@@ -282,7 +276,7 @@ These earlier local candidate files were not uploaded as a release. [Current Git
 
 No live multiplayer, actual map rendering, other OS install/upgrade, ARM64 lifecycle, OS signing/notarization, JVM heap/swap or Windows ACL/firewall inspection is claimed. Incremental deletion/GC and legacy ZIP partial restore are unavailable. Pack release changes remain an explicit migration prerequisite. New graphical options cover bounded existing YAML/JSON primitives; complex structures remain textual. The GIF is a labeled slideshow of actual captures, not a continuous recording or game video. The security document is an internal developer review, not an independent audit. See [the ledger](survival-evolution.md) and [roadmap](roadmap.md).
 
-## Charcoal dark-theme refinement, 8 October 2026
+## Historical charcoal dark-theme refinement, 8 October 2026
 
 Owner feedback refined the dark surfaces, text, borders and overlays to neutral charcoal grays. A before/after computed-style comparison confirms **all 76 light-theme tokens unchanged**, including the console. All ten relevant identity/polish cases pass across the targeted run and isolated rerun; two initial cases had a concurrent test-server port collision and pass when run separately. The visual case checks 23 contrast/focus combinations per theme, eight server states, mod badges, four desktop sizes, focus return and reduced motion. Lint, strict TypeScript, production compilation and unsigned Windows x64 NSIS/portable packaging pass. Backend, layout, languages and public release version are unchanged.
 
@@ -290,7 +284,7 @@ The current local portable x64 SHA-256 is `4e898083d8692677e6bc6aa50b82ec5920490
 
 The 22 current dark captures are refreshed; the six approved light images are retained byte-for-byte. The native before/after record again measures 181 rectangles across 26 views/states with zero differences beyond 0.5 CSS pixels. All 120 checked local documentation links resolve. Active capture views now wait for the real process sampler before recording metrics; this is a QA-tool change only.
 
-## Initial visual identity review, 8 October 2026 (`863c6fc`)
+## Historical initial visual identity review, 8 October 2026 (`863c6fc`)
 
 This separate style revision is based on the validated mod-manager branch. The source remains 0.3.1 and no release is published. Windows 11 x64 / Node 24 / pnpm 11.19: local lint and strict TypeScript pass; the full unit run passes **183 cases with four platform-specific skips (187 total in 24 files)**. The final full source UI run passes **25 cases in 3.6 minutes**. The final packaged Windows suite passes **nine actual Electron cases in 3.1 minutes**, against the rebuilt executable after the last semantic badge correction. Production compilation and unsigned Windows x64 NSIS/portable packaging pass. Historical results remain labeled separately below.
 
@@ -316,7 +310,7 @@ Historical results below describe their exact earlier source/release revisions.
 
 This record distinguishes the **0.3.1 UI source revision** from the published **0.3.0 beta**, both checked on 4 October 2026. Compilation, actual packaged execution, native probes and Minecraft gameplay are separate evidence. The previous 0.2.0 release passed 66 tests and two UI journeys on 3 October; those older checks are not evidence for the extension or UI revision.
 
-## 0.3.1 UI revision
+## Historical 0.3.1 UI revision
 
 The source fixes viewport centering and first-paint placement in the shared dialog, nested body scroll locks, keyboard focus/return, backdrop dismissal and bounded internal scrolling. It simplifies four-step creation, adds original bundled symbols for eight engines, improves light-theme Start contrast and navigation, and updates all six language catalogs. Unrelated snapshot refreshes preserve unsaved language/theme preferences. See [UI design](ui.md).
 
@@ -338,7 +332,7 @@ The six-platform native execution below belongs to **0.3.0**, not a new 0.3.1 ma
 
 The [initial Linux GitHub validation](https://github.com/Bobydeluxe/MineDock/actions/runs/37219775900) at application source `d26461e` passed frozen installation, lint, strict types, a fresh full unit run (**147 passed, 4 OS-specific skips**), production compilation and **all 22 then-existing UI cases** under Xvfb. Its independent push validation passed as well. A later repeat exposed an intermittent loss of a draft language selection. A deterministic regression reproduced it: an unrelated snapshot refresh reset unchanged persisted preferences over the form draft. The renderer now compares persisted values before synchronizing. The new regression and six-language journey both pass. Current-head CI results are available in [PR #4](https://github.com/Bobydeluxe/MineDock/pull/4/checks). These are source-build/Electron checks, not a newly packaged six-platform 0.3.1 matrix.
 
-## 0.3.0 beta: local final checks
+## Historical 0.3.0 beta: local final checks
 
 Native workstation: Windows 11 x64, Node 24, pnpm 11.19.
 
@@ -355,7 +349,7 @@ Native workstation: Windows 11 x64, Node 24, pnpm 11.19.
 
 The catalogs contain **541 UI keys and 408 shared messages in each of six languages**. Tests verify matching keys/placeholders, canonical and legacy French diagnostics, preference persistence and composed crash explanations. Unknown external errors/console output remain original.
 
-## 0.3.0 beta: native platform matrix
+## Historical 0.3.0 beta: native platform matrix
 
 The [native distribution workflow](https://github.com/Bobydeluxe/MineDock/actions/runs/37210682159) at source `a0363174` passed on **all six native targets**, including installation, lint, types, units, opt-in official catalogs/runtime/content checks, real Paper eula=false bootstrap, package compilation, seven packaged Electron cases and publisher-signed update metadata generation.
 

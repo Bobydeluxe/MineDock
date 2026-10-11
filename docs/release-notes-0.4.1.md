@@ -4,7 +4,7 @@ A cleaner black interface, complete engine version lists and safer server custom
 
 ## Added
 
-- The approved teal/copper cube icon for desktop packages, the website and documentation.
+- The approved teal/copper cube icon for desktop packages and documentation.
 - Complete official build catalogs, independent Fabric loader/installer choices, search, refresh and labeled cached/offline results.
 - A categorized, searchable graphical properties editor with typed controls, change review and protected saving.
 - Local server profile names and images, distinct from Minecraft MOTD and world names.
@@ -12,7 +12,7 @@ A cleaner black interface, complete engine version lists and safer server custom
 
 ## Improved
 
-The interface keeps compact server rows, numbered creation steps, engine information and clear controls, with a focused cleanup to neutral black/charcoal surfaces. Dashboard, Backups, servers and Settings form the main navigation. The breadcrumb/global-search strip, workspace promotion and repeated decorative labels are removed. Notifications, their preferences/history, recovery tools and searchable audit history live in Settings. Console categories and backup filters use real logs and backup metadata. All six languages remain available; English is primary. The website uses original dusk scenery and actual 0.4.1 screenshots, with downloads for every produced platform.
+The interface keeps compact server rows, numbered creation steps, engine information and clear controls, with a focused cleanup to neutral black/charcoal surfaces. Dashboard, Backups, servers and Settings form the main navigation. The breadcrumb/global-search strip, workspace promotion and repeated decorative labels are removed. Notifications, their preferences/history, recovery tools and searchable audit history live in Settings. Console categories and backup filters use real logs and backup metadata. All six languages remain available; English is primary. GitHub Releases retains downloads for every produced platform.
 
 ## Fixed
 

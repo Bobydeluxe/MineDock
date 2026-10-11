@@ -6,15 +6,15 @@ Implemented: exact-version private official resources without an installed game,
 
 Remaining: connected-client inventory/gameplay checks, Bedrock/PocketMine gameplay, exhaustive engine/mod/version combinations, live modded-server registries and trustworthy categories, full special-entity geometry, world-dependent compass/clock, effect-derived potion colours, executable client renderers and broader model/pack coverage, validated newer Java NBT formats, player-copy retention/garbage collection and broader power-loss/storage fault testing. No extension is silently installed to fill these gaps. Exact native release artifacts, migration results and remaining limits are recorded in validation.
 
-## Website migration — prepared only
+## GitHub distribution and privacy review
 
-The free GitHub Pages export, `main`-only workflow, project-path checks, four English legal pages and SEO generation were prepared in merged PR #9. The follow-up adds a combined desktop/website Privacy Policy, [fourteen-flow network audit](privacy-audit.md), [Code signing policy](code-signing-policy.md) and stricter publication checks. The owner confirmed non-professional status, anonymity and public contact **minedockapp@gmail.com**. GitHub private identity disclosure has not been arranged. Contact/legal review, disclosure confirmation, final Pages approval and actual deployment remain outstanding. The existing public site uses 0.5.0 downloads and remains primary until the replacement is verified. See [owner actions](website-owner-actions.md), the [website guide](website-seo.md) and [legal checklist](website-legal-checklist.md).
+The GitHub README is MineDock's official homepage and GitHub Releases distributes 0.5.0. The desktop [Privacy Policy](PRIVACY_POLICY.md), [fourteen-flow network audit](privacy-audit.md) and [Code signing policy](code-signing-policy.md) remain public repository documents. Public privacy contact: **minedockapp@gmail.com**. Remaining work is maintainer confirmation of correspondence access/roles/bases/deletion, SignPath assessment of the released installer and online controls, MFA verification and actual Foundation approval. No signing acceptance is claimed.
 
 ## Included in MineDock 0.4.1
 
 The existing eight engines, official runtimes, imports/worlds/files, Modrinth mod manager, backups, schedules and recovery remain. The friends survival evolution adds datapacks/resource packs, health/notices/crash evidence, player sessions/notes, incremental snapshots/partial restores, migration/clones, console search/macros, performance/JVM tools, configuration history/maps/reachability and `.minedock` transfer. English is primary; all six app languages remain bundled. See [the exact ledger](survival-evolution.md), [feature list](../MineDock-Features.txt), [user guide](user-guide.md) and [validation](validation.md).
 
-The static product site, native capture/GIF workflow, user changelog and internal security review are retained in [MineDock 0.4.1](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records the implementation review.
+The native capture/GIF workflow, user changelog and internal security review were included in [MineDock 0.4.1](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.4.1). [PR #7](https://github.com/Bobydeluxe/MineDock/pull/7) records the implementation review.
 
 ## Functional limits and follow-up
 
@@ -36,6 +36,6 @@ Docker, remote accounts/RBAC, tunnels, cloud synchronization/providers, optional
 
 ## Added in 0.4.1
 
-Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The original 0.4.1 site and captures record that release; the current homepage uses 0.5.0 downloads and discloses retained baseline screens. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
+Approved branding, full official catalogs, independent Fabric versions, safe categorized properties and local profile images are included in MineDock 0.4.1. The focused UI cleanup removes noisy navigation/header/decorative elements, restores neutral black surfaces and places notification/recovery/history controls inside Settings. The GitHub homepage links 0.5.0 downloads and discloses retained baseline captures. Public release notes are English. [Cleanup review](design/cleanup-041/README.md) and [validation](validation.md) record actual results.
 
 The owner authorized merging and publishing the validated 0.4.1 changes. All six native jobs and artifact checks pass for the recorded app source; changed app inputs require repeating them. GitHub's social preview is installed and verified. Direct visual confirmation of an existing pinned Windows shortcut remains a manual check where the connected tools cannot observe it.

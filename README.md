@@ -6,9 +6,9 @@
 [![Validation](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Bobydeluxe/MineDock/actions/workflows/ci.yml)
 [![MIT license](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 
-[**Download MineDock**](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) · [Website](https://minedock-friends.arcane-rhea-3082.chatgpt.site) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
+[**Downloads**](https://github.com/Bobydeluxe/MineDock/releases) · [Homepage and source](https://github.com/Bobydeluxe/MineDock) · [User guide](docs/user-guide.md) · [Features](MineDock-Features.txt) · [Privacy Policy](docs/PRIVACY_POLICY.md) · [Report a bug](https://github.com/Bobydeluxe/MineDock/issues/new/choose)
 
-The free GitHub Pages website migration is **prepared, not deployed**. The current Website link remains active until the replacement is verified. See the [website deployment and SEO guide](docs/website-seo.md) and [legal publication checklist](docs/website-legal-checklist.md). The current application release is **0.5.0**. Website publication is a separate, pending step.
+**GitHub is MineDock's only official home.** This README is the project homepage; documentation, support and downloads are available here. The current public application release is **0.5.0**.
 
 ![Dashboard design retained from 0.4.1 — actual Electron capture](docs/screenshots/dashboard.png)
 
@@ -24,7 +24,7 @@ English is the default. French, German, Spanish, Portuguese and Italian are bund
 
 **New in 0.4.1:** the approved cube icon, full engine build lists, independently pinned Fabric choices, reviewed engine-specific properties and local profile images. The cleaned interface uses neutral black surfaces and direct Dashboard/Backups/Servers/Settings navigation. Notification preferences/history and recovery tools live inside Settings; the global breadcrumb/search strip and decorative ribbons are removed. [UI cleanup](docs/design/cleanup-041/README.md) and [validation](docs/validation.md) document the released interface and exact test coverage.
 
-## Start using MineDock
+## Download and installation
 
 1. [Download a package](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0) for your OS and architecture.
 2. Open MineDock and choose your language, appearance and storage folders.
@@ -39,11 +39,15 @@ English is the default. French, German, Spanish, Portuguese and Italian are bund
 
 Packages include Electron and its runtime; end users do not install Node or pnpm. Portable builds still store persistent data in your user profile. Current Windows/macOS packages are unsigned. Check the release notes and `SHA256SUMS.txt` for the package you download.
 
+[Windows x64 Portable](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/MineDock-0.5.0-Portable-x64.exe) · [All downloads](https://github.com/Bobydeluxe/MineDock/releases) · [0.5.0 checksums](https://github.com/Bobydeluxe/MineDock/releases/download/v0.5.0/SHA256SUMS.txt) · [Privacy Policy](docs/PRIVACY_POLICY.md) · [Code signing policy](docs/code-signing-policy.md)
+
+For removal, use Installed apps for Windows Setup, or close MineDock and remove the portable executable. On Linux/macOS, remove the package/application through the usual OS tools. Removing the application retains your profiles and chosen server/backup folders; review [data deletion](docs/PRIVACY_POLICY.md#retention-deletion-and-uninstalling) before deleting them deliberately. MineDock does not automatically change router or firewall settings.
+
 ### Code signing policy
 
 MineDock 0.5.0 Windows downloads are **unsigned**; the project has not been accepted by SignPath Foundation. [Code signing policy](docs/code-signing-policy.md) documents the public source, GitHub Actions builds, release provenance and maintainer roles. Bobydeluxe is the sole verified write/admin collaborator and proposed future signing approver. Each future signing release requires explicit human approval after enrollment; it is not automatically authorized by a workflow.
 
-The [desktop and website privacy audit](docs/privacy-audit.md) covers local player/server data, online providers, controls, deletion and security limits. The [combined policy source](site/privacy/index.html) is available for review; **no live policy URL is announced or ready for submission**. Public privacy contact: **minedockapp@gmail.com**. Anonymous-publisher arrangements and publisher-controlled processing still require owner review; see [owner actions](docs/website-owner-actions.md). Publishing these sources on GitHub leaves the website deployment gate closed and the current Website link active. MIT covers original code, not Minecraft resources or other [third-party materials](docs/THIRD_PARTY_NOTICES.md).
+The [desktop Privacy Policy](docs/PRIVACY_POLICY.md) and [verified network audit](docs/privacy-audit.md) describe local server/player data, online providers, controls, deletion and security limits. Privacy contact: **[minedockapp@gmail.com](mailto:minedockapp@gmail.com)**. Correspondence handling still needs maintainer review; the released installer does not display this new policy and some online features have no separate opt-out. SignPath must assess these facts before approval; no signing service or endorsement is claimed. MIT covers original code, not Minecraft resources or other [third-party materials](docs/THIRD_PARTY_NOTICES.md).
 
 MineDock must stay open to supervise servers and run scheduled tasks. It stops servers gracefully when you close it. Downloads need Internet access; installed local servers can be administered offline. MineDock does not open firewall or router ports.
 
@@ -161,18 +165,20 @@ The screenshot shows an isolated desktop profile with real Modrinth metadata and
 
 React renders the interface. A narrow typed preload connects it to one Electron main-process application core. SQLite stores profiles, preferences and operation history. Filesystem, process, networking and download services stay outside the renderer; the Electron sandbox and context isolation stay enabled.
 
-| Document                                           | Contents                                                |
-| -------------------------------------------------- | ------------------------------------------------------- |
-| [Architecture](docs/architecture.md)               | Components, service boundaries and persistence          |
-| [Security](docs/security.md)                       | IPC, paths, archives, secrets and trust limits          |
-| [Validation](docs/validation.md)                   | Tests, native builds and unvalidated conditions         |
-| [UI design](docs/ui.md)                            | Dialog behavior, creation flow, symbols and captures    |
-| [Features](MineDock-Features.txt)                  | Complete implemented scope                              |
-| [Roadmap](docs/roadmap.md)                         | Remaining validation and future scope                   |
-| [User guide](docs/user-guide.md)                   | First survival, content, friends, backups and repairs   |
-| [Changelog](CHANGELOG.md)                          | User-facing changes and known issues                    |
-| [Internal security review](docs/security-audit.md) | Attack surfaces, evidence and external-review questions |
-| [Contributing](CONTRIBUTING.md)                    | Development and review expectations                     |
+| Document                                           | Contents                                                 |
+| -------------------------------------------------- | -------------------------------------------------------- |
+| [Architecture](docs/architecture.md)               | Components, service boundaries and persistence           |
+| [Security](docs/security.md)                       | IPC, paths, archives, secrets and trust limits           |
+| [Privacy Policy](docs/PRIVACY_POLICY.md)           | Local data, network requests, deletion and contact       |
+| [Code signing policy](docs/code-signing-policy.md) | Unsigned status, maintainer roles and release provenance |
+| [Validation](docs/validation.md)                   | Tests, native builds and unvalidated conditions          |
+| [UI design](docs/ui.md)                            | Dialog behavior, creation flow, symbols and captures     |
+| [Features](MineDock-Features.txt)                  | Complete implemented scope                               |
+| [Roadmap](docs/roadmap.md)                         | Remaining validation and future scope                    |
+| [User guide](docs/user-guide.md)                   | First survival, content, friends, backups and repairs    |
+| [Changelog](CHANGELOG.md)                          | User-facing changes and known issues                     |
+| [Internal security review](docs/security-audit.md) | Attack surfaces, evidence and external-review questions  |
+| [Contributing](CONTRIBUTING.md)                    | Development and review expectations                      |
 
 ## Known limits and next work
 
@@ -183,6 +189,10 @@ React renders the interface. A narrow typed preload connects it to one Electron 
 - Incremental objects have no automatic garbage collector; partial restoration currently uses incremental snapshots. Unknown migration compatibility blocks changes, and changed pack releases require an explicit update/removal first.
 
 The [roadmap](docs/roadmap.md) distinguishes remaining validation from future extensions such as Docker, remote accounts and cloud synchronization.
+
+## Support
+
+Use [GitHub Issues](https://github.com/Bobydeluxe/MineDock/issues/new/choose) for bugs and feature requests. Include the MineDock version, OS, reproduction steps and only the necessary redacted logs. For private privacy questions, contact **[minedockapp@gmail.com](mailto:minedockapp@gmail.com)**; do not publish passwords, player files or private rights requests in issues. See the [user guide](docs/user-guide.md) and [security guidance](docs/security.md).
 
 ## License
 

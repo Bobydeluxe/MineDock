@@ -4,7 +4,7 @@
 
 MineDock **0.5.0** is already released. Its Windows downloads are **unsigned**. MineDock has not been accepted by SignPath Foundation and no Foundation signing service, certificate, token, signing approver account or GitHub signing workflow has been provisioned. This policy documents current release provenance and the proposed controls for a future signing application; it does not re-sign or replace existing assets.
 
-Public source: [Bobydeluxe/MineDock](https://github.com/Bobydeluxe/MineDock). Build definition: [GitHub Actions distribution workflow](../.github/workflows/build-release.yml). Release evidence: [0.5.0 validation](validation-records/0.5.0-release.json).
+MineDock's original application code is **MIT-licensed**, maintained and reviewed by the project owner. Its official homepage and public source are [Bobydeluxe/MineDock](https://github.com/Bobydeluxe/MineDock). Windows packages are distributed through [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases), with [README download instructions](../README.md#download-and-installation). Builds use the [GitHub Actions distribution workflow](../.github/workflows/build-release.yml). Release evidence: [0.5.0 validation](validation-records/0.5.0-release.json). The project intends to apply for SignPath Foundation Windows code signing, subject to the Foundation's approval.
 
 ## Maintainer roles
 
@@ -30,10 +30,12 @@ The following attribution is **conditional wording for use only after acceptance
 
 ## Privacy, licenses and eligibility review
 
-The combined website/application Privacy Policy is available as [source for review](../site/privacy/index.html), alongside the [completed application network audit](privacy-audit.md). **No live policy URL is announced or ready for submission.** Contact: `minedockapp@gmail.com`. Publishing these documents on GitHub does not launch the website or establish signing eligibility. Website publication is gated on the owner's anonymous-publisher arrangements and review of publisher-controlled processing.
+Desktop [Privacy Policy](PRIVACY_POLICY.md): **https://github.com/Bobydeluxe/MineDock/blob/main/docs/PRIVACY_POLICY.md**. This is the intended canonical policy link after this change is merged; until then, review the file in the pull request. The [completed application network audit](privacy-audit.md) documents the source evidence. Contact: `minedockapp@gmail.com`. Correspondence access, roles/bases and deletion practice still need maintainer review; a public policy alone does not establish signing eligibility.
 
 MineDock has online update/download/catalog, skin and optional observer features. There is no blanket promise of zero network traffic. Automatic update checks default off, but opening some views triggers provider requests. The released installer does not display the newly prepared policy and no global network-disable option exists. Ask the Foundation to assess these facts against its installation/privacy requirements; do not claim eligibility is established by this document.
 
 Original code is MIT. [Third-party notices](THIRD_PARTY_NOTICES.md), Electron/Chromium distribution notices, the lockfile and [asset policy](asset-policy.md) identify other licenses and boundaries. Downloaded Minecraft clients/server resources, mods and plugins are separate user-selected resources; Minecraft proprietary content is not MIT and is not bundled for signing. Upstream runtime/library files keep their identity and licenses; acceptance must determine what can be included or signed, rather than treating every packaged dependency as MineDock-authored code.
 
-Reviewed requirements: [SignPath Foundation terms](https://signpath.org/terms.html), accessed 10 October 2026. The Foundation makes its own acceptance decision. See [owner actions](website-owner-actions.md) for the remaining website/privacy and application steps.
+The README's **Code signing policy** section and download links identify the maintainer roles, privacy notice and current unsigned status. Future release/download descriptions must retain links to both policies. Add the conditional credit above only after acceptance and actual signing; no existing binary or cryptographic update metadata is replaced by this documentation work.
+
+Reviewed requirements: [SignPath Foundation terms](https://signpath.org/terms.html), accessed 11 October 2026. The Foundation makes its own acceptance decision. Before applying, confirm the outstanding correspondence practices, request an assessment of installer/privacy controls, verify maintainer MFA and enroll a human signing approver. No host-disclosure or separate-site launch is part of this distribution model.
