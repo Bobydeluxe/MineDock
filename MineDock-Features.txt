@@ -1,5 +1,5 @@
 MINEDOCK — COMPLETE FEATURE LIST
-Public version: 0.5.0 (player/world administration and private item resources)
+Public version: 0.5.1 (Windows signing and distribution maintenance)
 Updated: 11 October 2026
 Repository: https://github.com/Bobydeluxe/MineDock
 
@@ -7,7 +7,17 @@ English is the primary project language and default application language.
 Implemented means connected to the real backend with relevant automated tests.
 It does not mean every release has had a real Minecraft gameplay session.
 See docs/validation.md for exact native build/test results and remaining limits.
-Download MineDock 0.5.0 from GitHub Releases. Features added in 0.4.0 are retained.
+Download MineDock 0.5.1 from GitHub Releases. Features added in 0.4.0 are retained.
+
+NEW IN 0.5.1 — WINDOWS SIGNING
+- Windows x64/ARM64 app, Setup and Portable carry the stable MineDock self-signed
+  RSA 3072 / SHA-256 identity and RFC 3161 timestamps. Native integrity and exact
+  fingerprint verification precede final package checksums and updater metadata.
+- All six native package jobs pass; original 0.5.0 downloads stay unchanged.
+- Real Windows 0.5.0 -> 0.5.1 portable replacement/relaunch preserves isolated
+  settings, servers, backups, Java, SQLite 12, player files/notes and tasks.
+- Self-signed is not public CA/Microsoft certification; Windows warnings remain
+  possible. macOS is not Apple signed/notarized. See docs/validation.md.
 
 INCLUDED IN 0.5.0 — PLAYER/WORLD ADMINISTRATION AND ITEM RESOURCES
 - Large player profile: Inventory / Actions / History / Notes; real UUID/skin fallback.
@@ -323,7 +333,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Publisher CI secret configured separately from OS-signing certificates.
 - Publisher-signed update metadata verifies each available native package.
 - Real public Windows portable download rechecked against signed size/hash.
-- The current release is 0.5.0; older 0.3.0 Windows users may need a manual first upgrade.
+- The current release is 0.5.1; older 0.3.0 Windows users may need a manual first upgrade.
 - Native updater/install/uninstall evidence and public-0.3.0 launcher limit are
   recorded precisely in docs/validation.md; native OSes are not interchangeable.
 
@@ -345,7 +355,8 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Conditional Windows signing with real certificate/password.
 - Conditional macOS hardened signing/JIT entitlement and Apple notarization.
 - Usable unsigned packages when certificates are missing.
-- Published 0.5.0 Windows/macOS packages remain unsigned and unchanged.
+- Published 0.5.1 Windows packages are self-signed; macOS remains unsigned.
+- Historical 0.5.0 packages and metadata remain unchanged.
 - Future Windows builds use the stable CN=MineDock RSA3072/SHA256 self-signed
   certificate, encrypted GitHub Actions secrets and pinned public fingerprint.
 - Automatic Windows signing is enabled for future v* version tags; manual
@@ -372,8 +383,8 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Opt-in real Paper bootstrap uses eula=false; no playable world created.
 - Real Minecraft clients/gameplay/crossplay/historical-engine compatibility
   unvalidated without owner consent and clients.
-- Published 0.5.0 OS packages remain unsigned. Future Windows self-signing is
-  configured; Apple signing/notarization still needs owner credentials.
+- Windows 0.5.1 is self-signed, with no public CA trust or guaranteed removal
+  of Windows warnings. Apple signing/notarization still needs owner credentials.
 - Windows x64 NSIS lifecycle is validated separately; Linux/macOS installation,
   keychain behavior, large-server load,
   disk-full and extended power-loss testing remain separate validation work.
@@ -464,7 +475,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
 - Release documentation includes appended schemas, validation and known limits.
-- Public packages and checksum links target v0.5.0.
+- Public packages and checksum links target v0.5.1.
 - Desktop Privacy Policy, network audit and Code signing policy on GitHub.
 - Public privacy contact: minedockapp@gmail.com.
 
@@ -488,7 +499,7 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - Inherited settings stay unset unless edited; unsaved navigation/close guards.
 - Curated existing Paper scalar paths, advanced discovered scalars and raw YAML.
 - English GitHub presentation and release text with real app screenshots.
-- GitHub Releases hosts the published 0.5.0 packages and checksums.
+- GitHub Releases hosts the published 0.5.1 packages and checksums.
 
 ======================================================================
 28. FUTURE OPTIONS — NOT IMPLEMENTED

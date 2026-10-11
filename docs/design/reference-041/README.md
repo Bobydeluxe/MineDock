@@ -2,16 +2,16 @@
 
 This records the released 0.4.1 design review. Linked Players/Worlds gallery files are now refreshed for the [0.5.0 administration gallery](../../screenshots/player-world-050/README.md); those additions are included in 0.5.0 and were absent from 0.4.1.
 
-The owner's [original collage](reference.png) remains art direction. The subsequent annotated cleanup request removes its noisy shell elements and tinted base surfaces. The [focused cleanup review](../cleanup-041/README.md) documents the current implementation. Every current image is captured from actual compiled Electron controls and core/SQLite services; no reference panel is embedded in the app. **This historical review describes MineDock 0.4.1; the current release is 0.5.0.**
+The owner's [original collage](reference.png) remains art direction. The subsequent annotated cleanup request removes its noisy shell elements and tinted base surfaces. The [focused cleanup review](../cleanup-041/README.md) documents the current implementation. Every current image is captured from actual compiled Electron controls and core/SQLite services; no reference panel is embedded in the app. **This historical review describes MineDock 0.4.1; the current release is 0.5.1.**
 
-| View       | Current actual capture                                   | Behavior                                                                          |
-| ---------- | -------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Dashboard  | [Black dashboard](../../screenshots/dashboard.png)       | Direct navigation, compact rows, no global header or promotion.                   |
-| Create     | [Creation flow](../../screenshots/create-server.png)     | Real engine information and numbered steps retained.                              |
-| Fabric     | [Version lists](../../screenshots/fabric-versions.png)   | Independent complete searchable loader/installer lists.                           |
-| Properties | [Server settings](../../screenshots/server-settings.png) | Actual typed/category controls and reviewed safe saving.                          |
-| Console    | [Console](../../screenshots/console.png)                 | Real category filters and command tools.                                          |
-| Backups    | [Backups](../../screenshots/backups.png)                 | Filters/actions use actual archive metadata.                                      |
+| View       | Current actual capture                                   | Behavior                                                        |
+| ---------- | -------------------------------------------------------- | --------------------------------------------------------------- |
+| Dashboard  | [Black dashboard](../../screenshots/dashboard.png)       | Direct navigation, compact rows, no global header or promotion. |
+| Create     | [Creation flow](../../screenshots/create-server.png)     | Real engine information and numbered steps retained.            |
+| Fabric     | [Version lists](../../screenshots/fabric-versions.png)   | Independent complete searchable loader/installer lists.         |
+| Properties | [Server settings](../../screenshots/server-settings.png) | Actual typed/category controls and reviewed safe saving.        |
+| Console    | [Console](../../screenshots/console.png)                 | Real category filters and command tools.                        |
+| Backups    | [Backups](../../screenshots/backups.png)                 | Filters/actions use actual archive metadata.                    |
 
 Earlier before/after captures are retired from the current tree. The [immutable previous review](https://github.com/Bobydeluxe/MineDock/blob/944caa8726dd26f2851230fabfcf39149e5c38c1/docs/design/reference-041/README.md) preserves that historical evidence. Current base surfaces are neutral black/gray; accents, status indicators and the approved light palette remain. See the current gallery for notification preferences/history inside Settings and the other affected pages.
 

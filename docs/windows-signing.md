@@ -1,6 +1,6 @@
 # Free Windows self-signed signing
 
-Optional infrastructure for **future builds**. Published 0.5.0 stays unsigned and unchanged; these scripts create no release/tag. No paid service, SignPath, Store or website is used.
+MineDock **0.5.1 Windows x64/ARM64 app, Setup and Portable packages are self-signed and timestamped** using this infrastructure. Published 0.5.0 stays unsigned and unchanged; these scripts create no release/tag. No paid service, SignPath, Store or website is used.
 
 **Self-signed certificates are not publicly trusted by default. SmartScreen and Unknown Publisher warnings can remain.** No Microsoft or CA validation is claimed. Do not disable Windows protections or install a root merely to run MineDock. See [Microsoft's explanation](https://learn.microsoft.com/en-us/windows/apps/package-and-deploy/smartscreen-reputation).
 
@@ -94,12 +94,12 @@ In Windows PowerShell 5.1, with the public fingerprint variable set:
 ```powershell
 .\scripts\windows\Test-Authenticode.ps1 -Path @(
     '.\release\win-unpacked\MineDock.exe',
-    '.\release\MineDock-0.5.0-Setup-x64.exe',
-    '.\release\MineDock-0.5.0-Portable-x64.exe'
+    '.\release\MineDock-0.5.1-Setup-x64.exe',
+    '.\release\MineDock-0.5.1-Portable-x64.exe'
 ) -RequireTimestamp
 ```
 
-Names above describe a private development build, **not permission to replace 0.5.0**. Use the future version's names; ARM64 uses `win-arm64-unpacked` and `-arm64.exe`.
+Names above describe the signed 0.5.1 release. Rebuilding locally is not permission to replace its published files. ARM64 uses `win-arm64-unpacked` and `-arm64.exe`.
 
 The verifier checks embedded CMS using `SignedCms.CheckSignature(true)`, SHA-256 algorithm identifiers, native `CryptSIPVerifyIndirectData` PE digest, exact subject, fingerprint and certificate constraints. Full-file SHA-256 is reported separately. Windows chain status is independent: `cryptographicIntegrity=true` can coexist with `trustedByThisWindowsInstallation=false` and `NotTrusted`/`UnknownError`. Local trust says nothing about other PCs.
 

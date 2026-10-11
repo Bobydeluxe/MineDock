@@ -24,13 +24,6 @@ Windows signing and distribution maintenance. Application features and the SQLit
 - macOS packages are not Apple Developer ID signed or notarized. Linux and macOS installation/update lifecycles and Windows ARM64 installed lifecycle retain their documented validation limits.
 - Gameplay, inventory/rendering, privacy-control and older 0.3.0 launcher limits from 0.5.0 remain applicable. Existing release files are preserved.
 
-## Unreleased — repository documentation and tooling
-
-- Use the GitHub README as the official homepage, with Releases downloads, support and application documentation.
-- Preserve a desktop-only Privacy Policy and Code signing policy, with the verified network audit and public contact `minedockapp@gmail.com`.
-- Remove the abandoned hosting sources, deployment workflow, SEO/legal publication machinery and web-only assets/tests. Retain desktop icons, captures, licenses and historical release evidence.
-- Limit future desktop packages to application build outputs, excluding unrelated stale output directories. Existing 0.5.0 binaries, checksums and update metadata are unchanged; no new application version is published.
-
 ## 0.5.0
 
 Player and world administration, private version-correct item resources and safer native commands. Historical releases retain their original executable files.
