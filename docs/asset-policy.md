@@ -67,4 +67,4 @@ Derived PNG/registry/language/skin files use contained atomic writes, hash-bound
 
 **98/132** representative vanilla/component cases render, plus **6/6** real Adorn items. This is a sample, not exhaustive registry coverage. Fresh private official downloads prove no installed game is required. Unit/native UI fixtures use original QA art. Real screenshots separately use private official resources and disclosed saved NBT, not gameplay. See [validation](validation.md), [guide](player-world-administration.md) and [gallery](screenshots/player-world-050/README.md).
 
-Included in MineDock 0.5.0. The owner authorized application publication on 10 October 2026. See [release validation](validation.md) for exact package sources, migration evidence and public integrity checks. Website legal drafts remain separately blocked.
+Included in MineDock 0.5.0. The owner authorized application publication on 10 October 2026. See [release validation](validation.md) for exact package sources, migration evidence and public integrity checks. Original code licensing remains distinct from game-resource rights.

@@ -50,7 +50,7 @@ Migrations 7–11 append notices, player sessions/notes, incremental manifests, 
 
 Notifications are capped at 400 and grouped over fifteen minutes; sustained process thresholds use thirty seconds. Player sessions retain at most 180 days/20,000 records per server. Performance samples are at most one per thirty seconds with seven-day retention and bounded aggregation; lag context is capped at 200 events. Configuration history retains at most ten versions/file, 200/server, 20 MB/server and 90 days. These limits and unsupported measurements are explained in [the evolution ledger](survival-evolution.md).
 
-The public product site is buildless static HTML/CSS using bundled engine symbols and real native captures. `scripts/build-site.mjs` prepares its separate ignored deployment checkout. It exposes no desktop IPC, backend, analytics or private server data.
+The GitHub README is the official project homepage; GitHub Releases distributes packages and update metadata. Documentation and original engine symbols/native captures are maintained in the repository. The desktop application has no separate hosting dependency.
 
 ## 0.5.0 item presentation
 

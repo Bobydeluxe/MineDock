@@ -1,5 +1,7 @@
 # A survival world with friends
 
+The [GitHub repository](https://github.com/Bobydeluxe/MineDock) is MineDock's official home. Download packages from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases). Read the desktop [Privacy Policy](PRIVACY_POLICY.md) and [Code signing policy](code-signing-policy.md); privacy contact: **minedockapp@gmail.com**. For public support, use [GitHub Issues](https://github.com/Bobydeluxe/MineDock/issues/new/choose).
+
 This guide describes the public **MineDock 0.5.0** release. Download it from [GitHub Releases](https://github.com/Bobydeluxe/MineDock/releases/tag/v0.5.0). English is the default; choose French, German, Spanish, Portuguese or Italian in Settings. MineDock stays on your computer and must remain open while it supervises servers and scheduled tasks.
 
 For **0.5.0 player and world tools**, see [player and world administration](player-world-administration.md): click Player details for actual inventory sources and tabs; stop the server for backed-up file edits/restoration; review exact targets for native actions and groups; use the existing Worlds page for native world controls. For preview pictures, expand **Download official images** and confirm Java ownership/EULA acceptance; no game installation is needed. The exact archive stays private, with optional local-client import, explicit resource-pack override and licensed mod resources. Known incompatible items remain disabled; unsupported pictures keep exact IDs. [Setup and limits](asset-policy.md).

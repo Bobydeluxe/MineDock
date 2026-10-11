@@ -6,7 +6,6 @@ The owner's [original collage](reference.png) remains art direction. The subsequ
 
 | View       | Current actual capture                                   | Behavior                                                                          |
 | ---------- | -------------------------------------------------------- | --------------------------------------------------------------------------------- |
-| Website    | [Live desktop site](site-1440.png)                       | Approved mark, original dusk hero, current app gallery and real public downloads. |
 | Dashboard  | [Black dashboard](../../screenshots/dashboard.png)       | Direct navigation, compact rows, no global header or promotion.                   |
 | Create     | [Creation flow](../../screenshots/create-server.png)     | Real engine information and numbered steps retained.                              |
 | Fabric     | [Version lists](../../screenshots/fabric-versions.png)   | Independent complete searchable loader/installer lists.                           |
@@ -20,11 +19,9 @@ Earlier before/after captures are retired from the current tree. The [immutable 
 
 Current captures are 1440 × 960 content windows. Modrinth files are real verified downloads. The official version lists are real current/cached metadata. World/player/administration records and profile imagery are isolated QA fixtures. Active console/resource images use an inert external Node child with actual process measurements, not Minecraft multiplayer. Settings can scroll or use full-page capture. See [the complete gallery](../../screenshots/README.md) and [validation](../../validation.md).
 
-Site review also covers [390](site-390.png), [768](site-768.png), [1280](site-1280.png), [1440](site-1440.png) and [1920](site-1920.png) pixels. The site presents actual 0.4.1 screenshots and downloads for the six produced platform/architecture combinations.
-
 ## Branding and publishing
 
-The approved PNG remains byte-identical in [assets/brand](../../../assets/brand/README.md). Reproducible ICO/ICNS/PNG variants feed packaging. The original dusk illustration is documented with its prompt and source. The repository social preview is prepared as `assets/brand/social-preview.png`.
+The approved PNG remains byte-identical in [assets/brand](../../../assets/brand/README.md). Reproducible ICO/ICNS/PNG/SVG variants feed packaging. The repository social preview is retained as `assets/brand/social-preview.png`.
 
 GitHub's social preview was uploaded through the supported repository web setting on October 9 and visually verified after reloading. [Actual setting proof](github-social-preview.png). To reproduce: open **Bobydeluxe/MineDock → Settings → General → Social preview → Edit → Upload an image**, then select that PNG. It is 1280 × 640, opaque and below 1 MB. No repository avatar was changed. See [GitHub's official instructions](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/customizing-your-repositorys-social-media-preview).
 

@@ -451,18 +451,20 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
 - No offline runtime bundle or universal plugin path/cross-edition conversion.
 
 ======================================================================
-26. WEBSITE, DOCS AND REVIEW
+26. GITHUB HOMEPAGE, DOCS AND REVIEW
 ======================================================================
-- Static public product site, original engine icons and real native app captures.
+- GitHub-only official homepage and Releases; original engine icons and captures.
 - Beginner survival guide, user changelog and internal (not independent) review.
 - Current screenshots and reproducible capture/GIF workflow; QA provenance stated.
 - Release documentation includes appended schemas, validation and known limits.
 - Public packages and checksum links target v0.5.0.
+- Desktop Privacy Policy, network audit and Code signing policy on GitHub.
+- Public privacy contact: minedockapp@gmail.com.
 
 ======================================================================
 27. REFERENCE DESIGN AND CUSTOMIZATION — IMPLEMENTED IN 0.4.1
 ======================================================================
-- Exact approved teal/copper icon with reproducible PNG/ICO/ICNS/favicon sizes.
+- Exact approved teal/copper icon with reproducible desktop PNG/ICO/ICNS/SVG sizes.
 - Compact server rows, informative engine tiles, console category tabs and
   full/incremental plus manual/automatic backup filters.
 - Complete cached/refreshable official engine build lists; explicit advanced
@@ -478,8 +480,8 @@ See docs/player-world-administration.md and docs/validation.md for exact limits.
   to a local 128px PNG stored with the profile, no remote image fetches.
 - Inherited settings stay unset unless edited; unsaved navigation/close guards.
 - Curated existing Paper scalar paths, advanced discovered scalars and raw YAML.
-- Original dusk website scene, English public release text and real screenshots.
-- Website downloads point to the published 0.5.0 packages and checksums.
+- English GitHub presentation and release text with real app screenshots.
+- GitHub Releases hosts the published 0.5.0 packages and checksums.
 
 ======================================================================
 28. FUTURE OPTIONS — NOT IMPLEMENTED

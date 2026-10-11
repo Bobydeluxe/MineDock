@@ -1,6 +1,6 @@
 # Security boundaries
 
-The [desktop/website privacy audit](privacy-audit.md) documents actual network recipients, local retention, credential protection and deletion limits for released 0.5.0. See [Code signing policy](code-signing-policy.md) for current unsigned status, source/build provenance and proposed future human signing approvals. Preparing these notices does not change application behavior or replace existing binaries.
+The desktop [Privacy Policy](PRIVACY_POLICY.md) and [source audit](privacy-audit.md) document actual network recipients, local retention, credential protection and deletion limits for released 0.5.0. See [Code signing policy](code-signing-policy.md) for current unsigned status, source/build provenance and proposed future human signing approvals. These documents do not change application behavior or replace existing binaries.
 
 MineDock is local and runs with the current OS account permissions. It exposes no public administration API, tunnel or web panel. Its isolated renderer uses only validated named preload methods; main verifies the sender/frame/origin and validates all input. Server/installer processes use argument arrays and `shell: false`. The updater uses fixed native helper scripts only for operations requiring the OS installation flow.
 

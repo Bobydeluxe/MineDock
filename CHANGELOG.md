@@ -1,12 +1,17 @@
 # Changelog
 
+## Unreleased — repository documentation and tooling
+
+- Use the GitHub README as the official homepage, with Releases downloads, support and application documentation.
+- Preserve a desktop-only Privacy Policy and Code signing policy, with the verified network audit and public contact `minedockapp@gmail.com`.
+- Remove the abandoned hosting sources, deployment workflow, SEO/legal publication machinery and web-only assets/tests. Retain desktop icons, captures, licenses and historical release evidence.
+- Limit future desktop packages to application build outputs, excluding unrelated stale output directories. Existing 0.5.0 binaries, checksums and update metadata are unchanged; no new application version is published.
+
 ## 0.5.0
 
 Player and world administration, private version-correct item resources and safer native commands. Historical releases retain their original executable files.
 
 ### Added
-
-- Prepared free GitHub Pages hosting with English legal-page drafts, project-path navigation and production SEO metadata. Publication remains blocked pending publisher/contact review, owner approval and a verified deployment; the current website remains active; application downloads use 0.5.0.
 
 - A large player profile with Inventory, Actions, History and Notes, official skin fallback, actual saved stats, 36 inventory slots, armor, offhand and 27 Ender Chest slots.
 - Stopped-server inventory quantity removal, exact-slot empty/replace and previewed restoration from real pre-edit copies, with full verified backup, conflict checks, transaction journal and rollback.
