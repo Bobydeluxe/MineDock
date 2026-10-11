@@ -6,9 +6,9 @@ Optional infrastructure for **future builds**. Published 0.5.0 stays unsigned an
 
 ## Current owner setup
 
-On 11 October 2026 the owner generated the stable `CN=MineDock` certificate. Its [public CER, validity and SHA-256 fingerprint](certificates/README.md) are available for inspection. The public GitHub Actions variable `MINEDOCK_WINDOWS_CERT_SHA256` matches that fingerprint. The two private Windows signing secrets have not yet been configured; owner-signed CI builds and automatic future-tag signing are not enabled. Existing 0.5.0 downloads remain unsigned.
+On 11 October 2026 the owner generated the stable `CN=MineDock` certificate. Its [public CER, validity and SHA-256 fingerprint](certificates/README.md) are available for inspection. The public GitHub Actions variable `MINEDOCK_WINDOWS_CERT_SHA256` matches that fingerprint. Both encrypted Windows signing secrets are configured, and `MINEDOCK_WINDOWS_SIGNING_ENABLED=true` enables automatic signing of future `v*` version tags. Manual owner-signed builds select `main` and `windows_signing`. Existing 0.5.0 downloads remain unsigned and unchanged. See the [owner-certificate native build](https://github.com/Bobydeluxe/MineDock/actions/runs/38156282426) and [setup/validation record](validation-records/windows-owner-signing.json).
 
-**The owner has already completed certificate generation. Do not run it again for this identity.** Back up the existing encrypted PFX and password separately, then complete the two private secrets below. Password entry belongs in a hidden local prompt or GitHub's private secret settings, never chat, source, an issue or a PR. Repository administrators and trusted workflow code can use configured secrets; hiding values in the UI/logs does not prevent their use by that code.
+**The owner has already completed certificate generation and CI secret setup. Do not generate a replacement for this identity.** Back up the existing encrypted PFX and password separately. Future password entry belongs in a hidden local prompt or GitHub's private secret settings, never chat, source, an issue or a PR. Repository administrators and trusted workflow code can use configured secrets; hiding values in the UI/logs does not prevent their use by that code.
 
 ## Generate the owner identity once
 
@@ -57,14 +57,14 @@ Electron-builder v26 invokes Microsoft SignTool for the packaged app, NSIS unins
 
 ## Optional GitHub Actions
 
-After reviewing/merging the signing PR, use **Settings → Secrets and variables → Actions**:
+The repository owner manages these under **Settings → Secrets and variables → Actions**. The current identity is already configured; the instructions below also support a deliberate future restore or rotation:
 
-| Name                               | Type                         | Value                                                            |
-| ---------------------------------- | ---------------------------- | ---------------------------------------------------------------- |
-| `WINDOWS_CERTIFICATE`              | Encrypted secret             | Base64 of the encrypted owner PFX                                |
-| `WINDOWS_CERTIFICATE_PASSWORD`     | Encrypted secret             | PFX password                                                     |
-| `MINEDOCK_WINDOWS_CERT_SHA256`     | Repository variable          | Already configured: fingerprint in the public certificate record |
-| `MINEDOCK_WINDOWS_SIGNING_ENABLED` | Optional repository variable | `true` only to enable reviewed future v* tag signing             |
+| Name                               | Type                | Value                                                            |
+| ---------------------------------- | ------------------- | ---------------------------------------------------------------- |
+| `WINDOWS_CERTIFICATE`              | Encrypted secret    | Configured: base64 of the encrypted owner PFX                    |
+| `WINDOWS_CERTIFICATE_PASSWORD`     | Encrypted secret    | Configured: PFX password                                         |
+| `MINEDOCK_WINDOWS_CERT_SHA256`     | Repository variable | Already configured: fingerprint in the public certificate record |
+| `MINEDOCK_WINDOWS_SIGNING_ENABLED` | Repository variable | Configured: `true` for reviewed future v* tag signing            |
 
 With authenticated GitHub CLI, send base64 directly without displaying it:
 
@@ -79,7 +79,7 @@ gh variable set MINEDOCK_WINDOWS_CERT_SHA256 --repo Bobydeluxe/MineDock --body '
 
 Alternatively use GitHub's private settings UI. Never send secrets in chat/issues or enable command tracing. Base64 PFX is **private key material**, despite encryption.
 
-For the current identity, use the existing `%LOCALAPPDATA%\MineDock\private-signing\MineDock-signing.pfx` and the password chosen during setup. The published CER cannot sign applications or replace the encrypted PFX. There is no need to recreate the certificate, change the public pin or enable `MINEDOCK_WINDOWS_SIGNING_ENABLED` just to finish private secret setup.
+For the current identity, use the existing `%LOCALAPPDATA%\MineDock\private-signing\MineDock-signing.pfx` and the password chosen during setup. The published CER cannot sign applications or replace the encrypted PFX. There is no need to recreate the certificate or change the existing public pin/secrets just to run a build.
 
 Run **Actions → Build distribution artifacts → Run workflow**, select **main**, enable **windows_signing**. Only owner default-branch dispatches or explicitly opted-in future v* tags access Windows signing secrets. No PR/fork event exists. Manual requests from another branch fail before reading owner secrets. Protect default branch/tags, use MFA and review executable workflow/dependency changes; administrators/trusted workflow code can access repository secrets.
 

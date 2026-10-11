@@ -45,7 +45,7 @@ For removal, use Installed apps for Windows Setup, or close MineDock and remove 
 
 ### Code signing policy
 
-MineDock 0.5.0 Windows downloads remain **unsigned**. Free [self-signed Windows signing](docs/windows-signing.md) is prepared for future reviewed builds. The owner has created a stable **CN=MineDock, RSA 3072 / SHA-256** certificate, valid until **11 October 2028**. [Public certificate, fingerprint and verification](docs/certificates/README.md). Private CI credentials still need owner configuration before automated signing can run.
+MineDock 0.5.0 Windows downloads remain **unsigned**. Free [self-signed Windows signing](docs/windows-signing.md) is configured for future reviewed builds. The owner has created a stable **CN=MineDock, RSA 3072 / SHA-256** certificate, valid until **11 October 2028**. [Public certificate, fingerprint and verification](docs/certificates/README.md). The encrypted GitHub Actions credentials and public fingerprint are configured; automatic Windows signing is enabled for future `v*` version tags.
 
 Self-signed signatures do **not** automatically remove SmartScreen or Unknown Publisher warnings. This is not Microsoft certification or public certificate-authority validation. The [Code signing policy](docs/code-signing-policy.md) explains release provenance and owner controls; the updater's separate Ed25519 signatures remain in place.
 
