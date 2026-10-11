@@ -1,0 +1,74 @@
+name: Download statistics
+
+on:
+  schedule:
+    - cron: '37 4 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main, 'codex/**']
+    paths:
+      - 'scripts/update-download-stats*.mjs'
+      - '.github/workflows/download-statistics.yml'
+      - '.github/workflows/ci.yml'
+  pull_request:
+    paths:
+      - 'scripts/update-download-stats*.mjs'
+      - '.github/workflows/download-statistics.yml'
+      - '.github/workflows/ci.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: download-statistics-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - run: node --test scripts/update-download-stats.test.mjs
+
+  update:
+    needs: test
+    if: >-
+      github.repository == 'Bobydeluxe/MineDock' &&
+      (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch') &&
+      github.ref == format('refs/heads/{0}', github.event.repository.default_branch)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Refresh package download counts
+        run: node scripts/update-download-stats.mjs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+      - name: Commit only changed statistics
+        shell: bash
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "Download counts are unchanged."
+            exit 0
+          fi
+          test "$(git diff --name-only)" = "README.md"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- README.md
+          git commit -m 'docs: refresh download statistics'
+          git push origin "HEAD:refs/heads/$DEFAULT_BRANCH"
