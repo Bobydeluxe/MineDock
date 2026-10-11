@@ -2,7 +2,17 @@ name: Validate
 on:
   push:
     branches: [main, master, 'codex/**']
+    paths-ignore:
+      - 'README.md'
+      - 'docs/download-statistics.md'
+      - 'scripts/update-download-stats*.mjs'
+      - '.github/workflows/download-statistics.yml'
   pull_request:
+    paths-ignore:
+      - 'README.md'
+      - 'docs/download-statistics.md'
+      - 'scripts/update-download-stats*.mjs'
+      - '.github/workflows/download-statistics.yml'
 permissions:
   contents: read
 jobs:
