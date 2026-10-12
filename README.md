@@ -211,10 +211,10 @@ Original code and engine symbols: [MIT](LICENSE). Packages include dependency li
 <!-- download-statistics:start -->
 | Platform | Downloads |
 | -------- | --------: |
-| Windows | 100 |
+| Windows | 102 |
 | Linux | 87 |
 | macOS | 85 |
-| **Total** | **272** |
+| **Total** | **274** |
 <!-- download-statistics:end -->
 
 Package download events across **all published releases**, including prereleases; these are not unique users or confirmed installations. Refreshed approximately daily by [GitHub Actions](https://github.com/Bobydeluxe/MineDock/actions/workflows/download-statistics.yml). [Counting rules and limitations](docs/download-statistics.md).
